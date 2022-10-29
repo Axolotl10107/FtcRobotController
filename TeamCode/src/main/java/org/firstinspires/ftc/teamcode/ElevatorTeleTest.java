@@ -22,8 +22,8 @@ public class ElevatorTeleTest extends LinearOpMode {
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
         upperLimit = hardwareMap.get(DigitalChannel.class, "UpperLimit");
         upperLimit.setMode(DigitalChannel.Mode.INPUT);
-        lowerLimit.setMode(DigitalChannel.Mode.OUTPUT);
-        lowerLimit = hardwareMap.get(DigitalChannel.class, "UpperLimit");
+        lowerLimit = hardwareMap.get(DigitalChannel.class, "LowerLimit");
+        lowerLimit.setMode(DigitalChannel.Mode.INPUT);
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
