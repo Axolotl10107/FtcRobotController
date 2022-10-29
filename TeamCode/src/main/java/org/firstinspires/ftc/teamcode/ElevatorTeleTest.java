@@ -1,4 +1,5 @@
 //ALoTO 2022-23
+//Null Pointer Exception: Attempt to invoke DigitalChannel.setMode on a null object reference
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
