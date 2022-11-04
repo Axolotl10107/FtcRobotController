@@ -36,7 +36,7 @@ public class ElevatorTeleTest extends LinearOpMode {
             double up = gamepad1.right_trigger;
             double down = gamepad1.left_trigger;
             double upPower = Range.clip(up, 0, maxPower);
-            double downPower = Range.clip(down, -maxPower, 0);
+            double downPower = Range.clip(down, 0, maxPower);
             telemetry.addData("        Up Trigger:", up);
             telemetry.addData("      Down Trigger:", down);
             telemetry.addData("         Max Power:", maxPower);
@@ -44,7 +44,7 @@ public class ElevatorTeleTest extends LinearOpMode {
             telemetry.addData("Clipped Down Power:", downPower);
             if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
                 elevatorDrive.setPower(upPower);
-            } else if (down > 0 && lowerLimit.getState()==false) {
+            } else if (down > 0 && lowerLimit.getState()) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad1.dpad_up) {
                 maxPower += 0.1;

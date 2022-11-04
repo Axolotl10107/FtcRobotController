@@ -56,9 +56,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
+@Autonomous(name="Robot: Auto Time Red", group="Robot")
 
-public class AutoTimeLinearALOTO extends LinearOpMode {
+public class AutoTimeRed extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor         LeftBack   = null;
@@ -88,7 +88,7 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
-        LeftBack.setDirection(DcMotor.Direction.REVERSE );
+        LeftBack.setDirection(DcMotor.Direction.REVERSE);
         RightBack.setDirection(DcMotor.Direction.FORWARD);
 
         // Send telemetry message to signify robot waiting;
@@ -100,11 +100,11 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // Step 1:  Drive Srafe Right for 1 seconds
-        LeftBack.setPower(REVERSE_SPEED);
-        RightBack.setPower(FORWARD_SPEED);
-        RightFront.setPower(REVERSE_SPEED);
-        LeftFront.setPower(FORWARD_SPEED);
+        // Step 1:   Strafe Left for 1 seconds
+        LeftBack.setPower(FORWARD_SPEED);
+        RightBack.setPower(REVERSE_SPEED);
+        RightFront.setPower(FORWARD_SPEED);
+        LeftFront.setPower(REVERSE_SPEED);
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 1.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
