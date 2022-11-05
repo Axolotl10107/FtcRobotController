@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Everything Opmode", group="Linear Opmode")
 
-public class ElevatorTeleTest extends LinearOpMode {
+public class EverythingOpmode extends LinearOpMode {
     private DcMotor elevatorDrive;
     private Servo servo1;
     private Servo servo2;
