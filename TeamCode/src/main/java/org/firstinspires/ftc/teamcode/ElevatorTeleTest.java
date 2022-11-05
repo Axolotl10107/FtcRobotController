@@ -17,7 +17,7 @@ public class ElevatorTeleTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        elevatorDrive = hardwareMap.get(DcMotor.class, "ElevatorDrive");
+        elevatorDrive = hardwareMap.get(DcMotor.class, "Ellyvader");
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
         upperLimit = hardwareMap.get(DigitalChannel.class, "UpperLimit");
         upperLimit.setMode(DigitalChannel.Mode.INPUT);
