@@ -1,6 +1,8 @@
 //ALoTO 2022-23
 //D-Pad max power adjustment moving by giant arbitrary amount (probably not debounced...)
 //Motor not actually spinning...
+//Put limit switch states in telemetry
+//Down auto works, but not down trigger
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -42,12 +44,14 @@ public class ElevatorTeleTest extends LinearOpMode {
             telemetry.addData("Clipped Down Power:", downPower);
             if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
                 elevatorDrive.setPower(upPower);
-            } else if (down < 0 && lowerLimit.getState()) {
+            } else if (down > 0 && lowerLimit.getState()==false) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad1.dpad_up) {
                 maxPower += 0.1;
+                sleep(100);
             } else if (gamepad1.dpad_down) {
                 maxPower -= 0.1;
+                sleep(100);
             } else if (gamepad1.left_bumper) {
                 double startTime = getRuntime();
                 elevatorDrive.setPower(-maxPower);
@@ -58,7 +62,7 @@ public class ElevatorTeleTest extends LinearOpMode {
             } else if (gamepad1.right_bumper) {
                 double startTime = getRuntime();
                 elevatorDrive.setPower(maxPower);
-                while (upperLimit.getState()) {
+                while (upperLimit.getState() == false) {
                     telemetry.addData("Running for (seconds):", getRuntime()-startTime);
                 }
                 elevatorDrive.setPower(0);
