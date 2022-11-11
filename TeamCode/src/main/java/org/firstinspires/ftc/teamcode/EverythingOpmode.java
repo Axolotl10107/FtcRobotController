@@ -1,4 +1,4 @@
-//ALoTO 2022-23
+//ALoTO 2022-23 LEFTFRONT IS COMENTED OUT
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Everything Opmode", group="Linear Opmode")
-
+//Start+A for driving, Start+B for manipulator
 public class EverythingOpmode extends LinearOpMode {
     private DcMotor elevatorDrive;
     private Servo servo1;
@@ -49,7 +49,7 @@ public class EverythingOpmode extends LinearOpMode {
         telemetry.addData("Status", "Ready");
         telemetry.update();
         waitForStart();
-
+//Evevator code
         while (opModeIsActive()) {
             double up = gamepad2.right_trigger;
             double down = gamepad2.left_trigger;
@@ -62,9 +62,15 @@ public class EverythingOpmode extends LinearOpMode {
             telemetry.addData("Clipped Down Power:", downPower);
             telemetry.addData(" Upper Limit State:", upperLimit.getState());
             telemetry.addData(" Lower Limit State:", lowerLimit.getState());
-            if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
+//            if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
+            if (up > 0) {
                 elevatorDrive.setPower(upPower);
-            } else if (down > 0 && lowerLimit.getState()) {
+//            } else if (down > 0 && lowerLimit.getState() == false) {
+            }
+            else if (gamepad2.right_bumper) {
+                elevatorDrive.setPower(.2);
+            }
+            else if (down > 0) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad2.dpad_up) {
                 maxPower += 0.1;
@@ -72,28 +78,44 @@ public class EverythingOpmode extends LinearOpMode {
             } else if (gamepad2.dpad_down) {
                 maxPower -= 0.1;
                 sleep(100);
-            } else if (gamepad2.left_bumper) {
-                double startTime = getRuntime();
-                elevatorDrive.setPower(-maxPower);
-                while (lowerLimit.getState()) {
-                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
-                }
-                elevatorDrive.setPower(0);
-            } else if (gamepad2.right_bumper) {
-                double startTime = getRuntime();
-                elevatorDrive.setPower(maxPower);
-                while (upperLimit.getState() == false) {
-                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
-                }
-                elevatorDrive.setPower(0);
-            } else {
+            }
+//            else if (gamepad2.left_bumper) {
+//                double startTime = getRuntime();
+//                elevatorDrive.setPower(-maxPower);
+//                while (lowerLimit.getState()) {
+//                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
+//                }
+//                elevatorDrive.setPower(0);
+//            } else if (gamepad2.right_bumper) {
+//                double startTime = getRuntime();
+//                elevatorDrive.setPower(maxPower);
+//                while (upperLimit.getState() == false) {
+//                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
+//                }
+//                elevatorDrive.setPower(0);
+//            }
+            else {
                 elevatorDrive.setPower(0);
             }
-            servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);
+            //servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);
+            //claw
+            if (gamepad2.x) {
+                servo1.setPosition(.45);
+            }
+            else if (gamepad2.a) {
+                servo1.setPosition(.2);
+            }
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
 
-            servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
+           // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
+            //arm
+            if (gamepad2.y) {
+                servo2.setPosition(.4);
+            }
+            else if (gamepad2.b) {
+                servo2.setPosition(.9);
+            }
             //driving code
             double leftPower;
             double rightPower;
