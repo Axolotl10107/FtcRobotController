@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.Range;
 //Start+A for driving, Start+B for manipulator
 public class EverythingOpmode extends LinearOpMode {
     private DcMotor elevatorDrive;
-    private Servo servo1;
-    private Servo servo2;
+    private Servo servo1;//Claw Servo
+    private Servo servo2;//Arm Servo
     //wheel motors
     private DcMotor leftFront = null;
     private DcMotor rightFront = null;
@@ -36,6 +36,8 @@ public class EverythingOpmode extends LinearOpMode {
         servo2 = hardwareMap.get(Servo.class, "servo2");
         servo1.setDirection(Servo.Direction.FORWARD);
         servo2.setDirection(Servo.Direction.FORWARD);
+//        servo1.setPosition(0);
+//        servo2.setPosition(0);
         //wheel motor names
         leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
         rightFront = hardwareMap.get(DcMotor.class, "RightFront");
@@ -53,7 +55,7 @@ public class EverythingOpmode extends LinearOpMode {
         while (opModeIsActive()) {
             double up = gamepad2.right_trigger;
             double down = gamepad2.left_trigger;
-            double upPower = Range.clip(up, 0, maxPower);
+            double upPower = Range.clip(up, 0, maxPower);//Makes sure elevator motor never runs above max. power
             double downPower = -Range.clip(down, 0, maxPower);
             telemetry.addData("        Up Trigger:", up);
             telemetry.addData("      Down Trigger:", down);
@@ -67,12 +69,12 @@ public class EverythingOpmode extends LinearOpMode {
                 elevatorDrive.setPower(upPower);
 //            } else if (down > 0 && lowerLimit.getState() == false) {
             }
-            else if (gamepad2.right_bumper) {
+            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
                 elevatorDrive.setPower(.2);
             }
             else if (down > 0) {
                 elevatorDrive.setPower(downPower);
-            } else if (gamepad2.dpad_up) {
+            } else if (gamepad2.dpad_up) {//Change max. power that elevator motor will run at
                 maxPower += 0.1;
                 sleep(100);
             } else if (gamepad2.dpad_down) {
@@ -95,15 +97,16 @@ public class EverythingOpmode extends LinearOpMode {
 //                elevatorDrive.setPower(0);
 //            }
             else {
-                elevatorDrive.setPower(0);
+                elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
             }
             //servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);
             //claw
             if (gamepad2.x) {
-                servo1.setPosition(.45);
+                // .45
+                servo1.setPosition(0);//Opens claw
             }
             else if (gamepad2.a) {
-                servo1.setPosition(.2);
+                servo1.setPosition(.5);//Closes claw
             }
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
@@ -111,10 +114,10 @@ public class EverythingOpmode extends LinearOpMode {
            // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
             //arm
             if (gamepad2.y) {
-                servo2.setPosition(.4);
+                servo2.setPosition(0);//Sends arm all the way [].
             }
             else if (gamepad2.b) {
-                servo2.setPosition(.9);
+                servo2.setPosition(.6);
             }
             //driving code
             double leftPower;
@@ -128,7 +131,7 @@ public class EverythingOpmode extends LinearOpMode {
             double turn = gamepad1.left_stick_x;
 
 
-            leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;
+            leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;//Makes sure motors only run up to half power
             rightPower   = Range.clip(drive - strafe - turn - negative, -.5, .5) ;
             leftbackPower = Range.clip(drive - strafe + turn - negative, -.5, .5) ;
             rightbackPower  = Range.clip(drive + strafe - turn - negative , -.5, .5) ;
