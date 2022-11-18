@@ -56,7 +56,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Robot: Auto Time Red", group="Robot")
+@Autonomous(name="Robot: Auto Fake Vision", group="Robot")
 
 public class AutoTimeRed extends LinearOpMode {
 
@@ -100,13 +100,26 @@ public class AutoTimeRed extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
+        // Step 0: Drive forward for 1 second, maybe land in the right parking zone?
+        LeftBack.setPower(FORWARD_SPEED);
+        RightBack.setPower(FORWARD_SPEED);
+        RightFront.setPower(FORWARD_SPEED);
+        LeftFront.setPower(FORWARD_SPEED);
+        sleep(500);
+        LeftBack.setPower(0);
+        RightBack.setPower(0);
+        RightFront.setPower(0);
+        LeftFront.setPower(0);
+        sleep(10000);
+
+
         // Step 1:   Strafe Left for 1 seconds
         LeftBack.setPower(FORWARD_SPEED);
         RightBack.setPower(REVERSE_SPEED);
         RightFront.setPower(FORWARD_SPEED);
         LeftFront.setPower(REVERSE_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+        while (opModeIsActive() && (runtime.milliseconds() < 500)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
