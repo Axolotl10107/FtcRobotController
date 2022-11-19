@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,13 +35,18 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@TeleOp
+@Autonomous(name="AprilTag", group="Robot")
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
+
+    private DcMotor leftFront;
+    private DcMotor rightFront;
+    private DcMotor leftBack;
+    private DcMotor rightBack;
 
     // Lens intrinsics
     // UNITS ARE PIXELS
@@ -75,17 +81,29 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
     int id = 0;
 
-    DcMotor leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
-    DcMotor rightFront = hardwareMap.get(DcMotor.class, "RightFront");
-    DcMotor leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
-    DcMotor rightBack = hardwareMap.get(DcMotor.class, "RightBack");
+    void stopTile() {
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+    }
 
     void forwardTile() {
         leftFront.setPower(0.6);
         rightFront.setPower(0.6);
         leftBack.setPower(0.6);
         rightBack.setPower(0.6);
-        sleep(500);
+        sleep(600);
+        stopTile();
+    }
+
+    void backwardTile() {
+        leftFront.setPower(-0.6);
+        rightFront.setPower(-0.6);
+        leftBack.setPower(-0.6);
+        rightBack.setPower(-0.6);
+        sleep(600);
+        stopTile();
     }
 
     void leftTile() {
@@ -94,7 +112,8 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         rightFront.setPower(0.6);
         leftBack.setPower(0.6);
         rightBack.setPower(-0.6);
-        sleep(500);
+        sleep(950);
+        stopTile();
     }
 
     void rightTile() {
@@ -103,12 +122,18 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         rightFront.setPower(-0.6);
         leftBack.setPower(-0.6);
         rightBack.setPower(0.6);
-        sleep(500);
+        sleep(850);
+        stopTile();
     }
 
     @Override
     public void runOpMode()
     {
+        leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "RightFront");
+        leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
+        rightBack = hardwareMap.get(DcMotor.class, "RightBack");
+
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -231,13 +256,15 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
 
         /* Actually do something useful */
-        forwardTile();
+        leftTile();
         if(tagOfInterest == null || tagOfInterest.id == LEFT){
             leftTile();
+            rightTile();
+            backwardTile();
         }else if(tagOfInterest.id == MIDDLE){
             //already in middle zone
         }else{
-            rightTile();
+            forwardTile();
         }
 
 
