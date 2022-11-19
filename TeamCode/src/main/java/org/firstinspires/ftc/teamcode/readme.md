@@ -1,3 +1,13 @@
+# ALoTO 2022-23 TeamCode
+This is the Master branch, which contains our known-good code to fall back on if we need to.
+To see the code currently in development, switch to the Testing branch.
+
+About the OpModes contained within:
+- EverythingOpmode is our TeleOp, which can currently control every part of the robot to a workable extent.
+- AprilTagAutonomousInitDetectionExample is Dark Matter's EasyOpenCV code with our own time-delay based autonomous hacked in for now. It works *brilliantly*! Except that it kinda' bonks the junctions, but it gets to the right parking zone almost every time we test it.
+
+#### Original ReadMe stuff is below.
+----
 ## TeamCode Module
 
 Welcome!
