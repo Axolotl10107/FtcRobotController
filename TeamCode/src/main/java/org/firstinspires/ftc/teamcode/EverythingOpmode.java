@@ -56,14 +56,14 @@ public class EverythingOpmode extends LinearOpMode {
             double up = gamepad2.right_trigger;
             double down = gamepad2.left_trigger;
             double upPower = Range.clip(up, 0, maxPower);//Makes sure elevator motor never runs above max. power
-            double downPower = -Range.clip(down, 0, maxPower);
-            telemetry.addData("        Up Trigger:", up);
-            telemetry.addData("      Down Trigger:", down);
+            double downPower = (-Range.clip(down, 0, maxPower))/2;
+//            telemetry.addData("        Up Trigger:", up);
+//            telemetry.addData("      Down Trigger:", down);
             telemetry.addData("         Max Power:", maxPower);
-            telemetry.addData("  Clipped Up Power:", upPower);
-            telemetry.addData("Clipped Down Power:", downPower);
-            telemetry.addData(" Upper Limit State:", upperLimit.getState());
-            telemetry.addData(" Lower Limit State:", lowerLimit.getState());
+//            telemetry.addData("  Clipped Up Power:", upPower);
+//            telemetry.addData("Clipped Down Power:", downPower);
+//            telemetry.addData(" Upper Limit State:", upperLimit.getState());
+//            telemetry.addData(" Lower Limit State:", lowerLimit.getState());
 //            if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
             if (up > 0) {
                 elevatorDrive.setPower(upPower);
@@ -141,6 +141,7 @@ public class EverythingOpmode extends LinearOpMode {
             leftBack.setPower(leftbackPower);
             rightBack.setPower(rightbackPower);
 
+            telemetry.addData("left x:", gamepad1.left_stick_x);
             telemetry.update();
         }
     }
