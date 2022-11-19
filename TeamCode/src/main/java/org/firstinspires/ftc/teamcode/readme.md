@@ -1,3 +1,18 @@
+# ALoTO 2022-23 TeamCode
+You are on the Testing branch, which contains all of our latest commits and all of our OpModes.
+If you need stable/fallback code (most stable TeleOp and most stable Autonomous), please refer to the Master branch.
+
+*Control layouts coming soon! Expect them here someday: https://wordenhome.neocities.org/rd/lm
+
+About the OpModes contained within:
+- [TeleOp] ALoTOBasicOpMode_Linear - Simple Driving-only TeleOp. (See Control Layout 1.)
+- [Autonomous] AprilTagAutonomousInitDetectionExample - Dark Matter's EasyOpenCV code with our own time-delay based autonomous hacked in for now. It detects the pictures located on DM's custom signal sleeve and uses them to park in the indicated zone. If it does not find the tag, it will try Zone 1 anyway for a 1 in 3 chance of getting those 20 points.
+- [Dependency] AprilTagDetectionPipeline
+- [Autonomous] AutoTimeLinearALOTO - Strafes right for 1 second.
+- [Autonomous] AutoTimeRed - Shows up on the Driver Station as "Robot: Auto Fake Vision". Just parks in Zone 1 for a 1 in 3 chance of getting points for the signal cone.
+- [TeleOp] EverythingOpmode - Controls every part of the robot to a workable extent. Arm and claw positions are all or nothing, but driving and elevator are nice. This is the *only* TeleOp that can drive the entire bot and be used at a meet! (See Control Layout 0.)
+- [TeleOp] MotorTest - A simple TeleOp to test servos. Uses analog sticks to control two servos' absolute position. (See Control Layout 2.)
+
 ## TeamCode Module
 
 Welcome!
