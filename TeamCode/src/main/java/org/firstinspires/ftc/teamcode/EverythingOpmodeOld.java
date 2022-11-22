@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Everything Opmode", group="Linear Opmode")
+@TeleOp(name="Everything Opmode (Old Stable)", group="Linear Opmode")
 //Start+A for driving, Start+B for manipulator
-public class EverythingOpmode extends LinearOpMode {
+public class EverythingOpmodeOld extends LinearOpMode {
     private DcMotor elevatorDrive;
     private Servo servo1;//Claw Servo
     private Servo servo2;//Arm Servo
@@ -69,9 +69,9 @@ public class EverythingOpmode extends LinearOpMode {
                 elevatorDrive.setPower(upPower);
 //            } else if (down > 0 && lowerLimit.getState() == false) {
             }
-//            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
-//                elevatorDrive.setPower(.2);
-//            }
+            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
+                elevatorDrive.setPower(.2);
+            }
             else if (down > 0) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad2.dpad_up) {//Change max. power that elevator motor will run at
@@ -130,12 +130,6 @@ public class EverythingOpmode extends LinearOpMode {
             double strafe  =  gamepad1.right_stick_x;
             double turn = gamepad1.left_stick_x;
 
-            if (gamepad1.right_bumper) {
-                drive = 0.25;
-            }
-            if (gamepad1.left_bumper) {
-                negative = 0.25;
-            }
 
             leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;//Makes sure motors only run up to half power
             rightPower   = Range.clip(drive - strafe - turn - negative, -.5, .5) ;

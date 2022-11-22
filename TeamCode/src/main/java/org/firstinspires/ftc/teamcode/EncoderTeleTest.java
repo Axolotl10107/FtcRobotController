@@ -19,7 +19,6 @@ public class EncoderTeleTest extends LinearOpMode {
     int tier = 0;
     double dtemp = 0;
     int temp = 0;
-//    ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     @Override
     public void runOpMode() {
@@ -29,6 +28,7 @@ public class EncoderTeleTest extends LinearOpMode {
         motor.setPower(0.2);
         motor.setTargetPosition(0);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        ElapsedTime timer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         //Wait for the PLAY button to be pressed (init has already happened!)
         waitForStart();
