@@ -1,20 +1,34 @@
+//ALoTO 2022-23
+/* Values we have found: 850 is the top */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="EncoderTeleTest", group="TeleTest")
 public class EncoderTeleTest extends LinearOpMode {
     //Declare variables first because we have to
     private DcMotor motor;
 
+    int targetPos = 0;//Store our target position, so we can move only when we command it.
+    //We can move an arbitrary amount of ticks this way.
+    int tier = 0;
+    double dtemp = 0;
+    int temp = 0;
+//    ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
     @Override
     public void runOpMode() {
         //Get the motor specified in the config file and set it up
-        motor = hardwareMap.get(DcMotor.class, "LeftFront");
+        motor = hardwareMap.get(DcMotor.class, "motor");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setPower(0.2);
+        motor.setTargetPosition(0);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         //Wait for the PLAY button to be pressed (init has already happened!)
         waitForStart();
@@ -23,13 +37,9 @@ public class EncoderTeleTest extends LinearOpMode {
         while(opModeIsActive()) {
             //Send some info back to the driver
             telemetry.addData("Encoder reading", motor.getCurrentPosition());
-            telemetry.addData("Target position", motor.getTargetPosition());
+            telemetry.addData("Your target position", targetPos);
+            telemetry.addData("Motor's target position", motor.getTargetPosition());
             telemetry.addData("Motor runmode", motor.getMode());
-
-            motor.setPower(0.2);
-            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            int targetPos = 0;//Store our target position, so we can move only when we command it.
-            //We can move an arbitrary amount of ticks this way.
 
             if (gamepad1.dpad_up) {//If UP on the D-Pad is pressed...
                 targetPos += 1;//Increase the target position by 1 tick
@@ -48,7 +58,25 @@ public class EncoderTeleTest extends LinearOpMode {
                 motor.setPower(0);//Safety shutoff
             } else if (gamepad1.y) {
                 motor.setPower(0.2);
+            } else if (gamepad1.right_bumper) {
+                targetPos += 100;
+            } else if (gamepad1.left_bumper) {
+                targetPos -= 100;
+            } else if (gamepad1.start) {
+                if (tier < 3) {
+                    tier += 1;
+                }
+            } else if (gamepad1.back) {
+                if (tier > 0) {
+                    tier -= 1;
+                }
             }
+            if (tier != 0) {
+                dtemp = tier * 283.33;
+                int temp = (int)dtemp;
+                motor.setTargetPosition(temp);
+            }
+            sleep(100);
             /* Setting the target position will make the motor move immediately at the power level
             * we set earlier. It will go until it reaches that position, then it will stop. */
 

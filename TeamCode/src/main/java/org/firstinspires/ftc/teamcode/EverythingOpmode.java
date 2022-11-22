@@ -106,7 +106,7 @@ public class EverythingOpmode extends LinearOpMode {
                 servo1.setPosition(0);//Opens claw
             }
             else if (gamepad2.a) {
-                servo1.setPosition(.24);//Closes claw
+                servo1.setPosition(.26);//Closes claw
             }
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
