@@ -26,6 +26,7 @@ public class NonBlockingDebounceTest extends LinearOpMode {
             } else {
                 telemetry.addData("B State", "Not Pressed");
             }
+            telemetry.addData(" Millis", timer.milliseconds());
             telemetry.update();
         }
     }
