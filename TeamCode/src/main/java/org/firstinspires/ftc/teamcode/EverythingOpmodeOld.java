@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Everything Opmode (Old Stable)", group="Linear Opmode")
@@ -47,6 +49,12 @@ public class EverythingOpmodeOld extends LinearOpMode {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE );
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        ServoController scont = servo1.getController();
+        scont.pwmEnable();
+        ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        boolean aflag = true;
+        servo1.setPosition(0);
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
@@ -105,9 +113,16 @@ public class EverythingOpmodeOld extends LinearOpMode {
                 // .45
                 servo1.setPosition(0);//Opens claw
             }
-            else if (gamepad2.a) {
-                servo1.setPosition(.26);//Closes claw
+            else if (gamepad2.a && adeb.milliseconds() > 500) {
+                if (aflag) {
+                    servo1.setPosition(.26);//Closes claw
+                } else {
+                    servo1.setPosition(0);
+                }
+                aflag = !aflag;
+                adeb.reset();
             }
+            telemetry.addData("aflag", aflag);
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
 
