@@ -1,4 +1,4 @@
-//ALoTO 2022-23 LEFTFRONT IS COMENTED OUT
+//ALoTO 2022-23
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Everything Opmode", group="Linear Opmode")
@@ -48,30 +50,32 @@ public class EverythingOpmode extends LinearOpMode {
         leftBack.setDirection(DcMotor.Direction.REVERSE );
         rightBack.setDirection(DcMotor.Direction.FORWARD);
 
+        ServoController scont = servo1.getController();
+        scont.pwmEnable();
+        ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        boolean aflag = true;
+        servo1.setPosition(0);
+
         telemetry.addData("Status", "Ready");
         telemetry.update();
         waitForStart();
-//Evevator code
+
+//Elevator code
         while (opModeIsActive()) {
             double up = gamepad2.right_trigger;
             double down = gamepad2.left_trigger;
             double upPower = Range.clip(up, 0, maxPower);//Makes sure elevator motor never runs above max. power
             double downPower = (-Range.clip(down, 0, maxPower))/2;
-//            telemetry.addData("        Up Trigger:", up);
-//            telemetry.addData("      Down Trigger:", down);
-            telemetry.addData("         Max Power:", maxPower);
-//            telemetry.addData("  Clipped Up Power:", upPower);
-//            telemetry.addData("Clipped Down Power:", downPower);
-//            telemetry.addData(" Upper Limit State:", upperLimit.getState());
-//            telemetry.addData(" Lower Limit State:", lowerLimit.getState());
+            telemetry.addData("Max Elevator Power:", maxPower);
+            //No limit switches currently installed!
 //            if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
             if (up > 0) {
                 elevatorDrive.setPower(upPower);
 //            } else if (down > 0 && lowerLimit.getState() == false) {
             }
-//            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
-//                elevatorDrive.setPower(.2);
-//            }
+            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
+                elevatorDrive.setPower(.2);
+            }
             else if (down > 0) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad2.dpad_up) {//Change max. power that elevator motor will run at
@@ -81,6 +85,8 @@ public class EverythingOpmode extends LinearOpMode {
                 maxPower -= 0.1;
                 sleep(100);
             }
+            //Elevator auto up/down; again, no limit switches installed. This code will likely be
+            //removed soon in favor of using encoders for 4 elevator tiers.
 //            else if (gamepad2.left_bumper) {
 //                double startTime = getRuntime();
 //                elevatorDrive.setPower(-maxPower);
@@ -99,20 +105,28 @@ public class EverythingOpmode extends LinearOpMode {
             else {
                 elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
             }
-            //servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);
-            //claw
+
+            //Claw Code
+            //servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);//Old absolute position code
             if (gamepad2.x) {
                 // .45
                 servo1.setPosition(0);//Opens claw
             }
-            else if (gamepad2.a) {
-                servo1.setPosition(.26);//Closes claw
+            else if (gamepad2.a && adeb.milliseconds() > 500) {
+                if (aflag) {
+                    servo1.setPosition(.26);//Closes claw
+                } else {
+                    servo1.setPosition(0);
+                }
+                aflag = !aflag;
+                adeb.reset();
             }
+            telemetry.addData("aflag", aflag);
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
 
-           // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
-            //arm
+            //Arm Code
+            // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
             if (gamepad2.y) {
                 servo2.setPosition(0);//Sends arm all the way [].
             }
@@ -130,6 +144,13 @@ public class EverythingOpmode extends LinearOpMode {
             double strafe  =  gamepad1.right_stick_x;
             double turn = gamepad1.left_stick_x;
 
+
+            leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;//Makes sure motors only run up to half power
+            rightPower   = Range.clip(drive - strafe - turn - negative, -.5, .5) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
+            leftbackPower = Range.clip(drive - strafe + turn - negative, -.5, .5) ;
+            rightbackPower  = Range.clip(drive + strafe - turn - negative , -.5, .5) ;
+
+            //Half-speed Driving
             if (gamepad1.right_bumper) {
                 drive = 0.25;
             }
@@ -137,17 +158,11 @@ public class EverythingOpmode extends LinearOpMode {
                 negative = 0.25;
             }
 
-            leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;//Makes sure motors only run up to half power
-            rightPower   = Range.clip(drive - strafe - turn - negative, -.5, .5) ;
-            leftbackPower = Range.clip(drive - strafe + turn - negative, -.5, .5) ;
-            rightbackPower  = Range.clip(drive + strafe - turn - negative , -.5, .5) ;
-
             leftFront.setPower(leftPower);
             rightFront.setPower(rightPower);
             leftBack.setPower(leftbackPower);
             rightBack.setPower(rightbackPower);
 
-            telemetry.addData("left x:", gamepad1.left_stick_x);
             telemetry.update();
         }
     }
