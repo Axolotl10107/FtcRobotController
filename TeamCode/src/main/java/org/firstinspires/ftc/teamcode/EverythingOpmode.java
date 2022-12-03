@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Everything Opmode", group="Linear Opmode")
+@TeleOp(name="Everything Opmode", group="Everything Opmode")
 //Start+A for driving, Start+B for manipulator
 public class EverythingOpmode extends LinearOpMode {
     private DcMotor elevatorDrive;

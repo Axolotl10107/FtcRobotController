@@ -35,7 +35,7 @@ import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.ArrayList;
 
-@Autonomous(name="AprilTag", group="Robot")
+@Autonomous(name="AprilTag (Auto True Vision)", group="Auto Vision")
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
     OpenCvCamera camera;
