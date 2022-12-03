@@ -6,13 +6,12 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Motor Test", group="Linear Opmode")
+@TeleOp(name="Servo Tele Test", group="Linear Opmode")
 
-public class MotorTest extends LinearOpMode {
+public class ServoTeleTest extends LinearOpMode {
     private DcMotor elevatorDrive;
     private Servo servo1;
     private Servo servo2;
