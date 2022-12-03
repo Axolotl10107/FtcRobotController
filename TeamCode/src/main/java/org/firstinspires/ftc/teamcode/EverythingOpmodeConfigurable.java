@@ -17,46 +17,31 @@ import java.security.spec.ECParameterSpec;
 //Start+A for driving, Start+B for manipulator
 public class EverythingOpmodeConfigurable extends LinearOpMode {
 
-//Configure controls in this section:
-    //Forward/Backward
-    private double driveAxis = 0;
-    private double forwardAxis = gamepad1.right_trigger;
-    private double reverseAxis = gamepad1.left_trigger;
-    //Slow drive is an all-or-nothing deal, so these must be booleans (on/off).
-    private boolean slowForward = gamepad1.right_bumper;
-    private boolean slowReverse = gamepad1.left_bumper;
-    //New! Like elevator motor power, change drive motor power!
-    private boolean drivePowerUp = gamepad1.dpad_right;
-    private boolean drivePowerDown = gamepad1.dpad_left;
+    //Declaring variables for controls
+    private double driveAxis;
+    private double forwardAxis;
+    private double reverseAxis;
+    private boolean slowForward;
+    private boolean slowReverse;
+    private boolean drivePowerUp;
+    private boolean drivePowerDown;
+    private double turnAxis;
+    private double turnLeft;
+    private double turnRight;
+    private double strafeAxis;
+    private double strafeLeft;
+    private double strafeRight;
+    private boolean clawToggle;
+    private boolean armToggle;
+    private double elevatorAxis;
+    private double elevatorUpAxis;
+    private double elevatorDownAxis;
+    private boolean elevatorHold;
+    private boolean elevatorMaxPowerUp;
+    private boolean elevatorMaxPowerDown;
+    private boolean elevatorEncoderReset;
 
-    //Turning
-    private double turnAxis = gamepad1.left_stick_x;
-    private double turnLeft = 0;
-    private double turnRight = 0;
-
-    //Strafing
-    private double strafeAxis = gamepad1.right_stick_x;
-    private double strafeLeft = 0;
-    private double strafeRight = 0;
-
-    //Manipulator
-    // |||These are booleans for now. They could possibly become doubles later!|||
-    private boolean clawToggle = gamepad2.a;
-    private boolean armToggle = gamepad2.x;
-
-    //Elevator
-    private double elevatorAxis = 0;
-    private double elevatorUpAxis = gamepad2.right_trigger;
-    private double elevatorDownAxis = gamepad2.left_trigger;
-    private boolean elevatorHold = gamepad2.right_bumper;
-    private boolean elevatorMaxPowerUp = gamepad2.dpad_up;
-    private boolean elevatorMaxPowerDown = gamepad2.dpad_down;
-    //Untested!
-    private boolean elevatorEncoderReset = gamepad2.back;
-
-
-
-
+    //Defining variables for everything else
     private DcMotor elevatorDrive;
     private Servo servo1;//Claw Servo
     private Servo servo2;//Arm Servo
@@ -73,6 +58,44 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //Configure controls in this section:
+        //Forward/Backward
+        driveAxis = 0;
+        forwardAxis = gamepad1.right_trigger;
+        reverseAxis = gamepad1.left_trigger;
+        //Slow drive is an all-or-nothing deal, so these must be booleans (on/off).
+        slowForward = gamepad1.right_bumper;
+        slowReverse = gamepad1.left_bumper;
+        //New! Like elevator motor power, change drive motor power!
+        drivePowerUp = gamepad1.dpad_right;
+        drivePowerDown = gamepad1.dpad_left;
+
+        //Turning
+        turnAxis = gamepad1.left_stick_x;
+        turnLeft = 0;
+        turnRight = 0;
+
+        //Strafing
+        strafeAxis = gamepad1.right_stick_x;
+        strafeLeft = 0;
+        strafeRight = 0;
+
+        //Manipulator
+        // |||These are booleans for now. They could possibly become doubles later!|||
+        clawToggle = gamepad2.a;
+        armToggle = gamepad2.x;
+
+        //Elevator
+        elevatorAxis = 0;
+        elevatorUpAxis = gamepad2.right_trigger;
+        elevatorDownAxis = gamepad2.left_trigger;
+        elevatorHold = gamepad2.right_bumper;
+        elevatorMaxPowerUp = gamepad2.dpad_up;
+        elevatorMaxPowerDown = gamepad2.dpad_down;
+        //Untested!
+        elevatorEncoderReset = gamepad2.back;
+
+
         elevatorDrive = hardwareMap.get(DcMotor.class, "Ellyvader");
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
         upperLimit = hardwareMap.get(DigitalChannel.class, "UpperLimit");
