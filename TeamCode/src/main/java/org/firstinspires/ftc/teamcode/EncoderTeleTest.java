@@ -25,7 +25,7 @@ public class EncoderTeleTest extends LinearOpMode {
         //Get the motor specified in the config file and set it up
         motor = hardwareMap.get(DcMotor.class, "motor");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
-        motor.setPower(0.2);//Motor will run at this power until it reaches...
+        motor.setPower(0);//Motor will run at this power until it reaches...
         motor.setTargetPosition(0);//this target position! We'll change this value with the D-Pad.
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         ElapsedTime tierUpDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -52,6 +52,7 @@ public class EncoderTeleTest extends LinearOpMode {
                 targetPos -= 10;
             }
             else if (gamepad1.a) {
+                motor.setPower(0.2);
                 motor.setTargetPosition(targetPos);//Actually tell the motor to move to our stored target position
             } else if (gamepad1.x) {
                 targetPos = 0;//Return motor to position 0
@@ -59,17 +60,24 @@ public class EncoderTeleTest extends LinearOpMode {
             } else if (gamepad1.b) {
                 motor.setPower(0);//Stop Motor
             } else if (gamepad1.y) {
-                motor.setPower(0.2);//Re-Enable Motor
+                //Set current position as 0 on encoder
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                sleep(1000);
+                motor.setTargetPosition(0);
+                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
             else if (gamepad1.right_bumper) {
                 targetPos += 100;
             } else if (gamepad1.left_bumper) {
                 targetPos -= 100;
             }
-            else if (gamepad1.start && tierUpDeb.milliseconds() > 500 && tier < 3) {
+            else if (gamepad1.start && tierUpDeb.milliseconds() > 1000 && tier < 3) {
                 tier += 1;
-            } else if (gamepad1.back && tierDownDeb.milliseconds() > 500 && tier > 0) {
+            } else if (gamepad1.back && tierDownDeb.milliseconds() > 1000 && tier > 0) {
                 tier -= 1;
+                if (tier == 0) {
+                    motor.setTargetPosition(0);
+                }
             }
             if (tier != 0) {
                 dtemp = tier * 283.33;
