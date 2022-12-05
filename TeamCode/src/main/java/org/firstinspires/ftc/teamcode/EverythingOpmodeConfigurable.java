@@ -73,6 +73,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //   ||| CURRENTLY configured to this layout: https://wordenhome.neocities.org/rd/lm/cl125.html |||
         //Configure controls in this section:
         //Forward/Backward
         driveAxis = 0;//double //UNTESTED
@@ -84,8 +85,8 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
         slowForward = gamepad1.right_bumper;//boolean
         slowReverse = gamepad1.left_bumper;//boolean
         //New! Like elevator motor power, change drive motor power!
-        drivePowerUp = gamepad1.dpad_right;//boolean
-        drivePowerDown = gamepad1.dpad_left;//boolean
+        drivePowerUp = gamepad1.dpad_up;//boolean
+        drivePowerDown = gamepad1.dpad_down;//boolean
 
         //Turning
         turnAxis = gamepad1.left_stick_x;//double
@@ -112,12 +113,12 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
         elevatorDownFull = false;//boolean //UNTESTED
         elevatorUpAxis = gamepad2.right_trigger;//double
         elevatorDownAxis = gamepad2.left_trigger;//double
-        elevatorHold = gamepad2.right_bumper;//boolean
+        elevatorHold = gamepad2.b;//boolean //NOTE: Rarely Used
         elevatorMaxPowerUp = gamepad2.dpad_up;//boolean
-        elevatorMaxPowerDown = gamepad2.dpad_down;//boolena
+        elevatorMaxPowerDown = gamepad2.dpad_down;//boolean
         //More Elevator - stuff that doesn't directly move it
-        elevatorTierUp = false;//boolean //UNTESTED
-        elevatorTierDown = false;//boolean //UNTESTED
+        elevatorTierUp = gamepad2.right_bumper;//boolean //UNTESTED
+        elevatorTierDown = gamepad2.left_bumper;//boolean //UNTESTED
         elevatorEncoderReset = gamepad2.back;//boolean //UNTESTED
 
 
