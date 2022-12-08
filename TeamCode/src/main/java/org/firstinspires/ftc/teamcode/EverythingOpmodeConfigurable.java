@@ -172,7 +172,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
                 elevatorPower = elevatorAxis;
             } else {
                 double upPower = Range.clip(elevatorUpAxis, 0, elevatorMaxPower);//Makes sure elevator motor never runs above max. power
-                double downPower = (-Range.clip(elevatorDownAxis, 0, elevatorMaxPower)) / 2;//Divide by 2, because elevator is assisted by gravity and fast descent has broken it before!
+                double downPower = Range.clip(elevatorDownAxis, 0, elevatorMaxPower) / 2;//Divide by 2, because elevator is assisted by gravity and fast descent has broken it before!
 
                 //Set elevator motor to power calculated above
 //            if (elevatorUpAxis > 0) {
