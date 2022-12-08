@@ -2,7 +2,7 @@
 You are on the Testing branch, which contains all of our latest commits and all of our OpModes.
 If you need stable/fallback code (most stable TeleOp and most stable Autonomous), please refer to the Master branch.
 
-*Control layouts coming soon! Expect them here someday: https://wordenhome.neocities.org/rd/lm
+*Control layouts have started arriving! Find them here: https://wordenhome.neocities.org/rd/lm
 
 About the OpModes contained within:
 - [TeleOp] ALoTOBasicOpMode_Linear - Simple Driving-only TeleOp. (See Control Layout 1.)
