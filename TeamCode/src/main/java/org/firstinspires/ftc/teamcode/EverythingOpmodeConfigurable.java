@@ -1,6 +1,9 @@
 //ALoTO 2022-23
 package org.firstinspires.ftc.teamcode;
 
+//TODO: Elevator very broken (going up just jitters, tiers do nothing)
+//TODO: Elevator max is 1000 now with new rigging!
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,36 +20,56 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
     //Declaring variables for controls
     private double driveAxis;
     private boolean forwardFull;
+    private static final double forwardFullPower = 1.0;
     private boolean reverseFull;
+    private static final double reverseFullPower = -1.0;
     private double forwardAxis;
     private double reverseAxis;
-    private boolean slowForward;
-    private boolean slowReverse;
+    private boolean forwardSlow;
+    private static final double forwardSlowPower = 0.25;
+    private boolean reverseSlow;
+    private static final double reverseSlowPower = -0.25;
     private boolean drivePowerUp;
     private boolean drivePowerDown;
     private double turnAxis;
     private boolean turnLeftFull;
+    private static final double turnLeftFullPower = -1.0;
     private boolean turnRightFull;
+    private static final double turnRightFullPower = 1.0;
     private double turnLeftAxis;
     private double turnRightAxis;
     private double strafeAxis;
     private boolean strafeLeftFull;
+    private static final double strafeLeftFullPower = -1.0;
     private boolean strafeRightFull;
+    private static final double strafeRightFullPower = 1.0;
     private double strafeLeftAxis;
     private double strafeRightAxis;
     private boolean clawToggle;
     private boolean armToggle;
+    private static final int manipulatorToggleTimer = 500;
     private double elevatorAxis;
     private boolean elevatorUpFull;
+    private static final double elevatorUpFullPower = 0.3;
     private boolean elevatorDownFull;
+    private static final double elevatorDownFullPower = -0.15;
     private double elevatorUpAxis;
     private double elevatorDownAxis;
     private boolean elevatorHold;
     private boolean elevatorMaxPowerUp;
     private boolean elevatorMaxPowerDown;
+    private static final int maxPowerToggleTimer = 500;//in milliseconds, both drive and elevator
     private boolean elevatorTierUp;
     private boolean elevatorTierDown;
+    private static final int elevatorTierToggleTimer = 1000;
     private boolean elevatorEncoderReset;
+    private static final double elevatorHoldPower = 0.2;
+
+    //Claw and arm positions
+    private static final double clawClosedPosition = 0.26;
+    private static final double clawOpenPosition = 0;
+    private static final double armLeftPosition = 0;// TODO: Left/right could be wrong, untested
+    private static final double armRightPosition = 0.6;
 
     //Defining variables for everything else
     private DcMotor elevatorDrive;
@@ -71,19 +94,20 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
     private double tierMultiplier = 283.33;//How much the tier is multiplied by to get the target position
     double elevatorPower = 0;
 
-    @Override
-    public void runOpMode() {
+    private void setControls() {
         //   ||| CURRENTLY configured to this layout: https://wordenhome.neocities.org/rd/lm/cl125.html |||
         //Configure controls in this section:
         //Forward/Backward
+        /*TODO: Put things that override other things under anything they depend on (what they
+        override and what they use to decide how to override); this avoids extra checks later.*/
         driveAxis = 0;//double //UNTESTED
         forwardFull = false;//boolean //UNTESTED
         reverseFull = false;//boolean //UNTESTED
         forwardAxis = gamepad1.right_trigger;//boolean
         reverseAxis = gamepad1.left_trigger;//boolean
         //Slow drive is an all-or-nothing deal, so these must be booleans (on/off).
-        slowForward = gamepad1.right_bumper;//boolean
-        slowReverse = gamepad1.left_bumper;//boolean
+        forwardSlow = gamepad1.right_bumper;//boolean
+        reverseSlow = gamepad1.left_bumper;//boolean
         //New! Like elevator motor power, change drive motor power!
         drivePowerUp = gamepad1.dpad_up;//boolean
         drivePowerDown = gamepad1.dpad_down;//boolean
@@ -104,8 +128,8 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 
         //Manipulator
         clawToggle = gamepad2.a;//boolean
-        armToggle = gamepad2.x;//boolean //NOTE: Could become a double in the future, for analog arm
-        //position rather than an either-or situation
+        armToggle = gamepad2.x;//boolean //NOTE: Could become a double in the future, for analog
+        //arm position rather than an either-or situation
 
         //Elevator
         elevatorAxis = 0;//double //UNTESTED
@@ -120,8 +144,10 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
         elevatorTierUp = gamepad2.right_bumper;//boolean //UNTESTED
         elevatorTierDown = gamepad2.left_bumper;//boolean //UNTESTED
         elevatorEncoderReset = gamepad2.back;//boolean //UNTESTED
+    }
 
-
+    @Override
+    public void runOpMode() {
         elevatorDrive = hardwareMap.get(DcMotor.class, "Ellyvader");
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
         elevatorDrive.setPower(0);
@@ -168,6 +194,9 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 //Elevator code
         status = "Running";
         while (opModeIsActive()) {
+
+            setControls();
+
             if (elevatorAxis != 0) {
                 elevatorPower = elevatorAxis;
             } else {
@@ -179,11 +208,11 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 //                elevatorDrive.setPower(upPower);
 //            }
                 if (elevatorHold) {//Hold elevator up against gravity (largely unused now)
-                    elevatorDrive.setPower(.2);
+                    elevatorDrive.setPower(elevatorHoldPower);
                 } else if (elevatorUpFull) {
-                    elevatorDrive.setPower(.3);
+                    elevatorDrive.setPower(elevatorUpFullPower);
                 } else if (elevatorDownFull) {
-                    elevatorDrive.setPower(-.15);
+                    elevatorDrive.setPower(elevatorDownFullPower);
                 } else {
                     elevatorPower = upPower - downPower;
                 }
@@ -193,23 +222,23 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             }
             elevatorDrive.setPower(elevatorPower);
             //Adjust Elevator Maximum Power
-            if (elevatorMaxPowerUp && elevPowerUpDeb.milliseconds() > 500) {//Change max. power that elevator motor will run at
+            if (elevatorMaxPowerUp && elevPowerUpDeb.milliseconds() > maxPowerToggleTimer) {//Change max. power that elevator motor will run at
                 elevatorMaxPower += 0.1;
                 elevPowerUpDeb.reset();
-            } else if (elevatorMaxPowerDown && elevPowerDownDeb.milliseconds() < 500) {
+            } else if (elevatorMaxPowerDown && elevPowerDownDeb.milliseconds() < maxPowerToggleTimer) {//TODO: Toggle timers are magic numbers
                 elevatorMaxPower -= 0.1;
                 elevPowerDownDeb.reset();
 
-            //Tiers
-            } else if (elevatorTierUp && elevatorTier < 2 && elevTierUpDeb.milliseconds() > 1000) {
+                //Tiers
+            } else if (elevatorTierUp && elevatorTier < 2 && elevTierUpDeb.milliseconds() > elevatorTierToggleTimer) {
                 elevatorTier += 1;
-            } else if (elevatorTierDown && elevatorTier > 0 && elevTierDownDeb.milliseconds() > 1000) {
+            } else if (elevatorTierDown && elevatorTier > 0 && elevTierDownDeb.milliseconds() > elevatorTierToggleTimer) {
                 elevatorTier -= 1;
                 if (tier == 0) {
                     elevatorDrive.setTargetPosition(0);//Code below only runs when tier > 0, so it never turns target back to 0 when tier == 0!
                 }
 
-            //Set current encoder position to 0
+                //Set current encoder position to 0
             } else if (elevatorEncoderReset) {
                 elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //                sleep(1000);
@@ -222,27 +251,27 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             //Actually make the motor go to its designated tier (preliminary code...)
             if (tier != 0) {
                 dtemp = tier * tierMultiplier;
-                int temp = (int)dtemp;
+                int temp = (int) dtemp;
                 elevatorDrive.setTargetPosition(temp);
             }
 
             //Claw Code
-            if (clawToggle && clawDeb.milliseconds() > 500) {
+            if (clawToggle && clawDeb.milliseconds() > manipulatorToggleTimer) {
                 if (clawFlag) {
-                    servo1.setPosition(.26);//Closes claw
+                    servo1.setPosition(clawClosedPosition);//Closes claw
                 } else {
-                    servo1.setPosition(0);
+                    servo1.setPosition(clawOpenPosition);
                 }
                 clawFlag = !clawFlag;
                 clawDeb.reset();
             }
 
             //Arm Code
-            if (armToggle && armDeb.milliseconds() > 500) {
+            if (armToggle && armDeb.milliseconds() > manipulatorToggleTimer) {
                 if (armFlag) {
-                    servo2.setPosition(0);//Sends arm all the way [].
+                    servo2.setPosition(armLeftPosition);
                 } else {
-                    servo2.setPosition(.6);
+                    servo2.setPosition(armRightPosition);
                 }
                 armDeb.reset();
                 armFlag = !armFlag;
@@ -255,32 +284,37 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             double rightbackPower;
 
             //Slow Driving
-            if (slowForward) {
-                forwardAxis = 0.25;
+            if (forwardSlow) {
+                forwardAxis = forwardSlowPower;
             } else if (forwardFull) {
-                forwardAxis = 1;
+                forwardAxis = forwardFullPower;
             }
-            if (slowReverse) {
-                reverseAxis = 0.25;
+            if (reverseSlow) {
+                reverseAxis = reverseSlowPower;
             } else if (reverseFull) {
-                reverseAxis = 1;
-            }
-            if (turnLeftFull && !turnRightFull) {
-                turnAxis = -1;
-            } else if (turnRightFull && !turnLeftFull) {
-                turnAxis = 1;
-            }
-            if (strafeLeftFull && !strafeRightFull) {
-                strafeAxis = -1;
-            } else if (strafeRightFull && !strafeLeftFull) {
-                strafeAxis = 1;
+                reverseAxis = reverseFullPower;
             }
 
+            if (turnLeftFull && !turnRightFull) {
+                turnAxis = turnLeftFullPower;
+            } else if (turnRightFull && !turnLeftFull) {
+                turnAxis = turnRightFullPower;
+            }
+
+            if (strafeLeftFull && strafeRightFull) {
+                strafeAxis = 0;
+            } else if (strafeLeftFull) {
+                strafeAxis = strafeLeftFullPower;//TODO: Add rather than set?
+            } else if (strafeRightFull) {
+                strafeAxis = strafeRightFullPower;
+            }//TODO: Else, set to axis
+            //TODO: Move these power sets closer to controls (or vice-versa)
+
             //Change Max Drive Power
-            if (drivePowerUp && maxDrivePower < 1 && driveUpDeb.milliseconds() > 500) {
+            if (drivePowerUp && maxDrivePower < 1 && driveUpDeb.milliseconds() > maxPowerToggleTimer) {
                 maxDrivePower += 0.1;
                 driveUpDeb.reset();
-            } else if (drivePowerDown && maxDrivePower > 0 && driveDownDeb.milliseconds() < 500) {
+            } else if (drivePowerDown && maxDrivePower > 0 && driveDownDeb.milliseconds() < maxPowerToggleTimer) {
                 maxDrivePower -= 0.1;
                 driveDownDeb.reset();
             }
