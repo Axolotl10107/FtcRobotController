@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 //TODO: Elevator very broken (going up just jitters, tiers do nothing)
 //TODO: Elevator max is 1000 now with new rigging!
+//
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -88,7 +89,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
     private double maxDrivePower = 0.5;
 
     private String status;
-    private int tier = 0;
+//    private int tier = 0;
     private double dtemp = 0;
     private int temp = 0;
     private double tierMultiplier = 283.33;//How much the tier is multiplied by to get the target position
@@ -152,7 +153,8 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
         elevatorDrive.setPower(0);
         elevatorDrive.setTargetPosition(0);
-        elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         upperLimit = hardwareMap.get(DigitalChannel.class, "UpperLimit");
         upperLimit.setMode(DigitalChannel.Mode.INPUT);
         lowerLimit = hardwareMap.get(DigitalChannel.class, "LowerLimit");
@@ -231,29 +233,41 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
 
                 //Tiers
             } else if (elevatorTierUp && elevatorTier < 2 && elevTierUpDeb.milliseconds() > elevatorTierToggleTimer) {
+                elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
                 elevatorTier += 1;
             } else if (elevatorTierDown && elevatorTier > 0 && elevTierDownDeb.milliseconds() > elevatorTierToggleTimer) {
+                elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
                 elevatorTier -= 1;
-                if (tier == 0) {
-                    elevatorDrive.setTargetPosition(0);//Code below only runs when tier > 0, so it never turns target back to 0 when tier == 0!
-                }
-
+//                if (elevatorTier == 0) {
+//                    elevatorDrive.setTargetPosition(0);//Code below only runs when tier > 0, so it never turns target back to 0 when tier == 0!
+//                }
                 //Set current encoder position to 0
             } else if (elevatorEncoderReset) {
                 elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 //                sleep(1000);
                 elevatorDrive.setTargetPosition(0);
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else {
+            } else if (elevatorDrive.getMode() == DcMotor.RunMode.RUN_TO_POSITION && elevatorDrive.getCurrentPosition() == elevatorDrive.getTargetPosition()) {
+                //TODO: Now I'm checking this twice!
+                status = "Redundant Check Returned Power";
                 elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
             }
 
             //Actually make the motor go to its designated tier (preliminary code...)
-            if (tier != 0) {
-                dtemp = tier * tierMultiplier;
+            if (elevatorTier != 0 && !elevatorDrive.isBusy()) {
+                dtemp = elevatorTier * tierMultiplier;
                 int temp = (int) dtemp;
+                elevatorDrive.setPower(0.2);
+                status = "Set Tier Power";
                 elevatorDrive.setTargetPosition(temp);
+            } if (!elevatorDrive.isBusy()) {
+                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             }
+//            if (temp-15 < elevatorDrive.getCurrentPosition() && elevatorDrive.getCurrentPosition() < temp+15) {
+//                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            }
 
             //Claw Code
             if (clawToggle && clawDeb.milliseconds() > manipulatorToggleTimer) {
@@ -314,7 +328,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             if (drivePowerUp && maxDrivePower < 1 && driveUpDeb.milliseconds() > maxPowerToggleTimer) {
                 maxDrivePower += 0.1;
                 driveUpDeb.reset();
-            } else if (drivePowerDown && maxDrivePower > 0 && driveDownDeb.milliseconds() < maxPowerToggleTimer) {
+            } else if (drivePowerDown && maxDrivePower > 0.0 && driveDownDeb.milliseconds() < maxPowerToggleTimer) {
                 maxDrivePower -= 0.1;
                 driveDownDeb.reset();
             }
@@ -337,6 +351,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             telemetry.addData("Elevator Tier", elevatorTier);
             telemetry.addData("Elevator Target Position", elevatorDrive.getTargetPosition());
             telemetry.addData("Elevator Actual Position", elevatorDrive.getCurrentPosition());
+            telemetry.addData("Elevator Power", elevatorDrive.getPower());
             telemetry.addData("Elevator RunMode", elevatorDrive.getMode());
             telemetry.update();
         }
