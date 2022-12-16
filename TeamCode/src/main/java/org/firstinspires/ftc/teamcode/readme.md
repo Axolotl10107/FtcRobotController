@@ -18,7 +18,7 @@ About the OpModes contained within:
 - readme.md - This file!
 
 
-*The old readme - if you enjoy satire, look much further (down).*
+*The old readme is below - if you enjoy satire, look much further (down).*
 
 ## TeamCode Module
 
