@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 //TODO: Elevator very broken (going up just jitters, tiers do nothing)
 //TODO: Elevator max is 1000 now with new rigging!
-//
+//TODO: Tier power is getting set for about .3 seconds then going back to 0, even when no line to set back to 0 is active in code? Check JavaDoc on relevant functions.
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
