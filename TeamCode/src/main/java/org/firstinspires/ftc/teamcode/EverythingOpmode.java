@@ -128,7 +128,7 @@ public class EverythingOpmode extends LinearOpMode {
             //Arm Code
             // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
             if (gamepad2.y) {
-                servo2.setPosition(0);//Sends arm all the way [].
+                servo2.setPosition(0.1);//Sends arm all the way [].
             }
             else if (gamepad2.b) {
                 servo2.setPosition(.6);

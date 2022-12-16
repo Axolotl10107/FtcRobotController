@@ -184,7 +184,7 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
         //Hardware Map
         elevatorDrive = hardwareMap.get(DcMotor.class, "Ellyvader");
         elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
-        elevatorDrive.setPower(0);
+        elevatorDrive.setPower(0.2);
         elevatorDrive.setTargetPosition(0);
 //        elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -244,10 +244,12 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
                     elevatorDrive.setPower(elevatorUpFullPower);
                 } else if (elevatorDownFull) {
                     elevatorDrive.setPower(elevatorDownFullPower);
-                } else if (upPower - downPower == 0) {
+                } else if (upPower - downPower == 0 || upPower - downPower == -0) {
                     elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
+                    elevatorDrive.setPower(0.2);
                     elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 } else {
+                    elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     elevatorDrive.setPower(upPower - downPower);
                 }
             }
@@ -277,12 +279,12 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             } else if (elevatorEncoderReset) {
                 elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 elevatorDrive.setTargetPosition(0);
-                elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else if (elevatorDrive.getMode() == DcMotor.RunMode.RUN_TO_POSITION && elevatorDrive.getCurrentPosition() == elevatorDrive.getTargetPosition()) {
-                //TODO: Now I'm checking this twice!
-                status = "Redundant Check Returned Power";
-                elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
-            }
+                elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);}//temporary ending curly brace
+//            } else if (elevatorDrive.getMode() == DcMotor.RunMode.RUN_TO_POSITION && elevatorDrive.getCurrentPosition() == elevatorDrive.getTargetPosition()) {
+//                //TODO: Now I'm checking this twice!
+//                status = "Redundant Check Returned Power";
+//                elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
+//            }
 
             //Actually make the motor go to its designated tier (preliminary code...)
             if (elevatorTier != 0 && !elevatorDrive.isBusy()) {
@@ -290,13 +292,13 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
                 temp = (int) dtemp;
                 elevatorDrive.setPower(0.2);
                 status = "Set Tier Power";
-                elevatorDrive.setTargetPosition(temp);
-            } if (!elevatorDrive.isBusy()) {
-                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-            if (temp-15 < elevatorDrive.getCurrentPosition() && elevatorDrive.getCurrentPosition() < temp+15) {
-                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
+                elevatorDrive.setTargetPosition(temp);}//temporary ending curly brace
+//            } if (!elevatorDrive.isBusy()) {
+//                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            }
+//            if (temp-15 < elevatorDrive.getCurrentPosition() && elevatorDrive.getCurrentPosition() < temp+15) {
+//                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            }
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
