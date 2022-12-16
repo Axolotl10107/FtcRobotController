@@ -5,6 +5,13 @@ package org.firstinspires.ftc.teamcode;
 //TODO: Elevator max is 1000 now with new rigging!
 //TODO: Tier power is getting set for about .3 seconds then going back to 0, even when no line to set back to 0 is active in code? Check JavaDoc on relevant functions.
 
+//Bugs:
+//RESOLVED - Motors keep running when sticks return to 0
+//drivePowerDown not working
+//Elevator up/down analog working weird - TODO: needs to switch runmode!
+
+import android.app.job.JobInfo;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -93,7 +100,9 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
     private double dtemp = 0;
     private int temp = 0;
     private double tierMultiplier = 283.33;//How much the tier is multiplied by to get the target position
-    double elevatorPower = 0;
+    private double elevatorPower = 0;
+    private double strafePower;
+    private double turnPower;
 
     private void setControls() {
         //   ||| CURRENTLY configured to this layout: https://wordenhome.neocities.org/rd/lm/cl125.html |||
@@ -309,19 +318,33 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
                 reverseAxis = reverseFullPower;
             }
 
-            if (turnLeftFull && !turnRightFull) {
-                turnAxis = turnLeftFullPower;
+            if (turnLeftFull && turnRightFull) {
+                turnPower = 0;
+            } else if (turnLeftFull && !turnRightFull) {
+                turnPower = turnLeftFullPower;
             } else if (turnRightFull && !turnLeftFull) {
-                turnAxis = turnRightFullPower;
+                turnPower = turnRightFullPower;
+            } else if (turnAxis != 0) {
+                turnPower = turnAxis;
+            } else if (turnAxis == 0 && turnLeftAxis == 0 && turnRightAxis == 0) {
+                turnPower = 0;
+            } else {
+                turnAxis = turnRightAxis - turnLeftAxis;
             }
 
             if (strafeLeftFull && strafeRightFull) {
-                strafeAxis = 0;
+                strafePower = 0;
             } else if (strafeLeftFull) {
-                strafeAxis = strafeLeftFullPower;//TODO: Add rather than set?
+                strafePower = strafeLeftFullPower;//TODO: Add rather than set?
             } else if (strafeRightFull) {
-                strafeAxis = strafeRightFullPower;
-            }//TODO: Else, set to axis
+                strafePower = strafeRightFullPower;
+            } else if (strafeAxis != 0) {
+                strafePower = strafeAxis;
+            } else if (strafeAxis == 0 && strafeLeftAxis == 0 && strafeRightAxis == 0) {
+                strafePower = 0;
+            } else {
+                strafeAxis = strafeRightAxis - strafeLeftAxis;
+            }
             //TODO: Move these power sets closer to controls (or vice-versa)
 
             //Change Max Drive Power
@@ -334,10 +357,11 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             }
 
             //Combine controls to allow a mix of all axes - kind of works?
-            leftPower    = Range.clip(forwardAxis + driveAxis + strafeAxis - strafeLeftAxis + strafeRightAxis + turnAxis - turnLeftAxis + turnRightAxis - reverseAxis, -maxDrivePower, maxDrivePower) ;//Makes sure motors only run up to half power
-            rightPower   = Range.clip(forwardAxis + driveAxis - strafeAxis + strafeLeftAxis - strafeRightAxis - turnAxis + turnLeftAxis - turnRightAxis - reverseAxis, -maxDrivePower, maxDrivePower) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
-            leftbackPower = Range.clip(forwardAxis + driveAxis - strafeAxis + strafeLeftAxis - strafeRightAxis + turnAxis - turnLeftAxis + turnRightAxis - reverseAxis, -maxDrivePower, maxDrivePower) ;//I think it's +driveAxis on all of them?
-            rightbackPower  = Range.clip(forwardAxis + driveAxis + strafeAxis - strafeLeftAxis + strafeRightAxis - turnAxis + turnLeftAxis - turnRightAxis - reverseAxis , -maxDrivePower, maxDrivePower) ;
+            //TODO: As done for turn/strafePower, do for drivePower.
+            leftPower    = Range.clip(forwardAxis + driveAxis + strafePower + turnPower - reverseAxis, -maxDrivePower, maxDrivePower) ;//Makes sure motors only run up to half power
+            rightPower   = Range.clip(forwardAxis + driveAxis - strafePower - turnPower - reverseAxis, -maxDrivePower, maxDrivePower) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
+            leftbackPower = Range.clip(forwardAxis + driveAxis - strafePower + turnPower - reverseAxis, -maxDrivePower, maxDrivePower) ;//I think it's +driveAxis on all of them?
+            rightbackPower  = Range.clip(forwardAxis + driveAxis + strafePower - turnPower - reverseAxis , -maxDrivePower, maxDrivePower) ;
 
             leftFront.setPower(leftPower);
             rightFront.setPower(rightPower);
@@ -353,6 +377,10 @@ public class EverythingOpmodeConfigurable extends LinearOpMode {
             telemetry.addData("Elevator Actual Position", elevatorDrive.getCurrentPosition());
             telemetry.addData("Elevator Power", elevatorDrive.getPower());
             telemetry.addData("Elevator RunMode", elevatorDrive.getMode());
+//            telemetry.addData("turnPower", turnPower);
+//            telemetry.addData("strafePower", strafePower);
+//            telemetry.addData("turnStick", gamepad1.left_stick_x);
+//            telemetry.addData("strafeStick", gamepad1.right_stick_x);
             telemetry.update();
         }
     }
