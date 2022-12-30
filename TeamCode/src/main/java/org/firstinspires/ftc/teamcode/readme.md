@@ -4,17 +4,17 @@ If you need stable/fallback code (most stable TeleOp and most stable Autonomous)
 
 
 About the OpModes contained within:
-- [TeleOp |||__No Encoders__|||] ALoTOBasicOpMode_Linear - Simple Driving-only TeleOp.
-- [Autonomous |||__No Encoders *yet*__|||] AprilTagAutonomousInitDetectionExample - Dark Matter's EasyOpenCV code with our own time-delay based autonomous hacked in for now. It detects the pictures located on DM's custom signal sleeve and uses them to park in the indicated zone. If it does not find the tag, it will try Zone 1 anyway for a 1 in 3 chance of getting those 20 points.
+- [TeleOp ||| __No Encoders__ |||] ALoTOBasicOpMode_Linear - Simple Driving-only TeleOp.
+- [Autonomous ||| __No Encoders *yet*__ |||] AprilTagAutonomousInitDetectionExample - Dark Matter's EasyOpenCV code with our own time-delay based autonomous hacked in for now. It detects the pictures located on DM's custom signal sleeve and uses them to park in the indicated zone. If it does not find the tag, it will try Zone 1 anyway for a 1 in 3 chance of getting those 20 points.
 - [Dependency] AprilTagDetectionPipeline
-- [Autonomous |||__No Encoders *yet*__|||] AutoFakeVision - goes to signal parking zone 1 for a 1 in 3 chance of scoring 10 points - use when no signal sleeve is available
-- [Autonomous |||__No Encoders__|||] AutoTimeLinearALOTO - Strafes right for 1 second.
-- [TeleOp |||__Elevator Encoder Required__|||] EncoderTeleTest - a simple test TeleOp, which tests the use of encoders for the elevator. *Fully working!*
-- [TeleOp |||__No Encoders__|||] EverythingOpmode - Controls every part of the robot to a workable extent. Arm and claw positions are all or nothing, but driving and elevator are nice. This is the *only* TeleOp that can drive the entire bot and be used at a meet!
-- [TeleOp |||__Elevator Encoder Required__|||] EverythingOpmodeElevHold - same as EverythingOpmode, but with an arm toggle and automatic elevator hold *using encoders*.
-- [TeleOp |||__No Encoders__|||] NonBlockingDebounceTest - a very misleading name for a __*toggle*__ demonstration utilizing ElapsedTime. Too confusing to be more than a quick test, and may be superseded later.
-- [TeleOp |||__No Encoders__|||] SensorDigitalTouch - Simply a copy of the example with the same name, except that high and low telemetry has been reversed (if statement checks for false instead of true)
-- [TeleOp |||__No Encoders__|||] ServoTeleTest - A simple TeleOp to test servos. Uses analog sticks to control two servos' absolute position. (See Control Layout 2.)
+- [Autonomous ||| __No Encoders *yet*__ |||] AutoFakeVision - goes to signal parking zone 1 for a 1 in 3 chance of scoring 10 points - use when no signal sleeve is available
+- [Autonomous ||| __No Encoders__ |||] AutoTimeLinearALOTO - Strafes right for 1 second.
+- [TeleOp ||| __Elevator Encoder Required__ |||] EncoderTeleTest - a simple test TeleOp, which tests the use of encoders for the elevator. *Fully working!*
+- [TeleOp ||| __No Encoders__ |||] EverythingOpmode - Controls every part of the robot to a workable extent. Arm and claw positions are all or nothing, but driving and elevator are nice. This is the *only* TeleOp that can drive the entire bot and be used at a meet!
+- [TeleOp ||| __Elevator Encoder Required__| ||] EverythingOpmodeElevHold - same as EverythingOpmode, but with an arm toggle and automatic elevator hold *using encoders*.
+- [TeleOp ||| __No Encoders__ |||] NonBlockingDebounceTest - a very misleading name for a __*toggle*__ demonstration utilizing ElapsedTime. Too confusing to be more than a quick test, and may be superseded later.
+- [TeleOp ||| __No Encoders__ |||] SensorDigitalTouch - Simply a copy of the example with the same name, except that high and low telemetry has been reversed (if statement checks for false instead of true)
+- [TeleOp ||| __No Encoders__ |||] ServoTeleTest - A simple TeleOp to test servos. Uses analog sticks to control two servos' absolute position. (See Control Layout 2.)
 - readme.md - This file!
 
 
@@ -79,7 +79,7 @@ This is done outside Android Studio directly, using the following steps:
 
 Once your ~~copy~~ wonderful new Opmode of your own design and creation has been brought into existence, you should prepare it for use on your robot. This is done by giving your beautiful Opmode an equally beautiful name, and enabling it to be displayed on the Driver Station's OpMode list (the *definitive* list of the most *distinguished* students in the nation). Enrolling it into your area's elementary school may also be wise.
 
-Each OpMode sample class begins with ~~several~~ TWO lines of code like the ones shown below:
+Each OpMode sample class begins with ~~several~~ two lines of code like the ones shown below:
 
 ```
  @TeleOp(name="Template: Linear OpMode", group="Linear Opmode")
