@@ -106,13 +106,14 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
 
             //Arm Code
             if (gamepad2.y && xdeb.milliseconds() > 500) {
-                if (aflag) {
+                if (xflag) {
                     servo2.setPosition(0.6);
                 } else {
                     servo2.setPosition(0);//Sends arm all the way left.
                 }
             } else if (gamepad2.b) {
                 servo2.setPosition(0.6);
+                xflag = false;
             }
 
             //driving code
