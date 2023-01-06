@@ -264,6 +264,8 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         }else if(tagOfInterest.id == MIDDLE){
             //already in middle zone
         }else{
+            leftTile();
+            rightTile();
             forwardTile();
         }
 
