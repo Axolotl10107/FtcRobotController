@@ -62,8 +62,8 @@ public class EverythingOpmode extends LinearOpMode {
 
 //Elevator code
         while (opModeIsActive()) {
-            double up = gamepad2.right_trigger;
-            double down = gamepad2.left_trigger;
+            double up = gamepad2.left_trigger;
+            double down = gamepad2.right_trigger;
             double upPower = Range.clip(up, 0, maxPower);//Makes sure elevator motor never runs above max. power
             double downPower = (-Range.clip(down, 0, maxPower))/2;
             telemetry.addData("Max Elevator Power:", maxPower);
