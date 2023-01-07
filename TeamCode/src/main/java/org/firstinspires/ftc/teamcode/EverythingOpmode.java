@@ -57,7 +57,7 @@ public class EverythingOpmode extends LinearOpMode {
         ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         boolean aflag = true;
         ElapsedTime ddeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        servo1.setPosition(0);
+        servo1.setPosition(0.19);
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
@@ -121,12 +121,13 @@ public class EverythingOpmode extends LinearOpMode {
             if (gamepad2.x) {
                 // .45
                 servo1.setPosition(0.05);//Opens claw
-                aflag = true;
+                telemetry.addData("Button", "X");
             }
-            else if (gamepad2.a && adeb.milliseconds() > 500) {
+            else if (gamepad2.a) {
                 servo1.setPosition(.19);//Closes claw
+                telemetry.addData("Button", "A");
             }
-            telemetry.addData("aflag", aflag);
+//            telemetry.addData("aflag", aflag);
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
             //Div. stick position by 2, so that, with the offset, 0 and 1 are at edges of stick
 
@@ -134,9 +135,11 @@ public class EverythingOpmode extends LinearOpMode {
             // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
             if (gamepad2.y) {
                 servo2.setPosition(0.05);//Sends arm all the way [front].
+                telemetry.addData("Button", "Y");
             }
             else if (gamepad2.b) {
                 servo2.setPosition(.75);
+                telemetry.addData("Button", "B");
             }
             //driving code
             double leftPower;
