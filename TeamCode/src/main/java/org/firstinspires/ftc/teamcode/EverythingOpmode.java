@@ -26,6 +26,7 @@ public class EverythingOpmode extends LinearOpMode {
     private DigitalChannel upperLimit;
     private DigitalChannel lowerLimit;
     private double maxPower = 0.5;//Change this to adjust the max motor power, or use the D-Pad to adjust it at runtime.
+    private double maxDrivePower = 0.5;
 
     @Override
     public void runOpMode() {
@@ -55,6 +56,7 @@ public class EverythingOpmode extends LinearOpMode {
         scont.pwmEnable();
         ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         boolean aflag = true;
+        ElapsedTime ddeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         servo1.setPosition(0);
 
         telemetry.addData("Status", "Ready");
@@ -68,6 +70,7 @@ public class EverythingOpmode extends LinearOpMode {
             double upPower = (Range.clip(up, 0, maxPower))/2;//Makes sure elevator motor never runs above max. power
             double downPower = (-Range.clip(down, 0, maxPower));
             telemetry.addData("Max Elevator Power:", maxPower);
+            telemetry.addData("Max Drive Power", maxDrivePower);
             //No limit switches currently installed!
 //            if (up > 0 && upperLimit.getState() == false) {//Limit switches are normally closed.
             if (up > 0) {
@@ -79,12 +82,18 @@ public class EverythingOpmode extends LinearOpMode {
             }
             else if (down > 0) {
                 elevatorDrive.setPower(downPower);
-            } else if (gamepad2.dpad_up) {//Change max. power that elevator motor will run at
+            } else if (gamepad2.dpad_up && maxPower < 0.9 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
                 maxPower += 0.1;
-                sleep(100);
-            } else if (gamepad2.dpad_down) {
+                ddeb.reset();
+            } else if (gamepad2.dpad_down && maxPower > 0.1 && ddeb.milliseconds() > 100) {
                 maxPower -= 0.1;
-                sleep(100);
+                ddeb.reset();
+            } else if (gamepad1.dpad_up && maxDrivePower < 0.9 && ddeb.milliseconds() > 100) {
+                maxDrivePower += 0.1;
+                ddeb.reset();
+            } else if (gamepad1.dpad_down && maxDrivePower > 0.1 && ddeb.milliseconds() > 100) {
+                maxDrivePower -= 0.1;
+                ddeb.reset();
             }
             //Elevator auto up/down; again, no limit switches installed. This code will likely be
             //removed soon in favor of using encoders for 4 elevator tiers.
@@ -112,12 +121,13 @@ public class EverythingOpmode extends LinearOpMode {
             if (gamepad2.x) {
                 // .45
                 servo1.setPosition(0);//Opens claw
+                aflag = true;
             }
             else if (gamepad2.a && adeb.milliseconds() > 500) {
                 if (aflag) {
                     servo1.setPosition(.19);//Closes claw
                 } else {
-                    servo1.setPosition(0);// Also opens claw :)
+                    servo1.setPosition(0.05);// Also opens claw :)
                 }
                 aflag = !aflag;
                 adeb.reset();
@@ -129,10 +139,10 @@ public class EverythingOpmode extends LinearOpMode {
             //Arm Code
             // servo2.setPosition((gamepad2.right_stick_x / 2) + 0.5);
             if (gamepad2.y) {
-                servo2.setPosition(0.1);//Sends arm all the way [].
+                servo2.setPosition(0.05);//Sends arm all the way [front].
             }
             else if (gamepad2.b) {
-                servo2.setPosition(.7);
+                servo2.setPosition(.75);
             }
             //driving code
             double leftPower;
@@ -146,10 +156,10 @@ public class EverythingOpmode extends LinearOpMode {
             double turn = gamepad1.left_stick_x;
 
 
-            leftPower    = Range.clip(drive + strafe/2 + turn/2 - negative, -0.5, 0.5) ;//Makes sure motors only run up to half power
-            rightPower   = Range.clip(drive - strafe/2 - turn/2 - negative, -0.5, 0.5) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
-            leftbackPower = Range.clip(drive - strafe/2 + turn/2 - negative, -0.5, 0.5) ;
-            rightbackPower  = Range.clip(drive + strafe/2 - turn/2 - negative , -0.5, 0.5) ;
+                 leftPower = Range.clip(drive + strafe + turn - negative, -maxDrivePower, maxDrivePower) ;//Makes sure motors only run up to half power
+                rightPower = Range.clip(drive - strafe - turn - negative, -maxDrivePower, maxDrivePower) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
+             leftbackPower = Range.clip(drive - strafe + turn - negative, -maxDrivePower, maxDrivePower) ;
+            rightbackPower = Range.clip(drive + strafe - turn - negative , -maxDrivePower, maxDrivePower) ;
 
             //Half-speed Driving
             if (gamepad1.right_bumper) {

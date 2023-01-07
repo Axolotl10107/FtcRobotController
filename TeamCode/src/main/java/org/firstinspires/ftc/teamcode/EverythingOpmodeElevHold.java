@@ -22,8 +22,12 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
     private DcMotor leftBack = null;
     private DcMotor rightBack = null;
 
-    private double maxElevPower = 0.5;//Change this to adjust the max elevator motor power, or use the D-Pad to
-    // adjust it at runtime.
+    private double maxElevPower = 0.5;//Change this to adjust the max elevator motor power, or use
+    // the D-Pad to adjust it at runtime.
+    private double maxDrivePower = 0.5;
+
+    private int elevUpperLimit = 900;
+    private int elevLowerLimit = -30;
 
     @Override
     public void runOpMode() {
@@ -47,9 +51,10 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
 
         ServoController scont = servo1.getController();
         scont.pwmEnable();
-        ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);//Creating basically a stopwatch that
-        // runs in the background
+        ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);//Creating basically
+        // a stopwatch that runs in the background
         ElapsedTime xdeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        ElapsedTime ddeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         boolean aflag = true;
         boolean xflag = true;
         servo1.setPosition(0);
@@ -66,23 +71,25 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
             double upPower = Range.clip(up, 0, maxElevPower);//Makes sure elevator motor never runs above max. power
             double downPower = (-Range.clip(down, 0, maxElevPower))/2;
             telemetry.addData("Max Elevator Power:", maxElevPower);
-            if (up > 0) {
+            telemetry.addData("Max Drive Power", maxDrivePower);
+            if (up > 0 && elevatorDrive.getCurrentPosition() < elevUpperLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(upPower);
-            }
-            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
-                elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                elevatorDrive.setPower(.2);
-            }
-            else if (down > 0) {
+            } else if (down > 0 && elevatorDrive.getCurrentPosition() > elevLowerLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(downPower);
-            } else if (gamepad2.dpad_up) {//Change max. power that elevator motor will run at
+            } else if (gamepad2.dpad_up && maxElevPower < 1 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
                 maxElevPower += 0.1;
-                sleep(100);
-            } else if (gamepad2.dpad_down) {
+                ddeb.reset();
+            } else if (gamepad2.dpad_down && maxElevPower > 0 && ddeb.milliseconds() > 100) {
                 maxElevPower -= 0.1;
-                sleep(100);
+                ddeb.reset();
+            } else if (gamepad1.dpad_up && maxDrivePower < 1 && ddeb.milliseconds() > 100) {
+                maxDrivePower += 0.1;
+                ddeb.reset();
+            } else if (gamepad1.dpad_down && maxDrivePower > 0 && ddeb.milliseconds() > 100) {
+                maxDrivePower -= 0.1;
+                ddeb.reset();
             } else {
                 elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
                 elevatorDrive.setPower(0.2);
@@ -135,11 +142,10 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
                 negative = 0.25;
             }
 
-            leftPower    = Range.clip(drive + strafe + turn - negative, -.5, .5) ;//Limits drive motors to half power
-            rightPower   = Range.clip(drive - strafe - turn - negative, -.5, .5) ;//Adds all controller inputs together
-            // so they can kind of work simultaneously (it doesn't work very well)
-            leftbackPower = Range.clip(drive - strafe + turn - negative, -.5, .5) ;
-            rightbackPower  = Range.clip(drive + strafe - turn - negative , -.5, .5) ;
+                 leftPower = Range.clip(drive + strafe + turn - negative, -maxDrivePower, maxDrivePower) ;//Limits drive motors to half power
+                rightPower = Range.clip(drive - strafe - turn - negative, -maxDrivePower, maxDrivePower) ;//Sums controller inputs to combine them (works poorly)
+             leftbackPower = Range.clip(drive - strafe + turn - negative, -maxDrivePower, maxDrivePower) ;
+            rightbackPower = Range.clip(drive + strafe - turn - negative , -maxDrivePower, maxDrivePower) ;
 
             leftFront.setPower(leftPower);
             rightFront.setPower(rightPower);
@@ -152,4 +158,3 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
         telemetry.update();
     }
 }
-
