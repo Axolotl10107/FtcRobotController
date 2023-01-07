@@ -120,17 +120,11 @@ public class EverythingOpmode extends LinearOpMode {
             //servo1.setPosition((gamepad2.left_stick_x / 2) + 0.5);//Old absolute position code
             if (gamepad2.x) {
                 // .45
-                servo1.setPosition(0);//Opens claw
+                servo1.setPosition(0.05);//Opens claw
                 aflag = true;
             }
             else if (gamepad2.a && adeb.milliseconds() > 500) {
-                if (aflag) {
-                    servo1.setPosition(.19);//Closes claw
-                } else {
-                    servo1.setPosition(0.05);// Also opens claw :)
-                }
-                aflag = !aflag;
-                adeb.reset();
+                servo1.setPosition(.19);//Closes claw
             }
             telemetry.addData("aflag", aflag);
             //+ 0.5 - stick goes -1 to 1, servo goes 0 to 1. This offsets the stick range.
