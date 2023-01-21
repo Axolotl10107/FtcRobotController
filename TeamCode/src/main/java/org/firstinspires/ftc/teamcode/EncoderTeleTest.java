@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class EncoderTeleTest extends LinearOpMode {
     //Declare variables first because we have to
     private DcMotor motor;
+    Robot robot = new Robot();
 
     int targetPos = 0;//Store our target position, so we can move only when we command it.
     //We can move an arbitrary amount of ticks this way.

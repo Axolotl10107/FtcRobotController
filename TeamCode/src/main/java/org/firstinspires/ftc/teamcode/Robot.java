@@ -29,6 +29,8 @@ public class Robot {
     private boolean armServoTarget = false;
     private boolean clawServoTarget = false;
 
+    private final float CPI = 100;//Unknown for now
+
     private void initialize() {
         elevatorDrive.setTargetPosition(elevatorDriveTarget);
         elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -56,6 +58,37 @@ public class Robot {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+    }
+
+    public void encoder(float inches) {
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setTargetPosition((int) (inches*CPI));
+        rightFront.setTargetPosition((int) (inches*CPI));
+        leftBack.setTargetPosition((int) (inches*CPI));
+        rightBack.setTargetPosition((int) (inches*CPI));
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftBack.setPower(0.5);
+        rightBack.setPower(0.5);
+
+        while (leftFront.isBusy()) {
+            //TODO: PID
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftBack.setPower(0);
+        rightBack.setPower(0);
+
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     private void setElevatorTarget(int target) {
