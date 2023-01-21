@@ -26,8 +26,8 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
     // the D-Pad to adjust it at runtime.
     private double maxDrivePower = 0.5;
 
-    private int elevUpperLimit = 900;
-    private int elevLowerLimit = -30;
+    private int elevUpperLimit = -1100;
+    private int elevLowerLimit = 0;
 
     @Override
     public void runOpMode() {
@@ -70,12 +70,14 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
             double downPower = (-Range.clip(down, 0, maxElevPower));
             telemetry.addData("Max Elevator Power", maxElevPower);
             telemetry.addData("Max Drive Power", maxDrivePower);
-            if (up > 0 && elevatorDrive.getCurrentPosition() < elevUpperLimit) {
+            if (up > 0 && elevatorDrive.getCurrentPosition() > elevUpperLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(upPower);
-            } else if (down > 0 && elevatorDrive.getCurrentPosition() > elevLowerLimit) {
+                telemetry.addData("upPower", upPower);
+            } else if (down > 0 && elevatorDrive.getCurrentPosition() < elevLowerLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(downPower);
+                telemetry.addData("downPower", downPower);
             } else if (gamepad2.dpad_up && maxElevPower < 0.9 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
                 maxElevPower += 0.1;
                 ddeb.reset();
@@ -92,6 +94,7 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
                 elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
                 elevatorDrive.setPower(0.2);
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                telemetry.addData("targetPosition", elevatorDrive.getTargetPosition());
             }
 
             //Claw Code
@@ -125,9 +128,9 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
                 servo1.setPosition(0.05);
             } else if (gamepad2.x) {
                 servo1.setPosition(0.19);
-            } else if (gamepad2.y) {
+            } else if (gamepad2.y && elevatorDrive.getCurrentPosition() < -200) {
                 servo2.setPosition(0.05);
-            } else if (gamepad2.b) {
+            } else if (gamepad2.b && elevatorDrive.getCurrentPosition() < -200) {
                 servo2.setPosition(0.75);
             }
 
