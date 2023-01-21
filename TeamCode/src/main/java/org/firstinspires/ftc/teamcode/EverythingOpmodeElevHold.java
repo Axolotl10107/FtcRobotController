@@ -37,26 +37,24 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
         servo2 = hardwareMap.get(Servo.class, "servo2");
         servo1.setDirection(Servo.Direction.FORWARD);
         servo2.setDirection(Servo.Direction.FORWARD);
-//        servo1.setPosition(0);
-//        servo2.setPosition(0);
         //wheel motor names
         leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
         rightFront = hardwareMap.get(DcMotor.class, "RightFront");
         leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
         rightBack = hardwareMap.get(DcMotor.class, "RightBack");
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
+         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
-        leftBack.setDirection(DcMotor.Direction.REVERSE );
-        rightBack.setDirection(DcMotor.Direction.FORWARD);
+          leftBack.setDirection(DcMotor.Direction.REVERSE);
+         rightBack.setDirection(DcMotor.Direction.FORWARD);
 
         ServoController scont = servo1.getController();
         scont.pwmEnable();
-        ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);//Creating basically
+        //ElapsedTime adeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);//Creating basically
         // a stopwatch that runs in the background
-        ElapsedTime xdeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        //ElapsedTime xdeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         ElapsedTime ddeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        boolean aflag = true;
-        boolean xflag = true;
+        //boolean aflag = true;
+        //boolean xflag = true;
         servo1.setPosition(0);
 
         telemetry.addData("Status", "Ready");
@@ -66,11 +64,11 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
 
 //Elevator code
         while (opModeIsActive()) {
-            double up = gamepad2.right_trigger;
-            double down = gamepad2.left_trigger;
-            double upPower = Range.clip(up, 0, maxElevPower);//Makes sure elevator motor never runs above max. power
-            double downPower = (-Range.clip(down, 0, maxElevPower))/2;
-            telemetry.addData("Max Elevator Power:", maxElevPower);
+            double up = gamepad2.left_trigger;
+            double down = gamepad2.right_trigger;
+            double upPower = Range.clip(up, 0, maxElevPower)/2;//Makes sure elevator motor never runs above max. power
+            double downPower = (-Range.clip(down, 0, maxElevPower));
+            telemetry.addData("Max Elevator Power", maxElevPower);
             telemetry.addData("Max Drive Power", maxDrivePower);
             if (up > 0 && elevatorDrive.getCurrentPosition() < elevUpperLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -78,16 +76,16 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
             } else if (down > 0 && elevatorDrive.getCurrentPosition() > elevLowerLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(downPower);
-            } else if (gamepad2.dpad_up && maxElevPower < 1 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
+            } else if (gamepad2.dpad_up && maxElevPower < 0.9 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
                 maxElevPower += 0.1;
                 ddeb.reset();
-            } else if (gamepad2.dpad_down && maxElevPower > 0 && ddeb.milliseconds() > 100) {
+            } else if (gamepad2.dpad_down && maxElevPower > 0.1 && ddeb.milliseconds() > 100) {
                 maxElevPower -= 0.1;
                 ddeb.reset();
-            } else if (gamepad1.dpad_up && maxDrivePower < 1 && ddeb.milliseconds() > 100) {
+            } else if (gamepad1.dpad_up && maxDrivePower < 0.9 && ddeb.milliseconds() > 100) {
                 maxDrivePower += 0.1;
                 ddeb.reset();
-            } else if (gamepad1.dpad_down && maxDrivePower > 0 && ddeb.milliseconds() > 100) {
+            } else if (gamepad1.dpad_down && maxDrivePower > 0.1 && ddeb.milliseconds() > 100) {
                 maxDrivePower -= 0.1;
                 ddeb.reset();
             } else {
@@ -97,30 +95,40 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
             }
 
             //Claw Code
-            if (gamepad2.a && adeb.milliseconds() > 500) {
-                if (aflag) {
-                    servo1.setPosition(.26);//Closes claw
-                } else {
-                    servo1.setPosition(0);
-                }
-                aflag = !aflag;
-                adeb.reset();
-            } else if (gamepad2.x) {
-                servo1.setPosition(0);
-                aflag = false;
-            }
-            telemetry.addData("aflag", aflag);
+//            if (gamepad2.a && adeb.milliseconds() > 500) {
+//                if (aflag) {
+//                    servo1.setPosition(.26);//Closes claw
+//                } else {
+//                    servo1.setPosition(0);
+//                }
+//                aflag = !aflag;
+//                adeb.reset();
+//            } else if (gamepad2.x) {
+//                servo1.setPosition(0);
+//                aflag = false;
+//            }
+//            telemetry.addData("aflag", aflag);
+//
+//            //Arm Code
+//            if (gamepad2.y && xdeb.milliseconds() > 500) {
+//                if (xflag) {
+//                    servo2.setPosition(0.6);
+//                } else {
+//                    servo2.setPosition(0);//Sends arm all the way left.
+//                }
+//            } else if (gamepad2.b) {
+//                servo2.setPosition(0.6);
+//                xflag = false;
+//            }
 
-            //Arm Code
-            if (gamepad2.y && xdeb.milliseconds() > 500) {
-                if (xflag) {
-                    servo2.setPosition(0.6);
-                } else {
-                    servo2.setPosition(0);//Sends arm all the way left.
-                }
+            if (gamepad2.a) {
+                servo1.setPosition(0.05);
+            } else if (gamepad2.x) {
+                servo1.setPosition(0.19);
+            } else if (gamepad2.y) {
+                servo2.setPosition(0.05);
             } else if (gamepad2.b) {
-                servo2.setPosition(0.6);
-                xflag = false;
+                servo2.setPosition(0.75);
             }
 
             //driving code

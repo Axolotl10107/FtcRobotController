@@ -76,11 +76,9 @@ public class EverythingOpmode extends LinearOpMode {
             if (up > 0) {
                 elevatorDrive.setPower(upPower);
 //            } else if (down > 0 && lowerLimit.getState() == false) {
-            }
-            else if (gamepad2.right_bumper) {//Hold elevator up against gravity
+            } else if (gamepad2.right_bumper) {//Hold elevator up against gravity
                 elevatorDrive.setPower(-.2);
-            }
-            else if (down > 0) {
+            } else if (down > 0) {
                 elevatorDrive.setPower(downPower);
             } else if (gamepad2.dpad_up && maxPower < 0.9 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
                 maxPower += 0.1;
@@ -94,25 +92,7 @@ public class EverythingOpmode extends LinearOpMode {
             } else if (gamepad1.dpad_down && maxDrivePower > 0.1 && ddeb.milliseconds() > 100) {
                 maxDrivePower -= 0.1;
                 ddeb.reset();
-            }
-            //Elevator auto up/down; again, no limit switches installed. This code will likely be
-            //removed soon in favor of using encoders for 4 elevator tiers.
-//            else if (gamepad2.left_bumper) {
-//                double startTime = getRuntime();
-//                elevatorDrive.setPower(-maxPower);
-//                while (lowerLimit.getState()) {
-//                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
-//                }
-//                elevatorDrive.setPower(0);
-//            } else if (gamepad2.right_bumper) {
-//                double startTime = getRuntime();
-//                elevatorDrive.setPower(maxPower);
-//                while (upperLimit.getState() == false) {
-//                    telemetry.addData("Running for (seconds):", getRuntime() - startTime);
-//                }
-//                elevatorDrive.setPower(0);
-//            }
-            else {
+            } else {
                 elevatorDrive.setPower(0);//If elevator is not being commanded, make sure it's stopped.
             }
 
@@ -122,8 +102,7 @@ public class EverythingOpmode extends LinearOpMode {
                 // .45
                 servo1.setPosition(0.05);//Opens claw
                 telemetry.addData("Button", "X");
-            }
-            else if (gamepad2.a) {
+            } else if (gamepad2.a) {
                 servo1.setPosition(.19);//Closes claw
                 telemetry.addData("Button", "A");
             }
@@ -136,8 +115,7 @@ public class EverythingOpmode extends LinearOpMode {
             if (gamepad2.y) {
                 servo2.setPosition(0.05);//Sends arm all the way [front].
                 telemetry.addData("Button", "Y");
-            }
-            else if (gamepad2.b) {
+            } else if (gamepad2.b) {
                 servo2.setPosition(.75);
                 telemetry.addData("Button", "B");
             }
@@ -152,12 +130,6 @@ public class EverythingOpmode extends LinearOpMode {
             double strafe  =  gamepad1.right_stick_x;
             double turn = gamepad1.left_stick_x;
 
-
-                 leftPower = Range.clip(drive + strafe + turn - negative, -maxDrivePower, maxDrivePower) ;//Makes sure motors only run up to half power
-                rightPower = Range.clip(drive - strafe - turn - negative, -maxDrivePower, maxDrivePower) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
-             leftbackPower = Range.clip(drive - strafe + turn - negative, -maxDrivePower, maxDrivePower) ;
-            rightbackPower = Range.clip(drive + strafe - turn - negative , -maxDrivePower, maxDrivePower) ;
-
             //Half-speed Driving
             if (gamepad1.right_bumper) {
                 drive = 0.25;
@@ -165,6 +137,11 @@ public class EverythingOpmode extends LinearOpMode {
             if (gamepad1.left_bumper) {
                 negative = 0.25;
             }
+
+                 leftPower = Range.clip(drive + strafe + turn - negative, -maxDrivePower, maxDrivePower) ;//Makes sure motors only run up to half power
+                rightPower = Range.clip(drive - strafe - turn - negative, -maxDrivePower, maxDrivePower) ;//Adds all controller inputs together so they can kind of work simultaneously (it doesn't work very well right now)
+             leftbackPower = Range.clip(drive - strafe + turn - negative, -maxDrivePower, maxDrivePower) ;
+            rightbackPower = Range.clip(drive + strafe - turn - negative , -maxDrivePower, maxDrivePower) ;
 
             leftFront.setPower(leftPower);
             rightFront.setPower(rightPower);
