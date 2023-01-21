@@ -23,7 +23,7 @@ public class EncoderTeleTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         //Get the motor specified in the config file and set it up
-        motor = hardwareMap.get(DcMotor.class, "motor");
+        motor = hardwareMap.get(DcMotor.class, "Ellyvader");
         motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setPower(0);//Motor will run at this power until it reaches...
         motor.setTargetPosition(0);//this target position! We'll change this value with the D-Pad.
@@ -52,7 +52,7 @@ public class EncoderTeleTest extends LinearOpMode {
                 targetPos -= 10;
             }
             else if (gamepad1.a) {
-                motor.setPower(0.2);
+                motor.setPower(0.4);
                 motor.setTargetPosition(targetPos);//Actually tell the motor to move to our stored target position
             } else if (gamepad1.x) {
                 targetPos = 0;//Return motor to position 0
