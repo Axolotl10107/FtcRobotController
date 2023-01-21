@@ -88,6 +88,10 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
             } else if (gamepad1.dpad_down && maxDrivePower > 0.1 && ddeb.milliseconds() > 100) {
                 maxDrivePower -= 0.1;
                 ddeb.reset();
+            } else if (gamepad2.back) {
+                elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                elevatorDrive.setTargetPosition(0);
+                elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             } else {
                 elevatorDrive.setTargetPosition(elevatorDrive.getCurrentPosition());
                 elevatorDrive.setPower(0.2);
