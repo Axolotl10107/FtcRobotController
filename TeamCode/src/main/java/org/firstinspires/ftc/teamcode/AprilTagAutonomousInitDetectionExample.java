@@ -93,7 +93,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         rightFront.setPower(0.6);
         leftBack.setPower(0.6);
         rightBack.setPower(0.6);
-        sleep(600);
+        sleep(500);
         stopTile();
     }
 
@@ -102,7 +102,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         rightFront.setPower(-0.6);
         leftBack.setPower(-0.6);
         rightBack.setPower(-0.6);
-        sleep(600);
+        sleep(400);
         stopTile();
     }
 
@@ -122,7 +122,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         rightFront.setPower(-0.6);
         leftBack.setPower(-0.6);
         rightBack.setPower(0.6);
-        sleep(850);
+        sleep(1000);
         stopTile();
     }
 

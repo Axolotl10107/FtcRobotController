@@ -13,13 +13,14 @@ public class NonBlockingDebounceTest extends LinearOpMode {
      * times a second. To solve this and only register one press, we add a small delay - 1 second in
      * this case, but normally it'd be quite a bit less - after first contact, and by then you'll
      * have stopped pressing the button.
+     * THE FOLLOWING IS INCORRECT! (It's a //toggle//, not a //debounce//...)
      * This demonstration does it without using the sleep() function, using an ElapsedTime background
      * chronometer instead, so that other code can run during the debounce delay. This would make
      * button toggles feasible during TeleOp on the field! */
 
-    // X button will toggle this to demonstrate async debounced toggles.
+    // X button will toggle this to demonstrate async toggles.
     private boolean xflag = false;
-    // Y button will use this to show why non-debounced toggles don't work.
+    // Y button will use this to show why non-timed toggles don't work.
     private boolean yflag = false;
 
     @Override
