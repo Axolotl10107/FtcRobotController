@@ -46,6 +46,17 @@ public class Robot {
         leftBackTarget -= right;
         rightBackTarget += right;
     }
+    public void intMotors(){
+        leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "RightFront");
+        leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
+        rightBack = hardwareMap.get(DcMotor.class, "RightBack");
+
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.FORWARD);
+    }
 
     private void setElevatorTarget(int target) {
         elevatorDrive.setTargetPosition(target);
