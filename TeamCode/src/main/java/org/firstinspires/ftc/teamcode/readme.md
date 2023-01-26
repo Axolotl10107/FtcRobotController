@@ -10,8 +10,8 @@ About the OpModes contained within:
 - [Autonomous ||| __No Encoders *yet*__ |||] AutoFakeVision - goes to signal parking zone 1 for a 1 in 3 chance of scoring 10 points - use when no signal sleeve is available
 - [Autonomous ||| __No Encoders__ |||] AutoTimeLinearALOTO - Strafes right for 1 second.
 - [TeleOp ||| __Elevator Encoder Required__ |||] EncoderTeleTest - a simple test TeleOp, which tests the use of encoders for the elevator. *Fully working!*
-- [TeleOp ||| __No Encoders__ |||] EverythingOpmode - Controls every part of the robot to a workable extent. Arm and claw positions are all or nothing, but driving and elevator are nice. This is the *only* TeleOp that can drive the entire bot and be used at a meet!
-- [TeleOp ||| __Elevator Encoder Required__| ||] EverythingOpmodeElevHold - same as EverythingOpmode, but with an arm toggle and automatic elevator hold *using encoders*.
+- [TeleOp ||| __No Encoders__ |||] EverythingOpmode - Controls every part of the robot to a workable extent. This is the *only* TeleOp that can drive the entire bot and be used at a meet!
+- [TeleOp ||| __Elevator Encoder Required__| ||] EverythingOpmodeElevHold - same as EverythingOpmode, but with automatic elevator hold *using encoders*.
 - [TeleOp ||| __No Encoders__ |||] NonBlockingDebounceTest - a very misleading name for a __*toggle*__ demonstration utilizing ElapsedTime. Too confusing to be more than a quick test, and may be superseded later.
 - [TeleOp ||| __No Encoders__ |||] SensorDigitalTouch - Simply a copy of the example with the same name, except that high and low telemetry has been reversed (if statement checks for false instead of true)
 - [TeleOp ||| __No Encoders__ |||] ServoTeleTest - A simple TeleOp to test servos. Uses analog sticks to control two servos' absolute position. (See Control Layout 2.)
