@@ -26,7 +26,7 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
     // the D-Pad to adjust it at runtime.
     private double maxDrivePower = 0.5;
 
-    private int elevUpperLimit = -1030;
+    private int elevUpperLimit = 1030;
     private int elevLowerLimit = 0;
 
     @Override
@@ -64,16 +64,16 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
 
 //Elevator code
         while (opModeIsActive()) {
-            double up = gamepad2.left_trigger;
-            double down = gamepad2.right_trigger;
-            double upPower = Range.clip(up, 0, maxElevPower)/2;//Makes sure elevator motor never runs above max. power
-            double downPower = (-Range.clip(down, 0, maxElevPower));
+            double up = gamepad2.right_trigger;
+            double down = gamepad2.left_trigger;
+            double upPower = Range.clip(up, 0, maxElevPower);//Makes sure elevator motor never runs above max. power
+            double downPower = (-Range.clip(down, 0, maxElevPower))/2;
             telemetry.addData("Max Elevator Power", maxElevPower);
             telemetry.addData("Max Drive Power", maxDrivePower);
-            if (up > 0 && elevatorDrive.getCurrentPosition() < elevLowerLimit) {
+            if (up > 0 && elevatorDrive.getCurrentPosition() < elevUpperLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(upPower);
-            } else if (down > 0 && elevatorDrive.getCurrentPosition() > elevUpperLimit) {
+            } else if (down > 0 && elevatorDrive.getCurrentPosition() > elevLowerLimit) {
                 elevatorDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 elevatorDrive.setPower(downPower);
             } else if (gamepad2.dpad_up && maxElevPower < 0.9 && ddeb.milliseconds() > 100) {//Change max. power that elevator motor will run at
@@ -129,9 +129,9 @@ public class EverythingOpmodeElevHold extends LinearOpMode {
                 servo1.setPosition(0.05);//Opens claw
             } else if (gamepad2.a) {
                 servo1.setPosition(0.19);//Closes claw
-            } else if (gamepad2.y && elevatorDrive.getCurrentPosition() < -100) {
+            } else if (gamepad2.y && elevatorDrive.getCurrentPosition() > 200) {
                 servo2.setPosition(0.05);
-            } else if (gamepad2.b && elevatorDrive.getCurrentPosition() < -100) {
+            } else if (gamepad2.b && elevatorDrive.getCurrentPosition() > 200) {
                 servo2.setPosition(0.75);
             }
 
