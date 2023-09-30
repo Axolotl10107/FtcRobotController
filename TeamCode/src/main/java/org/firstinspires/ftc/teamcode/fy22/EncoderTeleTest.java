@@ -1,14 +1,16 @@
 //ALoTO 2022-23
 /* Values we have found: 850 is the top */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy22;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Disabled
 @TeleOp(name="EncoderTeleTest", group="TeleTest")
 public class EncoderTeleTest extends LinearOpMode {
     //Declare variables first because we have to

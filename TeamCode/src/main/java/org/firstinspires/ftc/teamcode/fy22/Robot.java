@@ -1,5 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy22;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -49,10 +51,10 @@ public class Robot {
         rightBackTarget += right;
     }
     public void intMotors(){
-        leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "RightFront");
-        leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "RightBack");
+//        leftFront = hardwareMap.get(DcMotor.class, "LeftFront");
+//        rightFront = hardwareMap.get(DcMotor.class, "RightFront");
+//        leftBack = hardwareMap.get(DcMotor.class, "LeftBack");
+//        rightBack = hardwareMap.get(DcMotor.class, "RightBack");
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);

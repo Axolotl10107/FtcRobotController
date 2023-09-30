@@ -28,11 +28,13 @@
  */
 //ALoTO 2022-23
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy22;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -54,9 +56,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto Fake Vision", group="Auto Vision")
+@Disabled
+@Autonomous(name="Robot: Auto Drive By Time", group="Robot")
 
-public class AutoFakeVision extends LinearOpMode {
+public class AutoTimeLinearALOTO extends LinearOpMode {
 
     /* Declare OpMode members. */
     private DcMotor         LeftBack   = null;
@@ -86,7 +89,7 @@ public class AutoFakeVision extends LinearOpMode {
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         LeftFront.setDirection(DcMotor.Direction.REVERSE);
         RightFront.setDirection(DcMotor.Direction.FORWARD);
-        LeftBack.setDirection(DcMotor.Direction.REVERSE);
+        LeftBack.setDirection(DcMotor.Direction.REVERSE );
         RightBack.setDirection(DcMotor.Direction.FORWARD);
 
         // Send telemetry message to signify robot waiting;
@@ -98,26 +101,13 @@ public class AutoFakeVision extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // Step 0: Drive forward for 1 second, maybe land in the right parking zone?
-        LeftBack.setPower(FORWARD_SPEED);
+        // Step 1:  Drive Srafe Right for 1 seconds
+        LeftBack.setPower(REVERSE_SPEED);
         RightBack.setPower(FORWARD_SPEED);
-        RightFront.setPower(FORWARD_SPEED);
+        RightFront.setPower(REVERSE_SPEED);
         LeftFront.setPower(FORWARD_SPEED);
-        sleep(500);
-        LeftBack.setPower(0);
-        RightBack.setPower(0);
-        RightFront.setPower(0);
-        LeftFront.setPower(0);
-        sleep(10000);
-
-
-        // Step 1:   Strafe Left for 1 seconds
-        LeftBack.setPower(FORWARD_SPEED);
-        RightBack.setPower(REVERSE_SPEED);
-        RightFront.setPower(FORWARD_SPEED);
-        LeftFront.setPower(REVERSE_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.milliseconds() < 500)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }

@@ -1,6 +1,7 @@
 //ALoTO 2022-23
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy22;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+@Disabled
 @TeleOp(name="Everything Opmode", group="Everything Opmode")
 //Start+A for driving, Start+B for manipulator
 public class EverythingOpmode extends LinearOpMode {
