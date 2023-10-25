@@ -28,7 +28,7 @@
  */
 //ALoTO 2022-23
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy22;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -56,6 +56,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
+@Disabled
 @Autonomous(name="Robot: Auto Drive By Time", group="Robot")
 
 public class AutoTimeLinearALOTO extends LinearOpMode {
@@ -100,7 +101,7 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // Step 1:  Drive right for 1 seconds
+        // Step 1:  Drive Strafe Right for 1 seconds
         LeftBack.setPower(REVERSE_SPEED);
         RightBack.setPower(FORWARD_SPEED);
         RightFront.setPower(REVERSE_SPEED);
@@ -110,7 +111,7 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }
-
+/*
         // Michael's Step: Drive Left for 1 second
         LeftBack.setPower(FORWARD_SPEED);
         RightBack.setPower(REVERSE_SPEED);
@@ -155,7 +156,7 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
             telemetry.update();
         }
 
-        //Spin other way (also not tested)
+      //Spin other way (also not tested)
         LeftBack.setPower(REVERSE_SPEED);
         RightBack.setPower(FORWARD_SPEED);
         RightFront.setPower(FORWARD_SPEED);
@@ -164,7 +165,8 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
         while (opModeIsActive() && (runtime.seconds() < 1.0)) {
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
-        }
+            }
+      */
 
         // Step 4:  Stop
         LeftBack.setPower(0);
