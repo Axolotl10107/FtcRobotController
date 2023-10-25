@@ -3,9 +3,11 @@ package org.firstinspires.ftc.teamcode.fy23;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInterface;
 
 @TeleOp(name= "DriveCode", group = "Linear opmode")
 public class Drivecode extends LinearOpMode {
@@ -36,11 +38,47 @@ public class Drivecode extends LinearOpMode {
         // Wait for the game to start and this is where the driver hits play
         waitForStart();
         runtime.reset();
+//we coment stuff out so it will actually go to the robot
+        // map drive functions to gamepad buttons Sorry
+//        forwardMovement = rightStickYLinear;
+//        strafeMovement = rightStickXLinear;
+//        rotateMovement = leftStickXLinear;
+        GamepadInterface gamePad = new GamepadInterface() {
+            @Override
+            public double forwardMovement() {
+                return rightStickYLinear(1,1);
+            }
 
-        // map drive functions to gamepad buttons
-        forwardMovement = rightStickYLinear;
-        strafeMovement = rightStickXLinear;
-        rotateMovement = leftStickXLinear;
+            @Override
+            public double strafeMovement() {
+                return rightStickXLinear(1,1);
+            }
+
+            @Override
+            public double rotateMovement() {
+                return leftStickXLinear(1,1);
+            }
+
+            @Override
+            public double armMovement() {
+                return 0;
+            }
+
+            @Override
+            public double elevatorMovement() {
+                return 0;
+            }
+
+            @Override
+            public double clawOpen() {
+                return 0;
+            }
+
+            @Override
+            public double clawClose() {
+                return 0;
+            }
+        };
 
         while (opModeIsActive()) {
 
@@ -69,14 +107,16 @@ public class Drivecode extends LinearOpMode {
             //     strafe  =  gamepad1.right_stick_x;
             //     turn = gamepad1.left_stick_x;
             // }
-            drive = forwardMovement(1,1);
-            strafe  =  strafeMovement(1,1);
-            turn = rotateMovement(1,1);
 
-            leftPower    = Range.clip(drive + strafe + turn - negative, -2, 2) ;
-            rightPower   = Range.clip(drive - strafe - turn - negative, -2, 2) ;
-            leftbackPower = Range.clip(drive - strafe + turn - negative, -2, 2) ;
-            rightbackPower  = Range.clip(drive + strafe - turn - negative , -2, 2) ;
+// i am removing the 1,1 in the () you will need to add them back probably
+            drive = gamePad.forwardMovement();
+            strafe = gamePad.strafeMovement();
+            turn = gamePad.rotateMovement();
+
+            leftPower = Range.clip(drive + strafe + turn - negative, -1, 1);
+            rightPower = Range.clip(drive - strafe - turn - negative, -1, 1);
+            leftbackPower = Range.clip(drive - strafe + turn - negative, -1, 1);
+            rightbackPower = Range.clip(drive + strafe - turn - negative, -1, 1);
 
             leftFront.setPower(leftPower);
             rightFront.setPower(rightPower);
@@ -89,25 +129,38 @@ public class Drivecode extends LinearOpMode {
         telemetry.update();
     }
 
-    static double forwardMovement() {return 0;}
-    static double strafeMovement() {return 0;}
-    static double rotateMovement() {return 0;}
+    //
+    double rightStickYLinear(int gamepad, double scaling) {
+        if (gamepad == 2) {
+            return gamepad2.right_stick_y * scaling;
+        } else {
+            return gamepad1.right_stick_y * scaling;
+        }
+    }
 
-    static double rightStickYLinear(int gamepadNum, double scaling) {
-        gamepad = (gamepadNum == 2) ? gamepad2 : gamepad1 ;
-        return gamepad.right_stick_y()*scaling;
+    double rightStickXLinear(int gamepad, double scaling) {
+        if (gamepad == 2) {
+            return gamepad2.right_stick_x * scaling;
+        } else {
+            return gamepad1.right_stick_x * scaling;
+        }
     }
-    static double rightStickXLinear(int gamepadNum, double scaling) {
-        gamepad = (gamepadNum == 2) ? gamepad2 : gamepad1 ;
-        return gamepad.right_stick_x()*scaling;
+
+    double leftStickXLinear(int gamepad, double scaling) {
+        if (gamepad == 2) {
+            return gamepad2.left_stick_x * scaling;
+        } else {
+            return gamepad1.left_stick_x * scaling;
+        }
     }
-    static double triggerLinear(int gamepadNum, double scaling) {
-        gamepad = (gamepadNum == 2) ? gamepad2 : gamepad1 ;
-        return (gamepad.right_trigger()-gamepad.left_trigger())*scaling;
-    }
-    static double leftStickXLinear(int gamepadNum, double scaling) {
-        gamepad = (gamepadNum == 2) ? gamepad2 : gamepad1 ;
-        return gamepad.left_stick_x()*scaling;
+
+    double rightStickYExponential(int gamepad, double scaling) {
+        if (gamepad == 2) {
+            return -Math.pow(gamepad2.right_stick_y, scaling);
+        } else {
+            return -Math.pow(gamepad1.right_stick_y, scaling);
+        }
     }
 }
+// Probably need to add a } if the above code commented out is used!!!!
 

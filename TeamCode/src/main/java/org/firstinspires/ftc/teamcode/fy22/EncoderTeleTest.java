@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Disabled
 @TeleOp(name="EncoderTeleTest", group="TeleTest")
 public class EncoderTeleTest extends LinearOpMode {
     //Declare variables first because we have to

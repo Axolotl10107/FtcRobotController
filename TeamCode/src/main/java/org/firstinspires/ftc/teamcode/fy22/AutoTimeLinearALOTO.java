@@ -101,7 +101,7 @@ public class AutoTimeLinearALOTO extends LinearOpMode {
 
         // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
-        // Step 1:  Drive Srafe Right for 1 seconds
+        // Step 1:  Drive Strafe Right for 1 seconds
         LeftBack.setPower(REVERSE_SPEED);
         RightBack.setPower(FORWARD_SPEED);
         RightFront.setPower(REVERSE_SPEED);
