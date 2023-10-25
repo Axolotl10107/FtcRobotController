@@ -7,11 +7,11 @@ public class GamepadInputs {
         return gamepad.right_stick_y * scaling;
     }
 
-    double rightStickXLinear(int gamepad, double scaling) {
+    static double rightStickXLinear(Gamepad gamepad, double scaling) {
         return gamepad.right_stick_x * scaling;
     }
 
-    double leftStickXLinear(int gamepad, double scaling) {
+    static double leftStickXLinear(Gamepad gamepad, double scaling) {
         return gamepad.left_stick_x * scaling;
     }
 //
