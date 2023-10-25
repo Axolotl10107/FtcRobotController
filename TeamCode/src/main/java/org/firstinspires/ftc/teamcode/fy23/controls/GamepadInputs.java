@@ -7,21 +7,13 @@ public class GamepadInputs {
         return gamepad.right_stick_y * scaling;
     }
 
-//    double rightStickXLinear(int gamepad, double scaling) {
-//        if (gamepad == 2) {
-//            return gamepad2.right_stick_x * scaling;
-//        } else {
-//            return gamepad1.right_stick_x * scaling;
-//        }
-//    }
-//
-//    double leftStickXLinear(int gamepad, double scaling) {
-//        if (gamepad == 2) {
-//            return gamepad2.left_stick_x * scaling;
-//        } else {
-//            return gamepad1.left_stick_x * scaling;
-//        }
-//    }
+    double rightStickXLinear(int gamepad, double scaling) {
+        return gamepad.right_stick_x * scaling;
+    }
+
+    double leftStickXLinear(int gamepad, double scaling) {
+        return gamepad.left_stick_x * scaling;
+    }
 //
 //    double rightStickYExponential(int gamepad, double scaling) {
 //        if (gamepad == 2) {

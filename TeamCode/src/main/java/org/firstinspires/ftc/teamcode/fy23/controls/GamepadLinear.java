@@ -15,12 +15,12 @@ public class GamepadLinear implements GamepadInterface {
 
     @Override
     public double strafeMovement() {
-        return 0;
+        return GamepadInputs.rightStickXLinear(gamepad1, 1);
     }
 
     @Override
     public double rotateMovement() {
-        return 0;
+        return GamepadInputs.leftStickXLinear(gamepad1, 1);
     }
 
     @Override
