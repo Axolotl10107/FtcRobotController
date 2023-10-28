@@ -97,6 +97,7 @@ public class EncoderTeleTest23 extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addLine("Looped!");
         if (aActive) {
             telemetry.addData(">>> Staged Target A", targetPosA);
         } else {
@@ -109,6 +110,7 @@ public class EncoderTeleTest23 extends OpMode {
         }
         telemetry.addData("Active Target", motor.getTargetPosition());
         telemetry.addData("Actual Position", motor.getCurrentPosition());
+        telemetry.addData("Active Motor", motorList.get(listIdx));
         telemetry.addData("Motor runmode", motor.getMode());
         telemetry.addData("Motor power", motor.getPower());
         telemetry.addLine("------------------------------------------");
@@ -136,7 +138,7 @@ public class EncoderTeleTest23 extends OpMode {
         }
 
         //Change Staged Target
-        else if (gamepad1.right_trigger > 0.5 && otherDeb.milliseconds() > otherDebTime) {
+        if (gamepad1.right_trigger > 0.5 && otherDeb.milliseconds() > otherDebTime) {
             aActive = !aActive;
             bActive = !bActive;
             otherDeb.reset();
