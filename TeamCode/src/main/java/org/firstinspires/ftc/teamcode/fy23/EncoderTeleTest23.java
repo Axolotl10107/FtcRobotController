@@ -13,6 +13,24 @@ import java.util.ArrayList;
 
 @TeleOp(name="EncoderTeleTest23", group="TeleTest")
 public class EncoderTeleTest23 extends OpMode {
+
+    //Configure the Safety Check
+    ElapsedTime safetyCheckClock;
+    int safetyCheckInterval = 100;
+    int requiredDistance = 10;
+
+    boolean safetyCheck() { //returns true if continued operation is safe, false if unsafe
+        int currentPos = motor.getCurrentPosition();
+        if ((lastMotorPos > (currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
+            //if we haven't moved requriedDistance ticks since last we checked (since the safetyCheckInterval last came around)
+            //and we actually have somewhere to go
+            return false;
+        } else {
+            lastMotorPos = currentPos;
+            return true;
+        }
+    }
+
     //Declare variables first because we have to
     DcMotor motor;
     ElapsedTime upDeb;
@@ -22,10 +40,8 @@ public class EncoderTeleTest23 extends OpMode {
     int downDebTime = 200;
     int otherDebTime = 200;
 
-    ElapsedTime safetyCheck;
-    int safetyCheckTime = 100;
-
-    ArrayList<String> motorList = new ArrayList<String>(6);
+//    ArrayList<String> motorList = new ArrayList<>(6);
+    ArrayList<String> motorList = new ArrayList<>(1);
 
     int targetPosA = 0;//Stage target here - we'll send it to the motor later
     int targetPosB = 0;
@@ -77,12 +93,13 @@ public class EncoderTeleTest23 extends OpMode {
     public void init() {
         telemetry.addData("Task", "Initializing program...");
         //Add entries to motorList
-        motorList.add("leftFront");
-        motorList.add("leftBack");
-        motorList.add("rightFront");
-        motorList.add("rightBack");
-        motorList.add("armPivot");
-        motorList.add("armExtend");
+//        motorList.add("leftFront");
+//        motorList.add("leftBack");
+//        motorList.add("rightFront");
+//        motorList.add("rightBack");
+//        motorList.add("armPivot");
+//        motorList.add("armExtend");
+        motorList.add("motor");
 
         //Initialize the first motor
         initMotor(listIdx); //listIdx should be 0 at this time
@@ -90,7 +107,7 @@ public class EncoderTeleTest23 extends OpMode {
         upDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         downDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         otherDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        safetyCheck = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        safetyCheckClock = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
         telemetry.addData("Task", "Ready");
     }
@@ -101,18 +118,20 @@ public class EncoderTeleTest23 extends OpMode {
         if (aActive) {
             telemetry.addData(">>> Staged Target A", targetPosA);
         } else {
-            telemetry.addData("    Staged Target A", targetPosA);
+            telemetry.addData("      Staged Target A", targetPosA);
         }
         if (bActive) {
             telemetry.addData(">>> Staged Target B", targetPosB);
         } else {
-            telemetry.addData("    Staged Target B", targetPosB);
+            telemetry.addData("      Staged Target B", targetPosB);
         }
         telemetry.addData("Active Target", motor.getTargetPosition());
         telemetry.addData("Actual Position", motor.getCurrentPosition());
         telemetry.addData("Active Motor", motorList.get(listIdx));
         telemetry.addData("Motor runmode", motor.getMode());
-        telemetry.addData("Motor power", motor.getPower());
+        telemetry.addData("Set Motor Power", motorPower);
+        telemetry.addData("Actual Motor power", motor.getPower());
+        telemetry.addData("otherDeb", otherDeb.milliseconds());
         telemetry.addLine("------------------------------------------");
         telemetry.addLine("D-Pad: Up/Down 10, Left/Right 100");
         telemetry.addLine("Bumpers: 1000");
@@ -123,17 +142,36 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addLine("Left trigger sets selected Staged Target to current position");
         telemetry.addLine("Start/Back cycle through motors");
         telemetry.addLine("Left/Right stick click change motor power");
+        telemetry.addLine("Extra stuff on Gamepad 2:");
+        telemetry.addLine("A sets RUN_WITHOUT_ENCODER");
+        telemetry.addLine("B sets RUN_TO_POSITION");
+        telemetry.addLine("Triggers do analog control when in RUN_WITHOUT_ENCODER");
 
         //Safety Check
-        if (safetyCheck.milliseconds() > safetyCheckTime) {
-            if (!(motor.getTargetPosition()-20 < motor.getCurrentPosition() && motor.getCurrentPosition() < motor.getTargetPosition()+20)) {
-                //If we are not at our target position, then...
-                int diff = motor.getCurrentPosition() - getStagedTarget();
-                if (!(diff > 100 || diff < 100)) { //Both ways - could be moving either direction
-                    motor.setPower(0);
-                    motor.setTargetPosition(motor.getCurrentPosition());
-                    telemetry.addData("Task", "Safety check tripped");
-                }
+//        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
+//            if (!(motor.getTargetPosition()-20 < motor.getCurrentPosition() && motor.getCurrentPosition() < motor.getTargetPosition()+20)) {
+//                //If we are not at our target position, then...
+//                int diff = motor.getCurrentPosition() - getStagedTarget();
+//                if (!(diff > 100 || diff < 100)) { //Both ways - could be moving either direction
+//                    motor.setPower(0);
+//                    motor.setTargetPosition(motor.getCurrentPosition());
+//                    telemetry.addData("Task", "Safety check tripped");
+//                }
+//            }
+//        }
+
+        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
+            safetyCheckClock.reset();
+//            if (!safetyCheck()) {
+            if (false) { //disabled feature :(
+                motor.setPower(0);
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                telemetry.clearAll();
+                telemetry.addLine("||||||||||||||||||||||");
+                telemetry.addLine("||| Safety Lockout |||");
+                telemetry.addLine("||||||||||||||||||||||");
+                telemetry.update();
+//                while (true) {} //Yes, this is intentional.
             }
         }
 
@@ -152,10 +190,10 @@ public class EncoderTeleTest23 extends OpMode {
 
         //Motor power adjustment
         else if (gamepad1.right_stick_button && motor.getPower() < 1.0 && otherDeb.milliseconds() > otherDebTime) {
-            motor.setPower(motor.getPower()+0.1);
+            motorPower = (motorPower+0.1);
             otherDeb.reset();
         } else if (gamepad1.left_stick_button && motor.getPower() > 0 && otherDeb.milliseconds() > otherDebTime) {
-            motor.setPower(motor.getPower()-0.1);
+            motorPower = (motorPower-0.1);
             otherDeb.reset();
         }
 
@@ -229,6 +267,18 @@ public class EncoderTeleTest23 extends OpMode {
             motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             otherDeb.reset();
             telemetry.addData("Task", "Ready");
+
+        //Bonus feature: analog control with gamepad2
+        } else if (gamepad2.a && otherDeb.milliseconds() > otherDebTime) {
+            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            otherDeb.reset();
+        } else if (gamepad2.b && otherDeb.milliseconds() > otherDebTime) {
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            otherDeb.reset();
+        }
+
+        if (motor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+            motor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         }
 
     }
