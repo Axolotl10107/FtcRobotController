@@ -42,7 +42,7 @@ public class EncoderTeleTest23 extends OpMode {
     int otherDebTime = 200;
 
     //    ArrayList<String> motorList = new ArrayList<>(6);
-    ArrayList<String> motorList = new ArrayList<>(1);
+    ArrayList<String> motorList = new ArrayList<>(2);
 
     int targetPosA = 0;//Stage target here - we'll send it to the motor later
     int targetPosB = 0;
@@ -58,7 +58,7 @@ public class EncoderTeleTest23 extends OpMode {
         motor = hardwareMap.get(DcMotor.class, motorString);
 
         //Put the motor into a known configuration
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
         motor.setPower(0);
         motor.setTargetPosition(0);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
@@ -101,6 +101,7 @@ public class EncoderTeleTest23 extends OpMode {
 //        motorList.add("armPivot");
 //        motorList.add("armExtend");
         motorList.add("motor");
+        motorList.add("motor2");
 
         //Initialize the first motor
         initMotor(listIdx); //listIdx should be 0 at this time
@@ -128,6 +129,7 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addData("Active Target", motor.getTargetPosition());
         telemetry.addData("Actual Position", motor.getCurrentPosition());
         telemetry.addData("Active Motor", motorList.get(listIdx));
+        telemetry.addLine(motor.getDeviceName());
         telemetry.addData("Motor runmode", motor.getMode());
         telemetry.addData("Set Motor Power", motorPower);
         telemetry.addData("Actual Motor power", motor.getPower());
@@ -210,6 +212,7 @@ public class EncoderTeleTest23 extends OpMode {
             } else {
                 listIdx += 1;
             }
+            initMotor(listIdx);
             otherDeb.reset();
         } else if (gamepad1.back && otherDeb.milliseconds() > otherDebTime) {
             if (listIdx == 0) {
@@ -217,6 +220,7 @@ public class EncoderTeleTest23 extends OpMode {
             } else {
                 listIdx -= 1;
             }
+            initMotor(listIdx);
             otherDeb.reset();
         }
 
