@@ -3,7 +3,10 @@ package org.firstinspires.ftc.teamcode.fy23;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -17,6 +20,16 @@ public class Drivecode extends LinearOpMode {
     private DcMotor rightFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightBack = null;
+
+    //Manipulator stuffs
+    TouchSensor touch;
+    DcMotor armPivot;
+    DcMotor armExtend;
+    Servo clawServo;
+
+    double upPower = 0;
+    double downPower = 0;
+    //End manipulator stuffs
 
     @Override
     public void runOpMode() {
@@ -34,6 +47,19 @@ public class Drivecode extends LinearOpMode {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        //Manipulator stuffs
+        touch = hardwareMap.get(TouchSensor.class, "pivotLowerLimit");
+        armPivot = hardwareMap.get(DcMotor.class, "armPivot");
+        armExtend = hardwareMap.get(DcMotor.class, "armExtend");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
+
+        armExtend.setDirection(DcMotorSimple.Direction.REVERSE);
+
+//        armPivot.setTargetPosition(armPivot.getCurrentPosition());
+//        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armPivot.setPower(0);
+        //End manipulator stuffs
 
         // Wait for the game to start and this is where the driver hits play
         waitForStart();
@@ -123,10 +149,35 @@ public class Drivecode extends LinearOpMode {
             leftBack.setPower(leftbackPower);
             rightBack.setPower(rightbackPower);
 
+            telemetry.update();
 
+            //Manipulator stuffs
+            if (0 < armExtend.getCurrentPosition()) {
+                downPower = gamepad2.left_trigger;
+            } else {
+                downPower = 0;
+            }
+
+            if (armExtend.getCurrentPosition() < 2000) {
+                upPower = gamepad2.right_trigger;
+            } else {
+                upPower = 0;
+            }
+
+            armExtend.setPower((upPower - downPower) * 0.6);
+
+            //claw
+            if (gamepad2.x) {
+                clawServo.setPosition(0.05);//Opens claw
+            } else if (gamepad2.a) {
+                clawServo.setPosition(0.19);//Closes claw
+            }
+
+            armPivot.setPower(gamepad2.right_stick_x);
+
+            telemetry.addData("Encoder Position", armExtend.getCurrentPosition());
+            //End manipulator stuffs
         }
-
-        telemetry.update();
     }
 
     //
