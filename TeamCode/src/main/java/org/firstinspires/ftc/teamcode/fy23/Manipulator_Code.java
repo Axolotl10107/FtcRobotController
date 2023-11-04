@@ -96,7 +96,6 @@ public class Manipulator_Code extends LinearOpMode {
                 servo1.setPosition(0.05);//Opens claw
             } else if (gamepad1.a) {
                 servo1.setPosition(0.19);//Closes claw
-
             }
             telemetry.update();
         }
