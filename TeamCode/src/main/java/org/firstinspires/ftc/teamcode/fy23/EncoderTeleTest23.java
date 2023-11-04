@@ -1,7 +1,7 @@
 //Michael's test program for running a motor to encoder positions
 //Now with safety!
 
-package org.firstinspires.ftc.teamcode.fy23;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,12 +17,13 @@ public class EncoderTeleTest23 extends OpMode {
     //Configure the Safety Check
     ElapsedTime safetyCheckClock;
     int safetyCheckInterval = 100;
-    int requiredDistance = 10;
+    int requiredDistance = 50;
 
+    int currentPos = 0;
     boolean safetyCheck() { //returns true if continued operation is safe, false if unsafe
         int currentPos = motor.getCurrentPosition();
-        if ((lastMotorPos > (currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
-            //if we haven't moved requriedDistance ticks since last we checked (since the safetyCheckInterval last came around)
+        if ((lastMotorPos > Math.abs(currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
+            //if we haven't moved requiredDistance ticks since last we checked (since the safetyCheckInterval last came around)
             //and we actually have somewhere to go
             return false;
         } else {
@@ -40,7 +41,7 @@ public class EncoderTeleTest23 extends OpMode {
     int downDebTime = 200;
     int otherDebTime = 200;
 
-//    ArrayList<String> motorList = new ArrayList<>(6);
+    //    ArrayList<String> motorList = new ArrayList<>(6);
     ArrayList<String> motorList = new ArrayList<>(1);
 
     int targetPosA = 0;//Stage target here - we'll send it to the motor later
@@ -114,16 +115,15 @@ public class EncoderTeleTest23 extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addLine("Looped!");
         if (aActive) {
-            telemetry.addData(">>> Staged Target A", targetPosA);
+            telemetry.addData("->>>Staged Target A", targetPosA);
         } else {
-            telemetry.addData("      Staged Target A", targetPosA);
+            telemetry.addData("----Staged Target A", targetPosA);
         }
         if (bActive) {
-            telemetry.addData(">>> Staged Target B", targetPosB);
+            telemetry.addData("->>>Staged Target B", targetPosB);
         } else {
-            telemetry.addData("      Staged Target B", targetPosB);
+            telemetry.addData("----Staged Target B", targetPosB);
         }
         telemetry.addData("Active Target", motor.getTargetPosition());
         telemetry.addData("Actual Position", motor.getCurrentPosition());
@@ -131,7 +131,13 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addData("Motor runmode", motor.getMode());
         telemetry.addData("Set Motor Power", motorPower);
         telemetry.addData("Actual Motor power", motor.getPower());
-        telemetry.addData("otherDeb", otherDeb.milliseconds());
+        telemetry.addData("Safety Check Passing", safetyCheck());
+        telemetry.addData("lastMotorPos", lastMotorPos);
+        telemetry.addData("Difference", Math.abs(currentPos - lastMotorPos));
+        telemetry.addLine("(lastMotorPos > Math.abs(currentPos - requiredDistance))");
+        telemetry.addLine(String.valueOf((lastMotorPos > Math.abs(currentPos - requiredDistance))));
+        telemetry.addLine("(Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)");
+        telemetry.addLine(String.valueOf((Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)));
         telemetry.addLine("------------------------------------------");
         telemetry.addLine("D-Pad: Up/Down 10, Left/Right 100");
         telemetry.addLine("Bumpers: 1000");
@@ -222,7 +228,7 @@ public class EncoderTeleTest23 extends OpMode {
             changeStagedTarget(-10);
             downDeb.reset();
 
-        //100-tick adjustment
+            //100-tick adjustment
         } else if (gamepad1.dpad_right && upDeb.milliseconds() > upDebTime) {
             changeStagedTarget(100);
             upDeb.reset();
@@ -230,7 +236,7 @@ public class EncoderTeleTest23 extends OpMode {
             changeStagedTarget(-100);
             downDeb.reset();
 
-        //1000-tick adjustment
+            //1000-tick adjustment
         } else if (gamepad1.right_bumper && upDeb.milliseconds() > upDebTime) {
             changeStagedTarget(1000);
             upDeb.reset();
@@ -246,20 +252,20 @@ public class EncoderTeleTest23 extends OpMode {
             otherDeb.reset();
             telemetry.addData("Task", "Ready");
 
-        //Set the Active Target to Staged Target B
+            //Set the Active Target to Staged Target B
         } else if (gamepad1.b && otherDeb.milliseconds() > otherDebTime) {
             motor.setPower(motorPower);
             motor.setTargetPosition(targetPosB);
             otherDeb.reset();
             telemetry.addData("Task", "Ready");
 
-        //Stop Motor
+            //Stop Motor
         } else if (gamepad1.x && otherDeb.milliseconds() > otherDebTime) {
             motor.setPower(0);
             otherDeb.reset();
             telemetry.addData("Task", "Motor stopped");
 
-        //Reset encoder position (set current position as 0)
+            //Reset encoder position (set current position as 0)
         } else if (gamepad1.y && otherDeb.milliseconds() > otherDebTime) {
             telemetry.addData("Task", "Resetting encoder position...");
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -268,7 +274,7 @@ public class EncoderTeleTest23 extends OpMode {
             otherDeb.reset();
             telemetry.addData("Task", "Ready");
 
-        //Bonus feature: analog control with gamepad2
+            //Bonus feature: analog control with gamepad2
         } else if (gamepad2.a && otherDeb.milliseconds() > otherDebTime) {
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             otherDeb.reset();
