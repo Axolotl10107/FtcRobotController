@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 public class GamepadLinear implements GamepadInterface {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
-    public GamepadLinear(Gamepad gamepad1, Gamepad gamepad2) {
-
+    public GamepadLinear(Gamepad initgamepad1, Gamepad initgamepad2) {
+        gamepad1 = initgamepad1;
+        gamepad2 = initgamepad2;
     }
     @Override
     public double forwardMovement() {
@@ -24,22 +25,33 @@ public class GamepadLinear implements GamepadInterface {
     }
 
     @Override
+    public double armForward() {
+        return GamepadInputs.buttonB(gamepad2);
+    }
+
+    @Override
+    public double armBackward() {
+        return GamepadInputs.buttonY(gamepad2);
+    }
+
+    @Override
     public double armMovement() {
         return 0;
     }
 
     @Override
     public double elevatorMovement() {
-        return 0;
+        double net = GamepadInputs.rightTriggerLinear(gamepad2, 1) + GamepadInputs.leftTriggerLinear(gamepad2, 1);
+        return net;
     }
 
     @Override
     public double clawOpen() {
-        return 0;
+        return GamepadInputs.buttonX(gamepad2);
     }
 
     @Override
     public double clawClose() {
-        return 0;
+        return GamepadInputs.buttonA(gamepad2);
     }
 }
