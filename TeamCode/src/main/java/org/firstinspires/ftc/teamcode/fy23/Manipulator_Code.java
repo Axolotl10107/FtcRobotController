@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
+import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInputs;
+import org.firstinspires.ftc.teamcode.fy23.controls.GamepadLinear;
 
 
 @TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
@@ -17,7 +19,7 @@ public class Manipulator_Code extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor Arm = null;
-    //motors for driveing
+    //motors for driving
     private DcMotor leftFront = null;
     private DcMotor rightFront = null;
     private DcMotor leftBack = null;
@@ -25,8 +27,19 @@ public class Manipulator_Code extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        GamepadLinear Controls = new GamepadLinear(gamepad1, gamepad2);
 
         telemetry.addData("Status", "Ready for Initialisation");
+
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.FORWARD);
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.FORWARD);
 
         //code runs the arm up and down
         Arm = hardwareMap.get(DcMotor.class, "ArmPivot");
@@ -67,55 +80,27 @@ public class Manipulator_Code extends LinearOpMode {
             //Code for Arm moving out and in
 
              //This code moves the Arm out *TEST*
-            double ArmOutMotorPower;
-
-            double MoveOut = 0;
-
-            boolean AnythingOut = true;
-            if (AnythingOut) {
-                if (gamepad1.right_bumper) {
-                    MoveOut = .75;
-                }
-//                MoveOut = gamepad1.right_trigger * .75;
-            }
-            ArmOutMotorPower = Range.clip(MoveOut, -2, 2);
-            Arm.setPower(ArmOutMotorPower);
 
             // This code moves the Arm In *TEST*
-            double ArmInMotorPower;
 
-            double MoveIn = 0;
-
-            boolean AnythingIn = true;
-            if (AnythingIn) {
-                if (gamepad1.left_bumper) {
-                    MoveIn = -.75;
-                }
- //              MoveIn = gamepad1.left_trigger * -1.75;
-            }
-            ArmInMotorPower = Range.clip(MoveIn, -2, 2);
-            Arm.setPower(ArmInMotorPower);
+            Arm.setPower(Controls.elevatorMovement());
 
 
             //Code for the claw *TEST*
-            if (gamepad1.x) {
+            if (Controls.clawOpen() == 1) {
                 servo1.setPosition(0.05);//Opens claw
-            } else if (gamepad1.a) {
+            } else if (Controls.clawClose() == 1) {
                 servo1.setPosition(0.19);//Closes claw
             }
             telemetry.update();
 
+            leftFront.setPower(Controls.forwardMovement() + Controls.strafeMovement() + Controls.rotateMovement());
+            rightFront.setPower(Controls.forwardMovement() - Controls.strafeMovement() - Controls.rotateMovement());
+            leftBack.setPower(Controls.forwardMovement() - Controls.strafeMovement() + Controls.rotateMovement());
+            rightBack.setPower(Controls.forwardMovement() + Controls.strafeMovement() - Controls.rotateMovement());
 
             //Drive code TEST
-            leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-            rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-            leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-            rightBack = hardwareMap.get(DcMotor.class, "rightBack");
 
-            leftFront.setDirection(DcMotor.Direction.REVERSE);
-            rightFront.setDirection(DcMotor.Direction.FORWARD);
-            leftBack.setDirection(DcMotor.Direction.REVERSE);
-            rightBack.setDirection(DcMotor.Direction.FORWARD);
         }
     }
 }
