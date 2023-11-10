@@ -29,12 +29,13 @@ public class ManipulatorTwo extends OpMode {
         armPivot = new ArmMotor(dcMotorArmTemp);
 
         armExtend.setDirection(DcMotorSimple.Direction.REVERSE);
-        armPivot.setTargetPosition(armPivot.getCurrentPosition());
+        armPivot.setTargetPosition(armPivot.getCurrentPosition() - 2500);
         armPivot.setPower(0);
     }
 
     @Override
     public void loop() {
         armPivot.runToPosition();
+        armPivot.setTargetPosition(Math.round(armPivot.getTargetPosition() - gamepad1.right_stick_y));
     }
 }

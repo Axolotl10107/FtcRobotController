@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-public class DcMotorWrapper implements DcMotor {
+public abstract class DcMotorWrapper implements DcMotor {
     private final DcMotor motor;
 
     public DcMotorWrapper(DcMotor m){
