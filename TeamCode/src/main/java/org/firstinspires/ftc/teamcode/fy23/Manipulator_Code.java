@@ -15,15 +15,21 @@ import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCapt
 @TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
 public class Manipulator_Code extends LinearOpMode {
 
-    private DcMotor Arm = null;
     private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor Arm = null;
+    //motors for driveing
+    private DcMotor leftFront = null;
+    private DcMotor rightFront = null;
+    private DcMotor leftBack = null;
+    private DcMotor rightBack = null;
 
     @Override
     public void runOpMode() {
 
         telemetry.addData("Status", "Ready for Initialisation");
+
         //code runs the arm up and down
-        Arm = hardwareMap.get(DcMotor.class, "ArmMotor");
+        Arm = hardwareMap.get(DcMotor.class, "ArmPivot");
         Arm.setDirection(DcMotor.Direction.FORWARD);
         Servo servo1 = hardwareMap.get(Servo.class, "servo1");
         Servo servo2 = hardwareMap.get(Servo.class, "servo2");
@@ -34,33 +40,33 @@ public class Manipulator_Code extends LinearOpMode {
         while (opModeIsActive()) {
             //Code for arm moving up and down
 
-            // This code moves the ArmMotor forward
-            double ArmMotorpower;
-
-            double MoveForward = -2;
-
-            boolean Anything = true;
-            if (Anything) {
-                MoveForward = gamepad1.right_trigger * .75;
-            }
-            ArmMotorpower = Range.clip(MoveForward, -2, 2);
-            Arm.setPower(ArmMotorpower);
-
-            // This code moves the ArmMotor backwards
-            double ArmMotorpowerback;
-
-            double MoveBackward = -2;
-
-            boolean AnythingBack = true;
-            if (AnythingBack) {
-                MoveBackward = gamepad1.left_trigger * -.75;
-            }
-            ArmMotorpowerback = Range.clip(MoveBackward, -2, 2);
-            Arm.setPower(ArmMotorpowerback);
+//            // This code moves the ArmMotor forward
+//            double ArmMotorpower;
+//
+//            double MoveForward = -2;
+//
+//            boolean Anything = true;
+//            if (Anything) {
+//                MoveForward = gamepad1.right_trigger * .75;
+//            }
+//            ArmMotorpower = Range.clip(MoveForward, -2, 2);
+//            Arm.setPower(ArmMotorpower);
+//
+//            // This code moves the ArmMotor backwards
+//            double ArmMotorpowerback;
+//
+//            double MoveBackward = -2;
+//
+//            boolean AnythingBack = true;
+//            if (AnythingBack) {
+//                MoveBackward = gamepad1.left_trigger * -.75;
+//            }
+//            ArmMotorpowerback = Range.clip(MoveBackward, -2, 2);
+//            Arm.setPower(ArmMotorpowerback);
 
             //Code for Arm moving out and in
 
-            // This code moves the Arm out *TEST*
+             //This code moves the Arm out *TEST*
             double ArmOutMotorPower;
 
             double MoveOut = 0;
@@ -85,7 +91,7 @@ public class Manipulator_Code extends LinearOpMode {
                 if (gamepad1.left_bumper) {
                     MoveIn = -.75;
                 }
-//                MoveIn = gamepad1.left_trigger * -1.75;
+ //              MoveIn = gamepad1.left_trigger * -1.75;
             }
             ArmInMotorPower = Range.clip(MoveIn, -2, 2);
             Arm.setPower(ArmInMotorPower);
@@ -98,6 +104,18 @@ public class Manipulator_Code extends LinearOpMode {
                 servo1.setPosition(0.19);//Closes claw
             }
             telemetry.update();
+
+
+            //Drive code TEST
+            leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+            rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+            leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+            rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+
+            leftFront.setDirection(DcMotor.Direction.REVERSE);
+            rightFront.setDirection(DcMotor.Direction.FORWARD);
+            leftBack.setDirection(DcMotor.Direction.REVERSE);
+            rightBack.setDirection(DcMotor.Direction.FORWARD);
         }
     }
 }
