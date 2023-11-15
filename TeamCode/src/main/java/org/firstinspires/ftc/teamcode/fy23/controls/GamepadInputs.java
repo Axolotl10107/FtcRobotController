@@ -91,4 +91,36 @@ public class GamepadInputs {
             return 0;
         }
     }
+
+    static double buttonDpadDown(Gamepad gamepad){
+        if (gamepad.dpad_down) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static double buttonDpadUp(Gamepad gamepad){
+        if (gamepad.dpad_up) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static double buttonDpadRight(Gamepad gamepad){
+        if (gamepad.dpad_right) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static double buttonDpadLeft(Gamepad gamepad){
+        if (gamepad.dpad_left) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
