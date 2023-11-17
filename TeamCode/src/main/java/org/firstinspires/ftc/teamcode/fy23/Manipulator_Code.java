@@ -10,9 +10,11 @@ import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInputs;
+import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInterface;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadLinear;
 
 
@@ -20,7 +22,8 @@ import org.firstinspires.ftc.teamcode.fy23.controls.GamepadLinear;
 public class Manipulator_Code extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private ArmMotor armPivot = null;
+//    private ArmMotor armPivot = null;
+    private DcMotor armPivot;
     private DcMotor tempMotor = null;
     private DcMotor armExtend = null;
     //motors for driving
@@ -32,9 +35,20 @@ public class Manipulator_Code extends LinearOpMode {
     double driveClip = 0.7;
     ElapsedTime driveClipDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
+    Telemetry.Log log = telemetry.log();
+
     @Override
     public void runOpMode() {
-        GamepadDTS Controls = new GamepadDTS(gamepad1, gamepad2);
+        try {
+            realOpMode();
+        } catch (Exception x){
+            log.add(x.getStackTrace().toString());
+            throw x;
+        }
+    }
+
+    public void realOpMode() {
+        GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
 
         telemetry.addData("Status", "Ready for Initialisation");
 
@@ -54,8 +68,8 @@ public class Manipulator_Code extends LinearOpMode {
 
         tempMotor = hardwareMap.get(DcMotor.class, "armPivot");
         tempMotor.setDirection(DcMotor.Direction.REVERSE);
-        armPivot = new ArmMotor(tempMotor);
-
+//        armPivot = new ArmMotor(tempMotor);
+        armPivot = hardwareMap.get(DcMotor.class, "armPivot");
         Servo clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         int elevatorLowerLimit = armExtend.getCurrentPosition();
@@ -63,6 +77,9 @@ public class Manipulator_Code extends LinearOpMode {
 
         int armDefaultPosition = armPivot.getCurrentPosition();
         armPivot.setTargetPosition(armDefaultPosition);
+        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        int armCurrentPosition = armPivot.getCurrentPosition();
 
         double servoDefaultPosition = .585;
         clawServo.setPosition(servoDefaultPosition);
@@ -71,10 +88,24 @@ public class Manipulator_Code extends LinearOpMode {
 
         while (opModeIsActive()) {
     // controls the arm
-            armPivot.runToPosition();
-            if (Controls.armMovement() != 0) {
-                armDefaultPosition += Controls.armMovement()*3;
-                armPivot.setTargetPosition(armDefaultPosition);
+//            armPivot.runToPosition();
+            if (controls.armMovement() != 0) {
+                armCurrentPosition += controls.armMovement();
+                armPivot.setTargetPosition(armCurrentPosition);
+            }
+
+            if (controls.armMediumMovement() != 0) {
+                armCurrentPosition += controls.armMediumMovement();
+                armPivot.setTargetPosition(armCurrentPosition);
+            }
+
+            if (controls.armFastMovement() != 0) {
+                armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                armPivot.setPower(controls.armFastMovement());
+            } else {
+                armPivot.setTargetPosition(armPivot.getCurrentPosition());
+                armCurrentPosition = armPivot.getCurrentPosition();
+                armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
@@ -89,41 +120,42 @@ public class Manipulator_Code extends LinearOpMode {
 
             /*
             Consider this - might not be what you want but it's a potential option:
-            if (Controls.armMovement() != 0) {
+            if (controls.armMovement() != 0) {
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                armPivot.setPower(Controls.armMovement());
+                armPivot.setPower(controls.armMovement());
             } else {
+                armPivot.setTargetPosition(armPivot.getCurrentPosition());
                 armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
             */
 
-            if (Controls.armForward() > 0) {
+            if (controls.armForward() > 0) {
                 armPivot.setTargetPosition(armDefaultPosition);
-            } else if (Controls.armBackward() > 0) {
+            } else if (controls.armBackward() > 0) {
                 armPivot.setTargetPosition(armDefaultPosition + 1750);
             }
 
     // controls the elevator
             if (armExtend.getCurrentPosition() < elevatorLowerLimit) {
-                armExtend.setPower(Range.clip(Controls.elevatorMovement(), 0,1));
+                armExtend.setPower(Range.clip(controls.elevatorMovement(), 0,1));
             } else if (armExtend.getCurrentPosition() > elevatorUpperLimit) {
-                armExtend.setPower(Range.clip(Controls.elevatorMovement(), -1, 0));
+                armExtend.setPower(Range.clip(controls.elevatorMovement(), -1, 0));
             } else {
-                armExtend.setPower(Controls.elevatorMovement());
+                armExtend.setPower(controls.elevatorMovement());
 
             }
 
     // controls the claw
-            if (Controls.clawOpen() > 0) {
+            if (controls.clawOpen() > 0) {
                 clawServo.setPosition(servoDefaultPosition - .1); //Opens claw
-            } else if (Controls.clawClose() > 0) {
+            } else if (controls.clawClose() > 0) {
                 clawServo.setPosition(servoDefaultPosition); //Closes claw
             }
     // controls the wheels
-            leftFront.setPower(Range.clip(Controls.forwardMovement() + Controls.strafeMovement() + Controls.rotateMovement(), -driveClip, driveClip));
-            rightFront.setPower(Range.clip(Controls.forwardMovement() - Controls.strafeMovement() - Controls.rotateMovement(), -driveClip, driveClip));
-            leftBack.setPower(Range.clip(Controls.forwardMovement() - Controls.strafeMovement() + Controls.rotateMovement(), -driveClip, driveClip));
-            rightBack.setPower(Range.clip(Controls.forwardMovement() + Controls.strafeMovement() - Controls.rotateMovement(), -driveClip, driveClip));
+            leftFront.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
+            rightFront.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
+            leftBack.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
+            rightBack.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
 
             telemetry.update();
         }

@@ -40,6 +40,15 @@ public class GamepadDTS implements GamepadInterface {
         return net;
     }
 
+    public double armMediumMovement() {
+        double net = GamepadInputs.buttonDpadRight(gamepad2) - GamepadInputs.buttonDpadLeft(gamepad2);
+        return net * 3;
+    }
+
+    public double armFastMovement() {
+        return GamepadInputs.leftStickYExponential(gamepad2, 2);
+    }
+
     @Override
     public double elevatorMovement() {
         double net = GamepadInputs.rightTriggerLinear(gamepad2, 1) - GamepadInputs.leftTriggerLinear(gamepad2, 1);
