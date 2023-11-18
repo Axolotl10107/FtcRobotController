@@ -1,21 +1,14 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.ServoController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
-import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInputs;
-import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInterface;
-import org.firstinspires.ftc.teamcode.fy23.controls.GamepadLinear;
 
 
 @TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
@@ -24,7 +17,7 @@ public class Manipulator_Code extends LinearOpMode {
     //armPivot speeds
     double armSlow = 0.15;
     double armMedium = 0.2;
-    double gravityDivisor = 2;
+    double gravityDivisor = 1;
 
     private ElapsedTime runtime = new ElapsedTime();
 //    private ArmMotor armPivot = null;
@@ -77,10 +70,10 @@ public class Manipulator_Code extends LinearOpMode {
         armPivot = hardwareMap.get(DcMotor.class, "armPivot");
         Servo clawServo = hardwareMap.get(Servo.class, "clawServo");
 
-        int elevatorLowerLimit = armExtend.getCurrentPosition();
+        int elevatorLowerLimit = 0;
         int elevatorUpperLimit = elevatorLowerLimit + 2500;
 
-        int armDefaultPosition = armPivot.getCurrentPosition();
+        int armDefaultPosition = 0;
         armPivot.setTargetPosition(armDefaultPosition);
         armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -88,12 +81,33 @@ public class Manipulator_Code extends LinearOpMode {
 
         double servoDefaultPosition = .585;
         clawServo.setPosition(servoDefaultPosition);
+
+        //set current position of all motors as 0
+        //and as a convenient side-effect disallow them from running during initialization
+        armPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
+
         runtime.reset();
 
+        //let all the motors run again
+        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         while (opModeIsActive()) {
+
             telemetry.addData("armPivot power", armPivot.getPower());
             telemetry.addData("armPivot position", armPivot.getCurrentPosition());
+            telemetry.addData("armExtend position", armExtend.getCurrentPosition());
     // controls the arm
 //            armPivot.runToPosition();
 //            if (controls.armMovement() != 0) {
@@ -108,19 +122,21 @@ public class Manipulator_Code extends LinearOpMode {
 
             if (controls.armMovement() != 0) { //slow movement (D-Pad U/D)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                armPivot.setPower((controls.armMovement() * armSlow) + (armSlow / gravityDivisor));
+                armPivot.setPower(controls.armMovement() * armSlow);
+//                armPivot.setPower((controls.armMovement() * armSlow) + (armSlow / gravityDivisor));
             }
             else if (controls.armMediumMovement() != 0) { //medium movement (D-Pad R/L)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                armPivot.setPower((controls.armMediumMovement() * armMedium) + (armMedium / gravityDivisor));
+                armPivot.setPower(controls.armMediumMovement() * armMedium);
+//                armPivot.setPower((controls.armMediumMovement() * armMedium) + (armMedium / gravityDivisor));
             }
             else if (controls.armFastMovement() != 0) { //fast movement (Left Stick Y-Axis)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armFastMovement());
             }
-            else { //If we're not moving...
+            else if (armPivot.getPower() < 0.49) { //If we're not moving...
+                //This should run once because we'll set the power to 0.5 here.
                 armPivot.setTargetPosition(armPivot.getCurrentPosition()); //hold current position
-//                armCurrentPosition = armPivot.getCurrentPosition();
                 armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 armPivot.setPower(0.5); //it may be near 0 from the analog stick returning to center
                 //It will go to the target with this much power.

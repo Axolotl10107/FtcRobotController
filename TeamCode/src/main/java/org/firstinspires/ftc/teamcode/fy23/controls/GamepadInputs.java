@@ -123,4 +123,20 @@ public class GamepadInputs {
             return 0;
         }
     }
+
+    static double rightBumper(Gamepad gamepad){
+        if (gamepad.right_bumper) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static double leftBumper(Gamepad gamepad){
+        if (gamepad.left_bumper) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

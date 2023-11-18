@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class GamepadLinear extends GamepadDefault {
-    public GamepadLinear(Gamepad initgamepad1, Gamepad initgamepad2) {
-        super(initgamepad1, initgamepad2);
+public class GamepadLinearOld implements GamepadInterface {
+    private Gamepad gamepad1;
+    private Gamepad gamepad2;
+    public GamepadLinearOld(Gamepad initgamepad1, Gamepad initgamepad2) {
+        gamepad1 = initgamepad1;
+        gamepad2 = initgamepad2;
     }
-
     @Override
     public double forwardMovement() {
         return GamepadInputs.rightStickYLinear(gamepad1, 1);
@@ -36,6 +38,16 @@ public class GamepadLinear extends GamepadDefault {
     public double armMovement() {
         double net = GamepadInputs.buttonDpadUp(gamepad2) - GamepadInputs.buttonDpadDown(gamepad2);
         return net;
+    }
+
+    @Override
+    public double armMediumMovement() {
+        return 0;
+    }
+
+    @Override
+    public double armFastMovement() {
+        return 0;
     }
 
     @Override

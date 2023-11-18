@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class GamepadDTS implements GamepadInterface {
+public class GamepadDTS extends GamepadDefault {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
     public GamepadDTS(Gamepad initgamepad1, Gamepad initgamepad2) {
@@ -42,7 +42,7 @@ public class GamepadDTS implements GamepadInterface {
 
     public double armMediumMovement() {
         double net = GamepadInputs.buttonDpadRight(gamepad2) - GamepadInputs.buttonDpadLeft(gamepad2);
-        return net * 3;
+        return net;
     }
 
     public double armFastMovement() {
