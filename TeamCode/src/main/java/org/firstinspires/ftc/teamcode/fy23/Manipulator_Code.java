@@ -21,6 +21,11 @@ import org.firstinspires.ftc.teamcode.fy23.controls.GamepadLinear;
 @TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
 public class Manipulator_Code extends LinearOpMode {
 
+    //armPivot speeds
+    double armSlow = 0.15;
+    double armMedium = 0.2;
+    double gravityDivisor = 2;
+
     private ElapsedTime runtime = new ElapsedTime();
 //    private ArmMotor armPivot = null;
     private DcMotor armPivot;
@@ -79,7 +84,7 @@ public class Manipulator_Code extends LinearOpMode {
         armPivot.setTargetPosition(armDefaultPosition);
         armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        int armCurrentPosition = armPivot.getCurrentPosition();
+//        int armCurrentPosition = armPivot.getCurrentPosition();
 
         double servoDefaultPosition = .585;
         clawServo.setPosition(servoDefaultPosition);
@@ -87,25 +92,38 @@ public class Manipulator_Code extends LinearOpMode {
         runtime.reset();
 
         while (opModeIsActive()) {
+            telemetry.addData("armPivot power", armPivot.getPower());
+            telemetry.addData("armPivot position", armPivot.getCurrentPosition());
     // controls the arm
 //            armPivot.runToPosition();
-            if (controls.armMovement() != 0) {
-                armCurrentPosition += controls.armMovement();
-                armPivot.setTargetPosition(armCurrentPosition);
-            }
+//            if (controls.armMovement() != 0) {
+//                armCurrentPosition += controls.armMovement();
+//                armPivot.setTargetPosition(armCurrentPosition);
+//            }
 
-            if (controls.armMediumMovement() != 0) {
-                armCurrentPosition += controls.armMediumMovement();
-                armPivot.setTargetPosition(armCurrentPosition);
-            }
+//            if (controls.armMediumMovement() != 0) {
+//                armCurrentPosition += controls.armMediumMovement();
+//                armPivot.setTargetPosition(armCurrentPosition);
+//            }
 
-            if (controls.armFastMovement() != 0) {
+            if (controls.armMovement() != 0) { //slow movement (D-Pad U/D)
+                armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                armPivot.setPower((controls.armMovement() * armSlow) + (armSlow / gravityDivisor));
+            }
+            else if (controls.armMediumMovement() != 0) { //medium movement (D-Pad R/L)
+                armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                armPivot.setPower((controls.armMediumMovement() * armMedium) + (armMedium / gravityDivisor));
+            }
+            else if (controls.armFastMovement() != 0) { //fast movement (Left Stick Y-Axis)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armFastMovement());
-            } else {
-                armPivot.setTargetPosition(armPivot.getCurrentPosition());
-                armCurrentPosition = armPivot.getCurrentPosition();
+            }
+            else { //If we're not moving...
+                armPivot.setTargetPosition(armPivot.getCurrentPosition()); //hold current position
+//                armCurrentPosition = armPivot.getCurrentPosition();
                 armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armPivot.setPower(0.5); //it may be near 0 from the analog stick returning to center
+                //It will go to the target with this much power.
             }
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {

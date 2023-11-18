@@ -46,7 +46,14 @@ public class GamepadDTS implements GamepadInterface {
     }
 
     public double armFastMovement() {
-        return GamepadInputs.leftStickYExponential(gamepad2, 2);
+        double y = gamepad2.left_stick_y;
+        if (y > 0) {
+            return -GamepadInputs.leftStickYExponential(gamepad2, 2);
+            //negative because the Y-axis is inverted on the gamepad itself
+        } else {
+            return GamepadInputs.leftStickYExponential(gamepad2, 2);
+        }
+
     }
 
     @Override
