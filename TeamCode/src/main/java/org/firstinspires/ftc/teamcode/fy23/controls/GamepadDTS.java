@@ -6,6 +6,7 @@ public class GamepadDTS extends GamepadDefault {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
     public GamepadDTS(Gamepad initgamepad1, Gamepad initgamepad2) {
+        super(initgamepad1, initgamepad2);
         gamepad1 = initgamepad1;
         gamepad2 = initgamepad2;
     }
