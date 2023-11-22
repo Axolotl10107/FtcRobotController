@@ -14,13 +14,14 @@ import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 @TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
 public class Manipulator_Code extends LinearOpMode {
 
+    Servo servo123456789;
     //armPivot speeds
     double armSlow = 0.15;
     double armMedium = 0.2;
     double gravityDivisor = 1;
 
     private ElapsedTime runtime = new ElapsedTime();
-//    private ArmMotor armPivot = null;
+    //    private ArmMotor armPivot = null;
     private DcMotor armPivot;
     private DcMotor tempMotor = null;
     private DcMotor armExtend = null;
@@ -39,7 +40,7 @@ public class Manipulator_Code extends LinearOpMode {
     public void runOpMode() {
         try {
             realOpMode();
-        } catch (Exception x){
+        } catch (Exception x) {
             log.add(x.getStackTrace().toString());
             throw x;
         }
@@ -59,6 +60,8 @@ public class Manipulator_Code extends LinearOpMode {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+// Plane Servo Code
+        servo123456789 = hardwareMap.get(Servo.class, "planeservo");
 
         //code runs the arm up and down
         armExtend = hardwareMap.get(DcMotor.class, "armExtend");
@@ -108,7 +111,7 @@ public class Manipulator_Code extends LinearOpMode {
             telemetry.addData("armPivot power", armPivot.getPower());
             telemetry.addData("armPivot position", armPivot.getCurrentPosition());
             telemetry.addData("armExtend position", armExtend.getCurrentPosition());
-    // controls the arm
+            // controls the arm
 //            armPivot.runToPosition();
 //            if (controls.armMovement() != 0) {
 //                armCurrentPosition += controls.armMovement();
@@ -124,17 +127,14 @@ public class Manipulator_Code extends LinearOpMode {
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armMovement() * armSlow);
 //                armPivot.setPower((controls.armMovement() * armSlow) + (armSlow / gravityDivisor));
-            }
-            else if (controls.armMediumMovement() != 0) { //medium movement (D-Pad R/L)
+            } else if (controls.armMediumMovement() != 0) { //medium movement (D-Pad R/L)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armMediumMovement() * armMedium);
 //                armPivot.setPower((controls.armMediumMovement() * armMedium) + (armMedium / gravityDivisor));
-            }
-            else if (controls.armFastMovement() != 0) { //fast movement (Left Stick Y-Axis)
+            } else if (controls.armFastMovement() != 0) { //fast movement (Left Stick Y-Axis)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armFastMovement());
-            }
-            else if (armPivot.getPower() < 0.49) { //If we're not moving...
+            } else if (armPivot.getPower() < 0.49) { //If we're not moving...
                 //This should run once because we'll set the power to 0.5 here.
                 armPivot.setTargetPosition(armPivot.getCurrentPosition()); //hold current position
                 armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -169,9 +169,9 @@ public class Manipulator_Code extends LinearOpMode {
                 armPivot.setTargetPosition(armDefaultPosition + 1750);
             }
 
-    // controls the elevator
+            // controls the elevator
             if (armExtend.getCurrentPosition() < elevatorLowerLimit) {
-                armExtend.setPower(Range.clip(controls.elevatorMovement(), 0,1));
+                armExtend.setPower(Range.clip(controls.elevatorMovement(), 0, 1));
             } else if (armExtend.getCurrentPosition() > elevatorUpperLimit) {
                 armExtend.setPower(Range.clip(controls.elevatorMovement(), -1, 0));
             } else {
@@ -179,19 +179,28 @@ public class Manipulator_Code extends LinearOpMode {
 
             }
 
-    // controls the claw
+            // controls the claw
             if (controls.clawOpen() > 0) {
                 clawServo.setPosition(servoDefaultPosition - .1); //Opens claw
             } else if (controls.clawClose() > 0) {
                 clawServo.setPosition(servoDefaultPosition); //Closes claw
             }
-    // controls the wheels
+            // controls the wheels
             leftFront.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
             rightFront.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
             leftBack.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
             rightBack.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
 
             telemetry.update();
+
+           // Plane Servo Code Continue
+
+            if (gamepad1.right_bumper) {
+                servo123456789.setPosition(1);
+            }
+            else {
+                servo123456789.setPosition(0);
+            }
         }
     }
 }

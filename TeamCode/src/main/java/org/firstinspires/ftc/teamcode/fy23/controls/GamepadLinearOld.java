@@ -65,4 +65,9 @@ public class GamepadLinearOld implements GamepadInterface {
     public double clawClose() {
         return GamepadInputs.buttonA(gamepad2);
     }
+
+    @Override
+    public double planeLaunch() {
+        return 0;
+    }
 }

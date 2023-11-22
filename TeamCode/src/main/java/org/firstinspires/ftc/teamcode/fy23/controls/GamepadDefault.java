@@ -10,6 +10,9 @@ public class GamepadDefault implements GamepadInterface {
         gamepad2 = initgamepad2;
     }
 
+    public GamepadDefault() {
+    }
+
     @Override
     public double forwardMovement() {
         return 0;
