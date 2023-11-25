@@ -68,6 +68,16 @@ public class GamepadLinearOld extends GamepadDefault {
     }
 
     @Override
+    public double maxDrivePowerUp() {
+        return 0;
+    }
+
+    @Override
+    public double maxDrivePowerDown() {
+        return 0;
+    }
+
+    @Override
     public double planeLaunch() {
         return 0;
     }

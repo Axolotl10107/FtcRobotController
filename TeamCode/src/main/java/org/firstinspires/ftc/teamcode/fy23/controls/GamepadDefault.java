@@ -110,6 +110,16 @@ public class GamepadDefault implements GamepadInterface {
     }
 
     @Override
+    public double maxDrivePowerUp() {
+        return 0;
+    }
+
+    @Override
+    public double maxDrivePowerDown() {
+        return 0;
+    }
+
+    @Override
     public double planeLaunch() {
         return 0;
     }

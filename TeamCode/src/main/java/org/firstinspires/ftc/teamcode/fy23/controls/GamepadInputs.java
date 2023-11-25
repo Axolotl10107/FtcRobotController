@@ -92,6 +92,14 @@ public class GamepadInputs {
         }
     }
 
+    static double buttonBack(Gamepad gamepad) {
+        if (gamepad.back) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
     static double buttonDpadDown(Gamepad gamepad){
         if (gamepad.dpad_down) {
             return 1;

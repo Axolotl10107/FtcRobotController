@@ -19,6 +19,8 @@ public interface GamepadInterface {
     public double clawMovement();
     public double clawOpen();
     public double clawClose();
+    public double maxDrivePowerUp();
+    public double maxDrivePowerDown();
     public double planeLaunch();
     public double driveSpeedUp();
     public double driveSpeedDown();
