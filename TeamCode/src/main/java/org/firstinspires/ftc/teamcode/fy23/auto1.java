@@ -15,11 +15,11 @@ public class auto1 extends LinearOpMode {
     private DcMotor rightFront = null;
     private DcMotor leftBack = null;
     private DcMotor rightBack = null;
+    private DcMotor armPivot = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double FORWARD_SPEED = 0.6;
-    static final double REVERSE_SPEED = -0.6;
+    static final double strafeSpeed = 1;
 
     @Override
     public void runOpMode() {
@@ -28,11 +28,13 @@ public class auto1 extends LinearOpMode {
         rightBack = hardwareMap.get(DcMotor.class, "rightBack");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        armPivot = hardwareMap.get(DcMotor.class, "armPivot");
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+        armPivot.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         telemetry.addData("Status", "Ready");
@@ -41,14 +43,20 @@ public class auto1 extends LinearOpMode {
         waitForStart();
 
 
-        leftBack.setPower(REVERSE_SPEED);
-        rightBack.setPower(FORWARD_SPEED);
-        leftFront.setPower(REVERSE_SPEED);
-        rightFront.setPower(FORWARD_SPEED);
+
 
         runtime.reset();
 
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+//      i am deeply ashamed of what ive done
+        while (opModeIsActive() && (runtime.seconds() < 1.2)) {
+            armPivot.setPower(.5);
+            sleep(200);
+            armPivot.setPower(0);
+            leftFront.setPower(strafeSpeed);
+            rightFront.setPower(-strafeSpeed);
+            leftBack.setPower(-strafeSpeed);
+            rightBack.setPower(strafeSpeed);
+
             telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
             telemetry.update();
         }

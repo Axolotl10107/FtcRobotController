@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -23,6 +24,7 @@ public class Manipulator_Code extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //    private ArmMotor armPivot = null;
     private DcMotor armPivot;
+    private Servo clawServo;
     private DcMotor tempMotor = null;
     private DcMotor armExtend = null;
     //motors for driving
@@ -71,18 +73,20 @@ public class Manipulator_Code extends LinearOpMode {
         tempMotor.setDirection(DcMotor.Direction.REVERSE);
 //        armPivot = new ArmMotor(tempMotor);
         armPivot = hardwareMap.get(DcMotor.class, "armPivot");
-        Servo clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         int elevatorLowerLimit = 0;
         int elevatorUpperLimit = elevatorLowerLimit + 2500;
 
+        TouchSensor armCalibration = hardwareMap.get(TouchSensor.class, "armCalibration");
+        boolean armCalibrated = true; // should be false, currently set to true to disable
         int armDefaultPosition = 0;
         armPivot.setTargetPosition(armDefaultPosition);
         armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 //        int armCurrentPosition = armPivot.getCurrentPosition();
 
-        double servoDefaultPosition = .585;
+        double servoDefaultPosition = .225;
         clawServo.setPosition(servoDefaultPosition);
 
         //set current position of all motors as 0
@@ -111,6 +115,7 @@ public class Manipulator_Code extends LinearOpMode {
             telemetry.addData("armPivot power", armPivot.getPower());
             telemetry.addData("armPivot position", armPivot.getCurrentPosition());
             telemetry.addData("armExtend position", armExtend.getCurrentPosition());
+            telemetry.addData("arm calibrated", armCalibrated);
             // controls the arm
 //            armPivot.runToPosition();
 //            if (controls.armMovement() != 0) {
@@ -123,23 +128,36 @@ public class Manipulator_Code extends LinearOpMode {
 //                armPivot.setTargetPosition(armCurrentPosition);
 //            }
 
-            if (controls.armMovement() != 0) { //slow movement (D-Pad U/D)
+
+
+            if (controls.armMovement() != 0 && armCalibrated) { //slow movement (D-Pad U/D)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armMovement() * armSlow);
 //                armPivot.setPower((controls.armMovement() * armSlow) + (armSlow / gravityDivisor));
-            } else if (controls.armMediumMovement() != 0) { //medium movement (D-Pad R/L)
+            } else if (controls.armMediumMovement() != 0 && armCalibrated) { //medium movement (D-Pad R/L)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armMediumMovement() * armMedium);
 //                armPivot.setPower((controls.armMediumMovement() * armMedium) + (armMedium / gravityDivisor));
-            } else if (controls.armFastMovement() != 0) { //fast movement (Left Stick Y-Axis)
+            } else if (controls.armFastMovement() != 0 && armCalibrated) { //fast movement (Left Stick Y-Axis)
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(controls.armFastMovement());
-            } else if (armPivot.getPower() < 0.49) { //If we're not moving...
+            } else if (armPivot.getPower() < 0.95 && armCalibrated) { //If we're not moving...
                 //This should run once because we'll set the power to 0.5 here.
                 armPivot.setTargetPosition(armPivot.getCurrentPosition()); //hold current position
                 armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armPivot.setPower(0.5); //it may be near 0 from the analog stick returning to center
+                armPivot.setPower(1); //it may be near 0 from the analog stick returning to center
                 //It will go to the target with this much power.
+            }
+
+            if (armCalibrated == false) {
+                armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                armPivot.setPower(-0.5);
+                if (armCalibration.isPressed() || armCalibration.getValue() != 0 || (runtime.milliseconds() > 5000)) {
+                    armPivot.setPower(0);
+                    armCalibrated = true;
+                    armPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
             }
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
@@ -180,16 +198,16 @@ public class Manipulator_Code extends LinearOpMode {
             }
 
             // controls the claw
-            if (controls.clawOpen() > 0) {
+            if (controls.clawOpen() != 0) {
                 clawServo.setPosition(servoDefaultPosition - .1); //Opens claw
-            } else if (controls.clawClose() > 0) {
+            } else if (controls.clawClose() != 0) {
                 clawServo.setPosition(servoDefaultPosition); //Closes claw
             }
             // controls the wheels
-            leftFront.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
-            rightFront.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
-            leftBack.setPower(Range.clip(controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement(), -driveClip, driveClip));
-            rightBack.setPower(Range.clip(controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement(), -driveClip, driveClip));
+            leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+            rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip);
+            leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+            rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip);
 
             telemetry.update();
 
