@@ -24,6 +24,7 @@ package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -39,7 +40,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 // This actually uses AlliedDeterminationExample and prints the current analysis every time you
 // press [A] (after Start is pressed).
 @TeleOp
-public class AutonomousInitPrinter extends LinearOpMode
+public class SuperAutonomousInitPrinter extends LinearOpMode
 {
     OpenCvWebcam webcam;
     AlliedDeterminationExample.SkystoneDeterminationPipeline pipeline;
@@ -47,7 +48,17 @@ public class AutonomousInitPrinter extends LinearOpMode
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor colorAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor.BLUE; //default
 
     @Override
-    public void runOpMode()
+    public void runOpMode() {
+        Telemetry.Log log = telemetry.log();
+        try {
+            realOpMode();
+        } catch (Exception x) {
+            log.add(x.getStackTrace().toString());
+            while (opModeIsActive()) { sleep(100); }
+        }
+    }
+
+    public void realOpMode()
     {
         /**
          * NOTE: Many comments have been omitted from this sample for the
@@ -80,6 +91,7 @@ public class AutonomousInitPrinter extends LinearOpMode
         while (!isStarted() && !isStopRequested())
         {
             telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+            telemetry.addData("Realtime color", pipeline.getColor());
             telemetry.update();
 
             // Don't burn CPU cycles busy-looping in this sample
@@ -102,9 +114,7 @@ public class AutonomousInitPrinter extends LinearOpMode
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         while (opModeIsActive())
         {
-            if (gamepad1.a) {
-                analyzeImage();
-            }
+            analyzeImage();
             // Don't burn CPU cycles busy-looping in this sample
             telemetry.update(); //down here in case analyzeImage() takes too long
             sleep(50);

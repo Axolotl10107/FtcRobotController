@@ -24,6 +24,7 @@ package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -59,7 +60,7 @@ public class AlliedDeterminationExample extends LinearOpMode
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationPipeline();
+        pipeline = new SkystoneDeterminationPipeline(telemetry);
         phoneCam.setPipeline(pipeline);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
@@ -98,6 +99,13 @@ public class AlliedDeterminationExample extends LinearOpMode
 
     public static class SkystoneDeterminationPipeline extends OpenCvPipeline
     {
+
+        Telemetry telemetry;
+
+        public SkystoneDeterminationPipeline(Telemetry argTelemetry) {
+            telemetry = argTelemetry;
+        }
+
         /*
          * An enum to define the skystone position
          */
@@ -125,9 +133,9 @@ public class AlliedDeterminationExample extends LinearOpMode
          * The core values which define the location and size of the sample regions
          */
         static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,0); //default 109, 98
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(120,0); //default 181, 98
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(240,0); //default 253, 98
-        static final int REGION_WIDTH = 120; //default 20
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(105,0); //default 181, 98
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(212,0); //default 253, 98
+        static final int REGION_WIDTH = 106; //default 20
         static final int REGION_HEIGHT = 240; //default 20
         //Setting them this way should split the image into three vertical rectangles:
         /* -------
@@ -221,10 +229,12 @@ public class AlliedDeterminationExample extends LinearOpMode
             region1_Cb = matCb.submat(new Rect(region1_pointA, region1_pointB));
             region2_Cb = matCb.submat(new Rect(region2_pointA, region2_pointB));
             region3_Cb = matCb.submat(new Rect(region3_pointA, region3_pointB));
+            telemetry.addData("matCb Rows", matCb.rows());
+            telemetry.addData("matCb cols", matCb.cols());
 
-            region1_Cr = matCb.submat(new Rect(region1_pointA, region1_pointB));
-            region2_Cr = matCb.submat(new Rect(region2_pointA, region2_pointB));
-            region3_Cr = matCb.submat(new Rect(region3_pointA, region3_pointB));
+            region1_Cr = matCr.submat(new Rect(region1_pointA, region1_pointB));
+            region2_Cr = matCr.submat(new Rect(region2_pointA, region2_pointB));
+            region3_Cr = matCr.submat(new Rect(region3_pointA, region3_pointB));
         }
 
         @Override
@@ -282,9 +292,17 @@ public class AlliedDeterminationExample extends LinearOpMode
             avg2 = (int) Core.mean(region2_Cb).val[0];
             avg3 = (int) Core.mean(region3_Cb).val[0];
 
+            telemetry.addData("left Cb", avg1);
+            telemetry.addData("Middle Cb", avg2);
+            telemetry.addData("Right Cb", avg3);
+
             avgR1 = (int) Core.mean(region1_Cr).val[0];
             avgR2 = (int) Core.mean(region2_Cr).val[0];
             avgR3 = (int) Core.mean(region3_Cr).val[0];
+
+            telemetry.addData("left Cr", avgR1);
+            telemetry.addData("Middle Cr", avgR2);
+            telemetry.addData("Right Cr", avgR3);
 
             /*
              * Draw a rectangle showing sample region 1 on the screen.
@@ -339,6 +357,7 @@ public class AlliedDeterminationExample extends LinearOpMode
                 avg1 = avgR1;
                 avg2 = avgR2;
                 avg3 = avgR3;
+                max = maxR;
                 color = SkystoneColor.RED;
             } else {
                 color = SkystoneColor.BLUE; //not technically necessary since we initialized it
