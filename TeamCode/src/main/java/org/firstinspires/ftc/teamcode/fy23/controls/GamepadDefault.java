@@ -15,16 +15,49 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double forwardMovement() {
+        double net = moveForward() - moveBackward();
+        return net;
+    }
+
+    @Override
+    public double moveForward() {
+        return 0;
+    }
+
+    @Override
+    public double moveBackward() {
         return 0;
     }
 
     @Override
     public double strafeMovement() {
+        double net = strafeRight() - strafeLeft(); //check to make sure this is actually right
+        return 0;
+    }
+
+    @Override
+    public double strafeLeft() {
+        return 0;
+    }
+
+    @Override
+    public double strafeRight() {
         return 0;
     }
 
     @Override
     public double rotateMovement() {
+        double net = rotateClockwise() - rotateAnticlockwise(); //check to make sure this is actually right
+        return net;
+    }
+
+    @Override
+    public double rotateClockwise() {
+        return 0;
+    }
+
+    @Override
+    public double rotateAnticlockwise() {
         return 0;
     }
 
@@ -40,22 +73,30 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double armMovement() {
-        return 0;
-    }
-
-    @Override
-    public double armMediumMovement() {
-        return 0;
-    }
-
-    @Override
-    public double armFastMovement() {
-        return 0;
+        double net = armForward() - armBackward();
+        return net;
     }
 
     @Override
     public double elevatorMovement() {
+        double net = elevatorUp() - elevatorDown();
+        return net;
+    }
+
+    @Override
+    public double elevatorUp() {
         return 0;
+    }
+
+    @Override
+    public double elevatorDown() {
+        return 0;
+    }
+
+    @Override
+    public double clawMovement() {
+        double net = clawOpen() - clawClose();
+        return net;
     }
 
     @Override
@@ -70,6 +111,16 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double planeLaunch() {
+        return 0;
+    }
+
+    @Override
+    public double driveSpeedUp() {
+        return 0;
+    }
+
+    @Override
+    public double driveSpeedDown() {
         return 0;
     }
 }

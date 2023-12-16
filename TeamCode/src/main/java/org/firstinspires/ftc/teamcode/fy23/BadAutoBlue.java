@@ -3,13 +3,12 @@ package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Autonomuos Opmode", group="Autonomuos Opmode")
-public class auto1 extends LinearOpMode {
+@Autonomous(name="Bad Autonomous Blue", group="Autonomous")
+public class BadAutoBlue extends LinearOpMode {
 
     private DcMotor leftFront= null;
     private DcMotor rightFront = null;
@@ -19,7 +18,7 @@ public class auto1 extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double strafeSpeed = 1;
+    static final double strafeSpeed = -1;
 
     @Override
     public void runOpMode() {

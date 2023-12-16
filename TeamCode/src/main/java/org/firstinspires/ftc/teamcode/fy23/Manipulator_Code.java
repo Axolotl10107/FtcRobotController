@@ -149,7 +149,7 @@ public class Manipulator_Code extends LinearOpMode {
                 //It will go to the target with this much power.
             }
 
-            if (armCalibrated == false) {
+            if (!armCalibrated) {
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(-0.5);
                 if (armCalibration.isPressed() || armCalibration.getValue() != 0 || (runtime.milliseconds() > 5000)) {
