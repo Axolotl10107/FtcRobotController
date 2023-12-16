@@ -40,17 +40,30 @@ public class PixelDropBlue extends LinearOpMode {
 
         armPivot.setDirection(DcMotorSimple.Direction.REVERSE);
         armPivot.setTargetPosition(armPivot.getCurrentPosition());
-        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         armExtend = hardwareMap.get(DcMotor.class, "armExtend");
         armExtend.setDirection(DcMotor.Direction.REVERSE);
         armExtend.setTargetPosition(armExtend.getCurrentPosition());
-        armExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
 
         waitForStart();
+
+        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         armPivot.setPower(0.4);
 
@@ -66,7 +79,7 @@ public class PixelDropBlue extends LinearOpMode {
         armPivot.setPower(1);
 //      i am deeply ashamed of what ive done
 
-        armPivot.setTargetPosition(1500);
+        armPivot.setTargetPosition(1300);
         sleep(200);
         leftFront.setPower(strafeSpeed);
         rightFront.setPower(-strafeSpeed);
@@ -103,7 +116,7 @@ public class PixelDropBlue extends LinearOpMode {
         rightFront.setPower(0);
 
 
-        sleep(750);
+        sleep(900);
         armExtend.setTargetPosition(0);
 
         telemetry.addData("Path", "Completed");
