@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,11 +10,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 
 
-@TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
-public class Manipulator_Code extends LinearOpMode {
+@TeleOp
+public class TeleOpTestBed extends LinearOpMode {
 
     Servo servo123456789;
     //armPivot speeds
@@ -38,6 +43,14 @@ public class Manipulator_Code extends LinearOpMode {
 
     Telemetry.Log log = telemetry.log();
 
+    BNO055IMU imu;
+    BNO055IMU.Parameters imuParams;
+
+    Orientation orientation;
+    float pitch;
+    float roll;
+    float yaw;
+
     @Override
     public void runOpMode() {
         try {
@@ -49,6 +62,14 @@ public class Manipulator_Code extends LinearOpMode {
     }
 
     public void realOpMode() {
+        imuParams = new BNO055IMU.Parameters();
+        imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
+        imuParams.loggingEnabled = true;
+        imuParams.loggingTag = "IMU";
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(imuParams);
+
         GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
 
         telemetry.addData("Status", "Ready for Initialisation");
@@ -112,6 +133,15 @@ public class Manipulator_Code extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+            pitch = orientation.firstAngle;
+            roll = orientation.secondAngle;
+            yaw = orientation.thirdAngle;
+
+            telemetry.addData("pitch", pitch);
+            telemetry.addData("roll", roll);
+            telemetry.addData("yaw", yaw);
+
             telemetry.addData("armPivot power", armPivot.getPower());
             telemetry.addData("armPivot position", armPivot.getCurrentPosition());
             telemetry.addData("armExtend position", armExtend.getCurrentPosition());
@@ -149,7 +179,7 @@ public class Manipulator_Code extends LinearOpMode {
                 //It will go to the target with this much power.
             }
 
-            if (!armCalibrated) {
+            if (armCalibrated == false) {
                 armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 armPivot.setPower(-0.5);
                 if (armCalibration.isPressed() || armCalibration.getValue() != 0 || (runtime.milliseconds() > 5000)) {
