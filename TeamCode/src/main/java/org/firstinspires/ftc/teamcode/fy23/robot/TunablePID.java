@@ -5,11 +5,11 @@ import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 public class TunablePID {
     // I'm making this for the IMU stuff, so it works in floats because the IMU works in floats.
 
-    private double proportional;
-    private double integral = 0;
-    private double integralMultiplier;
-    private double derivative = 0;
-    private double derivativeMultiplier;
+    public double proportional; // public for telemetry
+    public double integral = 0;
+    public double integralMultiplier;
+    public double derivative = 0;
+    public double derivativeMultiplier;
 
     public TunablePID(double p, double im, double dm) {
         proportional = p;
@@ -37,6 +37,10 @@ public class TunablePID {
         return integral;
     }
 
+    public void clearIntegral() {
+        integral = 0;
+    }
+
     public void setIntegralMultiplier(double arg) {
         integralMultiplier = arg;
     }
@@ -48,6 +52,10 @@ public class TunablePID {
 
     public double getDerivative() {
         return derivative;
+    }
+
+    public void clearDerivative() {
+        derivative = 0;
     }
 
     public void setDerivativeMultiplier(double arg) {
@@ -70,11 +78,10 @@ public class TunablePID {
     public double getCorrectionPower(double error, double lastError) {
         updateIntegral(error);
         updateDerivative(error, lastError);
-        return
-                (proportional * error)
-                +
-                (integralMultiplier * integral)
-                +
-                (derivativeMultiplier * derivative);
+        double finalp = proportional * error;
+        double finali = integralMultiplier * integral;
+        double finald = derivativeMultiplier * derivative;
+        double gcd = Math.max((finalp + finali + finald), 1);
+        return finalp/gcd + finali/gcd + finald/gcd;
     }
 }

@@ -11,7 +11,7 @@ public class RobotB {
 
     public RobotB(HardwareMap hardwareMap) {
         drive = new MecanumDrive(hardwareMap, "leftFront", "rightFront", "leftBack", "rightBack");
-        pidConsts = new PIDconsts(0.05, 0.05, 0.05);
+        pidConsts = new PIDconsts(0.05, 0.01, 0.50);
         // TunablePID tuning for this robot
     }
 }
