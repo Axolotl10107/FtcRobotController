@@ -20,10 +20,10 @@ public class IMUdrive {
      */
 
     //configuration
-    private double hdgErrPower = 0.1;
+    private double hdgErrPower = 0.1; //try 0.05
     // applyTurn = turn + (hdgErrPower * headingError);
-    private double maxTotalCorrection = 0.5;
-    private float hdgErrThreshold = (float) 0.1;
+    private double maxTotalCorrection = 0.5; //try 0.3
+    private float hdgErrThreshold = (float) 0.1; //try 0.2
     // minimum actionable heading error
     private double turnThreshold = 0.05;
     // how much you must be turning for heading maintenance to temporarily stop
