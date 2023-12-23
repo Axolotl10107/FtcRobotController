@@ -53,7 +53,7 @@ public class ManipulatorCodeTestCopy extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        GamepadInterface controls = new GamepadDTS(gamepad1, gamepad2);
+        GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
 
         telemetry.addData("Status", "Ready for Initialization");
 

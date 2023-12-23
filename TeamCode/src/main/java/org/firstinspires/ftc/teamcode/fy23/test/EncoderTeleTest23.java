@@ -1,7 +1,7 @@
 //Michael's test program for running a motor to encoder positions
 //Now with safety!
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.fy23.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

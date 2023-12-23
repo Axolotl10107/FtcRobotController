@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.fy23;
+package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInterface;
+import org.firstinspires.ftc.teamcode.fy23.robot.IMUdrive;
 
 @TeleOp
 public class IMUdriveTestTeleOp extends OpMode {
