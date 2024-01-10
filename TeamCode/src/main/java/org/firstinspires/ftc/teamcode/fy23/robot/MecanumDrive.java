@@ -22,6 +22,11 @@ public class MecanumDrive {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
+
+//        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void applyDTS(double drive, double turn, double strafe) {

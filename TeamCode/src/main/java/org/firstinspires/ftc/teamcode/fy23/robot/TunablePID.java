@@ -14,6 +14,9 @@ public class TunablePID {
     public TunablePID(double p, double im, double dm) {
         proportional = p;
         integralMultiplier = im;
+        //TODO: GM0 recommends multiplying the integral by the time the last loop took to complete
+        //so that a consistent amount is added each time. I would probably also need a multiplier on
+        //that time, though, and I don't feel like tuning that right now.
         derivativeMultiplier = dm;
     }
 

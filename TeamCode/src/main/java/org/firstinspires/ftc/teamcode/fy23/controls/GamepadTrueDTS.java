@@ -82,6 +82,24 @@ public class GamepadTrueDTS extends GamepadDefault {
         }
     }
 
+    public boolean changeUp() {
+        if (GamepadInputs.buttonStart(driver) == 1 && buttonTimer.milliseconds() > buttonRest) {
+            buttonTimer.reset();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean changeDown() {
+        if (GamepadInputs.buttonBack(driver) == 1 && buttonTimer.milliseconds() > buttonRest) {
+            buttonTimer.reset();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean hdgUp() {
         if (GamepadInputs.buttonDpadRight(driver) == 1) {
             return true;
