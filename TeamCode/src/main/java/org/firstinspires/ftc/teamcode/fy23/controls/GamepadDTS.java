@@ -27,12 +27,12 @@ public class GamepadDTS extends GamepadDefault {
 
     @Override
     public double armForward() {
-        return GamepadInputs.buttonB(gamepad2);
+        return 0;
     }
 
     @Override
     public double armBackward() {
-        return GamepadInputs.buttonY(gamepad2);
+        return 0;
     }
 
     @Override

@@ -69,8 +69,8 @@ public class PixelDropBlue extends LinearOpMode {
 
         rightBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightBack.setPower(0.14);
-        rightFront.setPower(0.14);
+        rightBack.setPower(0.16);
+        rightFront.setPower(0.16);
 
         sleep(1000);
 
