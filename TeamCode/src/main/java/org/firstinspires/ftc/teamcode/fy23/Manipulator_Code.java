@@ -184,7 +184,7 @@ public class Manipulator_Code extends LinearOpMode {
             if (controls.armForward() > 0) {
                 armPivot.setTargetPosition(armDefaultPosition);
             } else if (controls.armBackward() > 0) {
-                armPivot.setTargetPosition(armDefaultPosition + 1750);
+                // armPivot.setTargetPosition(armDefaultPosition + 1750);
             }
 
             // controls the elevator

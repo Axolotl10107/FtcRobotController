@@ -21,13 +21,11 @@
 
 package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-//import org.firstinspires.ftc.teamcode.SkystoneDeterminationExample;
-//I've put these two in the same package, so this line isn't needed anyway.
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -38,16 +36,29 @@ import org.openftc.easyopencv.OpenCvWebcam;
  * and then snapshot that value for later use when the START
  * command is issued. The pipeline is re-used from SkystoneDeterminationExample
  */
-@Disabled
-@TeleOp
-public class AutonomousInitDetectionExample extends LinearOpMode
+
+// This actually uses AlliedDeterminationExample and prints the current analysis every time you
+// press [A] (after Start is pressed).
+@Autonomous
+public class VisionAutonomous extends LinearOpMode
 {
     OpenCvWebcam webcam;
-    SkystoneDeterminationExample.SkystoneDeterminationPipeline pipeline;
-    SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = SkystoneDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    AlliedDeterminationExample.SkystoneDeterminationPipeline pipeline;
+    AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
+    AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor colorAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor.BLUE; //default
 
     @Override
-    public void runOpMode()
+    public void runOpMode() {
+        Telemetry.Log log = telemetry.log();
+        try {
+            realOpMode();
+        } catch (Exception x) {
+            log.add(x.getStackTrace().toString());
+            while (opModeIsActive()) { sleep(100); }
+        }
+    }
+
+    public void realOpMode()
     {
         /**
          * NOTE: Many comments have been omitted from this sample for the
@@ -58,7 +69,7 @@ public class AutonomousInitDetectionExample extends LinearOpMode
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        pipeline = new SkystoneDeterminationExample.SkystoneDeterminationPipeline();
+        pipeline = new AlliedDeterminationExample.SkystoneDeterminationPipeline(telemetry);
         webcam.setPipeline(pipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -77,14 +88,16 @@ public class AutonomousInitDetectionExample extends LinearOpMode
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
-            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
-            telemetry.update();
-
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
-        }
+//        while (!isStarted() && !isStopRequested())
+//        {
+//            telemetry.addData("Realtime analysis", pipeline.getAnalysis());
+//            telemetry.addData("Realtime color", pipeline.getColor());
+//            telemetry.update();
+//
+//            // Don't burn CPU cycles busy-looping in this sample
+//            sleep(50);
+//        }
+        waitForStart();
 
         /*
          * The START command just came in: snapshot the current analysis now
@@ -99,32 +112,50 @@ public class AutonomousInitDetectionExample extends LinearOpMode
         telemetry.addData("Snapshot post-START analysis", snapshotAnalysis);
         telemetry.update();
 
+        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
+        while (opModeIsActive())
+        {
+            analyzeImage();
+            // Don't burn CPU cycles busy-looping in this sample
+            telemetry.update(); //down here in case analyzeImage() takes too long
+            sleep(50);
+        }
+    }
+
+    void analyzeImage() {
         switch (snapshotAnalysis)
         {
             case LEFT:
             {
-                /* Your autonomous code */
+                telemetry.addData("Object Position", "Left");
                 break;
             }
 
             case RIGHT:
             {
-                /* Your autonomous code */
+                telemetry.addData("Object Position", "Right");
                 break;
             }
 
             case CENTER:
             {
-                /* Your autonomous code*/
+                telemetry.addData("Object Position", "Center");
                 break;
             }
         }
 
-        /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive())
-        {
-            // Don't burn CPU cycles busy-looping in this sample
-            sleep(50);
+        switch (colorAnalysis) {
+            case RED:
+            {
+                telemetry.addData("Object Color", "Red");
+                break;
+            }
+
+            case BLUE:
+            {
+                telemetry.addData("Object Color", "Blue");
+                break;
+            }
         }
     }
 }

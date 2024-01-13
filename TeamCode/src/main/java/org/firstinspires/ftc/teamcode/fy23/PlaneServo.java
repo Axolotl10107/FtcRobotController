@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Disabled //has been integrated into Manipulator Opmode
 @TeleOp(name="Servo_for_plane", group="TeleTest")
 public class PlaneServo extends LinearOpMode {
     Servo servo123456789;

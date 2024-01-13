@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
+@Disabled //has been integrated into Manipulator Opmode
 @TeleOp(name="ManipulatorTwo", group="TeleTest")
 public class ManipulatorTwo extends OpMode {
     TouchSensor touch;

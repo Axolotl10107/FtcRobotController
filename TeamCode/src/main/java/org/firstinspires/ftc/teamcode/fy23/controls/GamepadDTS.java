@@ -3,89 +3,73 @@ package org.firstinspires.ftc.teamcode.fy23.controls;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadDTS extends GamepadDefault {
-    private Gamepad driver;
-    private Gamepad manipulator;
+    private Gamepad gamepad1;
+    private Gamepad gamepad2;
     public GamepadDTS(Gamepad initgamepad1, Gamepad initgamepad2) {
         super(initgamepad1, initgamepad2);
-        driver = initgamepad1;
-        manipulator = initgamepad2;
+        gamepad1 = initgamepad1;
+        gamepad2 = initgamepad2;
     }
     @Override
     public double forwardMovement() {
-        return GamepadInputs.rightTriggerLinear(driver, 1) - GamepadInputs.leftTriggerLinear(driver, 1);
+        return GamepadInputs.rightTriggerLinear(gamepad1, 1) - GamepadInputs.leftTriggerLinear(gamepad1, 1);
     }
 
     @Override
     public double strafeMovement() {
-        return GamepadInputs.rightStickXLinear(driver, 1);
+        return GamepadInputs.rightStickXLinear(gamepad1, 1);
     }
 
     @Override
     public double rotateMovement() {
-        return GamepadInputs.leftStickXLinear(driver, 1);
+        return GamepadInputs.leftStickXLinear(gamepad1, 1);
     }
 
     @Override
     public double armForward() {
-        return GamepadInputs.buttonB(manipulator);
+        return 0;
     }
 
     @Override
     public double armBackward() {
-        return GamepadInputs.buttonY(manipulator);
+        return 0;
     }
 
     @Override
     public double armMovement() {
-        double net = GamepadInputs.buttonDpadUp(manipulator) - GamepadInputs.buttonDpadDown(manipulator);
+        double net = GamepadInputs.buttonDpadUp(gamepad2) - GamepadInputs.buttonDpadDown(gamepad2);
         return net;
     }
 
     public double armMediumMovement() {
-        double net = GamepadInputs.buttonDpadRight(manipulator) - GamepadInputs.buttonDpadLeft(manipulator);
+        double net = GamepadInputs.buttonDpadRight(gamepad2) - GamepadInputs.buttonDpadLeft(gamepad2);
         return net;
     }
 
     public double armFastMovement() {
-        double y = manipulator.left_stick_y;
+        double y = gamepad2.left_stick_y;
         if (y > 0) {
-            return -GamepadInputs.leftStickYExponential(manipulator, 2);
+            return -GamepadInputs.leftStickYExponential(gamepad2, 2);
             //negative because the Y-axis is inverted on the gamepad itself
         } else {
-            return GamepadInputs.leftStickYExponential(manipulator, 2);
+            return GamepadInputs.leftStickYExponential(gamepad2, 2);
         }
 
     }
 
     @Override
     public double elevatorMovement() {
-        double net = GamepadInputs.rightTriggerLinear(manipulator, 1) - GamepadInputs.leftTriggerLinear(manipulator, 1);
+        double net = GamepadInputs.rightTriggerLinear(gamepad2, 1) - GamepadInputs.leftTriggerLinear(gamepad2, 1);
         return net;
     }
 
     @Override
     public double clawOpen() {
-        return GamepadInputs.buttonX(manipulator);
+        return GamepadInputs.buttonX(gamepad2);
     }
 
     @Override
     public double clawClose() {
-        return GamepadInputs.buttonA(manipulator);
+        return GamepadInputs.buttonA(gamepad2);
     }
-
-    @Override
-    public double maxDrivePowerUp() {
-        return GamepadInputs.buttonStart(driver);
-    }
-
-    @Override
-    public double maxDrivePowerDown() {
-        return GamepadInputs.buttonBack(driver);
-    }
-
-    @Override
-    public double planeLaunch() {
-        return GamepadInputs.rightBumper(driver);
-    }
-
 }

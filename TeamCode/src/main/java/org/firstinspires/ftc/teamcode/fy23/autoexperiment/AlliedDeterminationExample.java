@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -42,6 +43,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  * 100% accurate) method of detecting the skystone when lined up with
  * the sample regions over the first 3 stones.
  */
+@Disabled
 @TeleOp
 public class AlliedDeterminationExample extends LinearOpMode
 {
@@ -132,11 +134,11 @@ public class AlliedDeterminationExample extends LinearOpMode
         /*
          * The core values which define the location and size of the sample regions
          */
-        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,0); //default 109, 98
-        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(105,0); //default 181, 98
-        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(212,0); //default 253, 98
+        static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,150); //default 109, 98
+        static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(105,150); //default 181, 98
+        static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(212,150); //default 253, 98
         static final int REGION_WIDTH = 106; //default 20
-        static final int REGION_HEIGHT = 240; //default 20
+        static final int REGION_HEIGHT = 90; //default 20
         //Setting them this way should split the image into three vertical rectangles:
         /* -------
            | | | |
