@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInterface;
 
-
+@Disabled //outdated side project that never got integrated - has been replaced
 @TeleOp(name="Manipulator Opmode (Test Copy)", group="Manipulator Opmode")
 public class ManipulatorCodeTestCopy extends LinearOpMode {
 
