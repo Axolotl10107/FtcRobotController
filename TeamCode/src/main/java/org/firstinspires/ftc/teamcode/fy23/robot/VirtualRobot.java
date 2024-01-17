@@ -13,7 +13,7 @@ import java.io.File;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDrive},
  * and a {@link FriendlyIMU}. */
-public class RobotB implements AnyRobot {
+public class VirtualRobot implements AnyRobot {
 
     // Subsystems - include only and all the subsystems that this robot actually has
     public final MecanumDrive drive;
@@ -26,7 +26,7 @@ public class RobotB implements AnyRobot {
     public final double wheelDiameter = 9.6;
 
     /** Maximum forward speed in centimeters per second */
-    public final double maxForwardSpeed = 150;
+    public final double maxForwardSpeed = 150; // approximate for the Strafer V5
 
     /** There's a few different preset things that this can get set to. The default is loaded from
      * a file called "RobotA.pid" that gets saved by RobotAIMUDriveTuner,
@@ -39,16 +39,16 @@ public class RobotB implements AnyRobot {
     public final PIDconsts sdkMotorPidConsts;
 
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
-    public RobotB(HardwareMap hardwareMap) {
-        drive = new MecanumDrive(hardwareMap, "leftFront", "rightFront", "leftBack", "rightBack");
+    public VirtualRobot(HardwareMap hardwareMap) {
+        drive = new MecanumDrive(hardwareMap, "front_left_motor", "front_right_motor", "back_left_motor", "back_right_motor");
 
         // TunablePID tuning for this robot - select exactly one
 //        pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
-//        pidConsts = new PIDconsts(0, 0, 0); // disable PID (and therefore IMU correction)
+        pidConsts = new PIDconsts(0, 0, 0); // disable PID (and therefore IMU correction)
         { // load from the file that RobotBIMUDriveTuner saved (comment out the entire code block to disable)
             // modified from SensorBNO055IMUCalibration example
-            File file = AppUtil.getInstance().getSettingsFile("RobotB.pid");
-            pidConsts = new PIDconsts(ReadWriteFile.readFile(file));
+//            File file = AppUtil.getInstance().getSettingsFile("VirtualRobot.pid");
+//            pidConsts = new PIDconsts(ReadWriteFile.readFile(file));
         }
 
         sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);

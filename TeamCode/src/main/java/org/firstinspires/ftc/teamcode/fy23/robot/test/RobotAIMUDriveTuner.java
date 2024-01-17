@@ -8,19 +8,19 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.DTSscaler;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotB;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotA;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 import java.io.File;
 
 @TeleOp
-public class RobotBIMUDriveTuner extends OpMode {
+public class RobotAIMUDriveTuner extends OpMode {
 
     GamepadTrueDTS gamepad;
     IMUcorrector imuCorrector;
     DTSscaler scaler;
-    RobotB robot;
+    RobotA robot;
 
     TunablePID pid;
 
@@ -30,7 +30,7 @@ public class RobotBIMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         scaler = new DTSscaler();
-        robot = new RobotB(hardwareMap);
+        robot = new RobotA(hardwareMap);
     }
 
     public void start() {
@@ -81,7 +81,7 @@ public class RobotBIMUDriveTuner extends OpMode {
 
         if (gamepad.save()) {
             // modified from SensorBNO055IMUCalibration example
-            String filename = "RobotB.pid";
+            String filename = "RobotA.pid";
             File file = AppUtil.getInstance().getSettingsFile(filename);
             PIDconsts constsToWrite = new PIDconsts(pid.getProportional(), pid.getIntegralMultiplier(), pid.getDerivativeMultiplier());
             ReadWriteFile.writeFile(file, constsToWrite.serialize());

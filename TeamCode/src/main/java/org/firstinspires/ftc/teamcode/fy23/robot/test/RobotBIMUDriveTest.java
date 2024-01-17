@@ -2,14 +2,12 @@ package org.firstinspires.ftc.teamcode.fy23.robot.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.fy23.controls.FieldyGamepadLS;
-import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
-import org.firstinspires.ftc.teamcode.fy23.robot.DTSscaler;
-import org.firstinspires.ftc.teamcode.fy23.robot.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.robot.processors.DTSscaler;
+import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotB;
-import org.firstinspires.ftc.teamcode.fy23.robot.TunablePID;
+import org.firstinspires.ftc.teamcode.fy23.robot.processors.TunablePID;
 
 @TeleOp
 public class RobotBIMUDriveTest extends OpMode {
@@ -70,11 +68,11 @@ public class RobotBIMUDriveTest extends OpMode {
         telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
         telemetry.addData("Actual turn", scaler.scaledTurn);
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("Proportional", pid.proportional);
-        telemetry.addData("Integral", pid.integral);
-        telemetry.addData("Integral Multiplier", pid.integralMultiplier);
-        telemetry.addData("Derivative", pid.derivative);
-        telemetry.addData("Derivative Multiplier", pid.derivativeMultiplier);
+        telemetry.addData("Proportional", pid.getProportional());
+        telemetry.addData("Integral", pid.getIntegral());
+        telemetry.addData("Integral Multiplier", pid.getIntegralMultiplier());
+        telemetry.addData("Derivative", pid.getDerivative());
+        telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Current Heading", imuCorrector.imu.yaw());
         telemetry.addData("Target Heading", imuCorrector.targetHeading);
