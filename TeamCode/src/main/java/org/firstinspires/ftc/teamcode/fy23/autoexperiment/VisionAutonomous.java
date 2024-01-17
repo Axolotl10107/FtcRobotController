@@ -21,11 +21,19 @@
 
 package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 
+import android.view.animation.RotateAnimation;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotA;
+import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
+import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -47,6 +55,12 @@ public class VisionAutonomous extends LinearOpMode
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor colorAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor.BLUE; //default
 
+    RobotA robot;
+    RampTwo ramper;
+    IMUcorrector imuCorrector;
+
+    DcMotor armPivot;
+
     @Override
     public void runOpMode() {
         Telemetry.Log log = telemetry.log();
@@ -56,6 +70,14 @@ public class VisionAutonomous extends LinearOpMode
             log.add(x.getStackTrace().toString());
             while (opModeIsActive()) { sleep(100); }
         }
+    }
+
+    double ticksToCM(double ticks) {
+        return (ticks / robot.TPR) * robot.wheelDiameter;
+    }
+
+    double cmToTicks(double cm) {
+        return (cm * robot.TPR) / robot.wheelDiameter;
     }
 
     public void realOpMode()
@@ -71,6 +93,14 @@ public class VisionAutonomous extends LinearOpMode
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         pipeline = new AlliedDeterminationExample.SkystoneDeterminationPipeline(telemetry);
         webcam.setPipeline(pipeline);
+
+        robot = new RobotA(hardwareMap);
+        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
+
+        armPivot = hardwareMap.get(DcMotor.class, "armPivot");
+        armPivot.setTargetPosition(-500);
+        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armPivot.setPower(0.2);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -113,34 +143,65 @@ public class VisionAutonomous extends LinearOpMode
         telemetry.update();
 
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive())
-        {
+//        while (opModeIsActive())
+//        {
             analyzeImage();
             // Don't burn CPU cycles busy-looping in this sample
             telemetry.update(); //down here in case analyzeImage() takes too long
-            sleep(50);
-        }
+//            sleep(50);
+//        }
     }
 
     void analyzeImage() {
+        ramper = new RampTwo(5, 10, 1, 2, 50, 0);
+        while (ticksToCM(robot.drive.getAvgEncoderPos()) < 49) {
+            robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+            telemetry.addData("currentPos", ticksToCM(robot.drive.getAvgEncoderPos()));
+            telemetry.addData("leftFront", robot.drive.leftFront.getCurrentPosition());
+            telemetry.addData("rightFront", robot.drive.rightFront.getCurrentPosition());
+            telemetry.addData("leftBack", robot.drive.leftBack.getCurrentPosition());
+            telemetry.addData("rightBack", robot.drive.rightBack.getCurrentPosition());
+            telemetry.addData("armPivot", armPivot.getCurrentPosition());
+            telemetry.update();
+        }
+        // We always want to go forward.
         switch (snapshotAnalysis)
         {
             case LEFT:
             {
                 telemetry.addData("Object Position", "Left");
-                break;
+                imuCorrector.targetHeading = 90;
+                while (imuCorrector.imu.yaw() < 89) {
+                    robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
+                }
+                ramper = new RampTwo(5, 10, 1, 2, 20, 0);
+                while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
+                    robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                }
+                requestOpModeStop(); // We're there!
+//                break;
             }
 
             case RIGHT:
             {
                 telemetry.addData("Object Position", "Right");
-                break;
+                imuCorrector.targetHeading = -90;
+                while (imuCorrector.imu.yaw() > -89) {
+                    robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
+                }
+                ramper = new RampTwo(5, 10, 1, 2, 20, 0);
+                while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
+                    robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                }
+                requestOpModeStop(); // We're there!
+//                break;
             }
 
             case CENTER:
             {
                 telemetry.addData("Object Position", "Center");
-                break;
+//                break;
+                requestOpModeStop(); // We're there!
             }
         }
 

@@ -12,10 +12,10 @@ public class RampTwo {
     private double currentTime;
     private double currentVel;
     private double newVel;
-    private double remainingDistance;
+    public double remainingDistance;
     private double totalDistance;
-    private double timeToDecel;
-    private double accelToStop;
+    public double timeToDecel;
+    public double accelToStop;
 //    private double currentPos;
 
     private double maxAccel = 1;

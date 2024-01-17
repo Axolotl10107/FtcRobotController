@@ -49,6 +49,14 @@ public class MecanumDrive {
         ) / 4;
     }
 
+    public double getRobotBAvgEncoderPos() { // RobotB has a broken encoder wire
+        return (
+                leftFront.getCurrentPosition() +
+                leftBack.getCurrentPosition() +
+                rightBack.getCurrentPosition()
+                ) / 3;
+    }
+
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
         rightFront.setMode(runMode);

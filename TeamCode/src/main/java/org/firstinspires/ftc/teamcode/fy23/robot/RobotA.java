@@ -51,12 +51,12 @@ public class RobotA implements AnyRobot {
         drive = new MecanumDrive(hardwareMap, "leftFront", "rightFront", "leftBack", "rightBack");
 
         // TunablePID tuning for this robot - select exactly one
-//        pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
+        pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
 //        pidConsts = new PIDconsts(0, 0, 0); // disable PID (and therefore IMU correction)
         { // load from the file that RobotBIMUDriveTuner saved (comment out the entire code block to disable)
             // modified from SensorBNO055IMUCalibration example
-            File file = AppUtil.getInstance().getSettingsFile("RobotA.pid");
-            pidConsts = new PIDconsts(ReadWriteFile.readFile(file));
+//            File file = AppUtil.getInstance().getSettingsFile("RobotA.pid");
+//            pidConsts = new PIDconsts(ReadWriteFile.readFile(file));
         }
 
         sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);
