@@ -70,4 +70,12 @@ public class MecanumDrive {
         leftBack.setVelocity(velocity);
         rightBack.setVelocity(velocity);
     }
+
+    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
+        leftFront.setZeroPowerBehavior(behavior);
+        rightFront.setZeroPowerBehavior(behavior);
+        leftBack.setZeroPowerBehavior(behavior);
+        rightBack.setZeroPowerBehavior(behavior);
+
+    }
 }

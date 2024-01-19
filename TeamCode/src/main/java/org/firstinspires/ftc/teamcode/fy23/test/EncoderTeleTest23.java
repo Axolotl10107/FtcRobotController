@@ -94,14 +94,14 @@ public class EncoderTeleTest23 extends OpMode {
     public void init() {
         telemetry.addData("Task", "Initializing program...");
         //Add entries to motorList
+        motorList.add("leftFront");
+        motorList.add("leftBack");
+        motorList.add("rightFront");
+        motorList.add("rightBack");
+        motorList.add("armPivot");
+        motorList.add("armExtend");
 //        motorList.add("leftFront");
-//        motorList.add("leftBack");
-//        motorList.add("rightFront");
-//        motorList.add("rightBack");
 //        motorList.add("armPivot");
-//        motorList.add("armExtend");
-        motorList.add("motor");
-        motorList.add("motor2");
 
         //Initialize the first motor
         initMotor(listIdx); //listIdx should be 0 at this time

@@ -32,6 +32,7 @@ public class RobotA implements AnyRobot {
 
     /** Wheel diameter, in centimeters */
     public final double wheelDiameter = 9.6;
+    public final double wheelCircumference = wheelDiameter * Math.PI;
 
     /** Maximum forward speed in centimeters per second */
     public final double maxForwardSpeed = 150;
