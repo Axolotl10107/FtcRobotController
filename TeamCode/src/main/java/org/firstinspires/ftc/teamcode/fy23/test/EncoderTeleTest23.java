@@ -5,32 +5,32 @@ package org.firstinspires.ftc.teamcode.fy23.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
-// TODO: Finish developing the safety check
 @TeleOp(name="EncoderTeleTest23", group="TeleTest")
 public class EncoderTeleTest23 extends OpMode {
 
     //Configure the Safety Check
     ElapsedTime safetyCheckClock;
-    int safetyCheckInterval = 100;
-    int requiredDistance = 50;
+//    int safetyCheckInterval = 100;
+//    int requiredDistance = 50;
 
-    int currentPos = 0;
-    boolean safetyCheck() { //returns true if continued operation is safe, false if unsafe
-        int currentPos = motor.getCurrentPosition();
-        if ((lastMotorPos > Math.abs(currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
-            //if we haven't moved requiredDistance ticks since last we checked (since the safetyCheckInterval last came around)
-            //and we actually have somewhere to go
-            return false;
-        } else {
-            lastMotorPos = currentPos;
-            return true;
-        }
-    }
+//    int currentPos = 0;
+//    boolean safetyCheck() { //returns true if continued operation is safe, false if unsafe
+//        int currentPos = motor.getCurrentPosition();
+//        if ((lastMotorPos > Math.abs(currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
+//            //if we haven't moved requiredDistance ticks since last we checked (since the safetyCheckInterval last came around)
+//            //and we actually have somewhere to go
+//            return false;
+//        } else {
+//            lastMotorPos = currentPos;
+//            return true;
+//        }
+//    }
 
     //Declare variables first because we have to
     DcMotorEx motor;
@@ -44,13 +44,15 @@ public class EncoderTeleTest23 extends OpMode {
     //    ArrayList<String> motorList = new ArrayList<>(6);
     ArrayList<String> motorList = new ArrayList<>(2);
 
-    int targetPosA = 0;//Stage target here - we'll send it to the motor later
+    int targetPosA = 0; //Stage target here - we'll send it to the motor later
     int targetPosB = 0;
     boolean aActive = true;
     boolean bActive = false;
     int listIdx = 0;
     double motorPower = 0.4;
-    int lastMotorPos = 0;
+//    int lastMotorPos = 0;
+
+    boolean hasPassedSafetyCheck = false;
 
     void initMotor(int idx) {
         String motorString = motorList.get(idx);
@@ -103,8 +105,7 @@ public class EncoderTeleTest23 extends OpMode {
 //        motorList.add("leftFront");
 //        motorList.add("armPivot");
 
-        //Initialize the first motor
-        initMotor(listIdx); //listIdx should be 0 at this time
+        initMotor(0); //Initialize the first motor
 
         upDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         downDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -133,13 +134,14 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addData("Motor runmode", motor.getMode());
         telemetry.addData("Set Motor Power", motorPower);
         telemetry.addData("Actual Motor power", motor.getPower());
-        telemetry.addData("Safety Check Passing", safetyCheck());
-        telemetry.addData("lastMotorPos", lastMotorPos);
-        telemetry.addData("Difference", Math.abs(currentPos - lastMotorPos));
-        telemetry.addLine("(lastMotorPos > Math.abs(currentPos - requiredDistance))");
-        telemetry.addLine(String.valueOf((lastMotorPos > Math.abs(currentPos - requiredDistance))));
-        telemetry.addLine("(Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)");
-        telemetry.addLine(String.valueOf((Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)));
+        telemetry.addData("Motor Velocity", motor.getVelocity());
+//        telemetry.addData("Safety Check Passing", safetyCheck());
+//        telemetry.addData("lastMotorPos", lastMotorPos);
+//        telemetry.addData("Difference", Math.abs(currentPos - lastMotorPos));
+//        telemetry.addLine("(lastMotorPos > Math.abs(currentPos - requiredDistance))");
+//        telemetry.addLine(String.valueOf((lastMotorPos > Math.abs(currentPos - requiredDistance))));
+//        telemetry.addLine("(Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)");
+//        telemetry.addLine(String.valueOf((Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)));
         telemetry.addLine("------------------------------------------");
         telemetry.addLine("D-Pad: Up/Down 10, Left/Right 100");
         telemetry.addLine("Bumpers: 1000");
@@ -168,18 +170,34 @@ public class EncoderTeleTest23 extends OpMode {
 //            }
 //        }
 
-        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
-            safetyCheckClock.reset();
-//            if (!safetyCheck()) {
-            if (false) { //disabled feature :(
-                motor.setPower(0);
-                motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-                telemetry.clearAll();
-                telemetry.addLine("||||||||||||||||||||||");
-                telemetry.addLine("||| Safety Lockout |||");
-                telemetry.addLine("||||||||||||||||||||||");
-                telemetry.update();
-//                while (true) {} //Yes, this is intentional.
+//        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
+//            safetyCheckClock.reset();
+////            if (!safetyCheck()) {
+//            if (false) { //disabled feature :(
+//                motor.setPower(0);
+//                motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//                telemetry.clearAll();
+//                telemetry.addLine("||||||||||||||||||||||");
+//                telemetry.addLine("||| Safety Lockout |||");
+//                telemetry.addLine("||||||||||||||||||||||");
+//                telemetry.update();
+////                while (true) {} //Yes, this is intentional.
+//            }
+//        }
+
+        if (motor.getPower() > 0.05) {
+            if (!hasPassedSafetyCheck && motor.getVelocity() > 1) {
+                hasPassedSafetyCheck = true;
+            } else if (hasPassedSafetyCheck) {
+                if (motor.getVelocity() < 1) {
+                    motor.setPower(0);
+                    motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    telemetry.clearAll();
+                    telemetry.addLine("Safety Lockout");
+                    otherDeb.reset();
+                    while (otherDeb.seconds() < 5) {} // wait 5 seconds
+                    requestOpModeStop();
+                }
             }
         }
 
