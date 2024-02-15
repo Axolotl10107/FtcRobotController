@@ -10,6 +10,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class FriendlyIMU {
 
+    public static class Parameters {
+        public boolean present;
+    }
+
     private double pitch;
     private double roll;
     private double yaw;
@@ -19,7 +23,7 @@ public class FriendlyIMU {
 
     Orientation orientation;
 
-    public FriendlyIMU(HardwareMap hardwareMap) {
+    public FriendlyIMU(Parameters parameters, HardwareMap hardwareMap) {
         imuParams = new BNO055IMU.Parameters();
         imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
         //see "SensorBNO055IMUCalibration" example

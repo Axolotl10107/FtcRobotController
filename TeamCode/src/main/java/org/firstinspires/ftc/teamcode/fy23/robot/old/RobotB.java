@@ -1,15 +1,13 @@
-package org.firstinspires.ftc.teamcode.fy23.robot;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
+
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ReadWriteFile;
 
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.fy23.robot.generators.RudimentaryRampToTarget;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
-
-import java.io.File;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDrive},
  * and a {@link FriendlyIMU}. */
@@ -40,7 +38,21 @@ public class RobotB implements AnyRobot {
 
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public RobotB(HardwareMap hardwareMap) {
-        drive = new MecanumDrive(hardwareMap, "leftFront", "rightFront", "leftBack", "rightBack");
+        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+
+        driveParams.leftFrontName = "leftFront";
+        driveParams.leftFrontDirection = REVERSE;
+
+        driveParams.rightFrontName = "rightFront";
+        driveParams.rightFrontDirection = FORWARD;
+
+        driveParams.leftBackName = "leftBack";
+        driveParams.leftBackDirection = REVERSE;
+
+        driveParams.rightBackName = "rightBack";
+        driveParams.rightBackDirection = FORWARD;
+
+        drive = new MecanumDrive(driveParams, hardwareMap);
 
         // TunablePID tuning for this robot - select exactly one
         pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
@@ -53,6 +65,8 @@ public class RobotB implements AnyRobot {
 
         sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);
 
-        imu = new FriendlyIMU(hardwareMap);
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        imuParams.present = true;
+        imu = new FriendlyIMU(imuParams, hardwareMap);
     }
 }

@@ -37,14 +37,18 @@ public class IMUcorrector {
     private ElapsedTime pidEnableTimer;
 
     public IMUcorrector(HardwareMap hardwareMap, double p, double im, double dm) {
-        imu = new FriendlyIMU(hardwareMap);
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        imuParams.present = true;
+        imu = new FriendlyIMU(imuParams, hardwareMap);
         pid = new TunablePID(p, im, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     public IMUcorrector(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
-        imu = new FriendlyIMU(hardwareMap);
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        imuParams.present = true;
+        imu = new FriendlyIMU(imuParams, hardwareMap);
         pid = new TunablePID(pidConsts.p, pidConsts.im, pidConsts.dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);

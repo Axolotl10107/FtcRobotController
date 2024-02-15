@@ -1,7 +1,5 @@
-package org.firstinspires.ftc.teamcode.fy23.robot;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.generators.RudimentaryRampToTarget;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 /** Hopefully allows something to accept any robot, when that makes any sense */

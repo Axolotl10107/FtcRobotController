@@ -10,21 +10,52 @@ import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
  * with this. */
 public class MecanumDrive {
 
+    public static class Parameters {
+        public boolean present;
+
+        public String leftFrontName;
+        public DcMotor.Direction leftFrontDirection;
+
+        public String rightFrontName;
+        public DcMotor.Direction rightFrontDirection;
+
+        public String leftBackName;
+        public DcMotor.Direction leftBackDirection;
+
+        public String rightBackName;
+        public DcMotor.Direction rightBackDirection;
+
+        public DcMotor.RunMode runMode;
+        public DcMotor.ZeroPowerBehavior zeroPowerBehavior;
+    }
+
     public DcMotorEx leftFront;
     public DcMotorEx rightFront;
     public DcMotorEx leftBack;
     public DcMotorEx rightBack;
 
-    public MecanumDrive(HardwareMap hardwareMap, String lfName, String rfName, String lbName, String rbName) {
-        leftFront = hardwareMap.get(DcMotorEx.class, lfName);
-        rightFront = hardwareMap.get(DcMotorEx.class, rfName);
-        leftBack = hardwareMap.get(DcMotorEx.class, lbName);
-        rightBack = hardwareMap.get(DcMotorEx.class, rbName);
+    public MecanumDrive(Parameters parameters, HardwareMap hardwareMap) {
+        leftFront = hardwareMap.get(DcMotorEx.class, parameters.leftFrontName);
+        rightFront = hardwareMap.get(DcMotorEx.class, parameters.rightFrontName);
+        leftBack = hardwareMap.get(DcMotorEx.class, parameters.leftBackName);
+        rightBack = hardwareMap.get(DcMotorEx.class, parameters.rightBackName);
 
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection(DcMotor.Direction.FORWARD);
+        leftFront.setDirection(parameters.leftFrontDirection);
+        rightFront.setDirection(parameters.rightFrontDirection);
+        leftBack.setDirection(parameters.leftBackDirection);
+        rightBack.setDirection(parameters.rightBackDirection);
+
+        try {
+            setMode(parameters.runMode);
+        } catch (Exception x) {
+            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if it wasn't set, pick a default
+        }
+
+        try {
+            setZeroPowerBehavior(parameters.zeroPowerBehavior);
+        } catch (Exception x) {
+            setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
     }
 
     /** Takes these components as motor powers */
@@ -43,18 +74,10 @@ public class MecanumDrive {
     public double getAvgEncoderPos() {
         return (
                 leftFront.getCurrentPosition() +
-                        rightFront.getCurrentPosition() +
-                        leftBack.getCurrentPosition() +
-                        rightBack.getCurrentPosition()
-        ) / 4;
-    }
-
-    public double getRobotBAvgEncoderPos() { // RobotB has a broken encoder wire
-        return (
-                leftFront.getCurrentPosition() +
+                rightFront.getCurrentPosition() +
                 leftBack.getCurrentPosition() +
                 rightBack.getCurrentPosition()
-                ) / 3;
+        ) / 4;
     }
 
     public void setMode(DcMotor.RunMode runMode) {

@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.test;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ReadWriteFile;
@@ -8,19 +9,20 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.DTSscaler;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotA;
+import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotB;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 import java.io.File;
 
+@Disabled
 @TeleOp
-public class RobotAIMUDriveTuner extends OpMode {
+public class RobotBIMUDriveTuner extends OpMode {
 
     GamepadTrueDTS gamepad;
     IMUcorrector imuCorrector;
     DTSscaler scaler;
-    RobotA robot;
+    RobotB robot;
 
     TunablePID pid;
 
@@ -30,7 +32,7 @@ public class RobotAIMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         scaler = new DTSscaler();
-        robot = new RobotA(hardwareMap);
+        robot = new RobotB(hardwareMap);
     }
 
     public void start() {
@@ -81,7 +83,7 @@ public class RobotAIMUDriveTuner extends OpMode {
 
         if (gamepad.save()) {
             // modified from SensorBNO055IMUCalibration example
-            String filename = "RobotA.pid";
+            String filename = "RobotB.pid";
             File file = AppUtil.getInstance().getSettingsFile(filename);
             PIDconsts constsToWrite = new PIDconsts(pid.getProportional(), pid.getIntegralMultiplier(), pid.getDerivativeMultiplier());
             ReadWriteFile.writeFile(file, constsToWrite.serialize());

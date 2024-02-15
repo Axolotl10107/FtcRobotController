@@ -4,8 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotB;
-import org.firstinspires.ftc.teamcode.fy23.robot.VirtualRobot;
+import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotB;
 import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
 
 @TeleOp
@@ -45,7 +44,7 @@ public class RampTwoTest extends OpMode {
 
     @Override
     public void loop() {
-        currentPos = robot.drive.getRobotBAvgEncoderPos(); // how far we've traveled in encoder ticks
+        currentPos = robot.drive.getAvgEncoderPos(); // how far we've traveled in encoder ticks
         currentPos = ticksToCM(currentPos); // convert it to centimeters so it's easier for us to think about
 
         if (flag == false) {

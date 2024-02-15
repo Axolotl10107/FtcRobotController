@@ -4,7 +4,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Claw {
 
-    public Claw(HardwareMap hardwareMap) {
+    public static class Parameters {
+        public boolean present;
+    }
+
+    public Claw(Parameters parameters, HardwareMap hardwareMap) {
 
     }
 }

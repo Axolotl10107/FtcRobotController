@@ -4,7 +4,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class PlaneLauncher {
 
-    public PlaneLauncher(HardwareMap hardwareMap) {
+    public static class Parameters {
+        public boolean present;
+    }
+
+    public PlaneLauncher(Parameters parameters, HardwareMap hardwareMap) {
 
     }
 }

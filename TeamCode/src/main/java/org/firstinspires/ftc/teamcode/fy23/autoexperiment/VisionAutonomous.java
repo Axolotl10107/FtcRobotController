@@ -21,16 +21,13 @@
 
 package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 
-import android.view.animation.RotateAnimation;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotA;
+import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
 import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
@@ -39,14 +36,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-/*
- * This sample demonstrates how to run analysis during INIT
- * and then snapshot that value for later use when the START
- * command is issued. The pipeline is re-used from SkystoneDeterminationExample
- */
-
-// This actually uses AlliedDeterminationExample and prints the current analysis every time you
-// press [A] (after Start is pressed).
+// Incomplete. Theoretically gets the position and color of the team element and moves accordingly.
 @Autonomous
 public class VisionAutonomous extends LinearOpMode
 {

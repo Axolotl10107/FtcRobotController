@@ -5,12 +5,12 @@ package org.firstinspires.ftc.teamcode.fy23.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
+// TODO: Finish developing the safety check
 @TeleOp(name="EncoderTeleTest23", group="TeleTest")
 public class EncoderTeleTest23 extends OpMode {
 
@@ -33,7 +33,7 @@ public class EncoderTeleTest23 extends OpMode {
     }
 
     //Declare variables first because we have to
-    DcMotor motor;
+    DcMotorEx motor;
     ElapsedTime upDeb;
     ElapsedTime downDeb;
     ElapsedTime otherDeb;
@@ -55,14 +55,14 @@ public class EncoderTeleTest23 extends OpMode {
     void initMotor(int idx) {
         String motorString = motorList.get(idx);
         telemetry.addData("Task", "Initializing motor...");
-        motor = hardwareMap.get(DcMotor.class, motorString);
+        motor = hardwareMap.get(DcMotorEx.class, motorString);
 
         //Put the motor into a known configuration
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setDirection(DcMotorEx.Direction.REVERSE);
         motor.setPower(0);
         motor.setTargetPosition(0);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
+        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         telemetry.addData("Task", "Done initializing motor");
     }
 
@@ -173,7 +173,7 @@ public class EncoderTeleTest23 extends OpMode {
 //            if (!safetyCheck()) {
             if (false) { //disabled feature :(
                 motor.setPower(0);
-                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
                 telemetry.clearAll();
                 telemetry.addLine("||||||||||||||||||||||");
                 telemetry.addLine("||| Safety Lockout |||");
@@ -272,22 +272,22 @@ public class EncoderTeleTest23 extends OpMode {
             //Reset encoder position (set current position as 0)
         } else if (gamepad1.y && otherDeb.milliseconds() > otherDebTime) {
             telemetry.addData("Task", "Resetting encoder position...");
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
             motor.setTargetPosition(0);
-            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             otherDeb.reset();
             telemetry.addData("Task", "Ready");
 
             //Bonus feature: analog control with gamepad2
         } else if (gamepad2.a && otherDeb.milliseconds() > otherDebTime) {
-            motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
             otherDeb.reset();
         } else if (gamepad2.b && otherDeb.milliseconds() > otherDebTime) {
-            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             otherDeb.reset();
         }
 
-        if (motor.getMode() == DcMotor.RunMode.RUN_WITHOUT_ENCODER) {
+        if (motor.getMode() == DcMotorEx.RunMode.RUN_WITHOUT_ENCODER) {
             motor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         }
 

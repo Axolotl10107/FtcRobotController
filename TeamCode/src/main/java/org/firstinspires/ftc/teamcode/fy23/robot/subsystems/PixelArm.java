@@ -9,7 +9,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class PixelArm {
 
-    public PixelArm(HardwareMap hardwareMap) {
+    public static class Parameters {
+        public boolean present;
+    }
+
+    public PixelArm(Parameters parameters, HardwareMap hardwareMap) {
 
     }
 }
