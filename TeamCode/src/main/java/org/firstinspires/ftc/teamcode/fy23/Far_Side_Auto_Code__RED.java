@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+@Disabled
 @Autonomous(name="AutoCodeFarSide__RED", group="AutoCodeFarSide__RED")
 public class Far_Side_Auto_Code__RED extends LinearOpMode {
 
@@ -22,9 +23,17 @@ public class Far_Side_Auto_Code__RED extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        waitForStart();
+        armPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+        armPivot.setTargetPosition(armPivot.getCurrentPosition());
+        armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        telemetry.addData("Status", "Ready for Initialisation");
+        armExtend = hardwareMap.get(DcMotor.class, "armExtend");
+        armExtend.setDirection(DcMotor.Direction.REVERSE);
+        armExtend.setTargetPosition(armExtend.getCurrentPosition());
+        armExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armPivot.setTargetPosition(armPivot.getCurrentPosition() + 2000);
+        waitForStart();
 
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
@@ -33,6 +42,9 @@ public class Far_Side_Auto_Code__RED extends LinearOpMode {
         armPivot = hardwareMap.get(DcMotor.class, "armPivot");
         armPivot.setDirection(DcMotorSimple.Direction.REVERSE);
         armPivot.setTargetPosition(armPivot.getCurrentPosition());
+
+        telemetry.addData("Status", "Ready for Initialisation");
+
 
 
         //Code for Pivot the arm
@@ -72,12 +84,27 @@ public class Far_Side_Auto_Code__RED extends LinearOpMode {
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
 
-        leftBack.setPower(.5);
-        rightBack.setPower(.65);
-        leftFront.setPower(.5);
-        rightFront.setPower(.65);
+        leftBack.setPower(.63);
+        rightBack.setPower(.5);
+        leftFront.setPower(.63);
+        rightFront.setPower(.5);
 
-        sleep(3800);
+        sleep(3000);
+
+        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        leftBack.setDirection(DcMotor.Direction.FORWARD);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
+
+        leftBack.setPower(.5);
+        rightBack.setPower(.5);
+        leftFront.setPower(.5);
+        rightFront.setPower(.5);
+
+        sleep(2000);
+
+
+
 
 
 

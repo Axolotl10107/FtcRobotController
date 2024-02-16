@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotB;
 import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
-
+@Disabled
 @TeleOp
 public class RampTwoTest extends OpMode {
 

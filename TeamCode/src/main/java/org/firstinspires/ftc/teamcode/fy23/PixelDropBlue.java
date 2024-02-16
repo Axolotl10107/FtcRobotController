@@ -90,7 +90,7 @@ public class PixelDropBlue extends LinearOpMode {
         // Code for Extending the Arm
         // Change this 0 to different number from trail and error.
 
-        armExtend.setTargetPosition(1350);
+        armExtend.setTargetPosition(1500);
 
         telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
 

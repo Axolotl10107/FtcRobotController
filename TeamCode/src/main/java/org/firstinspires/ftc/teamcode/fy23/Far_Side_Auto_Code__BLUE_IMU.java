@@ -71,7 +71,7 @@ public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
         //Code for moving forward
         // about 83cm forward, 10cm to either side (for vision, not this...)
 
-        targetPos = cmToTicks(127);
+        targetPos = cmToTicks(119);
 //        stopwatch.reset();
         desiredMotion = new DTS(0.5, 0, 0);
         while (robot.drive.getAvgEncoderPos() < targetPos) {

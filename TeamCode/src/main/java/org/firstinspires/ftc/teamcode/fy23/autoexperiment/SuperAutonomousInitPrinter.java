@@ -21,6 +21,7 @@
 
 package org.firstinspires.ftc.teamcode.fy23.autoexperiment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -39,6 +40,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 // This actually uses AlliedDeterminationExample and prints the current analysis every time you
 // press [A] (after Start is pressed).
+@Disabled
 @TeleOp
 public class SuperAutonomousInitPrinter extends LinearOpMode
 {

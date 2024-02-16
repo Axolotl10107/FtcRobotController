@@ -70,7 +70,7 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
 
         //Code for moving forward
 
-        targetPos = cmToTicks(127);
+        targetPos = cmToTicks(119);
         stopwatch.reset();
         desiredMotion = new DTS(0.5, 0, 0);
         while (robot.drive.getAvgEncoderPos() < targetPos) {
@@ -89,7 +89,9 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
             robot.drive.applyDTS(corrected);
         }
 
-        sleep(3800);
+        sleep(1750);
+
+
 
 
 

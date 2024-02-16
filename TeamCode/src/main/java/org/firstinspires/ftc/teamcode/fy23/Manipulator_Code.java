@@ -201,7 +201,7 @@ public class Manipulator_Code extends LinearOpMode {
             if (controls.clawOpen() != 0) {
                 clawServo.setPosition(servoDefaultPosition - .1); //Opens claw
             } else if (controls.clawClose() != 0) {
-                clawServo.setPosition(servoDefaultPosition); //Closes claw
+                clawServo.setPosition(servoDefaultPosition + .01); //Closes claw
             }
             // controls the wheels
             leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
