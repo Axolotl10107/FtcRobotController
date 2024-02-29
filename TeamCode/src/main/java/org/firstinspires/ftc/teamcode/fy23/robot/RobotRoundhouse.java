@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
@@ -14,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 public class RobotRoundhouse {
 
-    public Robot.Parameters getRobotAParams() {
+    public static Robot.Parameters getRobotAParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;
 
@@ -41,9 +39,9 @@ public class RobotRoundhouse {
         planeLauncherParams.present = true;
 
         Robot.Parameters params = new Robot.Parameters();
-        params.TPR = 537.7;
-        params.wheelDiameter = 9.6;
-        params.maxForwardSpeed = 150;
+        params.tpr = 537.7; // ticks per rotation
+        params.wheelDiameter = 0.096; // in meters
+        params.maxForwardSpeed = 1.50; // in meters per second
         params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
 
         params.clawParameters = clawParams;
@@ -55,7 +53,7 @@ public class RobotRoundhouse {
         return params;
     }
 
-    public Robot.Parameters getRobotBParams() {
+    public static Robot.Parameters getRobotBParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
@@ -82,9 +80,9 @@ public class RobotRoundhouse {
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
-        params.TPR = 537.7;
-        params.wheelDiameter = 9.6;
-        params.maxForwardSpeed = 150;
+        params.tpr = 537.7;
+        params.wheelDiameter = 0.096; // in meters
+        params.maxForwardSpeed = 1.50; // in meters per second
         params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
 
         params.clawParameters = clawParams;
@@ -96,7 +94,7 @@ public class RobotRoundhouse {
         return params;
     }
 
-    public Robot.Parameters getVirtualRobotParams() {
+    public static Robot.Parameters getVirtualRobotParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
@@ -123,9 +121,9 @@ public class RobotRoundhouse {
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
-        params.TPR = 537.7;
-        params.wheelDiameter = 9.6;
-        params.maxForwardSpeed = 150;
+        params.tpr = 537.7;
+        params.wheelDiameter = 0.096; // in meters
+        params.maxForwardSpeed = 1.50; // in meters per second
         params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
 
         params.clawParameters = clawParams;

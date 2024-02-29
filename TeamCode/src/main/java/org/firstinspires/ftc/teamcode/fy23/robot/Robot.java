@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 public class Robot {
 
     public static class Parameters {
-        double TPR;
+        double tpr;
         double wheelDiameter;
         double maxForwardSpeed;
         double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
@@ -28,6 +28,7 @@ public class Robot {
 
     public final double TPR;
     public final double wheelDiameter;
+    public final double wheelCircumference;
     public final double maxForwardSpeed;
     public final PIDconsts hdgCorrectionPIDconsts;
 
@@ -38,8 +39,9 @@ public class Robot {
     public PlaneLauncher planeLauncher;
 
     public Robot(Parameters parameters, HardwareMap hardwareMap) {
-        TPR = parameters.TPR;
+        TPR = parameters.tpr;
         wheelDiameter = parameters.wheelDiameter;
+        wheelCircumference = Math.PI * wheelDiameter;
         maxForwardSpeed = parameters.maxForwardSpeed;
         hdgCorrectionPIDconsts = parameters.hdgCorrectionPIDconsts;
 

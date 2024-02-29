@@ -1,17 +1,21 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.test;
+package org.firstinspires.ftc.teamcode.fy23.robot.teletest;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotB;
 import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
+
 @Disabled
 @TeleOp
 public class RampTwoTest extends OpMode {
+    // TODO: I changed the wheelDiameter in the Robots to meters.
 
-    RobotB robot;
+    Robot robot;
     RampTwo ramper;
 
     double currentPos;
@@ -21,16 +25,16 @@ public class RampTwoTest extends OpMode {
     boolean flag = false;
 
     double ticksToCM(double ticks) {
-        return (ticks / robot.TPR) * robot.wheelDiameter;
+        return (ticks / robot.TPR) * robot.wheelCircumference;
     }
 
     double cmToTicks(double cm) {
-        return (cm * robot.TPR) / robot.wheelDiameter;
+        return (cm * robot.TPR) / robot.wheelCircumference;
     }
 
     @Override
     public void init() {
-        robot = new RobotB(hardwareMap);
+        robot = new Robot(RobotRoundhouse.getRobotBParams(), hardwareMap);
         robot.drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // This will be applied to all of the drive motors.
 

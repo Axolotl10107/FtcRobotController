@@ -80,6 +80,15 @@ public class MecanumDrive {
         ) / 4;
     }
 
+    public double getAvgVelocity() {
+        return (
+                leftFront.getVelocity() +
+                rightFront.getVelocity() +
+                leftBack.getVelocity() +
+                rightBack.getVelocity()
+        ) / 4;
+    }
+
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
         rightFront.setMode(runMode);

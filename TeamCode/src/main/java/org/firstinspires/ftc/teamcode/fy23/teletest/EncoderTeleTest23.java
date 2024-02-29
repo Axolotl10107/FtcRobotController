@@ -1,11 +1,8 @@
 //Michael's test program for running a motor to encoder positions
 //Now with safety!
 
-package org.firstinspires.ftc.teamcode.fy23.test;
+package org.firstinspires.ftc.teamcode.fy23.teletest;
 
-import static android.os.SystemClock.sleep;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;

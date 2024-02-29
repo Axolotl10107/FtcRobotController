@@ -66,14 +66,14 @@ public class IMUcorrector {
 
         // just one if statement to actually do the correction
         if (Math.abs(dts.turn) > turnThreshold) {
-            returnDTS.turn = dts.turn;
+            returnDTS = returnDTS.withTurn(dts.turn);
             // if the driver is turning, let them turn
             pid.clearIntegral();
             pid.clearDerivative();
             pidEnableTimer.reset();
             //we don't need PID while turning
         } else if ((Math.abs(headingError) > hdgErrThresholdStill && Math.abs(dts.drive) < turnThreshold && Math.abs(dts.strafe) < turnThreshold) || (Math.abs(headingError) > hdgErrThresholdMoving && (Math.abs(dts.drive) > turnThreshold) || Math.abs(dts.strafe) > turnThreshold)) {
-            returnDTS.turn = Range.clip(pid.getCorrectionPower(headingError, lastError), -maxTotalCorrection, maxTotalCorrection);
+            returnDTS = returnDTS.withTurn(Range.clip(pid.getCorrectionPower(headingError, lastError), -maxTotalCorrection, maxTotalCorrection));
             if (pidEnableTimer.milliseconds() < 800) {
                 pid.clearIntegral();
                 pid.clearDerivative();
