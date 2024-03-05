@@ -1,5 +1,5 @@
 // this class should *not* be used as a sample - please see DTSscalerTest
-package org.firstinspires.ftc.teamcode.robot.processors;
+package org.firstinspires.ftc.teamcode.fy23.robot.processors;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.AccelLimiter;
 import org.junit.Assert;
