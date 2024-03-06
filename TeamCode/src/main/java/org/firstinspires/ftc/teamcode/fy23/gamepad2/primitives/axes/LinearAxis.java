@@ -10,7 +10,7 @@ public class LinearAxis implements Axis {
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
-     * new LinearAxis( () -> gamepad.left_stick_x ); */
+     * new LinearAxis( () -{@literal >} gamepad.left_stick_x ); */
     public LinearAxis(DoubleLambda axis) {
         this.axis = axis;
     }

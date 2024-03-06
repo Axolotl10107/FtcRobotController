@@ -25,7 +25,7 @@ public class PIDconsts {
     }
 
     /** Takes a string previously created by the serialize() method. Made with help from
-     * https://stackoverflow.com/questions/7021074/string-delimiter-in-string-split-method */
+     * <a href="https://stackoverflow.com/questions/7021074/string-delimiter-in-string-split-method">Stack Overflow</a> */
     public PIDconsts(String arg) {
         // and how I'm getting this into the variables seems awful but I'll worry about that later
         Iterator constsIter = Arrays.stream(arg.split(";")).iterator();
@@ -35,7 +35,7 @@ public class PIDconsts {
     }
 
     /** Puts constants in a string that can be written to a file. Made with help from
-     * https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax */
+     * <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax">Oracle docs</a> */
     public String serialize() {
         //A few ways to do this:
         //return String.valueOf(p) + ";" + String.valueOf(im) + ";" + String.valueOf(dm);

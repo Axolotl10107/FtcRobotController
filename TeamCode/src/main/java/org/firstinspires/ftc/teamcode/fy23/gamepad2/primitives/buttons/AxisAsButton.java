@@ -12,7 +12,7 @@ public class AxisAsButton implements Button {
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
-     * new LinearAxis( () -> gamepad.left_stick_x );
+     * new LinearAxis( () -{@literal >} gamepad.left_stick_x );
      * and also pass in an activation threshold along the range of the axis, after which the
      * "button" is considered active */
     public AxisAsButton(Axis.DoubleLambda axis, double threshold) {

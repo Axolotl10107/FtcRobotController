@@ -11,7 +11,7 @@ public class TriggerButton implements Button {
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * button field:
-     * new TriggerButton( () -> gamepad.x ); */
+     * new TriggerButton( () -{@literal >} gamepad.x ); */
     public TriggerButton(Button.BoolLambda button) {
         this.button = button;
     }

@@ -13,7 +13,7 @@ public class ExponentialAxis implements Axis {
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
-     * new ExponentialAxis( () -> gamepad.left_stick_x );
+     * new ExponentialAxis( () -{@literal >} gamepad.left_stick_x );
      * and this.value() will report the value of that axis taken to the specified power. */
     public ExponentialAxis(DoubleLambda axis, double power) {
         this.axis = axis;

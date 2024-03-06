@@ -10,7 +10,7 @@ public class MomentaryButton implements Button {
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * button field:
-     * new MomentaryButton( () -> gamepad.x ); */
+     * new MomentaryButton( () -{@literal >} gamepad.x ); */
     public MomentaryButton(BoolLambda button) {
         this.button = button;
     }
