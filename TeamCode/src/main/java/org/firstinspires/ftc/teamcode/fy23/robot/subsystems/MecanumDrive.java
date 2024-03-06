@@ -3,17 +3,30 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.fy23.robot.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 
-/** Represents a mecanum drive base, such as the goBILDA strafer. It is recommended to use {@link org.firstinspires.ftc.teamcode.fy23.robot.processors.DTSscaler}
- * with this. */
+/** Represents a mecanum drive base, such as the goBILDA strafer. Make sure to normalize a DTS
+ * before passing it in! */
 public class MecanumDrive {
 
     public static class Parameters {
-        public boolean present;
+        public boolean present; /** Is the subsystem present on this robot? */
 
+        /** max. individual motor acceleration, in power per second
+         * (power loosely represents velocity) */
+        public double maxMotorAccel;
+
+        /** prevents jerking - in power */
+        public double maxDeltaVEachLoop;
+
+        /** The name of the motor on the left front corner of the drivebase */
         public String leftFrontName;
+
+        /** Direction motor spins when positive power is applied - to drive the motor "backwards",
+         * do not set this to reverse! Set the power to a negative value. */
         public DcMotor.Direction leftFrontDirection;
 
         public String rightFrontName;
@@ -25,14 +38,17 @@ public class MecanumDrive {
         public String rightBackName;
         public DcMotor.Direction rightBackDirection;
 
-        public DcMotor.RunMode runMode;
-        public DcMotor.ZeroPowerBehavior zeroPowerBehavior;
+        public DcMotor.RunMode runMode; /** Applies to all motors */
+        public DcMotor.ZeroPowerBehavior zeroPowerBehavior; /** Applies to all motors */
     }
 
     public DcMotorEx leftFront;
     public DcMotorEx rightFront;
     public DcMotorEx leftBack;
     public DcMotorEx rightBack;
+
+    public AccelLimiter accelLimiter;
+    public ElapsedTime stopwatch;
 
     public MecanumDrive(Parameters parameters, HardwareMap hardwareMap) {
         leftFront = hardwareMap.get(DcMotorEx.class, parameters.leftFrontName);
@@ -48,7 +64,7 @@ public class MecanumDrive {
         try {
             setMode(parameters.runMode);
         } catch (Exception x) {
-            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if it wasn't set, pick a default
+            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if the runmode wasn't set, pick a default
         }
 
         try {
@@ -56,6 +72,9 @@ public class MecanumDrive {
         } catch (Exception x) {
             setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
+
+        accelLimiter = new AccelLimiter(parameters.maxMotorAccel, parameters.maxDeltaVEachLoop);
+        stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     /** Takes these components as motor powers */
@@ -66,12 +85,13 @@ public class MecanumDrive {
         rightBack.setPower(drive + turn + strafe);
     }
 
-    /** Takes these components as motor powers */
+    /** Takes a DTS of motor powers */
     public void applyDTS(DTS dts) { // function overloading
         applyDTS(dts.drive, dts.turn, dts.strafe);
     }
 
-    public double getAvgEncoderPos() {
+    /** Returns the average of the encoder positions reported by the motors */
+    public int getAvgEncoderPos() {
         return (
                 leftFront.getCurrentPosition() +
                 rightFront.getCurrentPosition() +
@@ -80,6 +100,7 @@ public class MecanumDrive {
         ) / 4;
     }
 
+    /** Returns the average of the velocities reported by the motors */
     public double getAvgVelocity() {
         return (
                 leftFront.getVelocity() +
@@ -89,6 +110,7 @@ public class MecanumDrive {
         ) / 4;
     }
 
+    /** The normal DcMotor function but applied to all motors */
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
         rightFront.setMode(runMode);
@@ -96,13 +118,16 @@ public class MecanumDrive {
         rightBack.setMode(runMode);
     }
 
+    /** The normal DcMotorEx function but applied to all motors */
     public void setVelocity(double velocity) {
+        velocity = accelLimiter.request(velocity, getAvgVelocity(), stopwatch.milliseconds());
         leftFront.setVelocity(velocity);
         rightFront.setVelocity(velocity);
         leftBack.setVelocity(velocity);
         rightBack.setVelocity(velocity);
     }
 
+    /** The normal DcMotor function but applied to all motors */
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
         leftFront.setZeroPowerBehavior(behavior);
         rightFront.setZeroPowerBehavior(behavior);

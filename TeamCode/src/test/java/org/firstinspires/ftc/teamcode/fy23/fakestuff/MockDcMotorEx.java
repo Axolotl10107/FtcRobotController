@@ -17,6 +17,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import java.util.HashMap;
 import java.util.Map;
 
+/** This appears as a normal {@link DcMotorEx} to your program, and it even updates the position for
+ * you over time based on the set velocity and can determine the velocity the motor is running at
+ * based on the set power (approximated as a percentage of the maximum velocity). It also handles
+ * {@link com.qualcomm.robotcore.hardware.DcMotor.RunMode}.RUN_TO_POSITION mode, running at the set
+ * power until the position is reached. Remember that this simulated class is perfect, without the
+ * natural variance of a real motor. Have your test put this "device" into the
+ * {@link com.qualcomm.robotcore.hardware.HardwareMap} with the correct name so that the test
+ * subject can get it. */
 public class MockDcMotorEx implements DcMotorEx {
 
     private boolean motorEnabled = true;
@@ -143,21 +151,25 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
+    /** Unsupported Operation */
     public double getCurrent(CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    /** Unsupported Operation */
     public double getCurrentAlert(CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    /** Unsupported Operation */
     public void setCurrentAlert(double current, CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    /** Unsupported Operation */
     public boolean isOverCurrent() {
         throw new UnsupportedOperationException();
     }
@@ -174,11 +186,13 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
+    /** Unsupported Operation */
     public DcMotorController getController() {
         throw new UnsupportedOperationException();
     }
 
     @Override
+    /** Should return -1, which is the SDK's default before it gets set */
     public int getPortNumber() {
         return portNumber;
     }
@@ -194,12 +208,17 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
+    /** The name of this method is confusing. It simply sets the power to 0 and sets the {@link com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior}
+     * to FLOAT. This completely removes power from the motor. */
     public void setPowerFloat() {
         setZeroPowerBehavior(ZeroPowerBehavior.FLOAT);
         setPower(0.0);
     }
 
     @Override
+    /** Returns if the motor is simply floating, completely unpowered. Specifically, returns if the
+     * power is set to 0 and the {@link com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior}
+     * is set to FLOAT. */
     public boolean getPowerFloat() {
         return getZeroPowerBehavior() == ZeroPowerBehavior.FLOAT && getPower() == 0.0;
     }
@@ -215,6 +234,8 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
+    /** This implementation, and seemingly the SDK's, returns whether or not the current position is
+     * the target position (the target has been reached, we're not still moving towards it). */
     public boolean isBusy() {
         return position != targetPosition;
     }
@@ -248,6 +269,8 @@ public class MockDcMotorEx implements DcMotorEx {
     @Override
     public void setPower(double power) {
         this.power = Range.clip(power, -1, 1);
+        velocityTicks = maxVelocityTicks * power;
+        velocityRadians = maxVelocityRadians * power;
     }
 
     @Override
@@ -257,48 +280,64 @@ public class MockDcMotorEx implements DcMotorEx {
 
     // HardwareDevice
     @Override
+    /** Returns {@link com.qualcomm.robotcore.hardware.HardwareDevice.Manufacturer}.UNKNOWN */
     public Manufacturer getManufacturer() {
         return Manufacturer.Unknown;
     }
 
     @Override
+    /** Returns "Mockery 0 RPM motor" */
     public String getDeviceName() {
         return "Mockery 0 RPM motor";
     }
 
     @Override
+    /** Returns "This motor shares a connection with its friends." */
     public String getConnectionInfo() {
         return "This motor shares a connection with its friends.";
     }
 
     @Override
+    /** Returns 51825 */
     public int getVersion() {
         return 51825;
     }
 
     @Override
+    /** Sets the {@link com.qualcomm.robotcore.hardware.DcMotorSimple.Direction} to FORWARD.
+     * (matches the original implementation) */
     public void resetDeviceConfigurationForOpMode() {
         setDirection(Direction.FORWARD);
     }
 
     @Override
+    /** Calls setPowerFloat() (matches the original implementation) */
     public void close() {
         setPowerFloat();
     }
 
 
     // Methods for tests
+    /** For use by your test - sets the maximum velocity of the motor in ticks per second */
     public void setMaxVelocityTicks(double maxVelocityTicks) {
         this.maxVelocityTicks = maxVelocityTicks;
     }
 
+    /** For use by your test - sets the ticks counted by the encoder on each rotation of the motor */
     public void setTicksPerRotation(double ticksPerRotation) {
         this.ticksPerRotation = ticksPerRotation;
     }
 
     private void reCalculate() {
-        double deltaTime = elapsedTime.seconds() - lastTime;
-        int deltaPosition = (int) Math.round(velocityTicks * deltaTime);
-        position += deltaPosition;
+        if (runMode == RunMode.RUN_TO_POSITION && position >= targetPosition) {
+            position = targetPosition;
+            lastTime = elapsedTime.seconds();
+        } else {
+            double currentTime = elapsedTime.seconds();
+            double deltaTime = currentTime - lastTime;
+            int deltaPosition = (int) Math.round(velocityTicks * deltaTime);
+            position += deltaPosition;
+            lastTime = currentTime;
+        }
     }
 }

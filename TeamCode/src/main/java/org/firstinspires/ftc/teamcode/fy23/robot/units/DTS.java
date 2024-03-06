@@ -13,6 +13,10 @@ public class DTS {
         strafe = argStrafe;
     }
 
+    public DTS() {
+        this(0,0,0);
+    }
+
     public DTS negate() {
         return new DTS(-drive, -turn, -strafe);
     }
