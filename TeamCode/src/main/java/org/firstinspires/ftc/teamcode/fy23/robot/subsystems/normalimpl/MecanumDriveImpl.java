@@ -6,41 +6,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 
 /** Represents a mecanum drive base, such as the goBILDA strafer. Make sure to normalize a DTS
  * before passing it in! */
-public class MecanumDrive {
-
-    public static class Parameters {
-        public boolean present; /** Is the subsystem present on this robot? */
-
-        /** max. individual motor acceleration, in power per second
-         * (power loosely represents velocity) */
-        public double maxMotorAccel;
-
-        /** prevents jerking - in power */
-        public double maxDeltaVEachLoop;
-
-        /** The name of the motor on the left front corner of the drivebase */
-        public String leftFrontName;
-
-        /** Direction motor spins when positive power is applied - to drive the motor "backwards",
-         * do not set this to reverse! Set the power to a negative value. */
-        public DcMotor.Direction leftFrontDirection;
-
-        public String rightFrontName;
-        public DcMotor.Direction rightFrontDirection;
-
-        public String leftBackName;
-        public DcMotor.Direction leftBackDirection;
-
-        public String rightBackName;
-        public DcMotor.Direction rightBackDirection;
-
-        public DcMotor.RunMode runMode; /** Applies to all motors */
-        public DcMotor.ZeroPowerBehavior zeroPowerBehavior; /** Applies to all motors */
-    }
+public class MecanumDriveImpl implements MecanumDrive {
 
     public DcMotorEx leftFront;
     public DcMotorEx rightFront;
@@ -50,7 +21,7 @@ public class MecanumDrive {
     public AccelLimiter accelLimiter;
     public ElapsedTime stopwatch;
 
-    public MecanumDrive(Parameters parameters, HardwareMap hardwareMap) {
+    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap) {
         leftFront = hardwareMap.get(DcMotorEx.class, parameters.leftFrontName);
         rightFront = hardwareMap.get(DcMotorEx.class, parameters.rightFrontName);
         leftBack = hardwareMap.get(DcMotorEx.class, parameters.leftBackName);
@@ -86,6 +57,7 @@ public class MecanumDrive {
     }
 
     /** Takes a DTS of motor powers */
+    @Override
     public void applyDTS(DTS dts) { // function overloading
         applyDTS(dts.drive, dts.turn, dts.strafe);
     }
@@ -111,6 +83,7 @@ public class MecanumDrive {
     }
 
     /** The normal DcMotor function but applied to all motors */
+    @Override
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
         rightFront.setMode(runMode);
@@ -128,6 +101,7 @@ public class MecanumDrive {
     }
 
     /** The normal DcMotor function but applied to all motors */
+    @Override
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
         leftFront.setZeroPowerBehavior(behavior);
         rightFront.setZeroPowerBehavior(behavior);

@@ -5,17 +5,17 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
-/** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDrive},
- * and a {@link FriendlyIMU}. */
+/** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDriveImpl},
+ * and a {@link FriendlyIMUImpl}. */
 public class RobotB implements AnyRobot {
 
     // Subsystems - include only and all the subsystems that this robot actually has
-    public final MecanumDrive drive;
-    public final FriendlyIMU imu;
+    public final MecanumDriveImpl drive;
+    public final FriendlyIMUImpl imu;
 
     /** Ticks per Rotation - 537.7 for the goBILDA 5203-2402-0019 found on the Strafer V5 */
     public final double TPR = 537.7;
@@ -38,7 +38,7 @@ public class RobotB implements AnyRobot {
 
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public RobotB(HardwareMap hardwareMap) {
-        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
 
         driveParams.leftFrontName = "leftFront";
         driveParams.leftFrontDirection = REVERSE;
@@ -52,7 +52,7 @@ public class RobotB implements AnyRobot {
         driveParams.rightBackName = "rightBack";
         driveParams.rightBackDirection = FORWARD;
 
-        drive = new MecanumDrive(driveParams, hardwareMap);
+        drive = new MecanumDriveImpl(driveParams, hardwareMap);
 
         // TunablePID tuning for this robot - select exactly one
         pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
@@ -65,8 +65,8 @@ public class RobotB implements AnyRobot {
 
         sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
-        imu = new FriendlyIMU(imuParams, hardwareMap);
+        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
     }
 }

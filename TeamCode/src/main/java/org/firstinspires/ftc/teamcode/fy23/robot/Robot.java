@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncher;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.ClawImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 public class Robot {
@@ -20,10 +21,10 @@ public class Robot {
         PIDconsts hdgCorrectionPIDconsts;
 
         Claw.Parameters clawParameters;
-        FriendlyIMU.Parameters imuParameters;
-        MecanumDrive.Parameters driveParameters;
-        PixelArm.Parameters pixelArmParameters;
-        PlaneLauncher.Parameters planeLauncherParameters;
+        FriendlyIMUImpl.Parameters imuParameters;
+        MecanumDriveImpl.Parameters driveParameters;
+        PixelArmImpl.Parameters pixelArmParameters;
+        PlaneLauncherImpl.Parameters planeLauncherParameters;
     }
 
     public final double TPR;
@@ -32,11 +33,11 @@ public class Robot {
     public final double maxForwardSpeed;
     public final PIDconsts hdgCorrectionPIDconsts;
 
-    public Claw claw;
-    public FriendlyIMU imu;
-    public MecanumDrive drive;
-    public PixelArm arm;
-    public PlaneLauncher planeLauncher;
+    public ClawImpl claw;
+    public FriendlyIMUImpl imu;
+    public MecanumDriveImpl drive;
+    public PixelArmImpl arm;
+    public PlaneLauncherImpl planeLauncher;
 
     public Robot(Parameters parameters, HardwareMap hardwareMap) {
         TPR = parameters.tpr;
@@ -45,11 +46,11 @@ public class Robot {
         maxForwardSpeed = parameters.maxForwardSpeed;
         hdgCorrectionPIDconsts = parameters.hdgCorrectionPIDconsts;
 
-        claw = new Claw(parameters.clawParameters, hardwareMap);
-        imu = new FriendlyIMU(parameters.imuParameters, hardwareMap);
-        drive = new MecanumDrive(parameters.driveParameters, hardwareMap);
-        arm = new PixelArm(parameters.pixelArmParameters, hardwareMap);
-        planeLauncher = new PlaneLauncher(parameters.planeLauncherParameters, hardwareMap);
+        claw = new ClawImpl(parameters.clawParameters, hardwareMap);
+        imu = new FriendlyIMUImpl(parameters.imuParameters, hardwareMap);
+        drive = new MecanumDriveImpl(parameters.driveParameters, hardwareMap);
+        arm = new PixelArmImpl(parameters.pixelArmParameters, hardwareMap);
+        planeLauncher = new PlaneLauncherImpl(parameters.planeLauncherParameters, hardwareMap);
     }
 
 }

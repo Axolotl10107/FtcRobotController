@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 
 public class FieldyGamepadLS extends NoDriveAxes {
@@ -12,14 +12,14 @@ public class FieldyGamepadLS extends NoDriveAxes {
     private Gamepad driver;
     private Gamepad manipulator;
 
-    private FriendlyIMU imu;
+    private FriendlyIMUImpl imu;
 
     private ElapsedTime buttonTimer;
     private int buttonRest = 300;
 
     private Vector2d rrVector;
 
-    public FieldyGamepadLS(Gamepad initgamepad1, Gamepad initgamepad2, FriendlyIMU argIMU) {
+    public FieldyGamepadLS(Gamepad initgamepad1, Gamepad initgamepad2, FriendlyIMUImpl argIMU) {
         super(initgamepad1, initgamepad2);
         driver = initgamepad1;
         manipulator = initgamepad2;

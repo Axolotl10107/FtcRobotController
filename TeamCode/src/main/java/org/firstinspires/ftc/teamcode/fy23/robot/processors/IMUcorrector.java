@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 
 public class IMUcorrector {
 
@@ -24,7 +24,7 @@ public class IMUcorrector {
 
     public double correctedTurnPower; // for telemetry
 
-    public FriendlyIMU imu; // public for telemetry
+    public FriendlyIMUImpl imu; // public for telemetry
     public TunablePID pid; // public for telemetry
 
     public double targetHeading = 0; // public for telemetry
@@ -38,18 +38,18 @@ public class IMUcorrector {
     private ElapsedTime pidEnableTimer;
 
     public IMUcorrector(HardwareMap hardwareMap, double p, double im, double dm) {
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
-        imu = new FriendlyIMU(imuParams, hardwareMap);
+        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(p, im, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     public IMUcorrector(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
-        imu = new FriendlyIMU(imuParams, hardwareMap);
+        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(pidConsts.p, pidConsts.im, pidConsts.dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);

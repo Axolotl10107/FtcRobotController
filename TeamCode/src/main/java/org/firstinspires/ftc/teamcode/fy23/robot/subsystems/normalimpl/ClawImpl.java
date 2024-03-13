@@ -3,42 +3,34 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class Claw {
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+
+public class ClawImpl implements Claw {
 
     private Servo servo;
     private double openPosition;
     private double closePosition;
-    private State state = State.NONE;
+    private Claw.State state = Claw.State.NONE;
 
-    public enum State {
-        OPEN,
-        CLOSED,
-        NONE
-    }
-
-    public static class Parameters {
-        public boolean present;
-        public double openPosition;
-        public double closePosition;
-    }
-
-    public Claw(Parameters parameters, HardwareMap hardwareMap) {
+    public ClawImpl(Claw.Parameters parameters, HardwareMap hardwareMap) {
         servo = hardwareMap.get(Servo.class, "clawServo");
         openPosition = parameters.openPosition;
         closePosition = parameters.closePosition;
     }
 
-    public void setState(State state) {
+    @Override
+    public void setState(Claw.State state) {
         this.state = state;
-        if (state == State.OPEN){
+        if (state == Claw.State.OPEN){
             servo.setPosition(openPosition);
         }
-        else if (state == State.CLOSED){
+        else if (state == Claw.State.CLOSED){
             servo.setPosition(closePosition);
         }
     }
 
-    public State getState() {
+    @Override
+    public Claw.State getState() {
         return state;
     }
 }

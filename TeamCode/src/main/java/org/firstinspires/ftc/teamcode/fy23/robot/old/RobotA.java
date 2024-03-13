@@ -5,25 +5,27 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncher;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.ClawImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
-/** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDrive},
- * a {@link FriendlyIMU}, a {@link PixelArm},
- * a {@link Claw},
- * and a {@link PlaneLauncher}. */
+/** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDriveImpl},
+ * a {@link FriendlyIMUImpl}, a {@link PixelArmImpl},
+ * a {@link ClawImpl},
+ * and a {@link PlaneLauncherImpl}. */
 public class RobotA implements AnyRobot {
 
     // Subsystems - include only and all the subsystems that this robot actually has
-    public final MecanumDrive drive;
-    public final FriendlyIMU imu;
-    public final PixelArm pixelArm;
-    public final Claw claw;
-    public final PlaneLauncher planeLauncher;
+    public final MecanumDriveImpl drive;
+    public final FriendlyIMUImpl imu;
+    public final PixelArmImpl pixelArm;
+    public final ClawImpl claw;
+    public final PlaneLauncherImpl planeLauncher;
 
     /** Ticks per Rotation - 537.7 for the goBILDA 5203-2402-0019 found on the Strafer V5 */
     public final double TPR = 537.7;
@@ -47,7 +49,7 @@ public class RobotA implements AnyRobot {
 
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public RobotA(HardwareMap hardwareMap) {
-        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
 
         driveParams.leftFrontName = "leftFront";
         driveParams.leftFrontDirection = REVERSE;
@@ -61,7 +63,7 @@ public class RobotA implements AnyRobot {
         driveParams.rightBackName = "rightBack";
         driveParams.rightBackDirection = FORWARD;
 
-        drive = new MecanumDrive(driveParams, hardwareMap);
+        drive = new MecanumDriveImpl(driveParams, hardwareMap);
 
         // TunablePID tuning for this robot - select exactly one
         pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
@@ -76,18 +78,18 @@ public class RobotA implements AnyRobot {
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
-        imu = new FriendlyIMU(imuParams, hardwareMap);
+        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
+        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
-        pixelArm = new PixelArm(armParams, hardwareMap);
+        pixelArm = new PixelArmImpl(armParams, hardwareMap);
 
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;
-        claw = new Claw(clawParams, hardwareMap);
+        claw = new ClawImpl(clawParams, hardwareMap);
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
+        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
-        planeLauncher = new PlaneLauncher(planeLauncherParams, hardwareMap);
+        planeLauncher = new PlaneLauncherImpl(planeLauncherParams, hardwareMap);
     }
 }

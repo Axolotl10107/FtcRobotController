@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncher;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.ClawImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 public class RobotRoundhouse {
@@ -16,10 +17,10 @@ public class RobotRoundhouse {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
 
-        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.leftFrontName = "leftFront";
         driveParams.leftFrontDirection = REVERSE;
 
@@ -32,10 +33,10 @@ public class RobotRoundhouse {
         driveParams.rightBackName = "rightBack";
         driveParams.rightBackDirection = FORWARD;
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
+        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
+        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
 
         Robot.Parameters params = new Robot.Parameters();
@@ -57,10 +58,10 @@ public class RobotRoundhouse {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
 
-        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.leftFrontName = "leftFront";
         driveParams.leftFrontDirection = REVERSE;
 
@@ -73,10 +74,10 @@ public class RobotRoundhouse {
         driveParams.rightBackName = "rightBack";
         driveParams.rightBackDirection = FORWARD;
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
+        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = false;
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
+        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
@@ -98,10 +99,10 @@ public class RobotRoundhouse {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
 
-        MecanumDrive.Parameters driveParams = new MecanumDrive.Parameters();
+        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.leftFrontName = "front_left_motor";
         driveParams.leftFrontDirection = REVERSE;
 
@@ -114,10 +115,10 @@ public class RobotRoundhouse {
         driveParams.rightBackName = "back_right_motor";
         driveParams.rightBackDirection = FORWARD;
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
+        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = false;
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
+        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();

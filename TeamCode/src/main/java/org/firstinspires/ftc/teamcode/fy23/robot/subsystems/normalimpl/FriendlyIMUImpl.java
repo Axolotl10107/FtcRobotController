@@ -7,12 +7,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 
-public class FriendlyIMU {
-
-    public static class Parameters {
-        public boolean present;
-    }
+public class FriendlyIMUImpl implements FriendlyIMU {
 
     private double pitch;
     private double roll;
@@ -23,7 +20,7 @@ public class FriendlyIMU {
 
     Orientation orientation;
 
-    public FriendlyIMU(Parameters parameters, HardwareMap hardwareMap) {
+    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
         imuParams = new BNO055IMU.Parameters();
         imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
         //see "SensorBNO055IMUCalibration" example
@@ -39,17 +36,19 @@ public class FriendlyIMU {
         yaw = orientation.thirdAngle;
     }
 
-
+    @Override
     public double pitch() {
         updateOrientation();
         return pitch;
     }
 
+    @Override
     public double roll() {
         updateOrientation();
         return roll;
     }
 
+    @Override
     public double yaw() {
         updateOrientation();
         return yaw;
