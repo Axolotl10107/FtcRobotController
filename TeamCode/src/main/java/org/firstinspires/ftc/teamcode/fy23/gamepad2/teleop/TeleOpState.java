@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 
 public class TeleOpState {
