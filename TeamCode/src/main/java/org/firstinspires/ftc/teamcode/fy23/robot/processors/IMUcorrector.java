@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
+
 public class IMUcorrector {
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.

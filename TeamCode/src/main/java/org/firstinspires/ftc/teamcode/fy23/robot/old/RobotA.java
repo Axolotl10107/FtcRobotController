@@ -5,13 +5,16 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArm;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncher;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDrive},
  * a {@link FriendlyIMU}, a {@link PixelArm},
- * a {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw},
+ * a {@link Claw},
  * and a {@link PlaneLauncher}. */
 public class RobotA implements AnyRobot {
 

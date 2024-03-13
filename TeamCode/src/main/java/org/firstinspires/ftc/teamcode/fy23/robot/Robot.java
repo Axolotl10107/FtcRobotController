@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDrive;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArm;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
 
 public class Robot {

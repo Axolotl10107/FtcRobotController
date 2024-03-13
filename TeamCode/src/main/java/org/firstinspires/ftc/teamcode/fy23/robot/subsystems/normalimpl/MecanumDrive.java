@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
+package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -120,7 +120,7 @@ public class MecanumDrive {
 
     /** The normal DcMotorEx function but applied to all motors */
     public void setVelocity(double velocity) {
-        velocity = accelLimiter.request(velocity, getAvgVelocity(), stopwatch.milliseconds());
+        velocity = accelLimiter.requestVelocityAndReturnNewVelocity(velocity, getAvgVelocity(), stopwatch.milliseconds());
         leftFront.setVelocity(velocity);
         rightFront.setVelocity(velocity);
         leftBack.setVelocity(velocity);

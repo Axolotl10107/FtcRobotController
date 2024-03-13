@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
+package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
 
 public class IndyTeleOpScheme {

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
+package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 // Remember: you can just make something that works for now, and that is actually advisable.
 // Make something that works first, *then* worry about architecting it once you actually know what
