@@ -50,7 +50,8 @@ public class AccelLimiter {
     public double requestVelocityAndReturnDeltaVelocity(double newVel, double currentVel, double currentTime) {
         if (initialized) {
             double loopTime = currentTime - _lastTime;
-            double requestedDeltaVThisLoop = newVel - _oldVel;
+//            double requestedDeltaVThisLoop = newVel - _oldVel;
+            double requestedDeltaVThisLoop = newVel - currentVel;
             double targetDeltaVThisLoop = maxAccel * loopTime;
             double safeDeltaVThisLoop = Math.min(targetDeltaVThisLoop, maxDeltaVEachLoop);
             double actualDeltaVThisLoop = Range.clip(requestedDeltaVThisLoop, -safeDeltaVThisLoop, safeDeltaVThisLoop);
@@ -58,7 +59,7 @@ public class AccelLimiter {
             _lastTime = currentTime;
             return actualDeltaVThisLoop;
         } else {
-            _oldVel = currentVel;
+//            _oldVel = currentVel;
             _lastTime = currentTime;
             initialized = true;
             return 0;

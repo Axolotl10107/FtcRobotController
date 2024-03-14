@@ -49,7 +49,8 @@ public class RampTwoTest extends OpMode {
 
     @Override
     public void loop() {
-        currentPos = robot.drive.getAvgEncoderPos(); // how far we've traveled in encoder ticks
+//        currentPos = robot.drive.getAvgEncoderPos(); // how far we've traveled in encoder ticks
+        // above function not in interface
         currentPos = ticksToCM(currentPos); // convert it to centimeters so it's easier for us to think about
 
         if (flag == false) {
@@ -60,9 +61,9 @@ public class RampTwoTest extends OpMode {
         toApply = cmToTicks(suggestion); // convert back to encoder ticks for the motors
 
         if (suggestion != 0 && flag == false) { // if it's forwards time
-            robot.drive.setVelocity(toApply);
+//            robot.drive.setVelocity(toApply); // function not in interface
         } else if (suggestion != 0 && flag == true) { // if it's backwards time
-            robot.drive.setVelocity(-toApply);
+//            robot.drive.setVelocity(-toApply); // function not in interface
         } else if (suggestion == 0 && flag == false) { // if it's time to switch
             if (!flag) {
                 flag = true;
