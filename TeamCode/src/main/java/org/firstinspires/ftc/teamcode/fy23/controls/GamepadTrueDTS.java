@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.controls;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 public class GamepadTrueDTS extends GamepadDefault {
 

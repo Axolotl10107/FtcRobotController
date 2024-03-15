@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 /** Hopefully allows something to accept any robot, when that makes any sense */
 public interface AnyRobot {

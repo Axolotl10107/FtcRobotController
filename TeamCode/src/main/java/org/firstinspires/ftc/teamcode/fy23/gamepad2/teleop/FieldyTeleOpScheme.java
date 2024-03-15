@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
@@ -10,7 +9,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerBu
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-public class IndyTeleOpScheme {
+public class FieldyTeleOpScheme {
 
     private Gamepad driver;
     private Gamepad manipulator;
@@ -30,7 +29,7 @@ public class IndyTeleOpScheme {
 
     private boolean armMovementSet = false;
 
-    IndyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+    FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
         this.driver = driver;
         this.manipulator = manipulator;
 
@@ -47,11 +46,11 @@ public class IndyTeleOpScheme {
         armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
     }
 
-    private void updateMovementState() {
+    private void updateMovementState(double heading) {
         double drive = driver.right_trigger - driver.left_trigger;
         double turn = driver.left_stick_x;
         double strafe = driver.right_stick_x;
-        state.setDts(new DTS(drive, turn, strafe));
+        state.setDts(new DTS(drive, turn, strafe).rotate(heading));
     }
 
     private void updateArmFastMovementState() {
@@ -111,9 +110,9 @@ public class IndyTeleOpScheme {
         state.setDriveSpeedDown(driveSpeedDownButton.isActive());
     }
 
-    public TeleOpState getState() {
+    public TeleOpState getState(double heading) {
         armMovementSet = false;
-        updateMovementState();
+        updateMovementState(heading);
         updateArmMediumMovementState();
         updateArmSlowMovementState();
         updateArmFastMovementState();

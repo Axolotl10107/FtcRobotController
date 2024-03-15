@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.processors;
+package org.firstinspires.ftc.teamcode.fy23.processors;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Makes the components of a DTS add to 1 or less, maintaining proportions. This is done by dividing
  * each component by the sum of all 3, and it is necessary because DcMotor.setPower() simply clips

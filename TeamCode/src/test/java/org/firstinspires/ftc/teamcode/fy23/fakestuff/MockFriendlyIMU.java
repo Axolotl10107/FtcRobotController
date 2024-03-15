@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
+package org.firstinspires.ftc.teamcode.fy23.fakestuff;
+
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 
 public class MockFriendlyIMU implements FriendlyIMU {
 

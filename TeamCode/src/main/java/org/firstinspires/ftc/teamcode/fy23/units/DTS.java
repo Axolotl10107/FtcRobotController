@@ -1,4 +1,7 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.units;
+package org.firstinspires.ftc.teamcode.fy23.units;
+
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import org.firstinspires.ftc.teamcode.fy23.controls.GamepadInputs;
 
 /** An immutable vector represented as <b>D</b>rive, <b>T</b>urn, and <b>S</b>trafe axes. */
 public class DTS {
@@ -48,5 +51,10 @@ public class DTS {
 
     public DTS withStrafe(double argStrafe) {
         return new DTS(drive, turn, argStrafe);
+    }
+
+    public DTS rotate(double radians) {
+        Vector2d rrVector = new Vector2d(drive, strafe).rotated(radians);
+        return new DTS(rrVector.component1(), turn, rrVector.component2());
     }
 }

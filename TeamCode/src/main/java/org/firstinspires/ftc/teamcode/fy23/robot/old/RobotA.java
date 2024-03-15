@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDr
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.ClawImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDriveImpl},
  * a {@link FriendlyIMUImpl}, a {@link PixelArmImpl},

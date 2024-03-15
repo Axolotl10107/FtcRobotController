@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 public class MecanumDriveBlank implements MecanumDrive {
 

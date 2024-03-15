@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDriveImpl},
  * and a {@link FriendlyIMUImpl}. */

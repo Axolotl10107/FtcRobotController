@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 public interface MecanumDrive {
 

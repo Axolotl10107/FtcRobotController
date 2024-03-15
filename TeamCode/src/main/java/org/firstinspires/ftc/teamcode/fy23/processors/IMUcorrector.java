@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.processors;
+package org.firstinspires.ftc.teamcode.fy23.processors;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
-import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 

@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.processors;
+package org.firstinspires.ftc.teamcode.fy23.processors;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 /** A simple PID algorithm that allows its constants to be changed on the fly. Useful for tuning
- * them in a TeleOp to instantly see the results of changes. It can also import a {@link org.firstinspires.ftc.teamcode.fy23.robot.units.PIDconsts}. */
+ * them in a TeleOp to instantly see the results of changes. It can also import a {@link PIDconsts}. */
 public class TunablePID {
 
     private double proportional;

@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
-import org.firstinspires.ftc.teamcode.fy23.robot.processors.IMUcorrector;
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 @Autonomous(name="IMU AutoCodeFarSide__RED", group="AutoCodeFarSide__RED")
 public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
