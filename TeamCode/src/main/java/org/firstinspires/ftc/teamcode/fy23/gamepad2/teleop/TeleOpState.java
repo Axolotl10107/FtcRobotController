@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+/** Stores the state of the controls. The control scheme updates this, then the OpMode reads it. This effectively maps
+ * buttons to actions. */
 public class TeleOpState {
 
     private DTS dts = new DTS();

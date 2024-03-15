@@ -1,0 +1,136 @@
+package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
+
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+
+/** A controller scheme for driving with independent drive, turn, and strafe axes. Matches the "Dual23" diagram. This
+ * one does not return a TeleOpState to your OpMode, opting to call subsystem methods directly. The OpMode needs only to
+ * call the update() method each loop. This is a proof-of-concept, and the non-direct schemes are recommended for better
+ * readibility and configurability of the OpMode. */
+public class IndyDirectTeleOpScheme {
+
+    private Gamepad driver;
+    private Gamepad manipulator;
+
+    private TeleOpState state;
+
+    private Button clawOpenButton;
+    private Button clawCloseButton;
+    private Button planeLaunchButton;
+    private Button driveSpeedUpButton;
+    private Button driveSpeedDownButton;
+
+    private Axis armSlowUp;
+    private Axis armSlowDown;
+    private Axis armMediumUp;
+    private Axis armMediumDown;
+
+    private boolean armMovementSet = false;
+    private double driveSpeed;
+
+    IndyDirectTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+        this.driver = driver;
+        this.manipulator = manipulator;
+
+        state = new TeleOpState();
+
+        clawOpenButton = new TriggerButton( () -> manipulator.x );
+        clawCloseButton = new TriggerButton( () -> manipulator.a );
+        planeLaunchButton = new TriggerButton( () -> driver.right_bumper );
+        driveSpeedUpButton = new TriggerButton( () -> driver.start );
+        driveSpeedDownButton = new TriggerButton( () -> driver.back );
+        armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
+        armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
+        armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
+        armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
+    }
+
+    private void updateMovementState(Robot robot) {
+        double drive = Range.clip(driver.right_trigger - driver.left_trigger, -driveSpeed, driveSpeed);
+        double turn = Range.clip(driver.left_stick_x, -driveSpeed, driveSpeed);
+        double strafe = Range.clip(driver.right_stick_x, -driveSpeed, driveSpeed);
+        robot.drive.applyDTS(new DTS(drive, turn, strafe));
+    }
+
+    private void updateArmFastMovementState(Robot robot) {
+        if (!armMovementSet) {
+            // if all three run, then the last one is the only one that sets it - the other two have no effect
+            robot.arm.setPivotPower(-manipulator.left_stick_y); // Y-Axis is negated (nobody knows why, don't ask)
+        }
+        if (Math.abs(state.getArmMovement()) > 0.05) { // if we set something meaningful...
+            armMovementSet = true;
+        }
+    }
+
+    private void updateArmMediumMovementState(Robot robot) {
+        if (!armMovementSet) {
+            robot.arm.setPivotPower((armMediumUp.value() - armMediumDown.value()) * 0.2);
+        }
+        if (Math.abs(state.getArmMovement()) > 0.05) {
+            armMovementSet = true;
+        }
+    }
+
+    private void updateArmSlowMovementState(Robot robot) {
+        if (!armMovementSet) {
+            robot.arm.setPivotPower((armSlowUp.value() - armSlowDown.value()) * 0.15);
+        }
+        if (Math.abs(state.getArmMovement()) > 0.05) {
+            armMovementSet = true;
+        }
+    }
+
+    private void updateElevatorMovementState(Robot robot) {
+        robot.arm.setElevatorPower(manipulator.right_trigger - manipulator.left_trigger);
+    }
+
+    private void updateClawState(Robot robot) {
+        if (clawOpenButton.isActive()) {
+            robot.claw.setState(Claw.State.OPEN);
+        } else if (clawCloseButton.isActive()) {
+            robot.claw.setState(Claw.State.CLOSED);
+        }
+    }
+
+    private void updateLaunchPlaneState(Robot robot) {
+        if (planeLaunchButton.isActive()) {
+            robot.planeLauncher.launch();
+        } else {
+            robot.planeLauncher.handleAutoRetract();
+        }
+    }
+
+    private void updateDriveSpeedUpState(Robot robot) {
+        if (driveSpeedUpButton.isActive()) {
+            driveSpeed += 1;
+        }
+    }
+
+    private void updateDriveSpeedDownState(Robot robot) {
+        if (driveSpeedDownButton.isActive()) {
+            driveSpeed -= 1;
+        }
+    }
+
+    public void update(Robot robot) {
+        armMovementSet = false;
+        updateMovementState(robot);
+        updateArmMediumMovementState(robot);
+        updateArmSlowMovementState(robot);
+        updateArmFastMovementState(robot);
+        updateElevatorMovementState(robot);
+        updateClawState(robot);
+        updateLaunchPlaneState(robot);
+        updateDriveSpeedUpState(robot);
+        updateDriveSpeedDownState(robot);
+    }
+
+}

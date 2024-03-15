@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.units;
+package org.firstinspires.ftc.teamcode.fy23.units;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.units.DTS;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.junit.Assert;
 import org.junit.Test;
 

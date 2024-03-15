@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+/** A testing OpMode that prints TeleOpState to telemetry. */
 @TeleOp
 public class TeleOpStatePrinter extends OpMode {
 

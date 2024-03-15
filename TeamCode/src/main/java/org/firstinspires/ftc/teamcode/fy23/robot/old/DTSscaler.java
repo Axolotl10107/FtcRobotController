@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.fy23.processors;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** Makes the components of a DTS add to 1 or less, maintaining proportions. This is done by dividing
- * each component by the sum of all 3, and it is necessary because DcMotor.setPower() simply clips
- * its input from -1 to 1, damaging the proportions between the axes.
+/** <b>This is no longer necessary! Please use {@link DTS}.normalize() instead.</b> Makes the components of a DTS add to
+ * 1 or less, maintaining proportions. This is done by dividing each component by the sum of all 3, and it is necessary
+ * because DcMotor.setPower() simply clips its input from -1 to 1, damaging the proportions between the axes.
  * <a href="https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html">Game Manual 0 article on this</a>*/
 public class DTSscaler {
     private double gcd;

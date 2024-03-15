@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 
+/** A normal implementation of {@link Claw}. */
 public class ClawImpl implements Claw {
 
     private Servo servo;

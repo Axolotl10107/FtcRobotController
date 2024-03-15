@@ -4,10 +4,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+/** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the entire drivebase, and the
+ * implementation will handle mapping that to the individual motors. */
 public interface MecanumDrive {
 
     class Parameters {
-        public boolean present; /** Is the subsystem present on this robot? */
+        public boolean present; /** Is this subsystem installed on this robot? */
 
         /** max. individual motor acceleration, in power per second
          * (power loosely represents velocity) */
@@ -20,7 +22,8 @@ public interface MecanumDrive {
         public String leftFrontName;
 
         /** Direction motor spins when positive power is applied - to drive the motor "backwards",
-         * do not set this to reverse! Set the power to a negative value. */
+         * do not set this to reverse! Set the power to a negative value. What "FORWARD" or "REVERSE" is depends on your
+         * motors and how you've laid out your robot, so determine that experimentally. */
         public DcMotor.Direction leftFrontDirection;
 
         public String rightFrontName;
@@ -36,6 +39,7 @@ public interface MecanumDrive {
         public DcMotor.ZeroPowerBehavior zeroPowerBehavior; /** Applies to all motors */
     }
 
+    /** Normalize a DTS before passing it in for desirable behavior. */
     void applyDTS(DTS dts);
     void setMode(DcMotor.RunMode runMode);
     void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior);

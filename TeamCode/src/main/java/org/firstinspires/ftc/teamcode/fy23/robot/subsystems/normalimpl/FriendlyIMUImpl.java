@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 
+/** A normal implementation of {@link FriendlyIMU}. Relevant tip: use Math.toRadians() to convert degrees to radians. */
 public class FriendlyIMUImpl implements FriendlyIMU {
 
     private double pitch;
@@ -37,18 +38,21 @@ public class FriendlyIMUImpl implements FriendlyIMU {
     }
 
     @Override
+    /** in degrees */
     public double pitch() {
         updateOrientation();
         return pitch;
     }
 
     @Override
+    /** in degrees */
     public double roll() {
         updateOrientation();
         return roll;
     }
 
     @Override
+    /** in degrees */
     public double yaw() {
         updateOrientation();
         return yaw;

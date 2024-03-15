@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyI
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
+/** A catalog of {@link org.firstinspires.ftc.teamcode.fy23.robot.Robot.Parameters} classes for 10107's robots */
 public class RobotRoundhouse {
 
     public static Robot.Parameters getRobotAParams() {
@@ -34,9 +35,12 @@ public class RobotRoundhouse {
 
         PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
+        armParams.pivotMotorName = "armPivot";
+        armParams.elevatorMotorName = "armExtend";
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
+        planeLauncherParams.planeServoName = "planeservo";
 
         Robot.Parameters params = new Robot.Parameters();
         params.tpr = 537.7; // ticks per rotation

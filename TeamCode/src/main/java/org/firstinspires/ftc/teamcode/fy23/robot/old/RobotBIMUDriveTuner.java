@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
-import org.firstinspires.ftc.teamcode.fy23.processors.DTSscaler;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;

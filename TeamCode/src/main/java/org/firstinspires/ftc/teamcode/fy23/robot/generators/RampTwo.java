@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.generators;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/** This is broken! Please follow the progress on {@link org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter} instead. */
 public class RampTwo {
 
     private double deltaVel;

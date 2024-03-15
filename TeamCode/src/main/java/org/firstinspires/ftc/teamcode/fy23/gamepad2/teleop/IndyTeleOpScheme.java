@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerBu
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+/** A controller scheme for driving with independent drive, turn, and strafe axes. Matches the "Dual23" diagram. */
 public class IndyTeleOpScheme {
 
     private Gamepad driver;

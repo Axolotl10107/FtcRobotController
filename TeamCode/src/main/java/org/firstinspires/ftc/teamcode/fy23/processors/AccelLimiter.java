@@ -2,22 +2,27 @@ package org.firstinspires.ftc.teamcode.fy23.processors;
 
 import com.qualcomm.robotcore.util.Range;
 
+/** Currently, this is a 1-Dimensional acceleration limiter. It's quite simple for now, but there are future plans to
+ * make this work either in more dimensions, with more motors, or both. We're not sure yet. */
 public class AccelLimiter {
     // Be consistent with your units! If maxAccel is in meters per second squared, pass in seconds to request().
     // If it's in, like, centimeters per millisecond squared, pass in CpM and milliseconds to request().
 
-    double maxAccel = 1; // meters per second per second
-    double maxDeltaVEachLoop = .5; // just to prevent big jumps (jerks) on long loops
+    private double maxAccel = 1; // meters per second per second
+    private double maxDeltaVEachLoop = .5; // just to prevent big jumps (jerks) on long loops
 
-    double _lastTime;
-    double _oldVel;
-    double _oldDeltaV;
+    private double _lastTime;
+//    private double _oldVel;
+    private double _oldDeltaV;
 
-    boolean initialized = false;
+    private boolean initialized = false;
 
-    public AccelLimiter(double argMaxAccel, double argMaxDeltaVEachLoop) {
-        maxAccel = argMaxAccel;
-        maxDeltaVEachLoop = argMaxDeltaVEachLoop;
+    /** maxAccel is the maximum acceleration (in any unit you want, but we usually use meters per second), and
+     * maxDeltaVEachLoop is the maximum change in velocity each loop (prevents a sudden velocity change / jerk if a loop
+     * takes too long) */
+    public AccelLimiter(double maxAccel, double maxDeltaVEachLoop) {
+        this.maxAccel = maxAccel;
+        this.maxDeltaVEachLoop = maxDeltaVEachLoop;
     }
 
 //    public double requestVelocityAndReturnNewVelocity(double newVel, double currentVel, double currentTime) {
@@ -43,6 +48,8 @@ public class AccelLimiter {
 //        }
 //    }
 
+    /** Request the desired final velocity, and this will return the velocity that you can safely go now given the
+     * parameters you entered into the constructor. */
     public double requestVelocityAndReturnNewVelocity(double newVel, double currentVel, double currentTime) {
         return currentVel + requestVelocityAndReturnDeltaVelocity(newVel, currentVel, currentTime);
     }

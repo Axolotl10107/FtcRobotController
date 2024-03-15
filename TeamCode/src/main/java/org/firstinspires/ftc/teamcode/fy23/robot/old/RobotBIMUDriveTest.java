@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.fy23.controls.FieldyGamepadLS;
-import org.firstinspires.ftc.teamcode.fy23.processors.DTSscaler;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 

@@ -5,33 +5,39 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 // pieces are involved and how they can reasonably be split up while still interacting well with
 // each other.
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 
+/** A normal implementation of {@link PixelArm}. */
 public class PixelArmImpl implements PixelArm {
 
-    public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap) {
+    private DcMotorEx pivotMotor;
+    private DcMotorEx elevatorMotor;
 
+    public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap) {
+        pivotMotor = hardwareMap.get(DcMotorEx.class, parameters.pivotMotorName);
+        elevatorMotor = hardwareMap.get(DcMotorEx.class, parameters.elevatorMotorName);
     }
 
     @Override
     public void setPivotPower(double power) {
-
+        pivotMotor.setPower(power);
     }
 
     @Override
     public double getPivotPower() {
-        return 0;
+        return pivotMotor.getPower();
     }
 
     @Override
     public void setElevatorPower(double power) {
-
+        elevatorMotor.setPower(0);
     }
 
     @Override
     public double getElevatorPower() {
-        return 0;
+        return elevatorMotor.getPower();
     }
 }

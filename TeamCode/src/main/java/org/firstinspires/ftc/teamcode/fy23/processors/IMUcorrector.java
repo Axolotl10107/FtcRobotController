@@ -9,7 +9,9 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 
+/** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected. */
 public class IMUcorrector {
+    //TODO: Make this class testable!
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
 
@@ -55,6 +57,7 @@ public class IMUcorrector {
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
+    /** The drive and strafe values will remain unmodified, but it will <b>add</b> correction to the turn value. */
     public DTS correctDTS(DTS dts) {
 
         returnDTS = new DTS(dts.drive, 0, dts.strafe); // we'll populate turn ourselves

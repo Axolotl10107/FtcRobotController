@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+/** A blank implementation of {@link MecanumDrive} that does nothing. */
 public class MecanumDriveBlank implements MecanumDrive {
 
     @Override

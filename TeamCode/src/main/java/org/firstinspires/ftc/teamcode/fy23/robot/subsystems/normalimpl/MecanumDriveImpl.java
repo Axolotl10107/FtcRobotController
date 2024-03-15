@@ -9,8 +9,7 @@ import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** Represents a mecanum drive base, such as the goBILDA strafer. Make sure to normalize a DTS
- * before passing it in! */
+/** A normal implementation of {@link MecanumDrive}. Normalize a DTS before passing it in for desirable results. */
 public class MecanumDriveImpl implements MecanumDrive {
 
     public DcMotorEx leftFront;

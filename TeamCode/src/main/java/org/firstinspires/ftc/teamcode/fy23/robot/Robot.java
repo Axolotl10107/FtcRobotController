@@ -18,16 +18,20 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDr
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
-
+/** Encapsulates all of the components that make up a robot. A simple way to centralize initialization in one place
+ * (to avoid duplicated code across OpModes) and make it easier to work with multiple different robots, each of which is
+ * defined by a {@link Parameters} class. The Parameters also contain calibration values that tune certain fine
+ * behaviors to each robot. An OpMode no longer needs to set up every individual motor and servo. It needs only to
+ * create a robot and use the powerful and convenient methods provided by its subsystems. */
 public class Robot {
 
     public static class Parameters {
-        double tpr;
+        double tpr; /** ticks per rotation */
         double wheelDiameter;
         double maxForwardSpeed;
         double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
-        PIDconsts hdgCorrectionPIDconsts;
+        PIDconsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
         Claw.Parameters clawParameters;
         FriendlyIMUImpl.Parameters imuParameters;

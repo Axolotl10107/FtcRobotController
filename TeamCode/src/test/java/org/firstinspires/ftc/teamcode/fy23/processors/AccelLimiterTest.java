@@ -1,11 +1,10 @@
 // this class should *not* be used as a sample - please see DTSscalerTest
-package org.firstinspires.ftc.teamcode.fy23.robot.processors;
+package org.firstinspires.ftc.teamcode.fy23.processors;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

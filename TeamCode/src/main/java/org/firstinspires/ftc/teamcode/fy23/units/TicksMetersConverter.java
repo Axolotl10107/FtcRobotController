@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.fy23.units;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 
+/** This class is not used. If it ever is, then JavaDoc will be written for it. */
 public class TicksMetersConverter {
 
     private double _tpr;

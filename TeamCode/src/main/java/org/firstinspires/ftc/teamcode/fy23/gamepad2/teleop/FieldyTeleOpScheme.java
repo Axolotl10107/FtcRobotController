@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerBu
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+/** A controller scheme for field-oriented driving. Matches the "FieldyGamepadLS" diagram. */
 public class FieldyTeleOpScheme {
 
     private Gamepad driver;
