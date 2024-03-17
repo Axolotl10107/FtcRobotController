@@ -21,9 +21,8 @@ public class PlaneLauncherImpl implements PlaneLauncher {
     }
 
     @Override
-    /** Place this in the loop of your OpMode. (note: in the future, each subsystem may have an update() method, all of
-     * which will be called by robot.update() which goes in the OpMode loop) */
-    public void handleAutoRetract() {
+    public void update() {
+        // handle auto retract
         if (servo.getPosition() > 0.99) {
             launchComplete = true;
         }
@@ -32,4 +31,5 @@ public class PlaneLauncherImpl implements PlaneLauncher {
             launchComplete = false;
         }
     }
+
 }

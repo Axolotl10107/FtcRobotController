@@ -14,4 +14,10 @@ public class ClawBlank implements Claw {
     public State getState() {
         return State.NONE;
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

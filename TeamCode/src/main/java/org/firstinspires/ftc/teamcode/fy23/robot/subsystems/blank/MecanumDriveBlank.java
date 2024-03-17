@@ -22,4 +22,10 @@ public class MecanumDriveBlank implements MecanumDrive {
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
 
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

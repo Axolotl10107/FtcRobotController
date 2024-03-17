@@ -44,4 +44,6 @@ public interface MecanumDrive {
     void setMode(DcMotor.RunMode runMode);
     void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior);
 
+    void update();
+
 }

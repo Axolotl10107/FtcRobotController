@@ -8,12 +8,12 @@ public class AccelLimiter {
     // Be consistent with your units! If maxAccel is in meters per second squared, pass in seconds to request().
     // If it's in, like, centimeters per millisecond squared, pass in CpM and milliseconds to request().
 
-    private double maxAccel = 1; // meters per second per second
-    private double maxDeltaVEachLoop = .5; // just to prevent big jumps (jerks) on long loops
+    private double maxAccel; // meters per second per second
+    private double maxDeltaVEachLoop; // just to prevent big jumps (jerks) on long loops
 
     private double _lastTime;
 //    private double _oldVel;
-    private double _oldDeltaV;
+//    private double _oldDeltaV;
 
     private boolean initialized = false;
 
@@ -50,27 +50,44 @@ public class AccelLimiter {
 
     /** Request the desired final velocity, and this will return the velocity that you can safely go now given the
      * parameters you entered into the constructor. */
-    public double requestVelocityAndReturnNewVelocity(double newVel, double currentVel, double currentTime) {
-        return currentVel + requestVelocityAndReturnDeltaVelocity(newVel, currentVel, currentTime);
+    public double requestVel(double newVel, double currentVel, double currentTime) {
+        return currentVel + requestDeltaVel(newVel, currentVel, currentTime);
     }
 
-    public double requestVelocityAndReturnDeltaVelocity(double newVel, double currentVel, double currentTime) {
+    /** Same as requestVel, but returns the change in velocity since last time a request was made */
+    public double requestDeltaVel(double newVel, double currentVel, double currentTime) {
         if (initialized) {
             double loopTime = currentTime - _lastTime;
-//            double requestedDeltaVThisLoop = newVel - _oldVel;
             double requestedDeltaVThisLoop = newVel - currentVel;
             double targetDeltaVThisLoop = maxAccel * loopTime;
             double safeDeltaVThisLoop = Math.min(targetDeltaVThisLoop, maxDeltaVEachLoop);
             double actualDeltaVThisLoop = Range.clip(requestedDeltaVThisLoop, -safeDeltaVThisLoop, safeDeltaVThisLoop);
-            _oldDeltaV = actualDeltaVThisLoop;
             _lastTime = currentTime;
             return actualDeltaVThisLoop;
         } else {
-//            _oldVel = currentVel;
             _lastTime = currentTime;
             initialized = true;
             return 0;
         }
     }
+
+//    public double requestDeltaVel(double newVel, double currentVel, double currentTime) {
+//        if (initialized) {
+//            double loopTime = currentTime - _lastTime;
+////            double requestedDeltaVThisLoop = newVel - _oldVel;
+//            double requestedDeltaVThisLoop = newVel - currentVel;
+//            double targetDeltaVThisLoop = maxAccel * loopTime;
+//            double safeDeltaVThisLoop = Math.min(targetDeltaVThisLoop, maxDeltaVEachLoop);
+//            double actualDeltaVThisLoop = Range.clip(requestedDeltaVThisLoop, -safeDeltaVThisLoop, safeDeltaVThisLoop);
+//            _oldDeltaV = actualDeltaVThisLoop;
+//            _lastTime = currentTime;
+//            return actualDeltaVThisLoop;
+//        } else {
+////            _oldVel = currentVel;
+//            _lastTime = currentTime;
+//            initialized = true;
+//            return 0;
+//        }
+//    }
 
 }

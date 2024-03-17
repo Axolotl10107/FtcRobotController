@@ -15,4 +15,6 @@ public interface FriendlyIMU {
     double roll();
     double yaw();
 
+    void update();
+
 }

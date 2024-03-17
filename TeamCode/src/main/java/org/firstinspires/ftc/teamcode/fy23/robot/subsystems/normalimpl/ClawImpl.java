@@ -14,7 +14,7 @@ public class ClawImpl implements Claw {
     private Claw.State state = Claw.State.NONE;
 
     public ClawImpl(Claw.Parameters parameters, HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, "clawServo");
+        servo = hardwareMap.get(Servo.class, parameters.clawServoName);
         openPosition = parameters.openPosition;
         closePosition = parameters.closePosition;
     }
@@ -34,4 +34,10 @@ public class ClawImpl implements Claw {
     public Claw.State getState() {
         return state;
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

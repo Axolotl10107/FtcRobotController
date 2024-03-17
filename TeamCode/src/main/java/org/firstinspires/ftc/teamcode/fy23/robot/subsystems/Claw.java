@@ -12,11 +12,14 @@ public interface Claw {
     class Parameters {
         /** Is this subsystem installed on this robot? */
         public boolean present;
+        public String clawServoName;
         public double openPosition;
         public double closePosition;
     }
 
     void setState(State state);
     State getState();
+
+    void update();
 
 }

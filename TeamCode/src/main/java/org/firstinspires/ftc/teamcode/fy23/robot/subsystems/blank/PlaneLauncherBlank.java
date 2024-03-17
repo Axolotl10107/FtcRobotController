@@ -11,7 +11,8 @@ public class PlaneLauncherBlank implements PlaneLauncher {
     }
 
     @Override
-    public void handleAutoRetract() {
+    public void update() {
 
     }
+
 }

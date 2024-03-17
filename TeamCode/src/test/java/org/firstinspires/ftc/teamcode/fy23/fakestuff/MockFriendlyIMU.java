@@ -23,6 +23,11 @@ public class MockFriendlyIMU implements FriendlyIMU {
         return yaw;
     }
 
+    @Override
+    public void update() {
+
+    }
+
     // Methods for use in your test
     public void setPitch(double pitch) {
         this.pitch = pitch;

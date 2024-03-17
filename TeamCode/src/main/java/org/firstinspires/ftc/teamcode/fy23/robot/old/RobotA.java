@@ -5,6 +5,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
@@ -82,7 +83,7 @@ public class RobotA implements AnyRobot {
 
         PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
-        pixelArm = new PixelArmImpl(armParams, hardwareMap);
+        pixelArm = new PixelArmImpl(armParams, hardwareMap, new ElapsedTime());
 
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;

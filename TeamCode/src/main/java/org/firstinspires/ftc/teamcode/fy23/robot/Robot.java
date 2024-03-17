@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
@@ -52,6 +53,8 @@ public class Robot {
     public final PixelArm arm;
     public final PlaneLauncher planeLauncher;
 
+    private ElapsedTime stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+
     public Robot(Parameters parameters, HardwareMap hardwareMap) {
         TPR = parameters.tpr;
         wheelDiameter = parameters.wheelDiameter;
@@ -67,8 +70,24 @@ public class Robot {
         // above block and below statements work the same way
         imu = (parameters.imuParameters.present) ? new FriendlyIMUImpl(parameters.imuParameters, hardwareMap) : new FriendlyIMUBlank();
         drive = (parameters.driveParameters.present) ? new MecanumDriveImpl(parameters.driveParameters, hardwareMap) : new MecanumDriveBlank();
-        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, hardwareMap) : new PixelArmBlank();
+        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, hardwareMap, stopwatch) : new PixelArmBlank();
         planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters, hardwareMap) : new PlaneLauncherBlank();
+    }
+
+    /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
+     * a normal ElapsedTime. */
+    public Robot(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
+        this(parameters, hardwareMap);
+        this.stopwatch = stopwatch; // this will override the initial / default assignment
+    }
+
+    /** Call this method in the loop portion of your OpMode. */
+    public void update() {
+        claw.update();
+        imu.update();
+        drive.update();
+        arm.update();
+        planeLauncher.update();
     }
 
 }

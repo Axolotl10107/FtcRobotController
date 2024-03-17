@@ -103,8 +103,6 @@ public class IndyDirectTeleOpScheme {
     private void updateLaunchPlaneState(Robot robot) {
         if (planeLaunchButton.isActive()) {
             robot.planeLauncher.launch();
-        } else {
-            robot.planeLauncher.handleAutoRetract();
         }
     }
 

@@ -18,4 +18,10 @@ public class FriendlyIMUBlank implements FriendlyIMU {
     public double yaw() {
         return 0;
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

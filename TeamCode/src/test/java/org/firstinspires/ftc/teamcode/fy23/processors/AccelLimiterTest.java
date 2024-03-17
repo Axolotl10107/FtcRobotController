@@ -1,7 +1,6 @@
 // this class should *not* be used as a sample - please see DTSscalerTest
 package org.firstinspires.ftc.teamcode.fy23.processors;
 
-import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,7 +26,7 @@ public class AccelLimiterTest {
         System.out.println(String.format("Requesting {%f} meters per second", requestedVel));
         System.out.println("iter | time | output");
         for (int i = 0; i < iterations; i++) {
-            lastOutput = accelLimiter.requestVelocityAndReturnNewVelocity(requestedVel, lastOutput, currentTime);
+            lastOutput = accelLimiter.requestVel(requestedVel, lastOutput, currentTime);
             System.out.println(String.format("{%d} | {%f} | {%f}", i, currentTime, lastOutput));
             currentTime += timeStep;
         }
@@ -50,7 +49,7 @@ public class AccelLimiterTest {
         System.out.println(String.format("Requesting {%f} meters per second", requestedVel));
         System.out.println("iter | time | output");
         for (int i = 0; i < iterations; i++) {
-            lastOutput = accelLimiter.requestVelocityAndReturnNewVelocity(requestedVel, lastOutput, currentTime);
+            lastOutput = accelLimiter.requestVel(requestedVel, lastOutput, currentTime);
             System.out.println(String.format("{%d} | {%f} | {%f}", i, currentTime, lastOutput));
             currentTime += timeStep;
         }
@@ -71,7 +70,7 @@ public class AccelLimiterTest {
         System.out.println("iter | time | requested | output");
         for (int i=0; i < requestList.size(); i++) {
             currentTime = (double) timeList.get(i);
-            lastOutput = accelLimiter.requestVelocityAndReturnNewVelocity((double) requestList.get(i), lastOutput, (double) timeList.get(i));
+            lastOutput = accelLimiter.requestVel((double) requestList.get(i), lastOutput, (double) timeList.get(i));
             System.out.println(String.format("{%d} | {%f} | {%f} | {%f}", i, currentTime, (double) requestList.get(i), lastOutput));
         }
     }
@@ -87,7 +86,7 @@ public class AccelLimiterTest {
         AccelLimiter accelLimiter = new AccelLimiter(maxAccel, maxDeltaVEachLoop);
         System.out.println("iter | time | requested | output | expected");
         for (int i=0; i < requestList.size(); i++) {
-            lastOutput = accelLimiter.requestVelocityAndReturnNewVelocity(requestList.get(i), lastOutput, timeList.get(i));
+            lastOutput = accelLimiter.requestVel(requestList.get(i), lastOutput, timeList.get(i));
             System.out.println(String.format("{%d} | {%f} | {%f} | {%f} | {%f}", i, timeList.get(i), requestList.get(i), lastOutput, expectedList.get(i)));
 //            Assert.assertEquals(expectedList.get(i), lastOutput, 0.01);
             if (Math.abs(expectedList.get(i) - lastOutput) > 0.01) {

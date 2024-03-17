@@ -92,7 +92,7 @@ public class MecanumDriveImpl implements MecanumDrive {
 
     /** The normal DcMotorEx function but applied to all motors */
     public void setVelocity(double velocity) {
-        velocity = accelLimiter.requestVelocityAndReturnNewVelocity(velocity, getAvgVelocity(), stopwatch.milliseconds());
+        velocity = accelLimiter.requestVel(velocity, getAvgVelocity(), stopwatch.milliseconds());
         leftFront.setVelocity(velocity);
         rightFront.setVelocity(velocity);
         leftBack.setVelocity(velocity);
@@ -108,4 +108,10 @@ public class MecanumDriveImpl implements MecanumDrive {
         rightBack.setZeroPowerBehavior(behavior);
 
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

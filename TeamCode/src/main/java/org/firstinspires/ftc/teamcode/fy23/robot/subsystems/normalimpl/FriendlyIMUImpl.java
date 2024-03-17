@@ -57,4 +57,10 @@ public class FriendlyIMUImpl implements FriendlyIMU {
         updateOrientation();
         return yaw;
     }
+
+    @Override
+    public void update() {
+
+    }
+
 }

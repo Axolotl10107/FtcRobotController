@@ -10,6 +10,10 @@ public interface PixelArm {
         public boolean present;
         public String pivotMotorName;
         public String elevatorMotorName;
+        public double maxPivotAccel;
+        public double maxPivotDeltaVEachLoop;
+        public double maxElevatorAccel;
+        public double maxElevatorDeltaVEachLoop;
     }
 
     void setPivotPower(double power);
@@ -17,5 +21,7 @@ public interface PixelArm {
 
     void setElevatorPower(double power);
     double getElevatorPower();
+
+    void update();
 
 }

@@ -10,6 +10,7 @@ public interface PlaneLauncher {
     }
 
     void launch();
-    void handleAutoRetract();
+
+    void update();
 
 }

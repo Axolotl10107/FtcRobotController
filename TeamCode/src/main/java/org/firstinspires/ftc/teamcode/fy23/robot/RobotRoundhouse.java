@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 /** A catalog of {@link org.firstinspires.ftc.teamcode.fy23.robot.Robot.Parameters} classes for 10107's robots */
 public class RobotRoundhouse {
 
+    /** CenterStage Competition Robot */
     public static Robot.Parameters getRobotAParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;
@@ -37,6 +38,10 @@ public class RobotRoundhouse {
         armParams.present = true;
         armParams.pivotMotorName = "armPivot";
         armParams.elevatorMotorName = "armExtend";
+        armParams.maxPivotAccel = 1; // power per second
+        armParams.maxPivotDeltaVEachLoop = 0.2;
+        armParams.maxElevatorAccel = 1;
+        armParams.maxElevatorDeltaVEachLoop = 0.2;
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
@@ -57,6 +62,7 @@ public class RobotRoundhouse {
         return params;
     }
 
+    /** Drivebase-Only Robot */
     public static Robot.Parameters getRobotBParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
@@ -98,6 +104,7 @@ public class RobotRoundhouse {
         return params;
     }
 
+    /** MecanumBot in virtual_robot */
     public static Robot.Parameters getVirtualRobotParams() {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
@@ -125,10 +132,10 @@ public class RobotRoundhouse {
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
-        params.tpr = 537.7;
+        params.tpr = 537.7; // set for a goBILDA strafer
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0); // irrelevant in a perfect simulation
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;
