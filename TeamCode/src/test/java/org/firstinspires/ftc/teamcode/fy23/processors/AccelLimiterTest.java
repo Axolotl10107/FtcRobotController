@@ -1,6 +1,6 @@
-// this class should *not* be used as a sample - please see DTSscalerTest
 package org.firstinspires.ftc.teamcode.fy23.processors;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -107,7 +107,7 @@ public class AccelLimiterTest {
 //    }
 
     @Test
-    public void smallSimplePathTest() {
+    public void smallPlannedPathTest() {
         List<Double> requestList = Arrays.asList(0.0, 10.0, 10.0, 20.0, 20.0, 10.0, 10.0, 0.0, 0.0);
         List<Double> timeList = Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         List<Double> expectedList = Arrays.asList(0.0, 5.0, 10.0, 15.0, 20.0, 15.0, 10.0, 5.0, 0.0);
@@ -115,7 +115,7 @@ public class AccelLimiterTest {
     }
 
     @Test
-    public void largeSimplePathTest() {
+    public void largePlannedPathTest() {
         List<Double> requestList = Arrays.asList(0.0, 23.0, 64.0, 64.0, 64.0, 47.0, 25.0, 64.0, 64.0, 64.0, 31.0, 31.0, 0.0, 0.0);
         List<Double> timeList = Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0);
         List<Double> expectedList = Arrays.asList(0.0, 13.0, 26.0, 39.0, 52.0, 47.0, 34.0, 47.0, 60.0, 64.0, 51.0, 38.0, 25.0, 12.0);
@@ -123,7 +123,7 @@ public class AccelLimiterTest {
     }
 
     @Test
-    public void hugeSimplePathTest() {
+    public void hugePlannedPathTest() {
         List<Double> requestList = Arrays.asList(12.0, 32.0, 32.0, 54.0, 54.0, 45.0, 67.0, 67.0, 47.0, 47.0, 85.0, 85.0, 85.0, 85.0, 34.0, 34.0, 34.0, 34.0, 34.0, 34.0, 57.0, 57.0, -15.0, -15.0, -15.0, -15.0, -15.0, -15.0, -15.0, -15.0, -15.0, 21.0, 21.0, 21.0, 21.0, -30.0, -30.0, -30.0, -30.0, -30.0, -30.0, 25.0, 25.0, 25.0, 25.0, 25.0, 25.0, 48.0, 48.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, -48.0, -48.0, -48.0, -48.0, -48.0, -48.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         List<Double> timeList = Arrays.asList(0.0, 1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0, 16.5, 18.0, 19.5, 21.0, 22.5, 24.0, 25.5, 27.0, 28.5, 30.0, 31.5, 33.0, 34.5, 36.0, 37.5, 39.0, 40.5, 42.0, 43.5, 45.0, 46.5, 48.0, 49.5, 51.0, 52.5, 54.0, 55.5, 57.0, 58.5, 60.0, 61.5, 63.0, 64.5, 66.0, 67.5, 69.0, 70.5, 72.0, 73.5, 75.0, 76.5, 78.0, 79.5, 81.0, 82.5, 84.0, 85.5, 87.0, 88.5, 90.0, 91.5, 93.0, 94.5, 96.0, 97.5, 99.0);
         List<Double> expectedList = Arrays.asList(0.0, 8.0, 16.0, 24.0, 32.0, 40.0, 48.0, 56.0, 48.0, 47.0, 55.0, 63.0, 71.0, 79.0, 71.0, 63.0, 55.0, 47.0, 39.0, 34.0, 42.0, 50.0, 42.0, 34.0, 26.0, 18.0, 10.0, 2.0, -6.0, -14.0, -15.0, -7.0, 1.0, 9.0, 17.0, 9.0, 1.0, -7.0, -15.0, -23.0, -30.0, -22.0, -14.0, -6.0, 2.0, 10.0, 18.0, 26.0, 34.0, 26.0, 18.0, 10.0, 2.0, 0.0, 0.0, -8.0, -16.0, -24.0, -32.0, -40.0, -48.0, -40.0, -32.0, -24.0, -16.0, -8.0, 0.0);
@@ -131,10 +131,36 @@ public class AccelLimiterTest {
     }
 
     @Test
-    public void randomFromHugeSimplePathTest() {
+    public void randomFromHugePlannedPathTest() {
         List<Double> requestList = Arrays.asList(32.0, 67.0, 85.0, 34.0, 57.0, -15.0, -15.0, -15.0, 21.0, -30.0, -30.0, 25.0, 25.0, 48.0, 48.0, 0.0, 0.0, -48.0, -48.0, 0.0, 0.0);
         List<Double> timeList = Arrays.asList(3.0, 9.0, 16.5, 24.0, 31.5, 34.5, 36.0, 43.5, 49.5, 54.0, 57.0, 64.5, 67.5, 70.5, 72.0, 75.0, 81.0, 85.5, 88.5, 91.5, 99.0);
         List<Double> expectedList = Arrays.asList(0.0, 8.0, 16.0, 24.0, 32.0, 24.0, 16.0, 8.0, 16.0, 8.0, 0.0, 8.0, 16.0, 24.0, 32.0, 24.0, 16.0, 8.0, 0.0, 0.0, 0.0);
         plannedPathTest(8, 8, requestList, timeList, expectedList);
+    }
+
+
+    @Test
+    // This is *not* a pass/fail test.
+    public void stoppingDistancePrinter() {
+        AccelLimiter accelLimiter = new AccelLimiter(10, 1);
+        ElapsedTime stopwatch = new ElapsedTime();
+        double stoppingDistance = accelLimiter.stoppingDistance(10, 1000);
+        System.out.println(String.format("Got {%f} meters in {%f} milliseconds.", stoppingDistance, stopwatch.milliseconds()));
+    }
+
+    public double stoppingDistanceSimplePassFail(double maxAccel, double maxDeltaVEachLoop, double currentVel, int resolution) {
+        AccelLimiter accelLimiter = new AccelLimiter(maxAccel, maxDeltaVEachLoop);
+        double stoppingDistance = accelLimiter.stoppingDistance(currentVel, resolution);
+        return stoppingDistance;
+    }
+
+    @Test
+    public void stoppingDistanceSimplePassFail1() {
+        Assert.assertEquals(1.25, stoppingDistanceSimplePassFail(10, 1, 5, 1000), 0.01);
+    }
+
+    @Test
+    public void stoppingDistanceSimplePassFail2() {
+        Assert.assertEquals(5, stoppingDistanceSimplePassFail(10, 1, 10, 1000), 0.01);
     }
 }

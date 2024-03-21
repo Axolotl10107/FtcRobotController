@@ -21,9 +21,59 @@ public class AccelLimiter {
      * maxDeltaVEachLoop is the maximum change in velocity each loop (prevents a sudden velocity change / jerk if a loop
      * takes too long) */
     public AccelLimiter(double maxAccel, double maxDeltaVEachLoop) {
+        setParameters(maxAccel, maxDeltaVEachLoop);
+    }
+
+    public void setParameters(double maxAccel, double maxDeltaVEachLoop) {
         this.maxAccel = maxAccel;
         this.maxDeltaVEachLoop = maxDeltaVEachLoop;
     }
+
+    /** Request the desired final velocity, and this will return the velocity that you can safely go now given the
+     * parameters you entered into the constructor. */
+    public double requestVel(double newVel, double currentVel, double currentTime) {
+        return currentVel + requestDeltaVel(newVel - currentVel, currentTime);
+    }
+
+    /** Request the desired change in velocity, and this will return how much velocity you can safely add to your
+     * current velocity given the parameters you entered into the constructor. */
+    public double requestDeltaVel(double deltaVel, double currentTime) {
+        if (initialized) {
+            double loopTime = currentTime - _lastTime;
+//            double requestedDeltaVThisLoop = newVel - currentVel;
+            double requestedDeltaVThisLoop = deltaVel;
+            double targetDeltaVThisLoop = maxAccel * loopTime;
+            double safeDeltaVThisLoop = Math.min(targetDeltaVThisLoop, maxDeltaVEachLoop);
+            double actualDeltaVThisLoop = Range.clip(requestedDeltaVThisLoop, -safeDeltaVThisLoop, safeDeltaVThisLoop);
+            _lastTime = currentTime;
+            return actualDeltaVThisLoop;
+        } else {
+            _lastTime = currentTime;
+            initialized = true;
+            return 0;
+        }
+    }
+
+    /** How much distance is needed to stop from the given initial velocity at the maximum acceleration set for your
+     * AccelLimiter instance? Resolution is an integer. Higher resolution values make the calculation take longer but
+     * yield more accurate results. Use the "stoppingDistancePrinter" Unit Test to determine what resolution you need. */
+    public double stoppingDistance(double currentVel, int resolution) {
+        double timeStep = 1.0 / resolution;
+        double currentTime = 0;
+        double totalDistance = 0;
+//        System.out.println("currentTime | currentVel | totalDistance");
+        while (currentVel > 0.01) {
+            currentVel = requestVel(0, currentVel, currentTime);
+            totalDistance += currentVel / 1000 * (timeStep * 1000); // dimensional analysis - velocity to milliseconds to distance each iter
+            // example: (5 meters / 1 second) * (1 second / 1000 ms) * ((0.1 seconds / 1 iteration) * (1000 ms / 1 second) = (0.5 meters / 1 iteration)
+//            System.out.println(String.format("{%f} | {%f} | {%f}", currentTime, currentVel, totalDistance));
+            currentTime += timeStep;
+        }
+        return totalDistance;
+    }
+
+
+// old stuff
 
 //    public double requestVelocityAndReturnNewVelocity(double newVel, double currentVel, double currentTime) {
 //        if (initialized) {
@@ -47,29 +97,6 @@ public class AccelLimiter {
 //            return _oldVel;
 //        }
 //    }
-
-    /** Request the desired final velocity, and this will return the velocity that you can safely go now given the
-     * parameters you entered into the constructor. */
-    public double requestVel(double newVel, double currentVel, double currentTime) {
-        return currentVel + requestDeltaVel(newVel, currentVel, currentTime);
-    }
-
-    /** Same as requestVel, but returns the change in velocity since last time a request was made */
-    public double requestDeltaVel(double newVel, double currentVel, double currentTime) {
-        if (initialized) {
-            double loopTime = currentTime - _lastTime;
-            double requestedDeltaVThisLoop = newVel - currentVel;
-            double targetDeltaVThisLoop = maxAccel * loopTime;
-            double safeDeltaVThisLoop = Math.min(targetDeltaVThisLoop, maxDeltaVEachLoop);
-            double actualDeltaVThisLoop = Range.clip(requestedDeltaVThisLoop, -safeDeltaVThisLoop, safeDeltaVThisLoop);
-            _lastTime = currentTime;
-            return actualDeltaVThisLoop;
-        } else {
-            _lastTime = currentTime;
-            initialized = true;
-            return 0;
-        }
-    }
 
 //    public double requestDeltaVel(double newVel, double currentVel, double currentTime) {
 //        if (initialized) {
