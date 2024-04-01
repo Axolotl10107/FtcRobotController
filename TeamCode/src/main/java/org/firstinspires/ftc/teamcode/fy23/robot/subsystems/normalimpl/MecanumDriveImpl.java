@@ -9,7 +9,10 @@ import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** A normal implementation of {@link MecanumDrive}. Normalize a DTS before passing it in for desirable results. */
+import java.util.Arrays;
+import java.util.List;
+
+/** A normal implementation of {@link MecanumDrive}. */
 public class MecanumDriveImpl implements MecanumDrive {
 
     public DcMotorEx leftFront;
@@ -17,10 +20,14 @@ public class MecanumDriveImpl implements MecanumDrive {
     public DcMotorEx leftBack;
     public DcMotorEx rightBack;
 
-    public AccelLimiter accelLimiter;
-    public ElapsedTime stopwatch;
+    private AccelLimiter accelLimiter;
+    private ElapsedTime stopwatch;
 
-    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap) {
+    /** Pass in an ElapsedTime. Useful for UnitTests, which can pass in a MockElapsedTime.
+     * @param hardwareMap Passed in by the Robot. Your OpMode doesn't need to worry about this.
+     * @param parameters Passed in by the Robot. Your OpMode doesn't need to worry about this.
+     * @param stopwatch ElapsedTime to be used for acceleration control */
+    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
         leftFront = hardwareMap.get(DcMotorEx.class, parameters.leftFrontName);
         rightFront = hardwareMap.get(DcMotorEx.class, parameters.rightFrontName);
         leftBack = hardwareMap.get(DcMotorEx.class, parameters.leftBackName);
@@ -34,7 +41,7 @@ public class MecanumDriveImpl implements MecanumDrive {
         try {
             setMode(parameters.runMode);
         } catch (Exception x) {
-            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if the runmode wasn't set, pick a default
+            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if the RunMode wasn't set, pick a default
         }
 
         try {
@@ -44,44 +51,79 @@ public class MecanumDriveImpl implements MecanumDrive {
         }
 
         accelLimiter = new AccelLimiter(parameters.maxMotorAccel, parameters.maxDeltaVEachLoop);
-        stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        this.stopwatch = stopwatch;
     }
 
-    /** Takes these components as motor powers */
+    /** Creates a normal ElapsedTime. Good for use in OpModes.
+     * @param hardwareMap Passed in by the Robot. Your OpMode doesn't need to worry about this.
+     * @param parameters Passed in by the Robot. Your OpMode doesn't need to worry about this. */
+    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap) {
+        this(parameters, hardwareMap, new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS));
+    }
+
+    /** Takes these components as motor powers and limits the acceleration.
+     * @param drive Forwards power
+     * @param turn Turning power - positive is counterclockwise!
+     * @param strafe Strafing (sideways) power - positive is to the right */
     public void applyDTS(double drive, double turn, double strafe) {
-        leftFront.setPower(drive - turn + strafe);
-        rightFront.setPower(drive + turn - strafe);
-        leftBack.setPower(drive - turn - strafe);
-        rightBack.setPower(drive + turn + strafe);
+        double newLF = drive - turn + strafe;
+        double newRF = drive + turn - strafe;
+        double newLB = drive - turn - strafe;
+        double newRB = drive + turn + strafe;
+        double currentLF = leftFront.getPower();
+        double currentRF = rightFront.getPower();
+        double currentLB = leftBack.getPower();
+        double currentRB = rightBack.getPower();
+        double requestedDeltaLF = newLF - currentLF;
+        double requestedDeltaRF = newRF - currentRF;
+        double requestedDeltaLB = newLB - currentLB;
+        double requestedDeltaRB = newRB - currentRB;
+        List<Double> requestList = Arrays.asList(requestedDeltaLF, requestedDeltaRF, requestedDeltaLB, requestedDeltaRB);
+
+        List<Double> returnList = accelLimiter.requestDeltaVelOnN(requestList, stopwatch.seconds());
+        newLF = currentLF + returnList.get(0);
+        newRF = currentRF + returnList.get(1);
+        newLB = currentLB + returnList.get(2);
+        newRB = currentRB + returnList.get(3);
+        leftFront.setPower(newLF);
+        rightFront.setPower(newRF);
+        leftBack.setPower(newLB);
+        rightBack.setPower(newRB);
+
+        System.out.println(String.format("Requested deltaVels: | {%f} | {%f} | {%f} | {%f}", requestedDeltaLF, requestedDeltaRF, requestedDeltaLB, requestedDeltaRB));
+        System.out.println(String.format("Motor Powers: | {%f} | {%f} | {%f} | {%f}", newLF, newRF, newLB, newRB));
     }
 
-    /** Takes a DTS of motor powers */
+    /** Takes a DTS (Drive-Turn-Strafe) of motor powers.
+     * @param dts The DTS to apply */
     @Override
-    public void applyDTS(DTS dts) { // function overloading
+    public void applyDTS(DTS dts) { // method overloading
+        System.out.println("Ooh, fancy!");
         applyDTS(dts.drive, dts.turn, dts.strafe);
     }
 
     /** Returns the average of the encoder positions reported by the motors */
+    @Deprecated
     public int getAvgEncoderPos() {
         return (
                 leftFront.getCurrentPosition() +
-                rightFront.getCurrentPosition() +
-                leftBack.getCurrentPosition() +
-                rightBack.getCurrentPosition()
+                        rightFront.getCurrentPosition() +
+                        leftBack.getCurrentPosition() +
+                        rightBack.getCurrentPosition()
         ) / 4;
     }
 
     /** Returns the average of the velocities reported by the motors */
+    @Deprecated
     public double getAvgVelocity() {
         return (
                 leftFront.getVelocity() +
-                rightFront.getVelocity() +
-                leftBack.getVelocity() +
-                rightBack.getVelocity()
+                        rightFront.getVelocity() +
+                        leftBack.getVelocity() +
+                        rightBack.getVelocity()
         ) / 4;
     }
 
-    /** The normal DcMotor function but applied to all motors */
     @Override
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
@@ -90,7 +132,7 @@ public class MecanumDriveImpl implements MecanumDrive {
         rightBack.setMode(runMode);
     }
 
-    /** The normal DcMotorEx function but applied to all motors */
+    @Deprecated
     public void setVelocity(double velocity) {
         velocity = accelLimiter.requestVel(velocity, getAvgVelocity(), stopwatch.milliseconds());
         leftFront.setVelocity(velocity);
@@ -99,7 +141,6 @@ public class MecanumDriveImpl implements MecanumDrive {
         rightBack.setVelocity(velocity);
     }
 
-    /** The normal DcMotor function but applied to all motors */
     @Override
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
         leftFront.setZeroPowerBehavior(behavior);

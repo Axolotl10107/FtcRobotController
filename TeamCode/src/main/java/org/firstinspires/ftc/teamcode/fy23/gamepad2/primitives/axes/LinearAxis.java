@@ -6,19 +6,30 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 public class LinearAxis implements Axis {
 
     private DoubleLambda axis;
-    private int invert = 1;
+    private int invert;
+    private double scalingFactor;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
      * new LinearAxis( () -{@literal >} gamepad.left_stick_x ); */
     public LinearAxis(DoubleLambda axis) {
-        this.axis = axis;
+        this(axis, false, 1);
     }
 
-    /** Same as the other constructor, but allows for inverting the reported value */
+    /** Allows for inverting the reported value */
     public LinearAxis(DoubleLambda axis, boolean invert) {
+        this(axis, invert, 1);
+    }
+
+    /** Specify a scaling factor (a number that the value should be multiplied by) */
+    public LinearAxis(DoubleLambda axis, double scalingFactor) {
+        this(axis, false, scalingFactor);
+    }
+
+    public LinearAxis(DoubleLambda axis, boolean invert, double scalingFactor) {
         this.axis = axis;
         this.invert = invert ? -1 : 1;
+        this.scalingFactor = scalingFactor;
     }
 
     @Override

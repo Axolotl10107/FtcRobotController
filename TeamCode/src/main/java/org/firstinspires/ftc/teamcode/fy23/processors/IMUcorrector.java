@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 
-/** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected. */
+/** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected.
+ * <b>This class has an open task:</b> Filters / Make IMUcorrector Testable */
 public class IMUcorrector {
-    //TODO: Make this class testable!
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
 

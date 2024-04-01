@@ -30,7 +30,7 @@ public class Robot {
         double tpr; /** ticks per rotation */
         double wheelDiameter;
         double maxForwardSpeed;
-        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
+//        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
         PIDconsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
@@ -53,9 +53,11 @@ public class Robot {
     public final PixelArm arm;
     public final PlaneLauncher planeLauncher;
 
-    private ElapsedTime stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+    private ElapsedTime stopwatch;
 
-    public Robot(Parameters parameters, HardwareMap hardwareMap) {
+    /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
+     * a normal ElapsedTime. */
+    public Robot(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
         TPR = parameters.tpr;
         wheelDiameter = parameters.wheelDiameter;
         wheelCircumference = Math.PI * wheelDiameter;
@@ -72,13 +74,12 @@ public class Robot {
         drive = (parameters.driveParameters.present) ? new MecanumDriveImpl(parameters.driveParameters, hardwareMap) : new MecanumDriveBlank();
         arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, hardwareMap, stopwatch) : new PixelArmBlank();
         planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters, hardwareMap) : new PlaneLauncherBlank();
+
+        this.stopwatch = stopwatch;
     }
 
-    /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
-     * a normal ElapsedTime. */
-    public Robot(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
-        this(parameters, hardwareMap);
-        this.stopwatch = stopwatch; // this will override the initial / default assignment
+    public Robot(Parameters parameters, HardwareMap hardwareMap) {
+        this(parameters, hardwareMap, new ElapsedTime());
     }
 
     /** Call this method in the loop portion of your OpMode. */

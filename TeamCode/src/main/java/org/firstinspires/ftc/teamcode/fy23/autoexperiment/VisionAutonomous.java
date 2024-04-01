@@ -28,7 +28,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
-import org.firstinspires.ftc.teamcode.fy23.robot.generators.RampTwo;
+import org.firstinspires.ftc.teamcode.fy23.robot.old.RampTwo;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.openftc.easyopencv.OpenCvCamera;

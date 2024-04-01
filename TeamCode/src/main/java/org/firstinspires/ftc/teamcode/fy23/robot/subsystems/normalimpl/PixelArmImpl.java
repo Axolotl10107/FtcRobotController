@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 
-/** A normal implementation of {@link PixelArm} featuring acceleration limiting. */
+/** A normal implementation of {@link PixelArm} featuring acceleration limiting.
+ * <b>This class has two open tasks:</b> Robot and Subsystems / PixelArmImpl - place at point on plane  |||
+ * Filters / AccelLimiter Phase 2 in PixelArmImpl */
 public class PixelArmImpl implements PixelArm {
 
     private DcMotorEx pivotMotor;
@@ -21,15 +23,32 @@ public class PixelArmImpl implements PixelArm {
     private AccelLimiter pivotAccelLimiter;
     private AccelLimiter elevatorAccelLimiter;
 
+    private int pivotUpperLimit;
+    private int pivotLowerLimit;
+    private int elevatorUpperLimit;
+    private int elevatorLowerLimit;
+
+    private int pivotStoppingDistanceHalf;
+    private int pivotStoppingDistanceFull;
+    private int elevatorStoppingDistanceHalf;
+    private int elevatorStoppingDistanceFull;
+
     private ElapsedTime stopwatch;
+
+    public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap) {
+        this(parameters, hardwareMap, new ElapsedTime());
+    }
 
     public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
         pivotMotor = hardwareMap.get(DcMotorEx.class, parameters.pivotMotorName);
         elevatorMotor = hardwareMap.get(DcMotorEx.class, parameters.elevatorMotorName);
 
-        /** power per second */
+        pivotUpperLimit = parameters.pivotUpperLimit;
+        pivotLowerLimit = parameters.pivotLowerLimit;
+        elevatorUpperLimit = parameters.elevatorUpperLimit;
+        elevatorLowerLimit = parameters.elevatorLowerLimit;
+
         pivotAccelLimiter = new AccelLimiter(parameters.maxPivotAccel, parameters.maxPivotDeltaVEachLoop);
-        /** power per second */
         elevatorAccelLimiter = new AccelLimiter(parameters.maxElevatorAccel, parameters.maxElevatorDeltaVEachLoop);
 
         this.stopwatch = stopwatch;
@@ -38,6 +57,12 @@ public class PixelArmImpl implements PixelArm {
     @Override
     public void setPivotPower(double power) {
         double applyPower = pivotAccelLimiter.requestVel(power, getPivotPower(), stopwatch.seconds());
+        double currentPos = pivotMotor.getCurrentPosition();
+        if (currentPos > pivotUpperLimit) {
+            applyPower = Math.min(applyPower, 0);
+        } else if (currentPos < elevatorLowerLimit) {
+            applyPower = Math.max(applyPower, 0);
+        }
         pivotMotor.setPower(applyPower);
     }
 
@@ -49,6 +74,12 @@ public class PixelArmImpl implements PixelArm {
     @Override
     public void setElevatorPower(double power) {
         double applyPower = elevatorAccelLimiter.requestVel(power, getElevatorPower(), stopwatch.seconds());
+        double currentPos = elevatorMotor.getCurrentPosition();
+        if (currentPos > elevatorUpperLimit) {
+            applyPower = Math.min(applyPower, 0);
+        } else if (currentPos < elevatorLowerLimit) {
+            applyPower = Math.max(applyPower, 0);
+        }
         elevatorMotor.setPower(applyPower);
     }
 
@@ -58,6 +89,7 @@ public class PixelArmImpl implements PixelArm {
     }
 
     @Override
+    /** Called by robot.update(). You do not need to call this method. */
     public void update() {
 
     }

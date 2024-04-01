@@ -31,7 +31,7 @@ public class IndyTeleOpScheme {
 
     private boolean armMovementSet = false;
 
-    IndyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+    public IndyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
         this.driver = driver;
         this.manipulator = manipulator;
 
@@ -50,7 +50,7 @@ public class IndyTeleOpScheme {
 
     private void updateMovementState() {
         double drive = driver.right_trigger - driver.left_trigger;
-        double turn = driver.left_stick_x;
+        double turn = -driver.left_stick_x; // positive turn is counterclockwise
         double strafe = driver.right_stick_x;
         state.setDts(new DTS(drive, turn, strafe));
     }

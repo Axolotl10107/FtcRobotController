@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.fy23.processors;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockElapsedTime;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AccelLimiterTest {
 
@@ -138,6 +140,69 @@ public class AccelLimiterTest {
         plannedPathTest(8, 8, requestList, timeList, expectedList);
     }
 
+    @Test
+    public void requestDeltaVelOnNPrinter() {
+        AccelLimiter accelLimiter = new AccelLimiter(1, 10);
+        List<Double> deltaVelList = Arrays.asList(10.0, 10.0, 10.0, 10.0);
+        double currentTime = 0;
+        System.out.println("iter | time | deltaTime | first requested item | first output item");
+        for (int i = 0; i < 15; i++) {
+            List<Double> outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+            System.out.println(String.format("{%d} | {%f} | {%f} | {%f} | {%f}", i, currentTime, (double) i/10, deltaVelList.get(1), outputList.get(1)));
+            currentTime += ((double) (i+1) / 10);
+        }
+    }
+
+    @Test
+    public void requestDeltaVelOnNMaxAccelPassFail1() {
+        AccelLimiter accelLimiter = new AccelLimiter(5, 10);
+        List<Double> deltaVelList = Arrays.asList(5.0, 5.0, 5.0, 5.0);
+        double currentTime = 0;
+        List<Double> outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // make sure it takes the first loop to initialize
+        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+
+        currentTime = 0.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // Now it should give 2.5, since it's been .5 seconds and we can do 5 m/s every second
+        Assert.assertEquals(Arrays.asList(2.5, 2.5, 2.5, 2.5), outputList);
+
+        currentTime = 1.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        Assert.assertEquals(Arrays.asList(5.0, 5.0, 5.0, 5.0), outputList);
+
+        deltaVelList = Arrays.asList(10.0, 10.0, 10.0, 10.0);
+        currentTime = 2.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // We requested 10, but that's more than the maxAccel we set allows
+        Assert.assertEquals(Arrays.asList(5.0, 5.0, 5.0, 5.0), outputList);
+    }
+
+    @Test
+    public void requestDeltaVelOnNMaxAccelPassFail2() {
+        AccelLimiter accelLimiter = new AccelLimiter(5, 10);
+        List<Double> deltaVelList = Arrays.asList(-5.0, -5.0, -5.0, -5.0);
+        double currentTime = 0;
+        List<Double> outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // make sure it takes the first loop to initialize
+        Assert.assertEquals(Arrays.asList(-0.0, -0.0, -0.0, -0.0), outputList);
+
+        currentTime = 0.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // Now it should give -2.5, since it's been .5 seconds and we can do 5 m/s every second
+        Assert.assertEquals(Arrays.asList(-2.5, -2.5, -2.5, -2.5), outputList);
+
+        currentTime = 1.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        Assert.assertEquals(Arrays.asList(-5.0, -5.0, -5.0, -5.0), outputList);
+
+        deltaVelList = Arrays.asList(-10.0, -10.0, -10.0, -10.0);
+        currentTime = 2.5;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        // We requested -10, but that's more than the maxAccel we set allows
+        Assert.assertEquals(Arrays.asList(-5.0, -5.0, -5.0, -5.0), outputList);
+    }
+
 
     @Test
     // This is *not* a pass/fail test.
@@ -162,5 +227,65 @@ public class AccelLimiterTest {
     @Test
     public void stoppingDistanceSimplePassFail2() {
         Assert.assertEquals(5, stoppingDistanceSimplePassFail(10, 1, 10, 1000), 0.01);
+    }
+
+    @Test
+    public void stoppingDistanceSimplePassFail3() {
+        Assert.assertEquals(5, stoppingDistanceSimplePassFail(10, 1, -10, 1000), 0.01);
+    }
+
+    @Test
+    public void stoppingDistanceSimplePassFail4() {
+        Assert.assertEquals(45, stoppingDistanceSimplePassFail(10, 10, 30, 1000), 0.02);
+    }
+
+
+
+    @Test
+    public void rampAlongDistancePrinter() {
+        // parameters
+        double maxAccel = 10; // in meters per second
+        double maxDeltaVEachLoop = 10;
+        double timeStep = 0.1; // in seconds
+        double distance = 1000; // in meters
+        double maxVelocity = 30;
+        AccelLimiter accelLimiter = new AccelLimiter(maxAccel, maxDeltaVEachLoop);
+        MockElapsedTime stopwatch = new MockElapsedTime();
+        accelLimiter.setupRampAlongDistance(distance, maxVelocity, stopwatch);
+        double currentPos = 0;
+        double lastOutput;
+        int iters = 0;
+        System.out.println("iter | time | velocity | position");
+        while ((currentPos < (distance - 1)) && (iters < 1000)) {
+            iters += 1;
+            lastOutput = accelLimiter.updateRampAlongDistance(currentPos);
+            currentPos += lastOutput * timeStep;
+            System.out.println(String.format("{%d} | {%f} | {%f} | {%f}", iters, stopwatch.seconds(), lastOutput, currentPos));
+            stopwatch.setNanos((long) (stopwatch.nanoseconds() + (timeStep * 1000000000)));
+        }
+    }
+
+//    @Test
+    // Broken
+    public void rampAlongDistancePathTest() {
+        AccelLimiter accelLimiter = new AccelLimiter(5, 5);
+        MockElapsedTime stopwatch = new MockElapsedTime();
+        accelLimiter.setupRampAlongDistance(50, 15, stopwatch);
+        List<Double> distanceList = Arrays.asList(0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0);
+        List<Long> timeList = Arrays.asList(0L, 5L, 10L, 15L, 20L, 25L, 30L, 35L, 40L, 45L, 50L);
+        List<Double> expectedVelList = Arrays.asList(0.0, 5.0, 10.0, 15.0, 15.0, 15.0, 15.0, 15.0, 10.0, 5.0, 0.0);
+        double lastOutput = 0;
+        int failureCount = 0;
+        System.out.println("iter | time | distance | output vel | expected vel");
+        for (int i=0; i < distanceList.size(); i++) {
+            stopwatch.setNanos(TimeUnit.SECONDS.toNanos(timeList.get(i)));
+            lastOutput = accelLimiter.updateRampAlongDistance(distanceList.get(i));
+            System.out.println(String.format("{%d} | {%f} | {%f} | {%f} | {%f}", i, stopwatch.seconds(), distanceList.get(i), lastOutput, expectedVelList.get(i)));
+            if (Math.abs(expectedVelList.get(i) - lastOutput) > 0.01) {
+                failureCount += 1;
+            }
+        }
+        if (failureCount > 0) { System.out.println("Failed " + failureCount + " times."); }
+        Assert.assertEquals(0, failureCount);
     }
 }

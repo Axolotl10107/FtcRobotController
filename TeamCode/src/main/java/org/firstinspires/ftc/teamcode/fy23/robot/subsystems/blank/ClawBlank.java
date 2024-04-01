@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 
-/** An empty implementation of {@link Claw} that does nothing. */
+/** A blank implementation of {@link Claw} that does nothing. */
 public class ClawBlank implements Claw {
 
     @Override

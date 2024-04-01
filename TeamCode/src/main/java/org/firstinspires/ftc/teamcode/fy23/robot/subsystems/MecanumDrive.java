@@ -4,14 +4,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the entire drivebase, and the
+/** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the drivebase, and the
  * implementation will handle mapping that to the individual motors. */
 public interface MecanumDrive {
 
+    /** Contains motor names and settings - usually part of a set of Robot parameters */
     class Parameters {
-        public boolean present; /** Is this subsystem installed on this robot? */
+        /** Is this subsystem installed on this robot? */
+        public boolean present;
 
-        /** max. individual motor acceleration, in power per second
+        /** maximum individual motor acceleration, in power per second
          * (power loosely represents velocity) */
         public double maxMotorAccel;
 
@@ -35,15 +37,26 @@ public interface MecanumDrive {
         public String rightBackName;
         public DcMotor.Direction rightBackDirection;
 
-        public DcMotor.RunMode runMode; /** Applies to all motors */
-        public DcMotor.ZeroPowerBehavior zeroPowerBehavior; /** Applies to all motors */
+        /** Applies to all motors */
+        public DcMotor.RunMode runMode;
+
+        /** Applies to all motors */
+        public DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     }
 
-    /** Normalize a DTS before passing it in for desirable behavior. */
+    /** Apply motor powers from a DTS (Drive-Turn-Strafe).
+     * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior. */
     void applyDTS(DTS dts);
+
+    /** The usual DcMotor method, but applied to all four motors.
+     * @param runMode The RunMode to set */
     void setMode(DcMotor.RunMode runMode);
+
+    /** The usual DcMotor method, but applied to all four motors.
+     * @param behavior The ZeroPowerBehavior to set */
     void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior);
 
+    /** Called by robot.update(). You do not need to call this method. */
     void update();
 
 }

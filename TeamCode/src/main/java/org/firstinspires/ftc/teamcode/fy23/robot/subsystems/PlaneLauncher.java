@@ -11,6 +11,7 @@ public interface PlaneLauncher {
 
     void launch();
 
+    /** Called by robot.update(). You do not need to call this method. */
     void update();
 
 }

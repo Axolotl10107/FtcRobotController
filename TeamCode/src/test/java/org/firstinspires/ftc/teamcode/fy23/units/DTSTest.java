@@ -6,8 +6,9 @@ import org.junit.Test;
 
 public class DTSTest {
 
-    boolean randomize = true; /** if true, random DTS objects will be used over multiple
-    * iterations - otherwise, the fixedDTS will be used and each test will be run once */
+    /** if true, random DTS objects will be used over multiple
+     * iterations - otherwise, the fixedDTS will be used and each test will be run once */
+    boolean randomize = true;
 
     double equalsDelta = 0.01;
 

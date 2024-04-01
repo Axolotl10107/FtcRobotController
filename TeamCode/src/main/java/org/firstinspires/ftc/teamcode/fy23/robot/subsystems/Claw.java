@@ -20,6 +20,7 @@ public interface Claw {
     void setState(State state);
     State getState();
 
+    /** Called by robot.update(). You do not need to call this method. */
     void update();
 
 }

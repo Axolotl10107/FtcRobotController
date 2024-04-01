@@ -36,6 +36,7 @@ public class ClawImpl implements Claw {
     }
 
     @Override
+    /** Called by robot.update(). You do not need to call this method. */
     public void update() {
 
     }
