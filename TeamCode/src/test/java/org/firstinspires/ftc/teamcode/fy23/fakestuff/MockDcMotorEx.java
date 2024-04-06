@@ -20,7 +20,7 @@ import java.util.Map;
 /** This appears as a normal {@link DcMotorEx} to your program, and it even updates the position for
  * you over time based on the set velocity and can determine the velocity the motor is running at
  * based on the set power (approximated as a percentage of the maximum velocity). It also handles
- * {@link com.qualcomm.robotcore.hardware.DcMotor.RunMode}.RUN_TO_POSITION mode, running at the set
+ * {@link com.qualcomm.robotcore.hardware.DcMotorEx.RunMode}.RUN_TO_POSITION mode, running at the set
  * power until the position is reached. Remember that this simulated class is perfect, without the
  * natural variance of a real motor. Have your test put this "device" into the
  * {@link com.qualcomm.robotcore.hardware.HardwareMap} with the correct name so that the test
@@ -208,7 +208,7 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
-    /** The name of this method is confusing. It simply sets the power to 0 and sets the {@link com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior}
+    /** The name of this method is confusing. It simply sets the power to 0 and sets the {@link com.qualcomm.robotcore.hardware.DcMotorEx.ZeroPowerBehavior}
      * to FLOAT. This completely removes power from the motor. */
     public void setPowerFloat() {
         setZeroPowerBehavior(ZeroPowerBehavior.FLOAT);
@@ -217,7 +217,7 @@ public class MockDcMotorEx implements DcMotorEx {
 
     @Override
     /** Returns if the motor is simply floating, completely unpowered. Specifically, returns if the
-     * power is set to 0 and the {@link com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior}
+     * power is set to 0 and the {@link com.qualcomm.robotcore.hardware.DcMotorEx.ZeroPowerBehavior}
      * is set to FLOAT. */
     public boolean getPowerFloat() {
         return getZeroPowerBehavior() == ZeroPowerBehavior.FLOAT && getPower() == 0.0;
@@ -304,7 +304,7 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     @Override
-    /** Sets the {@link com.qualcomm.robotcore.hardware.DcMotorSimple.Direction} to FORWARD.
+    /** Sets the {@link com.qualcomm.robotcore.hardware.DcMotorEx.Direction} to FORWARD.
      * (matches the original implementation) */
     public void resetDeviceConfigurationForOpMode() {
         setDirection(Direction.FORWARD);

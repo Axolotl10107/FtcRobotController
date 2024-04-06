@@ -34,17 +34,23 @@ MecanumDrive:
 - DcMotor.ZeroPowerBehavior zeroPowerBehavior | The ZeroPowerBehavior of all four motors
 
 PixelArm:
-- boolean present                           | Is this subsystem installed on this robot?
-- String pivotMotorName                     | The name of the pivot motor in the HardwareMap
-- String elevatorMotorName                  | The name of the elevator motor in the HardwareMap
-- double maxPivotAccel                      | The maximum acceleration for the pivot motor
-- double maxPivotDeltaVEachLoop             | The maximum change in velocity each loop for the pivot motor (prevents jerking)
-- int pivotUpperLimit                       | The upper limit of the pivot motor's motion, in encoder ticks
-- int pivotLowerLimit                       |
-- double maxElevatorAccel                   | 
-- double maxElevatorDeltaVEachLoop          | 
-- int elevatorUpperLimit                    | 
-- int elevatorLowerLimit                    |
+- boolean present                             | Is this subsystem installed on this robot?
+- String pivotMotor                           | The pivot motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
+- String elevatorMotor                        | The elevator motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
+- AccelLimiter pivotAccelLimiter              | An AccelLimiter object that has been configured for the pivot motor
+- PowerTpSConverter pivotPowerTpSConverter    | A PowerTpSConverter set up for the pivot motor
+- double pivotTicksPerDegree                  | Encoder ticks traveled per degree of rotation
+- int pivotUpperLimit                         | The upper limit of the pivot motor's motion, in encoder ticks
+- int pivotLowerLimit                         | 
+- DigitalDevice pivotUpperLimitSwitch         | A DigitalDevice that represents a physical upper limit switch (high limit in encoder ticks!) for the pivot motor
+- DigitalDevice pivotLowerLimitSwitch         | 
+- AccelLimiter elevatorAccelLimiter           | An AccelLimiter object that has been configured for the elevator motor 
+- PowerTpSConverter elevatorPowerTpSConverter | 
+- double elevatorTicksPerMillimeter           | Encoder ticks (or fraction of a tick) traveled per millimeter of slide travel
+- int elevatorUpperLimit                      | 
+- int elevatorLowerLimit                      | 
+- DigitalDevice elevatorUpperLimitSwitch      | 
+- DigitalDevice elevatorLowerLimitSwitch      | 
 
 PlaneLauncher:
 - boolean present       | Is this subsystem installed on this robot?

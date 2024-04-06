@@ -52,10 +52,14 @@ public class RobotRoundhouse {
         armParams.maxPivotDeltaVEachLoop = 0.1;
         armParams.pivotUpperLimit = 2000;
         armParams.pivotLowerLimit = 0;
+        armParams.pivotMotorTPSAtHalfPower = 1249;
+        armParams.pivotMotorTPSAtFullPower = 2499;
         armParams.maxElevatorAccel = 1.0;
         armParams.maxElevatorDeltaVEachLoop = 0.1;
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
+        armParams.elevatorMotorTPSAtHalfPower = 1249;
+        armParams.elevatorMotorTPSAtFullPower = 2499;
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
