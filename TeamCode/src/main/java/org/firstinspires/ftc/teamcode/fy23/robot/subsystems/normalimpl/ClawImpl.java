@@ -13,8 +13,8 @@ public class ClawImpl implements Claw {
     private double closePosition;
     private Claw.State state = Claw.State.NONE;
 
-    public ClawImpl(Claw.Parameters parameters, HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, parameters.clawServoName);
+    public ClawImpl(Claw.Parameters parameters) {
+        servo = parameters.clawServo;
         openPosition = parameters.openPosition;
         closePosition = parameters.closePosition;
     }

@@ -46,11 +46,11 @@ public class PixelArmImpl implements PixelArm {
 
     private ElapsedTime stopwatch;
 
-    public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap) {
-        this(parameters, hardwareMap, new ElapsedTime());
+    public PixelArmImpl(PixelArm.Parameters parameters) {
+        this(parameters, new ElapsedTime());
     }
 
-    public PixelArmImpl(PixelArm.Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
+    public PixelArmImpl(PixelArm.Parameters parameters, ElapsedTime stopwatch) {
         pivotMotor = parameters.pivotMotor;
         elevatorMotor = parameters.elevatorMotor;
 

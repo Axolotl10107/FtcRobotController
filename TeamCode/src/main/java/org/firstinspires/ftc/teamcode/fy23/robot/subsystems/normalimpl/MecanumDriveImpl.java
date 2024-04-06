@@ -24,19 +24,13 @@ public class MecanumDriveImpl implements MecanumDrive {
     private ElapsedTime stopwatch;
 
     /** Pass in an ElapsedTime. Useful for UnitTests, which can pass in a MockElapsedTime.
-     * @param hardwareMap Passed in by the Robot. Your OpMode doesn't need to worry about this.
      * @param parameters Passed in by the Robot. Your OpMode doesn't need to worry about this.
      * @param stopwatch ElapsedTime to be used for acceleration control */
-    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
-        leftFront = hardwareMap.get(DcMotorEx.class, parameters.leftFrontName);
-        rightFront = hardwareMap.get(DcMotorEx.class, parameters.rightFrontName);
-        leftBack = hardwareMap.get(DcMotorEx.class, parameters.leftBackName);
-        rightBack = hardwareMap.get(DcMotorEx.class, parameters.rightBackName);
-
-        leftFront.setDirection(parameters.leftFrontDirection);
-        rightFront.setDirection(parameters.rightFrontDirection);
-        leftBack.setDirection(parameters.leftBackDirection);
-        rightBack.setDirection(parameters.rightBackDirection);
+    public MecanumDriveImpl(MecanumDrive.Parameters parameters, ElapsedTime stopwatch) {
+        leftFront = parameters.leftFrontMotor;
+        rightFront = parameters.rightFrontMotor;
+        leftBack = parameters.leftBackMotor;
+        rightBack = parameters.rightBackMotor;
 
         try {
             setMode(parameters.runMode);
@@ -50,15 +44,14 @@ public class MecanumDriveImpl implements MecanumDrive {
             setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
-        accelLimiter = new AccelLimiter(parameters.maxMotorAccel, parameters.maxDeltaVEachLoop);
+        accelLimiter = parameters.accelLimiter;
         this.stopwatch = stopwatch;
     }
 
     /** Creates a normal ElapsedTime. Good for use in OpModes.
-     * @param hardwareMap Passed in by the Robot. Your OpMode doesn't need to worry about this.
      * @param parameters Passed in by the Robot. Your OpMode doesn't need to worry about this. */
-    public MecanumDriveImpl(MecanumDrive.Parameters parameters, HardwareMap hardwareMap) {
-        this(parameters, hardwareMap, new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS));
+    public MecanumDriveImpl(MecanumDrive.Parameters parameters) {
+        this(parameters, new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS));
     }
 
     /** Takes these components as motor powers and limits the acceleration.

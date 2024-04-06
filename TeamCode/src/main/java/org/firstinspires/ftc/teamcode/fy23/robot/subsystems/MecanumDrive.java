@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the drivebase, and the
@@ -13,29 +15,21 @@ public interface MecanumDrive {
         /** Is this subsystem installed on this robot? */
         public boolean present;
 
-        /** maximum individual motor acceleration, in power per second
-         * (power loosely represents velocity) */
-        public double maxMotorAccel;
+        /** An AccelLimiter object, already instantiated */
+        public AccelLimiter accelLimiter;
 
-        /** prevents jerking - in power */
-        public double maxDeltaVEachLoop;
-
-        /** The name of the motor on the left front corner of the drivebase */
-        public String leftFrontName;
-
-        /** Direction motor spins when positive power is applied - to drive the motor "backwards",
-         * do not set this to reverse! Set the power to a negative value. What "FORWARD" or "REVERSE" is depends on your
-         * motors and how you've laid out your robot, so determine that experimentally. */
-        public DcMotor.Direction leftFrontDirection;
-
-        public String rightFrontName;
-        public DcMotor.Direction rightFrontDirection;
-
-        public String leftBackName;
-        public DcMotor.Direction leftBackDirection;
-
-        public String rightBackName;
-        public DcMotor.Direction rightBackDirection;
+        /** The motor object on the left front corner of the drivebase, already grabbed from the HardwareMap and
+         * configured (direction set) */
+        public DcMotorEx leftFrontMotor;
+        /** The motor object on the right front corner of the drivebase, already grabbed from the HardwareMap and
+         * configured (direction set) */
+        public DcMotorEx rightFrontMotor;
+        /** The motor object on the left back corner of the drivebase, already grabbed from the HardwareMap and
+         * configured (direction set) */
+        public DcMotorEx leftBackMotor;
+        /** The motor object on the right back corner of the drivebase, already grabbed from the HardwareMap and
+         * configured (direction set) */
+        public DcMotorEx rightBackMotor;
 
         /** Applies to all motors */
         public DcMotor.RunMode runMode;

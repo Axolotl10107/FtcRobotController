@@ -11,7 +11,7 @@ Robot:
 
 Claw:
 - boolean present       | Is this subsystem installed on this robot?
-- String clawServoName  | The name of the servo in the HardwareMap
+- String clawServo      | The Servo object, already grabbed from the HardwareMap
 - double openPosition   | The position (between 0 and 1) where the claw is considered "open" - determined experimentally
 - double closedPosition | 
 
@@ -20,16 +20,11 @@ FriendlyIMU:
 
 MecanumDrive:
 - boolean present                             | Is this subsystem installed on this robot?
-- double maxMotorAccel                        | Maximum acceleration, in power per second per second
-- double maxDeltaVEachLoop                    | Maximum change in velocity each loop - prevents jerking
-- String leftFrontName                        | Name of the left front motor in the HardwareMap
-- DcMotor.Direction leftFrontDirection        | The direction the left front motor spins when positive power is applied (FORWARD being clockwise)
-- String rightFrontName                       | 
-- DcMotor.Direction rightFrontDirection       | 
-- String leftBackName                         | 
-- DcMotor.Direction leftBackDirection         | 
-- String rightBackName                        | 
-- DcMotor.Direction rightBackDirection        | 
+- AccelLimiter accelLimiter                   | An AccelLimiter object, already instantiated
+- DcMotorEx leftFrontMotor                    | The DcMotorEx object for the motor on the left front corner of the drivebase, already instantiated and configured (direction set)
+- DcMotorEx rightFrontMotor                   | 
+- DcMotorEx leftBackMotor                     | 
+- DcMotorEx rightBackMotor                    | 
 - DcMotor.RunMode runMode                     | The RunMode of all four motors
 - DcMotor.ZeroPowerBehavior zeroPowerBehavior | The ZeroPowerBehavior of all four motors
 
@@ -54,4 +49,4 @@ PixelArm:
 
 PlaneLauncher:
 - boolean present       | Is this subsystem installed on this robot?
-- String planeServoName | The name of the servo in the HardwareMap
+- Servo planeServo      | The Servo object, already grabbed from the HardwareMap

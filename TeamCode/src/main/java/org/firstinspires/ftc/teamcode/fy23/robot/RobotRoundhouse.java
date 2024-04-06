@@ -1,22 +1,28 @@
 package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.SimplePowerTpSConverter;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 public class RobotRoundhouse {
 
-    public static Robot.Parameters getRobotAParams() {
+    public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;
-        clawParams.clawServoName = "clawServo";
+        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
         clawParams.openPosition = 0.1;
         clawParams.closePosition = 0.01;
 
@@ -26,40 +32,41 @@ public class RobotRoundhouse {
         MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.present = true;
 
-        driveParams.maxMotorAccel = 2; // meters per second
-        driveParams.maxDeltaVEachLoop = 0.1;
+        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 
-        driveParams.leftFrontName = "leftFront";
-        driveParams.leftFrontDirection = REVERSE;
+        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+        driveParams.leftFrontMotor.setDirection(REVERSE);
 
-        driveParams.rightFrontName = "rightFront";
-        driveParams.rightFrontDirection = FORWARD;
+        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
+        driveParams.rightFrontMotor.setDirection(FORWARD);
 
-        driveParams.leftBackName = "leftBack";
-        driveParams.leftBackDirection = REVERSE;
+        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
+        driveParams.leftBackMotor.setDirection(REVERSE);
 
-        driveParams.rightBackName = "rightBack";
-        driveParams.rightBackDirection = FORWARD;
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        driveParams.rightBackMotor.setDirection(FORWARD);
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
         PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
-        armParams.pivotMotorName = "armPivot";
-        armParams.elevatorMotorName = "armExtend";
-        armParams.maxPivotAccel = 1.0; // meters per second
-        armParams.maxPivotDeltaVEachLoop = 0.1;
-        armParams.pivotUpperLimit = 2000;
-        armParams.pivotLowerLimit = 0;
-        armParams.pivotMotorTPSAtHalfPower = 1249;
-        armParams.pivotMotorTPSAtFullPower = 2499;
-        armParams.maxElevatorAccel = 1.0;
-        armParams.maxElevatorDeltaVEachLoop = 0.1;
+        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
+        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
+        armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
+        armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
+        armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
+        armParams.pivotUpperLimit = 2000; // TODO: not measured on real hardware!!
+        armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
+        armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
+        armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
+        armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
-        armParams.elevatorMotorTPSAtHalfPower = 1249;
-        armParams.elevatorMotorTPSAtFullPower = 2499;
+        armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
@@ -80,7 +87,7 @@ public class RobotRoundhouse {
         return params;
     }
 
-    public static Robot.Parameters getRobotBParams() {
+    public static Robot.Parameters getRobotBParams(HardwareMap hardwareMap) {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
@@ -90,20 +97,19 @@ public class RobotRoundhouse {
         MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.present = true;
 
-        driveParams.maxMotorAccel = 2.0;
-        driveParams.maxDeltaVEachLoop = 0.1;
+        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 
-        driveParams.leftFrontName = "leftFront";
-        driveParams.leftFrontDirection = REVERSE;
+        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+        driveParams.leftFrontMotor.setDirection(REVERSE);
 
-        driveParams.rightFrontName = "rightFront";
-        driveParams.rightFrontDirection = FORWARD;
+        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
+        driveParams.rightFrontMotor.setDirection(FORWARD);
 
-        driveParams.leftBackName = "leftBack";
-        driveParams.leftBackDirection = REVERSE;
+        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
+        driveParams.leftBackMotor.setDirection(REVERSE);
 
-        driveParams.rightBackName = "rightBack";
-        driveParams.rightBackDirection = FORWARD;
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        driveParams.rightBackMotor.setDirection(FORWARD);
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
@@ -129,7 +135,7 @@ public class RobotRoundhouse {
         return params;
     }
 
-    public static Robot.Parameters getVirtualRobotParams() {
+    public static Robot.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
@@ -139,20 +145,19 @@ public class RobotRoundhouse {
         MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
         driveParams.present = true;
 
-        driveParams.maxMotorAccel = 1.0;
-        driveParams.maxDeltaVEachLoop = 0.1;
+        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 
-        driveParams.leftFrontName = "front_left_motor";
-        driveParams.leftFrontDirection = REVERSE;
+        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "front_left_motor");
+        driveParams.leftFrontMotor.setDirection(REVERSE);
 
-        driveParams.rightFrontName = "front_right_motor";
-        driveParams.rightFrontDirection = FORWARD;
+        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "front_right_motor");
+        driveParams.rightFrontMotor.setDirection(FORWARD);
 
-        driveParams.leftBackName = "back_left_motor";
-        driveParams.leftBackDirection = REVERSE;
+        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "back_left_motor");
+        driveParams.leftBackMotor.setDirection(REVERSE);
 
-        driveParams.rightBackName = "back_right_motor";
-        driveParams.rightBackDirection = FORWARD;
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "back_right_motor");
+        driveParams.rightBackMotor.setDirection(FORWARD);
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;

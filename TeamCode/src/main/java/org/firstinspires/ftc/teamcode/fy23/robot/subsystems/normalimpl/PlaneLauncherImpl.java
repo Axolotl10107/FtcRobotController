@@ -11,8 +11,8 @@ public class PlaneLauncherImpl implements PlaneLauncher {
     private Servo servo;
     private boolean launchComplete;
 
-    public PlaneLauncherImpl(Parameters parameters, HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, parameters.planeServoName);
+    public PlaneLauncherImpl(Parameters parameters) {
+        servo = parameters.planeServo;
     }
 
     @Override
