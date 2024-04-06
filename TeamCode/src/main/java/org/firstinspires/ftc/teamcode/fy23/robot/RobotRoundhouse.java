@@ -70,7 +70,7 @@ public class RobotRoundhouse {
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
-        planeLauncherParams.planeServoName = "planeServo";
+        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeServo");
 
         Robot.Parameters params = new Robot.Parameters();
         params.tpr = 537.7; // ticks per rotation
