@@ -65,7 +65,7 @@ public class RobotBIMUDriveTest extends OpMode {
 //        }
 
         telemetry.addData("Requested turn", gamepad.dts().turn);
-        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
+//        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
         telemetry.addData("Actual turn", scaler.scaledTurn);
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Proportional", pid.getProportional());

@@ -14,6 +14,7 @@ public class TeleOpState {
     private boolean launchPlane = false;
     private boolean driveSpeedUp = false;
     private boolean driveSpeedDown = false;
+    private boolean squareUp = false;
 
     public DTS getDts() {
         return dts;
@@ -69,5 +70,13 @@ public class TeleOpState {
 
     public void setDriveSpeedDown(boolean driveSpeedDown) {
         this.driveSpeedDown = driveSpeedDown;
+    }
+
+    public boolean isSquareUp() {
+        return squareUp;
+    }
+
+    public void setSquareUp(boolean squareUp) {
+        this.squareUp = squareUp;
     }
 }

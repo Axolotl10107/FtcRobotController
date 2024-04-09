@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
@@ -39,20 +41,23 @@ public class RobotB implements AnyRobot {
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public RobotB(HardwareMap hardwareMap) {
         MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        driveParams.present = true;
 
-        driveParams.leftFrontName = "leftFront";
-        driveParams.leftFrontDirection = REVERSE;
+        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 
-        driveParams.rightFrontName = "rightFront";
-        driveParams.rightFrontDirection = FORWARD;
+        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
+        driveParams.leftFrontMotor.setDirection(REVERSE);
 
-        driveParams.leftBackName = "leftBack";
-        driveParams.leftBackDirection = REVERSE;
+        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
+        driveParams.rightFrontMotor.setDirection(FORWARD);
 
-        driveParams.rightBackName = "rightBack";
-        driveParams.rightBackDirection = FORWARD;
+        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
+        driveParams.leftBackMotor.setDirection(REVERSE);
 
-        drive = new MecanumDriveImpl(driveParams, hardwareMap);
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        driveParams.rightBackMotor.setDirection(FORWARD);
+
+        drive = new MecanumDriveImpl(driveParams);
 
         // TunablePID tuning for this robot - select exactly one
         pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far

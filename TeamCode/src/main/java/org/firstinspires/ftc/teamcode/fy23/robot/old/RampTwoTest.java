@@ -33,7 +33,7 @@ public class RampTwoTest extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getRobotBParams(), hardwareMap);
+        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
         robot.drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // This will be applied to all of the drive motors.
 

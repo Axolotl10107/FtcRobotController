@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
@@ -39,20 +41,23 @@ public class VirtualRobot implements AnyRobot {
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public VirtualRobot(HardwareMap hardwareMap) {
         MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        driveParams.present = true;
 
-        driveParams.leftFrontName = "front_left_motor";
-        driveParams.leftFrontDirection = REVERSE;
+        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 
-        driveParams.rightFrontName = "front_right_motor";
-        driveParams.rightFrontDirection = FORWARD;
+        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "front_left_motor");
+        driveParams.leftFrontMotor.setDirection(REVERSE);
 
-        driveParams.leftBackName = "back_left_motor";
-        driveParams.leftBackDirection = REVERSE;
+        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "front_right_motor");
+        driveParams.rightFrontMotor.setDirection(FORWARD);
 
-        driveParams.rightBackName = "back_right_motor";
-        driveParams.rightBackDirection = FORWARD;
+        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "back_left_motor");
+        driveParams.leftBackMotor.setDirection(REVERSE);
 
-        drive = new MecanumDriveImpl(driveParams, hardwareMap);
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "back_right_motor");
+        driveParams.rightBackMotor.setDirection(FORWARD);
+
+        drive = new MecanumDriveImpl(driveParams);
 
         // TunablePID tuning for this robot - select exactly one
 //        pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far

@@ -23,6 +23,7 @@ public class IndyTeleOpScheme {
     private Button planeLaunchButton;
     private Button driveSpeedUpButton;
     private Button driveSpeedDownButton;
+    private Button squareUpButton;
 
     private Axis armSlowUp;
     private Axis armSlowDown;
@@ -42,6 +43,7 @@ public class IndyTeleOpScheme {
         planeLaunchButton = new MomentaryButton( () -> driver.right_bumper );
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
+        squareUpButton = new TriggerButton( () -> driver.left_bumper );
         armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
         armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
         armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
@@ -112,6 +114,10 @@ public class IndyTeleOpScheme {
         state.setDriveSpeedDown(driveSpeedDownButton.isActive());
     }
 
+    private void updateSquareUpState() {
+        state.setSquareUp(squareUpButton.isActive());
+    }
+
     public TeleOpState getState() {
         armMovementSet = false;
         updateMovementState();
@@ -123,6 +129,7 @@ public class IndyTeleOpScheme {
         updateLaunchPlaneState();
         updateDriveSpeedUpState();
         updateDriveSpeedDownState();
+        updateSquareUpState();
 
         return state;
     }

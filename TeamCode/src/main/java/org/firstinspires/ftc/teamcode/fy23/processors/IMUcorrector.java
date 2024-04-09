@@ -17,14 +17,15 @@ public class IMUcorrector {
 
     // configuration
     private double maxTotalCorrection = 0.3;
-    private double hdgErrThresholdStill = 0.2;
-    private double hdgErrThresholdMoving = 0.2;
+    private double hdgErrThresholdStill = 1.0;
+    private double hdgErrThresholdMoving = 1.0;
     //minimum actionable heading error
-    private double turnThreshold = 0.01;
+    private double turnThreshold = 0.1;
     // how much you must be turning for heading maintenance to temporarily stop
     // and a new target heading to be set when you're done turning
-
-    public double correctedTurnPower; // for telemetry
+    private double movementThreshold = 0.1;
+    // how much you must be moving for the moving threshold, rather than the still threshold, to come into effect
+    private int postSquaringUpPatience = 1000; // in milliseconds
 
     public FriendlyIMUImpl imu; // public for telemetry
     public TunablePID pid; // public for telemetry
@@ -33,11 +34,13 @@ public class IMUcorrector {
     public double headingError = 0; // public for telemetry
     public double lastError = 0; // public for telemetry
     private double lastTurn = 0;
+    private double lastHeading = 0;
+    public boolean squaringUp = false;
 
     private DTS returnDTS;
 
     private ElapsedTime errorSampleTimer;
-    private ElapsedTime pidEnableTimer;
+    public ElapsedTime postSquaringUpPatienceTimer;
 
     public IMUcorrector(HardwareMap hardwareMap, double p, double im, double dm) {
         FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
@@ -45,16 +48,21 @@ public class IMUcorrector {
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(p, im, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        postSquaringUpPatienceTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
     public IMUcorrector(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
-        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
-        pid = new TunablePID(pidConsts.p, pidConsts.im, pidConsts.dm);
-        errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+        this(hardwareMap, pidConsts.p, pidConsts.im, pidConsts.dm);
+    }
+
+    private DTS applyCorrection(DTS dts) {
+        double correctionPower = pid.getCorrectionPower(headingError, lastError);
+        double safeCorrectionPower = Range.clip(correctionPower, -maxTotalCorrection, maxTotalCorrection);
+        return dts.withTurn(safeCorrectionPower);
+    }
+
+    private boolean moving(DTS dts) {
+        return (Math.abs(dts.drive) + Math.abs(dts.strafe) > movementThreshold);
     }
 
     /** The drive and strafe values will remain unmodified, but it will <b>add</b> correction to the turn value. */
@@ -68,36 +76,53 @@ public class IMUcorrector {
         }
         headingError = targetHeading - imu.yaw(); //imu.yaw() returns our heading
 
-        // just one if statement to actually do the correction
         if (Math.abs(dts.turn) > turnThreshold) {
-            returnDTS = returnDTS.withTurn(dts.turn);
-            // if the driver is turning, let them turn
-            pid.clearIntegral();
-            pid.clearDerivative();
-            pidEnableTimer.reset();
-            //we don't need PID while turning
-        } else if ((Math.abs(headingError) > hdgErrThresholdStill && Math.abs(dts.drive) < turnThreshold && Math.abs(dts.strafe) < turnThreshold) || (Math.abs(headingError) > hdgErrThresholdMoving && (Math.abs(dts.drive) > turnThreshold) || Math.abs(dts.strafe) > turnThreshold)) {
-            returnDTS = returnDTS.withTurn(Range.clip(pid.getCorrectionPower(headingError, lastError), -maxTotalCorrection, maxTotalCorrection));
-            if (pidEnableTimer.milliseconds() < 800) {
-                pid.clearIntegral();
+            returnDTS = dts; // if the driver is turning, let them turn
+        } else {
+            if ((Math.abs(lastTurn) > turnThreshold && Math.abs(imu.yaw() - lastHeading) < turnThreshold)
+                    && (!squaringUp && postSquaringUpPatienceTimer.milliseconds() > postSquaringUpPatience)) {
+                // if we're actually done turning (we just fell below the turning threshold
+                targetHeading = imu.yaw(); // we want to face the direction they turned to now
+                pid.clearIntegral(); // accumulated corrections are irrelevant now
                 pid.clearDerivative();
+                headingError = 0; // this will go into lastError
             }
-            // otherwise, we have it to ourselves :) The TunablePID does the PID for us. We just
-            //determine when we can use it and give it the numbers it needs.
+            if (moving(dts) || squaringUp) {
+                if (Math.abs(headingError) > hdgErrThresholdMoving) {
+                    // if we're above the threshold
+                    returnDTS = applyCorrection(dts);
+                }
+            } else if (Math.abs(headingError) > hdgErrThresholdStill) {
+                // if we're not moving and above the still threshold
+                returnDTS = applyCorrection(dts);
+            } else {
+                returnDTS = dts; // we're not moving and we're within tolerances, so don't bother with correction
+            }
+
+            if (squaringUp) {
+                if (moving(dts)) {
+                    if (Math.abs(headingError) <= hdgErrThresholdMoving) {
+                        squaringUp = false;
+                        postSquaringUpPatienceTimer.reset();
+                    }
+                } else {
+                    if (Math.abs(headingError) <= hdgErrThresholdStill) {
+                        squaringUp = false;
+                        postSquaringUpPatienceTimer.reset();
+                    }
+                }
+            }
         }
 
-        // this if statement is for ourselves
-        if (Math.abs(dts.turn) < turnThreshold && lastTurn > turnThreshold) {
-            targetHeading = imu.yaw();
-            // if they just got done turning, set the current heading as our new target to hold
-            pid.clearIntegral();
-            pid.clearDerivative();
-            headingError = 0; // this will end up in lastError, where I want it, next iteration
-            // and reset the accumulated corrections now that they are irrelevant
-        }
-        lastTurn = Math.abs(dts.turn);
+        lastTurn = Math.abs(imu.yaw() - lastHeading);
+        lastHeading = imu.yaw();
 
-        correctedTurnPower = returnDTS.turn; // for telemetry
         return returnDTS;
+    }
+
+    /** Set the target heading to the nearest cardinal direction */
+    public void squareUp() {
+        targetHeading = 90 * Math.round(targetHeading / 90);
+        squaringUp = true;
     }
 }

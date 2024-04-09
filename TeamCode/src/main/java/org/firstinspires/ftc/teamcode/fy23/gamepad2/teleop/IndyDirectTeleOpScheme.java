@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
@@ -27,6 +28,7 @@ public class IndyDirectTeleOpScheme {
     private Button planeLaunchButton;
     private Button driveSpeedUpButton;
     private Button driveSpeedDownButton;
+    private Button squareUpButton;
 
     private Axis armSlowUp;
     private Axis armSlowDown;
@@ -47,6 +49,7 @@ public class IndyDirectTeleOpScheme {
         planeLaunchButton = new TriggerButton( () -> driver.right_bumper );
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
+        squareUpButton = new TriggerButton( () -> driver.left_bumper );
         armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
         armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
         armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
@@ -118,7 +121,13 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    public void update(Robot robot) {
+    private void updateSquareUpState(IMUcorrector imuCorrector) {
+        if (squareUpButton.isActive()) {
+            imuCorrector.squareUp();
+        }
+    }
+
+    public void update(Robot robot, IMUcorrector imuCorrector) {
         armMovementSet = false;
         updateMovementState(robot);
         updateArmMediumMovementState(robot);
@@ -129,6 +138,7 @@ public class IndyDirectTeleOpScheme {
         updateLaunchPlaneState(robot);
         updateDriveSpeedUpState(robot);
         updateDriveSpeedDownState(robot);
+        updateSquareUpState(imuCorrector);
     }
 
 }

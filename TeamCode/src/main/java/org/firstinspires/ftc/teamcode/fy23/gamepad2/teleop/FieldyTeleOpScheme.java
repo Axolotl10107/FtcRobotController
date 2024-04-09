@@ -22,6 +22,7 @@ public class FieldyTeleOpScheme {
     private Button planeLaunchButton;
     private Button driveSpeedUpButton;
     private Button driveSpeedDownButton;
+    private Button squareUpButton;
 
     private Axis armSlowUp;
     private Axis armSlowDown;
@@ -30,7 +31,7 @@ public class FieldyTeleOpScheme {
 
     private boolean armMovementSet = false;
 
-    FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+    public FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
         this.driver = driver;
         this.manipulator = manipulator;
 
@@ -41,6 +42,7 @@ public class FieldyTeleOpScheme {
         planeLaunchButton = new MomentaryButton( () -> driver.right_bumper );
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
+        squareUpButton = new TriggerButton( () -> driver.left_bumper );
         armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
         armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
         armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
@@ -111,6 +113,10 @@ public class FieldyTeleOpScheme {
         state.setDriveSpeedDown(driveSpeedDownButton.isActive());
     }
 
+    private void updateSquareUpState() {
+        state.setSquareUp(squareUpButton.isActive());
+    }
+
     public TeleOpState getState(double heading) {
         armMovementSet = false;
         updateMovementState(heading);
@@ -122,8 +128,8 @@ public class FieldyTeleOpScheme {
         updateLaunchPlaneState();
         updateDriveSpeedUpState();
         updateDriveSpeedDownState();
+        updateSquareUpState();
 
         return state;
     }
-
 }

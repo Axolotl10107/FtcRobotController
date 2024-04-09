@@ -65,15 +65,15 @@ public class Robot {
         hdgCorrectionPIDconsts = parameters.hdgCorrectionPIDconsts;
 
         if (parameters.clawParameters.present) {
-            claw = new ClawImpl(parameters.clawParameters, hardwareMap);
+            claw = new ClawImpl(parameters.clawParameters);
         } else {
             claw = new ClawBlank();
         }
         // above block and below statements work the same way
         imu = (parameters.imuParameters.present) ? new FriendlyIMUImpl(parameters.imuParameters, hardwareMap) : new FriendlyIMUBlank();
-        drive = (parameters.driveParameters.present) ? new MecanumDriveImpl(parameters.driveParameters, hardwareMap) : new MecanumDriveBlank();
-        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, hardwareMap, stopwatch) : new PixelArmBlank();
-        planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters, hardwareMap) : new PlaneLauncherBlank();
+        drive = (parameters.driveParameters.present) ? new MecanumDriveImpl(parameters.driveParameters) : new MecanumDriveBlank();
+        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, stopwatch) : new PixelArmBlank();
+        planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
 
         this.stopwatch = stopwatch;
     }
