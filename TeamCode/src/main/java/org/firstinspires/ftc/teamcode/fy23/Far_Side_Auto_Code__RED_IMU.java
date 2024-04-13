@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
@@ -18,7 +21,7 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     private DcMotor armPivot = null;
     private DcMotor armExtend = null;
 
-    private RobotA robot; // this contains your motors
+    private Robot robot; // this contains your motors
     private IMUcorrector imuCorrector;
 
     DTS desiredMotion;
@@ -39,8 +42,15 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        robot = new RobotA(hardwareMap);
-        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
+        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
+        params.haveHitTargetTolerance = 0.1;
+        params.hdgErrTolerance = 1.0;
+        params.maxCorrection = 0.1;
+        params.turnThreshold = 0.05;
+        params.imu = robot.imu;
+        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        imuCorrector = new IMUcorrector(params);
 
         stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
@@ -75,10 +85,10 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
         desiredMotion = new DTS(0.5, 0, 0);
         while (robot.drive.getAvgEncoderPos() < targetPos) {
             corrected = imuCorrector.correctDTS(desiredMotion);
-            robot.drive.applyDTS(0.5, 0, 0);
+            robot.drive.applyDTS(new DTS(0.5, 0, 0));
         }
 
-        robot.drive.applyDTS(0,0,0);
+        robot.drive.applyDTS(new DTS(0,0,0));
 
         sleep(1800);
 

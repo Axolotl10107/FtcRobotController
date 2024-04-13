@@ -38,6 +38,11 @@ public interface MecanumDrive {
         public DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     }
 
+    DcMotorEx leftFront = null;
+    DcMotorEx rightFront = null;
+    DcMotorEx leftBack = null;
+    DcMotorEx rightBack = null;
+
     /** Apply motor powers from a DTS (Drive-Turn-Strafe).
      * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior. */
     void applyDTS(DTS dts);
@@ -45,6 +50,9 @@ public interface MecanumDrive {
     /** The usual DcMotor method, but applied to all four motors.
      * @param runMode The RunMode to set */
     void setMode(DcMotor.RunMode runMode);
+
+    @Deprecated
+    int getAvgEncoderPos();
 
     /** The usual DcMotor method, but applied to all four motors.
      * @param behavior The ZeroPowerBehavior to set */

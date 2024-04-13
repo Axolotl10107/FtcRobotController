@@ -27,6 +27,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RampTwo;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
@@ -45,7 +48,7 @@ public class VisionAutonomous extends LinearOpMode
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor colorAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor.BLUE; //default
 
-    RobotA robot;
+    Robot robot;
     RampTwo ramper;
     IMUcorrector imuCorrector;
 
@@ -84,8 +87,15 @@ public class VisionAutonomous extends LinearOpMode
         pipeline = new AlliedDeterminationExample.SkystoneDeterminationPipeline(telemetry);
         webcam.setPipeline(pipeline);
 
-        robot = new RobotA(hardwareMap);
-        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
+        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
+        params.haveHitTargetTolerance = 0.1;
+        params.hdgErrTolerance = 1.0;
+        params.maxCorrection = 0.1;
+        params.turnThreshold = 0.05;
+        params.imu = robot.imu;
+        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        imuCorrector = new IMUcorrector(params);
 
         armPivot = hardwareMap.get(DcMotor.class, "armPivot");
         armPivot.setTargetPosition(-500);
@@ -145,7 +155,10 @@ public class VisionAutonomous extends LinearOpMode
     void analyzeImage() {
         ramper = new RampTwo(5, 10, 1, 2, 50, 0);
         while (ticksToCM(robot.drive.getAvgEncoderPos()) < 49) {
-            robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+            robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+            robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+            robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+            robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
             telemetry.addData("currentPos", ticksToCM(robot.drive.getAvgEncoderPos()));
             telemetry.addData("leftFront", robot.drive.leftFront.getCurrentPosition());
             telemetry.addData("rightFront", robot.drive.rightFront.getCurrentPosition());
@@ -161,12 +174,15 @@ public class VisionAutonomous extends LinearOpMode
             {
                 telemetry.addData("Object Position", "Left");
                 imuCorrector.targetHeading = 90;
-                while (imuCorrector.imu.yaw() < 89) {
+                while (robot.imu.yaw() < 89) {
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
                 while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
-                    robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;
@@ -176,12 +192,15 @@ public class VisionAutonomous extends LinearOpMode
             {
                 telemetry.addData("Object Position", "Right");
                 imuCorrector.targetHeading = -90;
-                while (imuCorrector.imu.yaw() > -89) {
+                while (robot.imu.yaw() > -89) {
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
                 while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
-                    robot.drive.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;

@@ -9,6 +9,8 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 import java.io.File;
@@ -20,7 +22,7 @@ public class RobotAIMUDriveTuner extends OpMode {
     GamepadTrueDTS gamepad;
     IMUcorrector imuCorrector;
     DTSscaler scaler;
-    RobotA robot;
+    Robot robot;
 
     TunablePID pid;
 
@@ -30,13 +32,20 @@ public class RobotAIMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         scaler = new DTSscaler();
-        robot = new RobotA(hardwareMap);
+        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
     }
 
     public void start() {
-        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
+        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
+        params.haveHitTargetTolerance = 0.1;
+        params.hdgErrTolerance = 1.0;
+        params.maxCorrection = 0.1;
+        params.turnThreshold = 0.05;
+        params.imu = robot.imu;
+        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        imuCorrector = new IMUcorrector(params);
         // Why is this here? Because Virtual Robot is slow, I guess?
-        pid = imuCorrector.pid;
+        pid = params.pid;
         gamepad = new GamepadTrueDTS(gamepad1, gamepad2);
         // totally a safety mechanism - try moving during init without a gamepad :)
     }
@@ -106,10 +115,10 @@ public class RobotAIMUDriveTuner extends OpMode {
         telemetry.addData("Derivative", pid.getDerivative());
         telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("Current Heading", imuCorrector.imu.yaw());
+        telemetry.addData("Current Heading", robot.imu.yaw());
         telemetry.addData("Target Heading", imuCorrector.targetHeading);
         telemetry.addData("Heading Error", imuCorrector.headingError);
-        telemetry.addData("Last Error", imuCorrector.lastError);
+        telemetry.addData("Last Error", imuCorrector.lastHdgError);
         telemetry.addLine("-------------------------------------");
         telemetry.addData("leftFront encoder", robot.drive.leftFront.getCurrentPosition());
         telemetry.addData("rightFront encoder", robot.drive.rightFront.getCurrentPosition());

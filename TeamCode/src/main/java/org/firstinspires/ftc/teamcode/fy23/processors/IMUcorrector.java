@@ -1,121 +1,114 @@
 package org.firstinspires.ftc.teamcode.fy23.processors;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
-
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 
 /** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected.
  * <b>This class has an open task:</b> Filters / Make IMUcorrector Testable */
 public class IMUcorrector {
 
+    public static class Parameters {
+        /** Already instantiated and configured */
+        public FriendlyIMU imu;
+        /** Already instantiated and configured */
+        public TunablePID pid;
+        /** Maximum correction power that can be applied */
+        public double maxCorrection;
+        /** Minimum actionable heading error */
+        public double hdgErrTolerance;
+        /** Minimum absolute value of the turn axis that is considered an intentional turn (which
+         * will pause correction) */
+        public double turnThreshold;
+        /** Proximity to the target that counts as hitting the target */
+        public double haveHitTargetTolerance;
+    }
+
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
 
     // configuration
-    private double maxTotalCorrection = 0.3;
-    private double hdgErrThresholdStill = 1.0;
-    private double hdgErrThresholdMoving = 1.0;
-    //minimum actionable heading error
-    private double turnThreshold = 0.1;
-    // how much you must be turning for heading maintenance to temporarily stop
-    // and a new target heading to be set when you're done turning
-    private double movementThreshold = 0.1;
-    // how much you must be moving for the moving threshold, rather than the still threshold, to come into effect
-    private int postSquaringUpPatience = 1000; // in milliseconds
-
-    public FriendlyIMUImpl imu; // public for telemetry
-    public TunablePID pid; // public for telemetry
+    private double maxCorrection;
+    private double hdgErrTolerance;
+    private double turnThreshold;
+    private double haveHitTargetTolerance;
 
     public double targetHeading = 0; // public for telemetry
     public double headingError = 0; // public for telemetry
-    public double lastError = 0; // public for telemetry
+    public double lastHdgError = 0; // public for telemetry
     private double lastTurn = 0;
+    private double currentTurn = 0;
     private double lastHeading = 0;
     public boolean squaringUp = false;
+    private boolean haveHitTarget = false;
+    private boolean turning = false;
 
     private DTS returnDTS;
+
+    private FriendlyIMU imu;
+    private TunablePID pid;
 
     private ElapsedTime errorSampleTimer;
     public ElapsedTime postSquaringUpPatienceTimer;
 
-    public IMUcorrector(HardwareMap hardwareMap, double p, double im, double dm) {
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
-        imu = new FriendlyIMUImpl(imuParams, hardwareMap);
-        pid = new TunablePID(p, im, dm);
-        errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-        postSquaringUpPatienceTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-    }
-
-    public IMUcorrector(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
-        this(hardwareMap, pidConsts.p, pidConsts.im, pidConsts.dm);
+    public IMUcorrector(Parameters parameters) {
+        maxCorrection = parameters.maxCorrection;
+        hdgErrTolerance = parameters.hdgErrTolerance;
+        turnThreshold = parameters.turnThreshold;
+        haveHitTargetTolerance = parameters.haveHitTargetTolerance;
+        imu = parameters.imu;
+        pid = parameters.pid;
     }
 
     private DTS applyCorrection(DTS dts) {
-        double correctionPower = pid.getCorrectionPower(headingError, lastError);
-        double safeCorrectionPower = Range.clip(correctionPower, -maxTotalCorrection, maxTotalCorrection);
+        double correctionPower = pid.getCorrectionPower(headingError, lastHdgError);
+        double safeCorrectionPower = Range.clip(correctionPower, -maxCorrection, maxCorrection);
         return dts.withTurn(safeCorrectionPower);
     }
 
-    private boolean moving(DTS dts) {
-        return (Math.abs(dts.drive) + Math.abs(dts.strafe) > movementThreshold);
-    }
-
     /** The drive and strafe values will remain unmodified, but it will <b>add</b> correction to the turn value. */
-    public DTS correctDTS(DTS dts) {
+    public DTS correctDTS(DTS driver) {
 
-        returnDTS = new DTS(dts.drive, 0, dts.strafe); // we'll populate turn ourselves
+        returnDTS = new DTS(driver.drive, 0, driver.strafe); // we'll populate turn ourselves
 
         if (errorSampleTimer.milliseconds() > 1150) {
-            lastError = headingError;
+            lastHdgError = headingError;
             errorSampleTimer.reset();
         }
-        headingError = targetHeading - imu.yaw(); //imu.yaw() returns our heading
 
-        if (Math.abs(dts.turn) > turnThreshold) {
-            returnDTS = dts; // if the driver is turning, let them turn
-        } else {
-            if ((Math.abs(lastTurn) > turnThreshold && Math.abs(imu.yaw() - lastHeading) < turnThreshold)
-                    && (!squaringUp && postSquaringUpPatienceTimer.milliseconds() > postSquaringUpPatience)) {
-                // if we're actually done turning (we just fell below the turning threshold
-                targetHeading = imu.yaw(); // we want to face the direction they turned to now
-                pid.clearIntegral(); // accumulated corrections are irrelevant now
+        double currentHeading = imu.yaw();
+        headingError = currentHeading - targetHeading;
+        // positive (clockwise) error generates positive (counterclockwise) correction
+
+        if (turning) {
+            lastTurn = currentTurn;
+            currentTurn = currentHeading - lastHeading;
+            if (Math.abs(currentTurn) < turnThreshold && Math.abs(lastTurn) > turnThreshold) {
+                // if we just fell below the turn threshold
+                // Note to self: this is still inside the "if (turning)! This doesn't trigger if the driver didn't initiate the turn with the turn axis.
+                turning = false;
+                // clear old cumulative values
+                pid.clearIntegral();
                 pid.clearDerivative();
-                headingError = 0; // this will go into lastError
+                lastHdgError = 0;
+                targetHeading = currentHeading; // set the target to the direction the driver wants to go now
             }
-            if (moving(dts) || squaringUp) {
-                if (Math.abs(headingError) > hdgErrThresholdMoving) {
-                    // if we're above the threshold
-                    returnDTS = applyCorrection(dts);
-                }
-            } else if (Math.abs(headingError) > hdgErrThresholdStill) {
-                // if we're not moving and above the still threshold
-                returnDTS = applyCorrection(dts);
-            } else {
-                returnDTS = dts; // we're not moving and we're within tolerances, so don't bother with correction
-            }
-
-            if (squaringUp) {
-                if (moving(dts)) {
-                    if (Math.abs(headingError) <= hdgErrThresholdMoving) {
-                        squaringUp = false;
-                        postSquaringUpPatienceTimer.reset();
-                    }
-                } else {
-                    if (Math.abs(headingError) <= hdgErrThresholdStill) {
-                        squaringUp = false;
-                        postSquaringUpPatienceTimer.reset();
-                    }
+        } else {
+            if (Math.abs(driver.turn) > turnThreshold) {
+               // if the driver is requesting to turn
+               turning = true;
+               haveHitTarget = false;
+            } else if (!haveHitTarget || Math.abs(headingError) > hdgErrTolerance) {
+                applyCorrection(returnDTS);
+                if (Math.abs(headingError) < haveHitTargetTolerance) {
+                    // we want to get to about the middle of our heading tolerance, not the edge - mostly for squaring up
+                    haveHitTarget = true;
                 }
             }
         }
 
-        lastTurn = Math.abs(imu.yaw() - lastHeading);
-        lastHeading = imu.yaw();
+        lastHeading = currentHeading;
 
         return returnDTS;
     }
@@ -123,6 +116,5 @@ public class IMUcorrector {
     /** Set the target heading to the nearest cardinal direction */
     public void squareUp() {
         targetHeading = 90 * Math.round(targetHeading / 90);
-        squaringUp = true;
     }
 }

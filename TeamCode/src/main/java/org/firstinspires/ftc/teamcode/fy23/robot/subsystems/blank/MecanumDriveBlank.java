@@ -19,6 +19,12 @@ public class MecanumDriveBlank implements MecanumDrive {
     }
 
     @Override
+    @Deprecated
+    public int getAvgEncoderPos() {
+        return 0;
+    }
+
+    @Override
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior behavior) {
 
     }

@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.fy23.teletest;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+@TeleOp
 public class RobotATeleTest extends OpMode {
 
     Robot robot;
@@ -19,7 +24,14 @@ public class RobotATeleTest extends OpMode {
     @Override
     public void init() {
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
-        imuCorrector = new IMUcorrector(hardwareMap, robot.hdgCorrectionPIDconsts);
+        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
+        params.haveHitTargetTolerance = 0.1;
+        params.hdgErrTolerance = 1.0;
+        params.maxCorrection = 0.1;
+        params.turnThreshold = 0.05;
+        params.imu = robot.imu;
+        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        imuCorrector = new IMUcorrector(params);
         controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2);
     }
 
