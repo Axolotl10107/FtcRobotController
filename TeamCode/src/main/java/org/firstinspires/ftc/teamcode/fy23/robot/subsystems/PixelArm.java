@@ -63,6 +63,8 @@ public interface PixelArm {
     void setPivotPower(double power);
     /** Get the current power of the pivot motor. */
     double getPivotPower();
+    /** Get the current position of the pivot motor. */
+    int getPivotPosition();
 
     /** Set the target position of the elevator motor to a distance from the fully retracted position.
      * @param distance in millimeters */
@@ -73,6 +75,8 @@ public interface PixelArm {
     void setElevatorPower(double power);
     /** Get the current power of the elevator motor. */
     double getElevatorPower();
+    /** Get the current position of the elevator motor. */
+    int getElevatorPosition();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();

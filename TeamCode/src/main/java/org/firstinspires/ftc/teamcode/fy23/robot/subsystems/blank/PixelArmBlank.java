@@ -24,6 +24,11 @@ public class PixelArmBlank implements PixelArm {
     }
 
     @Override
+    public int getPivotPosition() {
+        return 0;
+    }
+
+    @Override
     public void setElevatorDistance(double distance) {
 
     }
@@ -35,6 +40,11 @@ public class PixelArmBlank implements PixelArm {
 
     @Override
     public double getElevatorPower() {
+        return 0;
+    }
+
+    @Override
+    public int getElevatorPosition() {
         return 0;
     }
 

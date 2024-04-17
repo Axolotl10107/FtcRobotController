@@ -2,12 +2,10 @@ package org.firstinspires.ftc.teamcode.fy23.processors;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected.
- * <b>This class has an open task:</b> Filters / Make IMUcorrector Testable */
+/** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected. Also lets you "square up".*/
 public class IMUcorrector {
 
     public static class Parameters {
@@ -24,6 +22,8 @@ public class IMUcorrector {
         public double turnThreshold;
         /** Proximity to the target that counts as hitting the target */
         public double haveHitTargetTolerance;
+        /** An ElapsedTime (or MockElapsedTime for testing) */
+        public ElapsedTime errorSampleTimer;
     }
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
@@ -40,7 +40,7 @@ public class IMUcorrector {
     private double lastTurn = 0;
     private double currentTurn = 0;
     private double lastHeading = 0;
-    public boolean squaringUp = false;
+    //    public boolean squaringUp = false;
     private boolean haveHitTarget = false;
     private boolean turning = false;
 
@@ -50,7 +50,7 @@ public class IMUcorrector {
     private TunablePID pid;
 
     private ElapsedTime errorSampleTimer;
-    public ElapsedTime postSquaringUpPatienceTimer;
+//    public ElapsedTime postSquaringUpPatienceTimer;
 
     public IMUcorrector(Parameters parameters) {
         maxCorrection = parameters.maxCorrection;
@@ -59,6 +59,7 @@ public class IMUcorrector {
         haveHitTargetTolerance = parameters.haveHitTargetTolerance;
         imu = parameters.imu;
         pid = parameters.pid;
+        errorSampleTimer = parameters.errorSampleTimer;
     }
 
     private DTS applyCorrection(DTS dts) {
@@ -67,10 +68,12 @@ public class IMUcorrector {
         return dts.withTurn(safeCorrectionPower);
     }
 
-    /** The drive and strafe values will remain unmodified, but it will <b>add</b> correction to the turn value. */
+    /** The drive and strafe values will remain unmodified, but the turn power will be replaced by the correction power
+     * given by the {@link TunablePID} instance given in the Parameters. */
     public DTS correctDTS(DTS driver) {
 
-        returnDTS = new DTS(driver.drive, 0, driver.strafe); // we'll populate turn ourselves
+//        returnDTS = new DTS(driver.drive, 0, driver.strafe); // we'll populate turn ourselves
+        returnDTS = driver;
 
         if (errorSampleTimer.milliseconds() > 1150) {
             lastHdgError = headingError;
@@ -96,9 +99,9 @@ public class IMUcorrector {
             }
         } else {
             if (Math.abs(driver.turn) > turnThreshold) {
-               // if the driver is requesting to turn
-               turning = true;
-               haveHitTarget = false;
+                // if the driver is requesting to turn
+                turning = true;
+                haveHitTarget = false;
             } else if (!haveHitTarget || Math.abs(headingError) > hdgErrTolerance) {
                 applyCorrection(returnDTS);
                 if (Math.abs(headingError) < haveHitTargetTolerance) {
@@ -113,7 +116,7 @@ public class IMUcorrector {
         return returnDTS;
     }
 
-    /** Set the target heading to the nearest cardinal direction */
+    /** Sets the target heading to the nearest cardinal direction. */
     public void squareUp() {
         targetHeading = 90 * Math.round(targetHeading / 90);
     }

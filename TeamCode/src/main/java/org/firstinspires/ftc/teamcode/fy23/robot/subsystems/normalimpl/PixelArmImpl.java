@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -46,11 +44,11 @@ public class PixelArmImpl implements PixelArm {
 
     private ElapsedTime stopwatch;
 
-    public PixelArmImpl(PixelArm.Parameters parameters) {
+    public PixelArmImpl(Parameters parameters) {
         this(parameters, new ElapsedTime());
     }
 
-    public PixelArmImpl(PixelArm.Parameters parameters, ElapsedTime stopwatch) {
+    public PixelArmImpl(Parameters parameters, ElapsedTime stopwatch) {
         pivotMotor = parameters.pivotMotor;
         elevatorMotor = parameters.elevatorMotor;
 
@@ -99,6 +97,11 @@ public class PixelArmImpl implements PixelArm {
         return pivotMotor.getPower();
     }
 
+    @Override
+    public int getPivotPosition() {
+        return pivotMotor.getCurrentPosition();
+    }
+
 
     @Override
     public void setElevatorDistance(double distance) {
@@ -115,6 +118,11 @@ public class PixelArmImpl implements PixelArm {
     @Override
     public double getElevatorPower() {
         return elevatorMotor.getPower();
+    }
+
+    @Override
+    public int getElevatorPosition() {
+        return elevatorMotor.getCurrentPosition();
     }
 
     private void updatePivotPower() {

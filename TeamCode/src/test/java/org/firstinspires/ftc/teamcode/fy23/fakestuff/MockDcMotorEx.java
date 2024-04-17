@@ -35,8 +35,8 @@ public class MockDcMotorEx implements DcMotorEx {
     private double ticksPerRotation = 537.7;
     private double maxVelocityRadians = (maxVelocityTicks / ticksPerRotation) * (2 * Math.PI);
 
-    private double power;
-    private int position;
+    private double power = 0;
+    private int position = 0;
     private int targetPosition;
     private int targetPositionTolerance;
 
@@ -339,5 +339,9 @@ public class MockDcMotorEx implements DcMotorEx {
             position += deltaPosition;
             lastTime = currentTime;
         }
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

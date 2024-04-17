@@ -23,13 +23,19 @@ public class FriendlyIMUImpl implements FriendlyIMU {
 
     Orientation orientation;
 
-    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
+    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap, AngleUnit angleUnit) {
         imuParams = new BNO055IMU.Parameters();
         imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
         //see "SensorBNO055IMUCalibration" example
 
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(imuParams);
+
+        this.angleUnit = angleUnit;
+    }
+
+    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
+        this(parameters, hardwareMap, AngleUnit.DEGREES);
     }
 
     private void updateOrientation() {
