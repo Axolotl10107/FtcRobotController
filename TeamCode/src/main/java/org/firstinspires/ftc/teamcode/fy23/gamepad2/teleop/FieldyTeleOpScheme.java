@@ -57,13 +57,13 @@ public class FieldyTeleOpScheme {
     }
 
     private void updateArmFastMovementState() {
-        if (!armMovementSet) {
+//        if (!armMovementSet) {
             // if all three run, then the last one is the only one that sets it - the other two have no effect
             state.setArmMovement(-manipulator.left_stick_y); // Y-Axis is negated (nobody knows why, don't ask)
-        }
-        if (Math.abs(state.getArmMovement()) > 0.05) { // if we set something meaningful...
-            armMovementSet = true;
-        }
+//        }
+//        if (Math.abs(state.getArmMovement()) > 0.05) { // if we set something meaningful...
+//            armMovementSet = true;
+//        }
     }
 
     private void updateArmMediumMovementState() {
@@ -120,8 +120,8 @@ public class FieldyTeleOpScheme {
     public TeleOpState getState(double heading) {
         armMovementSet = false;
         updateMovementState(heading);
-        updateArmMediumMovementState();
-        updateArmSlowMovementState();
+//        updateArmMediumMovementState();
+//        updateArmSlowMovementState();
         updateArmFastMovementState();
         updateElevatorMovementState();
         updateClawState();

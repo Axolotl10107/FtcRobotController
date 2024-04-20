@@ -41,8 +41,8 @@ public class IMUcorrector {
     private double currentTurn = 0;
     private double lastHeading = 0;
     //    public boolean squaringUp = false;
-    private boolean haveHitTarget = false;
-    private boolean turning = false;
+    public boolean haveHitTarget = false;
+    public boolean turning = false;
 
     private DTS returnDTS;
 
@@ -103,7 +103,7 @@ public class IMUcorrector {
                 turning = true;
                 haveHitTarget = false;
             } else if (!haveHitTarget || Math.abs(headingError) > hdgErrTolerance) {
-                applyCorrection(returnDTS);
+                returnDTS = applyCorrection(returnDTS);
                 if (Math.abs(headingError) < haveHitTargetTolerance) {
                     // we want to get to about the middle of our heading tolerance, not the edge - mostly for squaring up
                     haveHitTarget = true;
@@ -119,5 +119,6 @@ public class IMUcorrector {
     /** Sets the target heading to the nearest cardinal direction. */
     public void squareUp() {
         targetHeading = 90 * Math.round(targetHeading / 90);
+        haveHitTarget = false;
     }
 }

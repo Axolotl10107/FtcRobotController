@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-@Disabled
+//@Disabled
 @TeleOp(name="IMUprinter", group="TeleTest")
 public class IMUprinter extends OpMode {
     BNO055IMU imu;
@@ -33,10 +33,10 @@ public class IMUprinter extends OpMode {
 
     @Override
     public void loop() {
-        orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        pitch = orientation.firstAngle;
+        orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        pitch = orientation.thirdAngle;
         roll = orientation.secondAngle;
-        yaw = orientation.thirdAngle;
+        yaw = orientation.firstAngle;
 
         telemetry.addData("pitch", pitch);
         telemetry.addData("roll", roll);

@@ -41,7 +41,7 @@ public class RobotRoundhouse {
         driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
         driveParams.leftBackMotor.setDirection(REVERSE);
 
-        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
         driveParams.rightBackMotor.setDirection(FORWARD);
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
@@ -49,7 +49,7 @@ public class RobotRoundhouse {
 
         PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
-        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
+        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
         armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
@@ -68,7 +68,7 @@ public class RobotRoundhouse {
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
-        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeServo");
+        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
         Robot.Parameters params = new Robot.Parameters();
         params.tpr = 537.7; // ticks per rotation

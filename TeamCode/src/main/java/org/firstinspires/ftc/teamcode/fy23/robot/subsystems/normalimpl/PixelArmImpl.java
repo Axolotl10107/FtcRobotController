@@ -39,8 +39,8 @@ public class PixelArmImpl implements PixelArm {
     private double pivotTicksPerDegree;
     private double elevatorTicksPerMillimeter;
 
-    private double pivotPower;
-    private double elevatorPower;
+    private double setPivotPower;
+    private double setElevatorPower;
 
     private ElapsedTime stopwatch;
 
@@ -89,7 +89,7 @@ public class PixelArmImpl implements PixelArm {
 
     @Override
     public void setPivotPower(double power) {
-        pivotPower = power;
+        setPivotPower = power;
     }
 
     @Override
@@ -112,7 +112,7 @@ public class PixelArmImpl implements PixelArm {
 
     @Override
     public void setElevatorPower(double power) {
-        elevatorPower = power;
+        setElevatorPower = power;
     }
 
     @Override
@@ -125,72 +125,94 @@ public class PixelArmImpl implements PixelArm {
         return elevatorMotor.getCurrentPosition();
     }
 
+    private void killPivotMotor() {
+        pivotMotor.setPower(0);
+        pivotAccelLimiter.reset();
+    }
+
     private void updatePivotPower() {
-        double currentPivotPower = getPivotPower();
-        if (!pivotUpperLimitSwitch.isActive() && !pivotLowerLimitSwitch.isActive()) {
-            if (currentPivotPower > 0) {
-                // if moving
-                int currentPos = pivotMotor.getCurrentPosition();
-                if (currentPivotPower > 0.5) {
-                    // if above half power
-                    if ((pivotUpperLimit - currentPos) < pivotStoppingDistanceAtFullPower) {
-                        pivotPower = Math.min(pivotPower, 0);
-                    } else if (currentPos < (pivotLowerLimit + pivotStoppingDistanceAtFullPower)) {
-                        pivotPower = Math.max(0, pivotPower);
-                    }
-                } else {
-                    // if below half power but still moving
-                    if ((pivotUpperLimit - currentPos) < pivotStoppingDistanceAtHalfPower) {
-                        pivotPower = Math.min(pivotPower, 0);
-                    } else if (currentPos < (pivotLowerLimit + pivotStoppingDistanceAtHalfPower)) {
-                        pivotPower = Math.max(0, pivotPower);
-                    }
-                }
-            }
+        double requestedPivotPower = setPivotPower;
+
+        // hard limits
+        if (pivotLowerLimitSwitch.isActive()) {
+            killPivotMotor();
+            requestedPivotPower = Math.max(setPivotPower, 0);
+        } else if (pivotUpperLimitSwitch.isActive()) {
+            killPivotMotor();
+            requestedPivotPower = Math.min(setPivotPower, 0);
+
+        // soft limits
+        } else if (getPivotPosition() <= pivotLowerLimit) {
+            killPivotMotor();
+            requestedPivotPower = Math.max(setPivotPower, 0);
+        } else if (getPivotPosition() >= pivotUpperLimit) {
+            killPivotMotor();
+            requestedPivotPower = Math.min(setPivotPower, 0);
+
+        // stopping distances
         } else {
-            // a limit switch is pressed
-            pivotMotor.setPower(0); // kill power now, ask questions later
-            if (pivotUpperLimitSwitch.isActive()) {
-                pivotPower = Math.min(pivotPower, 0);
+            int stoppingDistance;
+            // choose the correct stopping distance...
+            if (getPivotPower() <= 0.5) {
+                stoppingDistance = pivotStoppingDistanceAtHalfPower;
             } else {
-                pivotPower = Math.max(0, pivotPower);
+                stoppingDistance = pivotStoppingDistanceAtFullPower;
+            }
+
+            // ... then check our position against it
+            if (getPivotPosition() - pivotLowerLimit < stoppingDistance) {
+                requestedPivotPower = Math.max(setPivotPower, 0);
+            } else if (pivotUpperLimit - getPivotPosition() < stoppingDistance) {
+                requestedPivotPower = Math.min(setPivotPower, 0);
             }
         }
-        pivotMotor.setPower(pivotAccelLimiter.requestVel(pivotPower, currentPivotPower, stopwatch.seconds()));
+
+        pivotMotor.setPower(pivotAccelLimiter.requestVel(requestedPivotPower, getPivotPosition(), stopwatch.seconds()));
+    }
+
+    private void killElevatorMotor() {
+        elevatorMotor.setPower(0);
+        elevatorAccelLimiter.reset();
     }
 
     private void updateElevatorPower() {
-        double currentElevatorPower = getElevatorPower();
-        if (!elevatorUpperLimitSwitch.isActive() && !elevatorLowerLimitSwitch.isActive()) {
-            if (currentElevatorPower > 0) {
-                // if moving
-                int currentPos = elevatorMotor.getCurrentPosition();
-                if (currentElevatorPower > 0.5) {
-                    // if above half power
-                    if ((elevatorUpperLimit - currentPos) < elevatorStoppingDistanceAtFullPower) {
-                        elevatorPower = Math.min(elevatorPower, 0);
-                    } else if (currentPos < (elevatorLowerLimit + elevatorStoppingDistanceAtFullPower)) {
-                        elevatorPower = Math.max(0, elevatorPower);
-                    }
-                } else {
-                    // if below half power but still moving
-                    if ((elevatorUpperLimit - currentPos) < elevatorStoppingDistanceAtHalfPower) {
-                        elevatorPower = Math.min(elevatorPower, 0);
-                    } else if (currentPos < (elevatorLowerLimit + elevatorStoppingDistanceAtHalfPower)) {
-                        elevatorPower = Math.max(0, elevatorPower);
-                    }
-                }
-            }
+        double requestedElevatorPower = setElevatorPower;
+
+        // hard limits
+        if (elevatorLowerLimitSwitch.isActive()) {
+            killElevatorMotor();
+            requestedElevatorPower = Math.max(setElevatorPower, 0);
+        } else if (elevatorUpperLimitSwitch.isActive()) {
+            killElevatorMotor();
+            requestedElevatorPower = Math.min(setElevatorPower, 0);
+
+            // soft limits
+        } else if (getElevatorPosition() <= elevatorLowerLimit) {
+            killElevatorMotor();
+            requestedElevatorPower = Math.max(setElevatorPower, 0);
+        } else if (getElevatorPosition() >= elevatorUpperLimit) {
+            killElevatorMotor();
+            requestedElevatorPower = Math.min(setElevatorPower, 0);
+
+            // stopping distances
         } else {
-            // a limit switch is pressed
-            elevatorMotor.setPower(0); // kill power now, ask questions later
-            if (elevatorUpperLimitSwitch.isActive()) {
-                elevatorPower = Math.min(elevatorPower, 0);
+            int stoppingDistance;
+            // choose the correct stopping distance...
+            if (getElevatorPower() <= 0.5) {
+                stoppingDistance = elevatorStoppingDistanceAtHalfPower;
             } else {
-                elevatorPower = Math.max(0, elevatorPower);
+                stoppingDistance = elevatorStoppingDistanceAtFullPower;
+            }
+
+            // ... then check our position against it
+            if (getElevatorPosition() - elevatorLowerLimit < stoppingDistance) {
+                requestedElevatorPower = Math.max(setElevatorPower, 0);
+            } else if (elevatorUpperLimit - getElevatorPosition() < stoppingDistance) {
+                requestedElevatorPower = Math.min(setElevatorPower, 0);
             }
         }
-        elevatorMotor.setPower(elevatorAccelLimiter.requestVel(elevatorPower, currentElevatorPower, stopwatch.seconds()));
+
+        elevatorMotor.setPower(elevatorAccelLimiter.requestVel(requestedElevatorPower, getElevatorPosition(), stopwatch.seconds()));
     }
 
     @Override

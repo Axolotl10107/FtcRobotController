@@ -39,10 +39,10 @@ public class FriendlyIMUImpl implements FriendlyIMU {
     }
 
     private void updateOrientation() {
-        orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        pitch = orientation.firstAngle;
+        orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        pitch = orientation.thirdAngle;
         roll = orientation.secondAngle;
-        yaw = orientation.thirdAngle;
+        yaw = orientation.firstAngle;
     }
 
     @Override
