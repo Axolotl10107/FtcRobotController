@@ -207,9 +207,9 @@ public class AccelLimiterTest {
     @Test
     // This is *not* a pass/fail test.
     public void stoppingDistancePrinter() {
-        AccelLimiter accelLimiter = new AccelLimiter(10, 1);
+        AccelLimiter accelLimiter = new AccelLimiter(2499, 249.9);
         ElapsedTime stopwatch = new ElapsedTime();
-        double stoppingDistance = accelLimiter.stoppingDistance(10, 1000);
+        double stoppingDistance = accelLimiter.stoppingDistance(2499, 1000);
         System.out.println(String.format("Got {%f} meters in {%f} milliseconds.", stoppingDistance, stopwatch.milliseconds()));
     }
 

@@ -34,6 +34,10 @@ public interface PixelArm {
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the pivot arm reaches its minimum position (in encoder ticks!). */
         public DigitalDevice pivotLowerLimitSwitch;
+        /** The maximum power to use while the pivot arm has tripped a limit and is returning to a
+         * safe position. This is important because acceleration control is not applied at this stage,
+         * so a large value here will cause jolts. */
+        public double maxPivotRecoveryPower;
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
         public AccelLimiter elevatorAccelLimiter;
         /** Pass in a PowerTpSConverter object (an implementation of your choice) that has already been instantiated
@@ -51,6 +55,10 @@ public interface PixelArm {
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its minimum position (in encoder ticks!). */
         public DigitalDevice elevatorLowerLimitSwitch;
+        /** The maximum power to use while the elevator has tripped a limit and is returning to a
+         * safe position. This is important because acceleration control is not applied at this stage,
+         * so a large value here will cause jolts. */
+        public double maxElevatorRecoveryPower;
     }
 
     /** Set the target position of the pivot motor to an angle. Safety limits apply.

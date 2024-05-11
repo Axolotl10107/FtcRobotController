@@ -58,6 +58,7 @@ public class RobotRoundhouse {
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
         armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.maxPivotRecoveryPower = 0.2;
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
@@ -65,6 +66,7 @@ public class RobotRoundhouse {
         armParams.elevatorLowerLimit = 0;
         armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.maxElevatorRecoveryPower = 0.2;
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = true;
@@ -223,6 +225,7 @@ public class RobotRoundhouse {
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
         armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.maxPivotRecoveryPower = 0.2;
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
@@ -230,6 +233,7 @@ public class RobotRoundhouse {
         armParams.elevatorLowerLimit = 0;
         armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.maxElevatorRecoveryPower = 0.2;
 
         PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
         planeLauncherParams.present = false;

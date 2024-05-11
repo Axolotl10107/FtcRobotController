@@ -146,6 +146,7 @@ public class AccelLimiter {
      * @param currentVel How fast you are currently going
      * @param resolution Higher resolution values make the calculation take longer but yield more accurate results. Use
      * the "stoppingDistancePrinter" Unit Test to determine what resolution you need. */
+    // TODO: Acceleration is linear, so you can just find the area of a right triangle...
     public double stoppingDistance(double currentVel, int resolution) {
         currentVel = Math.abs(currentVel);
         double timeStep = 1.0 / resolution;

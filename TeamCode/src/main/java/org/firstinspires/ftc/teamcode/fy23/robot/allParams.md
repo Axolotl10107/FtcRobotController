@@ -39,6 +39,7 @@ PixelArm:
 - int pivotLowerLimit                         | 
 - DigitalDevice pivotUpperLimitSwitch         | A DigitalDevice that represents a physical upper limit switch (high limit in encoder ticks!) for the pivot motor
 - DigitalDevice pivotLowerLimitSwitch         | 
+- double maxPivotRecoveryPower                | The maximum power to use while the pivot arm is returning from a dangerous position
 - AccelLimiter elevatorAccelLimiter           | An AccelLimiter object that has been configured for the elevator motor 
 - PowerTpSConverter elevatorPowerTpSConverter | 
 - double elevatorTicksPerMillimeter           | Encoder ticks (or fraction of a tick) traveled per millimeter of slide travel
@@ -46,6 +47,7 @@ PixelArm:
 - int elevatorLowerLimit                      | 
 - DigitalDevice elevatorUpperLimitSwitch      | 
 - DigitalDevice elevatorLowerLimitSwitch      | 
+- double maxElevatorRecoveryPower                | The maximum power to use while the elevator is returning from a dangerous position
 
 PlaneLauncher:
 - boolean present       | Is this subsystem installed on this robot?
