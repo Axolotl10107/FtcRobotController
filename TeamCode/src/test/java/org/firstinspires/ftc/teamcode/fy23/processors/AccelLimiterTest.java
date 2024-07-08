@@ -203,6 +203,54 @@ public class AccelLimiterTest {
         Assert.assertEquals(Arrays.asList(-5.0, -5.0, -5.0, -5.0), outputList);
     }
 
+    @Test
+    public void PixelArmProblemTest() {
+        AccelLimiter accelLimiter = new AccelLimiter(1.0, 0.1);
+        MockElapsedTime stopwatch = new MockElapsedTime();
+        double output;
+        stopwatch.setNanos(TimeUnit.MILLISECONDS.toNanos(1150));
+
+        for (int i=0; i<9; i++) {
+            output = accelLimiter.requestVel(0, 0, stopwatch.seconds());
+            Assert.assertEquals(0, output, 0.01);
+            stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+        }
+
+        output = accelLimiter.requestVel(0.98573, 0, stopwatch.seconds());
+        stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+        Assert.assertTrue(output < 0.1); // did not exceed maxDeltaVEachLoop
+
+        output = accelLimiter.requestVel(0.54862, output, stopwatch.seconds());
+        stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+        Assert.assertTrue(output < 0.2);
+
+
+        stopwatch.setNanos(stopwatch.nanoseconds() + TimeUnit.SECONDS.toNanos(1)); // add 1 second
+        output = accelLimiter.requestVel(0, output, stopwatch.seconds());
+        Assert.assertEquals(0, output, 0.001);
+        stopwatch.setNanos(stopwatch.nanoseconds() + TimeUnit.SECONDS.toNanos(1)); // add 1 second
+
+
+        Assert.assertEquals(0, accelLimiter.requestVel(0, output, stopwatch.seconds()), 0.001);
+        output = accelLimiter.requestVel(0.96438, 0, stopwatch.seconds());
+        stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+        Assert.assertTrue(output < 0.1); // did not exceed maxDeltaVEachLoop
+
+        output = accelLimiter.requestVel(0.78421, output, stopwatch.seconds());
+        stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+        Assert.assertTrue(output < 0.2);
+
+
+        for (int i=0; i<9; i++) {
+            double lastOutput = output;
+            stopwatch.setNanos((long) (stopwatch.nanoseconds() + (Math.random() * 1000000)));
+            output = accelLimiter.requestVel(0, lastOutput, stopwatch.seconds());
+            System.out.println(String.format("lastOutput: {%f}", lastOutput));
+            System.out.println(String.format("output: {%f}", output));
+            Assert.assertTrue((output - lastOutput) < 0.1);
+        }
+    }
+
 
     @Test
     // This is *not* a pass/fail test.
