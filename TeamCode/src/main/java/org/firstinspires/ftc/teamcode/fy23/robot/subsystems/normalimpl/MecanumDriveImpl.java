@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
@@ -12,7 +11,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import java.util.Arrays;
 import java.util.List;
 
-/** A normal implementation of {@link MecanumDrive}. */
+/** A normal implementation of {@link MecanumDrive} featuring acceleration control. */
 public class MecanumDriveImpl implements MecanumDrive {
 
     public DcMotorEx leftFront;
@@ -54,15 +53,12 @@ public class MecanumDriveImpl implements MecanumDrive {
         this(parameters, new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS));
     }
 
-    /** Takes these components as motor powers and limits the acceleration.
-     * @param drive Forwards power
-     * @param turn Turning power - positive is counterclockwise!
-     * @param strafe Strafing (sideways) power - positive is to the right */
-    public void applyDTS(double drive, double turn, double strafe) {
-        double newLF = drive - turn + strafe;
-        double newRF = drive + turn - strafe;
-        double newLB = drive - turn - strafe;
-        double newRB = drive + turn + strafe;
+    @Override
+    public void applyDTS(DTS dts) { // method overloading
+        double newLF = dts.drive - dts.turn + dts.strafe;
+        double newRF = dts.drive + dts.turn - dts.strafe;
+        double newLB = dts.drive - dts.turn - dts.strafe;
+        double newRB = dts.drive + dts.turn + dts.strafe;
         double currentLF = leftFront.getPower();
         double currentRF = rightFront.getPower();
         double currentLB = leftBack.getPower();
@@ -87,51 +83,12 @@ public class MecanumDriveImpl implements MecanumDrive {
         System.out.println(String.format("Motor Powers: | {%f} | {%f} | {%f} | {%f}", newLF, newRF, newLB, newRB));
     }
 
-    /** Takes a DTS (Drive-Turn-Strafe) of motor powers.
-     * @param dts The DTS to apply */
-    @Override
-    public void applyDTS(DTS dts) { // method overloading
-        System.out.println("Ooh, fancy!");
-        applyDTS(dts.drive, dts.turn, dts.strafe);
-    }
-
-    /** Returns the average of the encoder positions reported by the motors */
-    @Deprecated
-    public int getAvgEncoderPos() {
-        return (
-                leftFront.getCurrentPosition() +
-                        rightFront.getCurrentPosition() +
-                        leftBack.getCurrentPosition() +
-                        rightBack.getCurrentPosition()
-        ) / 4;
-    }
-
-    /** Returns the average of the velocities reported by the motors */
-    @Deprecated
-    public double getAvgVelocity() {
-        return (
-                leftFront.getVelocity() +
-                        rightFront.getVelocity() +
-                        leftBack.getVelocity() +
-                        rightBack.getVelocity()
-        ) / 4;
-    }
-
     @Override
     public void setMode(DcMotor.RunMode runMode) {
         leftFront.setMode(runMode);
         rightFront.setMode(runMode);
         leftBack.setMode(runMode);
         rightBack.setMode(runMode);
-    }
-
-    @Deprecated
-    public void setVelocity(double velocity) {
-        velocity = accelLimiter.requestVel(velocity, getAvgVelocity(), stopwatch.milliseconds());
-        leftFront.setVelocity(velocity);
-        rightFront.setVelocity(velocity);
-        leftBack.setVelocity(velocity);
-        rightBack.setVelocity(velocity);
     }
 
     @Override

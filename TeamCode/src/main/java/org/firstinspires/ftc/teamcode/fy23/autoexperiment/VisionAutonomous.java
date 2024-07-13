@@ -54,6 +54,15 @@ public class VisionAutonomous extends LinearOpMode
 
     DcMotor armPivot;
 
+    private int getAvgEncoderPos() {
+        return (
+                robot.drive.leftFront.getCurrentPosition() +
+                robot.drive.rightFront.getCurrentPosition() +
+                robot.drive.leftBack.getCurrentPosition() +
+                robot.drive.rightBack.getCurrentPosition()
+        ) / 4;
+    }
+
     @Override
     public void runOpMode() {
         Telemetry.Log log = telemetry.log();
@@ -154,12 +163,12 @@ public class VisionAutonomous extends LinearOpMode
 
     void analyzeImage() {
         ramper = new RampTwo(5, 10, 1, 2, 50, 0);
-        while (ticksToCM(robot.drive.getAvgEncoderPos()) < 49) {
-            robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-            robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-            robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-            robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-            telemetry.addData("currentPos", ticksToCM(robot.drive.getAvgEncoderPos()));
+        while (ticksToCM(getAvgEncoderPos()) < 49) {
+            robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            telemetry.addData("currentPos", ticksToCM(getAvgEncoderPos()));
             telemetry.addData("leftFront", robot.drive.leftFront.getCurrentPosition());
             telemetry.addData("rightFront", robot.drive.rightFront.getCurrentPosition());
             telemetry.addData("leftBack", robot.drive.leftBack.getCurrentPosition());
@@ -178,11 +187,11 @@ public class VisionAutonomous extends LinearOpMode
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
-                while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
-                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                while (ticksToCM(getAvgEncoderPos()) < 19) {
+                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;
@@ -196,11 +205,11 @@ public class VisionAutonomous extends LinearOpMode
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
-                while (ticksToCM(robot.drive.getAvgEncoderPos()) < 19) {
-                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
-                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(robot.drive.getAvgEncoderPos()))));
+                while (ticksToCM(getAvgEncoderPos()) < 19) {
+                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;

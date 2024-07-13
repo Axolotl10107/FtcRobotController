@@ -117,13 +117,22 @@ public class RudimentaryRampToTarget {
         moveInProgress = false;
     }
 
+    private int getAvgEncoderPos() {
+        return (
+                robot.drive.leftFront.getCurrentPosition() +
+                robot.drive.rightFront.getCurrentPosition() +
+                robot.drive.leftBack.getCurrentPosition() +
+                robot.drive.rightBack.getCurrentPosition()
+        ) / 4;
+    }
+
     /**
      * Get the DTS suggested by the ramping algorithm. (It's a "suggestion" because you could run
      * it through processors.) */
     public DTS getCurrentSuggestion() {
         if (moving()) {
             loopTime = stopwatch.milliseconds() - lastTime; // How much time has passed
-            loopMove = (((robot.drive.getAvgEncoderPos() - lastPos) / robot.TPR) * robot.wheelDiameter) / 10; // divide by 10 to get centimeters
+            loopMove = (((getAvgEncoderPos() - lastPos) / robot.TPR) * robot.wheelDiameter) / 10; // divide by 10 to get centimeters
 
             if (stopwatch.seconds() < 1 - (timeToDecelerate / totalDistance)) { // Can we still go...
                 newSpeed = suggestedSpeed + (accel * loopTime) / 1000; // Dimensional analysis! How much can we accelerate now?
@@ -135,7 +144,7 @@ public class RudimentaryRampToTarget {
             }
 
             lastTime = stopwatch.milliseconds();
-            lastPos = robot.drive.getAvgEncoderPos();
+            lastPos = getAvgEncoderPos();
             currentPose = new Pose2d(0, currentPose.getY() + loopMove, robot.imu.yaw());
             return new DTS(suggestedSpeed, 0, 0);
         } else {

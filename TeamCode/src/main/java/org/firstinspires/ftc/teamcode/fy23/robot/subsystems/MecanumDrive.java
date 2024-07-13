@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the drivebase, and the
@@ -38,10 +39,14 @@ public interface MecanumDrive {
         public DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     }
 
-    DcMotorEx leftFront = null;
-    DcMotorEx rightFront = null;
-    DcMotorEx leftBack = null;
-    DcMotorEx rightBack = null;
+    /** The leftFront motor, if direct access is needed */
+    DcMotorEx leftFront = new BlankMotor();
+    /** The rightFront motor, if direct access is needed */
+    DcMotorEx rightFront = new BlankMotor();
+    /** The leftBack motor, if direct access is needed */
+    DcMotorEx leftBack = new BlankMotor();
+    /** The rightBack motor, if direct access is needed */
+    DcMotorEx rightBack = new BlankMotor();
 
     /** Apply motor powers from a DTS (Drive-Turn-Strafe).
      * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior. */
@@ -50,9 +55,6 @@ public interface MecanumDrive {
     /** The usual DcMotor method, but applied to all four motors.
      * @param runMode The RunMode to set */
     void setMode(DcMotor.RunMode runMode);
-
-    @Deprecated
-    int getAvgEncoderPos();
 
     /** The usual DcMotor method, but applied to all four motors.
      * @param behavior The ZeroPowerBehavior to set */

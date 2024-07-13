@@ -31,6 +31,15 @@ public class RampTwoTest extends OpMode {
         return (cm * robot.TPR) / robot.wheelCircumference;
     }
 
+    private int getAvgEncoderPos() {
+        return (
+                robot.drive.leftFront.getCurrentPosition() +
+                robot.drive.rightFront.getCurrentPosition() +
+                robot.drive.leftBack.getCurrentPosition() +
+                robot.drive.rightBack.getCurrentPosition()
+        ) / 4;
+    }
+
     @Override
     public void init() {
         robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
@@ -48,7 +57,7 @@ public class RampTwoTest extends OpMode {
 
     @Override
     public void loop() {
-        currentPos = robot.drive.getAvgEncoderPos(); // how far we've traveled in encoder ticks
+        currentPos = getAvgEncoderPos(); // how far we've traveled in encoder ticks
         // above function not in interface
         currentPos = ticksToCM(currentPos); // convert it to centimeters so it's easier for us to think about
 

@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.fy23.robot;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.fy23.roadrunner.util.LynxModuleUtil;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
@@ -55,6 +58,8 @@ public class Robot {
 
     private ElapsedTime stopwatch;
 
+    public final VoltageSensor voltageSensor;
+
     /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
      * a normal ElapsedTime. */
     public Robot(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
@@ -76,6 +81,13 @@ public class Robot {
         planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
 
         this.stopwatch = stopwatch;
+
+        // Lynx stuff found in RR's SampleMecanumDrive
+        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
     }
 
     public Robot(Parameters parameters, HardwareMap hardwareMap) {

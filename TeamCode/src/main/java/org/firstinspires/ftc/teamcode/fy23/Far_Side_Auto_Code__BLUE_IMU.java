@@ -39,6 +39,15 @@ public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
         return (cm * robot.TPR) / robot.wheelCircumference;
     }
 
+    private int getAvgEncoderPos() {
+        return (
+                robot.drive.leftFront.getCurrentPosition() +
+                robot.drive.rightFront.getCurrentPosition() +
+                robot.drive.leftBack.getCurrentPosition() +
+                robot.drive.rightBack.getCurrentPosition()
+        ) / 4;
+    }
+
     @Override
     public void runOpMode() {
 
@@ -84,11 +93,11 @@ public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
         targetPos = cmToTicks(119);
 //        stopwatch.reset();
         desiredMotion = new DTS(0.5, 0, 0);
-        while (robot.drive.getAvgEncoderPos() < targetPos) {
+        while (getAvgEncoderPos() < targetPos) {
             corrected = imuCorrector.correctDTS(desiredMotion);
             robot.drive.applyDTS(new DTS(0.5, 0, 0));
-            telemetry.addData("current position", robot.drive.getAvgEncoderPos());
-            telemetry.addData("current pos CM", ticksToCM(robot.drive.getAvgEncoderPos()));
+            telemetry.addData("current position", getAvgEncoderPos());
+            telemetry.addData("current pos CM", ticksToCM(getAvgEncoderPos()));
             telemetry.update();
         }
 
