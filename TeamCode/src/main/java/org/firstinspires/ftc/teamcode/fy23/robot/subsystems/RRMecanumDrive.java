@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
 import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
-import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -155,4 +154,8 @@ public interface RRMecanumDrive {
     TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth);
     TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel);
 
+    // from RR's MecanumDrive - not overridden in SampleMecanumDrive
+    void setDrivePower();
+    // from RR's MecanumDrive - not overridden in SampleMecanumDrive
+    void setDriveSignal();
 }

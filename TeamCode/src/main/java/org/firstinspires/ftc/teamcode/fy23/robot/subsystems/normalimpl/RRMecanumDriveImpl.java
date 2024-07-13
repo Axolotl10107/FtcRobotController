@@ -13,7 +13,6 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.*;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
-import kotlin.NotImplementedError;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -310,5 +309,27 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     @Override
     public TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
         return new ProfileAccelerationConstraint(maxAccel);
+    }
+
+    // The methods below come from the superclass (MecanumDrive) and were not overridden by SampleMecanumDrive.
+    // The interface makes them available, so these callthroughs must exist.
+    @Override
+    public void setDrivePower() {
+        super.setDrivePower(new Pose2d());
+    }
+
+    @Override
+    public void setDriveSignal() {
+        super.setDriveSignal(new DriveSignal());
+    }
+
+    @Override
+    public void setDrivePower(@NotNull Pose2d drivePower) {
+        super.setDrivePower(drivePower);
+    }
+
+    @Override
+    public void setDriveSignal(@NotNull DriveSignal driveSignal) {
+        super.setDriveSignal(driveSignal);
     }
 }
