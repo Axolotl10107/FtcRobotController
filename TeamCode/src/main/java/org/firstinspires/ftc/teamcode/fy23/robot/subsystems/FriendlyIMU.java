@@ -12,8 +12,13 @@ public interface FriendlyIMU {
     }
 
     double pitch();
+    double pitchVel();
+
     double roll();
+    double rollVel();
+
     double yaw();
+    double yawVel();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();

@@ -208,6 +208,21 @@ public class MecanumDriveBlank implements MecanumDrive, RRMecanumDrive {
 
     }
 
+    @Override
+    public void updatePoseEstimate() {
+
+    }
+
+    @Override
+    public Pose2d getPoseEstimate() {
+        return null;
+    }
+
+    @Override
+    public void setPoseEstimate(Pose2d startPose) {
+
+    }
+
 //    public void setDrivePower(Pose2d drivePower) {
 //
 //    }

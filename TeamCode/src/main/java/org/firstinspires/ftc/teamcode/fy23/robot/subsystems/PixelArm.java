@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.units.PowerTpSConverter;
@@ -59,6 +60,8 @@ public interface PixelArm {
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
         public double maxElevatorRecoveryPower;
+        /** An ElapsedTime or MockElapsedTime object, already instantiated */
+        public ElapsedTime stopwatch;
     }
 
     /** Set the target position of the pivot motor to an angle. Safety limits apply.

@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
@@ -24,9 +24,9 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 public class RobotA implements AnyRobot {
 
     // Subsystems - include only and all the subsystems that this robot actually has
-    public final MecanumDriveImpl drive;
+    public final MecanumDrive drive;
     public final FriendlyIMUImpl imu;
-    public final PixelArmImpl pixelArm;
+    public final PixelArmImpl pixelArmImpl;
     public final ClawImpl claw;
     public final PlaneLauncherImpl planeLauncher;
 
@@ -82,13 +82,13 @@ public class RobotA implements AnyRobot {
 
         sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters();
         imuParams.present = true;
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
 
         PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
         armParams.present = true;
-        pixelArm = new PixelArmImpl(armParams, new ElapsedTime());
+        pixelArmImpl = new PixelArmImpl(armParams);
 
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = true;

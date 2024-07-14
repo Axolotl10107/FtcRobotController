@@ -10,12 +10,27 @@ public class FriendlyIMUBlank implements FriendlyIMU {
     }
 
     @Override
+    public double pitchVel() {
+        return 0;
+    }
+
+    @Override
     public double roll() {
         return 0;
     }
 
     @Override
+    public double rollVel() {
+        return 0;
+    }
+
+    @Override
     public double yaw() {
+        return 0;
+    }
+
+    @Override
+    public double yawVel() {
         return 0;
     }
 

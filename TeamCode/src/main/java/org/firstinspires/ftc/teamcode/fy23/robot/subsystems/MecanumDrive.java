@@ -8,7 +8,9 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the drivebase, and the
- * implementation will handle mapping that to the individual motors. */
+ * implementation will handle mapping that to the individual motors.
+ * {@link MecanumDrive} has been superseded by {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive}.
+ * Please use that instead. */
 public interface MecanumDrive {
 
     /** Contains motor names and settings - usually part of a set of Robot parameters */

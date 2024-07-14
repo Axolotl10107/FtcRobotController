@@ -6,11 +6,10 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DigitalDevice;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 import org.firstinspires.ftc.teamcode.fy23.units.PowerTpSConverter;
 
-/** A normal implementation of {@link PixelArm} featuring acceleration control and hard and soft safety limits. */
-public class PixelArmImpl implements PixelArm {
+/** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm} featuring acceleration control and hard and soft safety limits. */
+public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm {
 
     private DcMotorEx pivotMotor;
     private DcMotorEx elevatorMotor;
@@ -50,10 +49,6 @@ public class PixelArmImpl implements PixelArm {
     private double maxElevatorRecoveryPower;
 
     public PixelArmImpl(Parameters parameters) {
-        this(parameters, new ElapsedTime());
-    }
-
-    public PixelArmImpl(Parameters parameters, ElapsedTime stopwatch) {
         pivotMotor = parameters.pivotMotor;
         elevatorMotor = parameters.elevatorMotor;
 
@@ -81,7 +76,7 @@ public class PixelArmImpl implements PixelArm {
         elevatorTicksPerMillimeter = parameters.elevatorTicksPerMillimeter;
         maxElevatorRecoveryPower = parameters.maxElevatorRecoveryPower;
 
-        this.stopwatch = stopwatch;
+        stopwatch = parameters.stopwatch;
     }
 
 

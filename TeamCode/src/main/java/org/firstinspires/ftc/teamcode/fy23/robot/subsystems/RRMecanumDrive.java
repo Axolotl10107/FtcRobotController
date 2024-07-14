@@ -12,9 +12,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -48,9 +52,6 @@ public interface RRMecanumDrive {
         /** Make sure to adjust this */
         public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
-        public double encoderTicksToInches(double ticks) {
-            return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
-        }
         public double rpmToVelocity(double rpm) {
             return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;
         }
@@ -67,6 +68,9 @@ public interface RRMecanumDrive {
         /** Use the {@link DriveConstants} class included in the RRMecanumDrive interface. */
         public DriveConstants dc;
 
+        /** Ignore this - it will be handled by the Robot class */
+        public FriendlyIMU imu;
+
         /** The motor object on the left front corner of the drivebase, already instantiated */
         public DcMotorEx leftFrontMotor;
         /** The motor object on the right front corner of the drivebase, already instantiated */
@@ -75,6 +79,11 @@ public interface RRMecanumDrive {
         public DcMotorEx leftBackMotor;
         /** The motor object on the right back corner of the drivebase, already instantiated */
         public DcMotorEx rightBackMotor;
+
+        /** An AccelLimiter object, already instantiated */
+        public AccelLimiter accelLimiter;
+        /** An ElapsedTime or MockElapsedTime object, already instantiated */
+        public ElapsedTime stopwatch;
 
         /** Applies to all motors */
         public DcMotor.RunMode runMode = DcMotor.RunMode.RUN_USING_ENCODER;
@@ -94,6 +103,19 @@ public interface RRMecanumDrive {
         public VoltageSensor batteryVoltageSensor;
     }
 
+    TrajectoryVelocityConstraint VEL_CONSTRAINT = new TrajectoryVelocityConstraint() {
+        @Override
+        public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
+            return 0;
+        }
+    };
+    TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = new TrajectoryAccelerationConstraint() {
+        @Override
+        public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
+            return 0;
+        }
+    };
+
     /** The leftFront motor, if direct access is needed */
     DcMotorEx leftFront = new BlankMotor();
     /** The rightFront motor, if direct access is needed */
@@ -102,6 +124,10 @@ public interface RRMecanumDrive {
     DcMotorEx leftBack = new BlankMotor();
     /** The rightBack motor, if direct access is needed */
     DcMotorEx rightBack = new BlankMotor();
+
+    /** Apply motor powers from a DTS (Drive-Turn-Strafe).
+     * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior. */
+    void applyDTS(DTS dts);
 
     /** The usual DcMotor method, but applied to all four motors.
      * @param runMode The RunMode to set */
@@ -154,8 +180,10 @@ public interface RRMecanumDrive {
     TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth);
     TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel);
 
-    // from RR's MecanumDrive - not overridden in SampleMecanumDrive
+    // methods from RR's MecanumDrive that are not overridden in SampleMecanumDrive
     void setDrivePower();
-    // from RR's MecanumDrive - not overridden in SampleMecanumDrive
     void setDriveSignal();
+    void updatePoseEstimate();
+    Pose2d getPoseEstimate();
+    void setPoseEstimate(Pose2d startPose);
 }

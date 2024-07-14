@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 @TeleOp

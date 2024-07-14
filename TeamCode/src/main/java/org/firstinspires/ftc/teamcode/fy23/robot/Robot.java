@@ -2,26 +2,13 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.teamcode.fy23.roadrunner.util.LynxModuleUtil;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.ClawBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.FriendlyIMUBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.MecanumDriveBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.PixelArmBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.PlaneLauncherBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.ClawImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.*;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.*;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+
 /** Encapsulates all of the components that make up a robot. A simple way to centralize initialization in one place
  * (to avoid duplicated code across OpModes) and make it easier to work with multiple different robots, each of which is
  * defined by a {@link Parameters} class. The Parameters also contain calibration values that tune certain fine
@@ -30,33 +17,38 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 public class Robot {
 
     public static class Parameters {
+        @Deprecated
         double tpr; /** ticks per rotation */
+        @Deprecated
         double wheelDiameter;
+        @Deprecated
         double maxForwardSpeed;
 //        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
         PIDconsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
         Claw.Parameters clawParameters;
-        FriendlyIMUImpl.Parameters imuParameters;
-        MecanumDriveImpl.Parameters driveParameters;
-        PixelArmImpl.Parameters pixelArmParameters;
-        PlaneLauncherImpl.Parameters planeLauncherParameters;
+        FriendlyIMU.Parameters imuParameters;
+        RRMecanumDrive.Parameters driveParameters;
+        PixelArm.Parameters pixelArmParameters;
+        PlaneLauncher.Parameters planeLauncherParameters;
     }
 
+    @Deprecated
     public final double TPR;
+    @Deprecated
     public final double wheelDiameter;
+    @Deprecated
     public final double wheelCircumference;
+    @Deprecated
     public final double maxForwardSpeed;
     public final PIDconsts hdgCorrectionPIDconsts;
 
     public final Claw claw;
     public final FriendlyIMU imu;
-    public final MecanumDrive drive;
+    public final RRMecanumDrive drive;
     public final PixelArm arm;
     public final PlaneLauncher planeLauncher;
-
-    private ElapsedTime stopwatch;
 
     public final VoltageSensor voltageSensor;
 
@@ -69,6 +61,8 @@ public class Robot {
         maxForwardSpeed = parameters.maxForwardSpeed;
         hdgCorrectionPIDconsts = parameters.hdgCorrectionPIDconsts;
 
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+
         if (parameters.clawParameters.present) {
             claw = new ClawImpl(parameters.clawParameters);
         } else {
@@ -76,15 +70,14 @@ public class Robot {
         }
         // above block and below statements work the same way
         imu = (parameters.imuParameters.present) ? new FriendlyIMUImpl(parameters.imuParameters, hardwareMap) : new FriendlyIMUBlank();
-        drive = (parameters.driveParameters.present) ? new MecanumDriveImpl(parameters.driveParameters) : new MecanumDriveBlank();
-        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters, stopwatch) : new PixelArmBlank();
+        parameters.driveParameters.imu = imu; // RRMecanumDrive needs an IMU, so we pass in the one we want here
+        parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
+        drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : (RRMecanumDrive) new MecanumDriveBlank();
+        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters) : new PixelArmBlank();
         planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
 
-        this.stopwatch = stopwatch;
-
         // Lynx stuff found in RR's SampleMecanumDrive
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
-        voltageSensor = hardwareMap.voltageSensor.iterator().next();
+//        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }

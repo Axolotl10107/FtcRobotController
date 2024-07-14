@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PixelArmTest {
 
-    PixelArm.Parameters params = new PixelArm.Parameters();
+    org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters params = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters();
     MockElapsedTime pivotStopwatch = new MockElapsedTime();
     MockElapsedTime elevatorStopwatch = new MockElapsedTime();
     MockDcMotorEx pivotMotor = new MockDcMotorEx(pivotStopwatch);
@@ -42,7 +42,7 @@ public class PixelArmTest {
     @Test
     public void testPivotSoftLimits() {
         initializeParams();
-        PixelArm pixelArm = new PixelArmImpl(params);
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm pixelArm = new PixelArmImpl(params);
 
         // lower limit (assuming we start at the lower limit)
         pixelArm.setPivotPower(-1);

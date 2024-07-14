@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
@@ -11,43 +10,59 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.*;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
+import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.DriveConstants.*;
-import static org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.DriveConstants.MAX_ACCEL;
-
 @Config
-public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
+public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive {
 
     public DcMotorEx leftFront;
     public DcMotorEx rightFront;
     public DcMotorEx leftBack;
     public DcMotorEx rightBack;
 
-    public PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    private double lfPowerTarget = 0;
+    private double rfPowerTarget = 0;
+    private double lbPowerTarget = 0;
+    private double rbPowerTarget = 0;
+    private boolean inDTSMode = false;
 
-    // super() fails if this isn't static... educational exercise: try removing "static" and see if you can figure out what the problem is
-    public static double LATERAL_MULTIPLIER = 1;
+    private AccelLimiter accelLimiter;
+    private ElapsedTime stopwatch;
+    private FriendlyIMU imu;
 
-    public double VX_WEIGHT = 1;
-    public double VY_WEIGHT = 1;
-    public double OMEGA_WEIGHT = 1;
+    public static double LATERAL_MULTIPLIER;
+
+    public double VX_WEIGHT;
+    public double VY_WEIGHT;
+    public double OMEGA_WEIGHT;
 
     private TrajectorySequenceRunner trajectorySequenceRunner;
 
-    private final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
+    public final TrajectoryVelocityConstraint VEL_CONSTRAINT;
+    public final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
+
+    private double MAX_ANG_VEL;
+    private double MAX_ANG_ACCEL;
+    private double WHEEL_RADIUS;
+    private double GEAR_RATIO;
+    private double TICKS_PER_REV;
 
     private TrajectoryFollower follower;
 
@@ -59,28 +74,35 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     private List<Integer> lastEncVels = new ArrayList<>();
 
     public RRMecanumDriveImpl(RRMecanumDrive.Parameters parameters) {
-        super(parameters.dc.kV, parameters.dc.kA, parameters.dc.kStatic, parameters.dc.TRACK_WIDTH, parameters.dc.TRACK_WIDTH, LATERAL_MULTIPLIER);
+        super(parameters.dc.kV, parameters.dc.kA, parameters.dc.kStatic, parameters.dc.TRACK_WIDTH, parameters.dc.TRACK_WIDTH, parameters.LATERAL_MULTIPLIER);
 
         leftFront = parameters.leftFrontMotor;
         rightFront = parameters.rightFrontMotor;
         leftBack = parameters.leftBackMotor;
         rightBack = parameters.rightBackMotor;
 
+        LATERAL_MULTIPLIER = parameters.LATERAL_MULTIPLIER;
+
+        VX_WEIGHT = parameters.VX_WEIGHT;
+        VY_WEIGHT = parameters.VY_WEIGHT;
+        OMEGA_WEIGHT = parameters.OMEGA_WEIGHT;
+
+        VEL_CONSTRAINT = getVelocityConstraint(parameters.dc.MAX_VEL, parameters.dc.MAX_ANG_VEL, parameters.dc.TRACK_WIDTH);
+        ACCEL_CONSTRAINT = getAccelerationConstraint(parameters.dc.MAX_ACCEL);
+
+        MAX_ANG_VEL = parameters.dc.MAX_ANG_VEL;
+        MAX_ANG_ACCEL = parameters.dc.MAX_ANG_ACCEL;
+        WHEEL_RADIUS = parameters.dc.WHEEL_RADIUS;
+        GEAR_RATIO = parameters.dc.GEAR_RATIO;
+        TICKS_PER_REV = parameters.dc.TICKS_PER_REV;
+
+        accelLimiter = parameters.accelLimiter;
+        stopwatch = parameters.stopwatch;
+        imu = parameters.imu;
+
         batteryVoltageSensor = parameters.batteryVoltageSensor;
 
-        try {
-            setMode(parameters.runMode);
-        } catch (Exception x) {
-            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if the RunMode wasn't set, pick a default
-        }
-
-        try {
-            setZeroPowerBehavior(parameters.zeroPowerBehavior);
-        } catch (Exception x) {
-            setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
-
-        follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
+        follower = new HolonomicPIDVAFollower(parameters.TRANSLATIONAL_PID, parameters.TRANSLATIONAL_PID, parameters.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         // TODO: SampleMecanumDrive constructs the IMU here
@@ -92,12 +114,8 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
             motor.setMotorType(motorConfigurationType);
         }
 
-        // SampleMecanumDrive checks for RUN_USING_ENCODER in DriveConstants. Please use the existing RunMode field in the MecanumDrive parameters instead.
-        setMode(parameters.runMode);
-        setZeroPowerBehavior(parameters.zeroPowerBehavior);
-
-        if (leftFront.getMode() == DcMotor.RunMode.RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
-            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
+        if (leftFront.getMode() == DcMotor.RunMode.RUN_USING_ENCODER && parameters.dc.MOTOR_VELO_PID != null) {
+            setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, parameters.dc.MOTOR_VELO_PID);
         }
 
         leftFront.setDirection(DcMotor.Direction.REVERSE);
@@ -112,9 +130,31 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
         // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
-                follower, HEADING_PID, parameters.batteryVoltageSensor,
+                follower, parameters.HEADING_PID, parameters.batteryVoltageSensor,
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
+
+        // SampleMecanumDrive checks for RUN_USING_ENCODER in DriveConstants. Please use the existing RunMode field in the MecanumDrive parameters instead.
+        try {
+            setMode(parameters.runMode);
+        } catch (Exception x) {
+            setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); // if the RunMode wasn't set, pick a default
+        }
+
+        try {
+            setZeroPowerBehavior(parameters.zeroPowerBehavior);
+        } catch (Exception x) {
+            setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
+    }
+
+    @Override
+    public void applyDTS(DTS dts) {
+        lfPowerTarget = dts.drive - dts.turn + dts.strafe;
+        rfPowerTarget = dts.drive + dts.turn - dts.strafe;
+        lbPowerTarget = dts.drive - dts.turn - dts.strafe;
+        rbPowerTarget = dts.drive + dts.turn + dts.strafe;
+        inDTSMode = true;
     }
 
     @Override
@@ -133,6 +173,32 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void update() {
+        if (inDTSMode) {
+            tUpdate();
+        }
+    }
+
+    // for when applyDTS() is being used - called by OpMode
+    private void tUpdate() {
+        double currentLF = leftFront.getPower();
+        double currentRF = rightFront.getPower();
+        double currentLB = leftBack.getPower();
+        double currentRB = rightBack.getPower();
+        double requestedDeltaLF = lfPowerTarget - currentLF;
+        double requestedDeltaRF = rfPowerTarget - currentRF;
+        double requestedDeltaLB = lbPowerTarget - currentLB;
+        double requestedDeltaRB = rbPowerTarget - currentRB;
+        List<Double> requestList = Arrays.asList(requestedDeltaLF, requestedDeltaRF, requestedDeltaLB, requestedDeltaRB);
+
+        List<Double> returnList = accelLimiter.requestDeltaVelOnN(requestList, stopwatch.seconds());
+        leftFront.setPower(currentLF + returnList.get(0));
+        rightFront.setPower(currentRF + returnList.get(1));
+        leftBack.setPower(currentLB + returnList.get(2));
+        rightBack.setPower(currentRB + returnList.get(3));
+    }
+
+    // for when followTrajectory(Sequence) is being used - called by waitForIdle()
+    private void rrUpdate() {
         updatePoseEstimate();
         DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
@@ -164,6 +230,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void turnAsync(double angle) {
+        inDTSMode = false;
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(getPoseEstimate())
                         .turn(angle)
@@ -179,6 +246,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void followTrajectoryAsync(Trajectory trajectory) {
+        inDTSMode = false;
         trajectorySequenceRunner.followTrajectorySequenceAsync(
                 trajectorySequenceBuilder(trajectory.start())
                         .addTrajectory(trajectory)
@@ -194,6 +262,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
+        inDTSMode = false;
         trajectorySequenceRunner.followTrajectorySequenceAsync(trajectorySequence);
     }
 
@@ -211,7 +280,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     @Override
     public void waitForIdle() {
         while (!Thread.currentThread().isInterrupted() && isBusy())
-            update();
+            rrUpdate();
     }
 
     @Override
@@ -233,6 +302,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void setWeightedDrivePower(Pose2d drivePower) {
+        inDTSMode = false;
         Pose2d vel = drivePower;
 
         if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
@@ -250,6 +320,10 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
         }
 
         setDrivePower(vel);
+    }
+
+    public double encoderTicksToInches(double ticks) {
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
     @NonNull
@@ -282,6 +356,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
+        inDTSMode = false;
         leftFront.setPower(v);
         leftBack.setPower(v1);
         rightBack.setPower(v2);
@@ -290,12 +365,12 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
-        throw new UnsupportedOperationException();
+        return Math.toRadians(imu.yaw());
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        throw new UnsupportedOperationException();
+        return imu.yawVel();
     }
 
     @Override
@@ -315,21 +390,25 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     // The interface makes them available, so these callthroughs must exist.
     @Override
     public void setDrivePower() {
+        inDTSMode = false;
         super.setDrivePower(new Pose2d());
     }
 
     @Override
     public void setDriveSignal() {
+        inDTSMode = false;
         super.setDriveSignal(new DriveSignal());
     }
 
     @Override
     public void setDrivePower(@NotNull Pose2d drivePower) {
+        inDTSMode = false;
         super.setDrivePower(drivePower);
     }
 
     @Override
     public void setDriveSignal(@NotNull DriveSignal driveSignal) {
+        inDTSMode = false;
         super.setDriveSignal(driveSignal);
     }
 }

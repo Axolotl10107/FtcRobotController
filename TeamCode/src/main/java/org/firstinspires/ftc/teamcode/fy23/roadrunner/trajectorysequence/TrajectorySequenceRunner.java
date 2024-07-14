@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.sequenc
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.sequencesegment.WaitSegment;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.util.DashboardUtil;
-import org.firstinspires.ftc.teamcode.fy23.roadrunner.util.LogFiles;
+//import org.firstinspires.ftc.teamcode.fy23.roadrunner.util.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -211,10 +211,11 @@ public class TrajectorySequenceRunner {
         }
 
         if (targetPose != null) {
-            LogFiles.record(
-                    targetPose, poseEstimate, voltage,
-                    lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels
-            );
+            // TODO: This is commented out so that JavaDoc builds...
+//            LogFiles.record(
+//                    targetPose, poseEstimate, voltage,
+//                    lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels
+//            );
         }
 
         packet.put("x", poseEstimate.getX());

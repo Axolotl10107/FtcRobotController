@@ -1,14 +1,15 @@
 package org.firstinspires.ftc.teamcode.fy23.robot;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PlaneLauncherImpl;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 import org.firstinspires.ftc.teamcode.fy23.units.SimplePowerTpSConverter;
 
@@ -24,10 +25,10 @@ public class RobotRoundhouse {
         clawParams.openPosition = 0.1;
         clawParams.closePosition = 0.01;
 
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
 
-        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
@@ -47,7 +48,7 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
+        PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = true;
         armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
@@ -68,7 +69,7 @@ public class RobotRoundhouse {
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxElevatorRecoveryPower = 0.2;
 
-        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
+        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
         planeLauncherParams.present = true;
         planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
@@ -91,10 +92,10 @@ public class RobotRoundhouse {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
 
-        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
@@ -114,10 +115,10 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
+        PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = false;
 
-        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
+        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
@@ -139,10 +140,23 @@ public class RobotRoundhouse {
         Claw.Parameters clawParams = new Claw.Parameters();
         clawParams.present = false;
 
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
 
-        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
+        RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
+
+        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+        driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
+        dc.TICKS_PER_REV = 1120;
+        dc.MAX_RPM = 133.9;
+        dc.WHEEL_RADIUS = 2;
+        dc.TRACK_WIDTH = 18;
+        dc.MAX_VEL = dc.MAX_RPM * Math.PI * (dc.WHEEL_RADIUS * 2) / 60.0;
+        dc.kV = 1.0 / dc.MAX_VEL;
+        dc.kA = 0;
+        dc.kStatic = 0;
+
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
@@ -162,17 +176,17 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
+        PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = false;
 
-        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters();
         planeLauncherParams.present = false;
 
         Robot.Parameters params = new Robot.Parameters();
-        params.tpr = 537.7;
-        params.wheelDiameter = 0.096; // in meters
+        params.tpr = 1120;
+        params.wheelDiameter = 0.1016; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDconsts(0, 0, 0);
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;
@@ -190,10 +204,10 @@ public class RobotRoundhouse {
         clawParams.openPosition = 0.1;
         clawParams.closePosition = 0.01;
 
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters();
         imuParams.present = false;
 
-        MecanumDriveImpl.Parameters driveParams = new MecanumDriveImpl.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters driveParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters();
         driveParams.present = false;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
@@ -213,7 +227,7 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters armParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters();
         armParams.present = true;
         armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "motor");
 //        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
@@ -235,7 +249,7 @@ public class RobotRoundhouse {
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxElevatorRecoveryPower = 0.2;
 
-        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters();
         planeLauncherParams.present = false;
         planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeServo");
 

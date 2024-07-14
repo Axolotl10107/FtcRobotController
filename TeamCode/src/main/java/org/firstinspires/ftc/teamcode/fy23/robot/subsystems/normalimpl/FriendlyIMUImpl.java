@@ -3,19 +3,20 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
+import org.firstinspires.ftc.robotcore.external.navigation.*;
 
-/** A normal implementation of {@link FriendlyIMU}.
+/** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU}.
  * <b>This class has an open task:</b> Robot and Subsystems / Remake FriendlyIMUImpl */
-public class FriendlyIMUImpl implements FriendlyIMU {
+public class FriendlyIMUImpl implements org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU {
 
     private double pitch;
+    private double pitchVel;
+
     private double roll;
+    private double rollVel;
+
     private double yaw;
+    private double yawVel;
 
     public BNO055IMU imu; //our control hubs should have this type
     private BNO055IMU.Parameters imuParams; //stores configuration stuff for the IMU
@@ -23,7 +24,7 @@ public class FriendlyIMUImpl implements FriendlyIMU {
 
     Orientation orientation;
 
-    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap, AngleUnit angleUnit) {
+    public FriendlyIMUImpl(org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters parameters, HardwareMap hardwareMap, AngleUnit angleUnit) {
         imuParams = new BNO055IMU.Parameters();
         imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
         //see "SensorBNO055IMUCalibration" example
@@ -34,7 +35,7 @@ public class FriendlyIMUImpl implements FriendlyIMU {
         this.angleUnit = angleUnit;
     }
 
-    public FriendlyIMUImpl(FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
+    public FriendlyIMUImpl(org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
         this(parameters, hardwareMap, AngleUnit.DEGREES);
     }
 
@@ -45,10 +46,23 @@ public class FriendlyIMUImpl implements FriendlyIMU {
         yaw = orientation.firstAngle;
     }
 
+    private void updateVelocity() {
+        AngularVelocity angVel = imu.getAngularVelocity();
+        pitchVel = angVel.xRotationRate;
+        rollVel = angVel.yRotationRate;
+        yawVel = angVel.zRotationRate;
+    }
+
     @Override
     public double pitch() {
         updateOrientation();
         return angleUnit.fromDegrees(pitch);
+    }
+
+    @Override
+    public double pitchVel() {
+        updateVelocity();
+        return angleUnit.fromDegrees(pitchVel);
     }
 
     @Override
@@ -58,9 +72,21 @@ public class FriendlyIMUImpl implements FriendlyIMU {
     }
 
     @Override
+    public double rollVel() {
+        updateVelocity();
+        return angleUnit.fromDegrees(rollVel);
+    }
+
+    @Override
     public double yaw() {
         updateOrientation();
         return angleUnit.fromDegrees(yaw);
+    }
+
+    @Override
+    public double yawVel() {
+        updateVelocity();
+        return angleUnit.fromDegrees(yawVel);
     }
 
     @Override

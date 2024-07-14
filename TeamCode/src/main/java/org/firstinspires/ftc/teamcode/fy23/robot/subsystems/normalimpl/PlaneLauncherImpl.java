@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
-
-/** A normal implementation of {@link PlaneLauncher}. */
-public class PlaneLauncherImpl implements PlaneLauncher {
+/** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher}. */
+public class PlaneLauncherImpl implements org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher {
 
     private Servo servo;
     private boolean launchComplete;

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 public class VirtualRobot implements AnyRobot {
 
     // Subsystems - include only and all the subsystems that this robot actually has
-    public final MecanumDriveImpl drive;
+    public final MecanumDrive drive;
     public final FriendlyIMUImpl imu;
 
     /** Ticks per Rotation - 537.7 for the goBILDA 5203-2402-0019 found on the Strafer V5 */
