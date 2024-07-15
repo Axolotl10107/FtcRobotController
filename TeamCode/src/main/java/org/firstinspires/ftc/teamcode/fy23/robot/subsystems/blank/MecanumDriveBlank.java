@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /** A blank implementation of {@link MecanumDrive} that does nothing. Can also be
- * used for any variant of that interface. Does not return null, returns blank
- * objects, so hopefully no null pointers. */
+ * used for any variant of that interface. Never returns null (returns blank objects
+ * instead where applicable), so hopefully no null pointers.*/
 public class MecanumDriveBlank implements MecanumDrive, RRMecanumDrive {
 
     @Override
@@ -215,7 +215,7 @@ public class MecanumDriveBlank implements MecanumDrive, RRMecanumDrive {
 
     @Override
     public Pose2d getPoseEstimate() {
-        return null;
+        return new Pose2d();
     }
 
     @Override

@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 
-/** A blank implementation of {@link PixelArm} that does nothing. */
+/** A blank implementation of {@link PixelArm} that does nothing.
+ * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
 public class PixelArmBlank implements PixelArm {
 
     @Override

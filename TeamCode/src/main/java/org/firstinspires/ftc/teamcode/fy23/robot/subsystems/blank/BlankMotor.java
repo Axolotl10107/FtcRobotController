@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank;
 
+import com.qualcomm.hardware.lynx.LynxDcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -8,6 +9,8 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+/** A blank implementation of DcMotorEx that does nothing.
+ * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
 public class BlankMotor implements DcMotorEx {
     @Override
     public void setMotorEnable() {
@@ -66,12 +69,12 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public PIDCoefficients getPIDCoefficients(RunMode runMode) {
-        return null;
+        return new PIDCoefficients();
     }
 
     @Override
     public PIDFCoefficients getPIDFCoefficients(RunMode runMode) {
-        return null;
+        return new PIDFCoefficients();
     }
 
     @Override
@@ -106,7 +109,7 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public MotorConfigurationType getMotorType() {
-        return null;
+        return new MotorConfigurationType();
     }
 
     @Override
@@ -116,7 +119,108 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public DcMotorController getController() {
-        return null;
+        // Could easily replace this with a BlankMotorController - maybe a project for the future
+        return new DcMotorController() {
+            @Override
+            public void setMotorType(int motor, MotorConfigurationType motorType) {
+
+            }
+
+            @Override
+            public MotorConfigurationType getMotorType(int motor) {
+                return new MotorConfigurationType();
+            }
+
+            @Override
+            public void setMotorMode(int motor, RunMode mode) {
+
+            }
+
+            @Override
+            public RunMode getMotorMode(int motor) {
+                return RunMode.RUN_WITHOUT_ENCODER;
+            }
+
+            @Override
+            public void setMotorPower(int motor, double power) {
+
+            }
+
+            @Override
+            public double getMotorPower(int motor) {
+                return 0;
+            }
+
+            @Override
+            public boolean isBusy(int motor) {
+                return false;
+            }
+
+            @Override
+            public void setMotorZeroPowerBehavior(int motor, ZeroPowerBehavior zeroPowerBehavior) {
+
+            }
+
+            @Override
+            public ZeroPowerBehavior getMotorZeroPowerBehavior(int motor) {
+                return ZeroPowerBehavior.FLOAT;
+            }
+
+            @Override
+            public boolean getMotorPowerFloat(int motor) {
+                return false;
+            }
+
+            @Override
+            public void setMotorTargetPosition(int motor, int position) {
+
+            }
+
+            @Override
+            public int getMotorTargetPosition(int motor) {
+                return 0;
+            }
+
+            @Override
+            public int getMotorCurrentPosition(int motor) {
+                return 0;
+            }
+
+            @Override
+            public void resetDeviceConfigurationForOpMode(int motor) {
+
+            }
+
+            @Override
+            public Manufacturer getManufacturer() {
+                return Manufacturer.Unknown;
+            }
+
+            @Override
+            public String getDeviceName() {
+                return "DcMotorController inside of BlankMotor";
+            }
+
+            @Override
+            public String getConnectionInfo() {
+                return "Not Applicable";
+            }
+
+            @Override
+            public int getVersion() {
+                return 0;
+            }
+
+            @Override
+            public void resetDeviceConfigurationForOpMode() {
+
+            }
+
+            @Override
+            public void close() {
+
+            }
+        };
     }
 
     @Override
@@ -131,7 +235,7 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public ZeroPowerBehavior getZeroPowerBehavior() {
-        return null;
+        return ZeroPowerBehavior.FLOAT;
     }
 
     @Override
@@ -171,7 +275,7 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public RunMode getMode() {
-        return null;
+        return RunMode.RUN_WITHOUT_ENCODER;
     }
 
     @Override
@@ -181,7 +285,7 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public Direction getDirection() {
-        return null;
+        return Direction.FORWARD;
     }
 
     @Override
@@ -196,17 +300,17 @@ public class BlankMotor implements DcMotorEx {
 
     @Override
     public Manufacturer getManufacturer() {
-        return null;
+        return Manufacturer.Unknown;
     }
 
     @Override
     public String getDeviceName() {
-        return null;
+        return "BlankMotor";
     }
 
     @Override
     public String getConnectionInfo() {
-        return null;
+        return "Not Applicable";
     }
 
     @Override

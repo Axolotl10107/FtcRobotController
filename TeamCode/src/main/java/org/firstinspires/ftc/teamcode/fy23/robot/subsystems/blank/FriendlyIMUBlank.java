@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 
-/** A blank implementation of {@link FriendlyIMU} that does nothing. */
+/** A blank implementation of {@link FriendlyIMU} that does nothing.
+ * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
 public class FriendlyIMUBlank implements FriendlyIMU {
     @Override
     public double pitch() {
