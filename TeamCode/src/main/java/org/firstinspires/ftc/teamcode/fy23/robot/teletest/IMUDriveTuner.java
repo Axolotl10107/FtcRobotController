@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.fy23.robot.old;
+package org.firstinspires.ftc.teamcode.fy23.robot.teletest;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.specific.imudrivetuner.IMUDriveTunerScheme;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.specific.imudrivetuner.IMUDriveTunerState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
@@ -16,15 +16,13 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
 
 import java.io.File;
 
-@Disabled
-@TeleOp
-public class RobotBIMUDriveTuner extends OpMode {
+@TeleOp(group="TeleTest")
+public class IMUDriveTuner extends OpMode {
 
-    GamepadTrueDTS gamepad;
+    IMUDriveTunerState gamepad;
+    IMUDriveTunerScheme controlScheme;
     IMUcorrector imuCorrector;
-    DTSscaler scaler;
     Robot robot;
-
     TunablePID pid;
 
     double changeAmount = 0.01;
@@ -32,8 +30,8 @@ public class RobotBIMUDriveTuner extends OpMode {
     @Override
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
-        scaler = new DTSscaler();
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        // TODO: Detect and/or parameterize which robot to use
+        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
     }
 
     public void start() {
@@ -49,13 +47,15 @@ public class RobotBIMUDriveTuner extends OpMode {
         imuCorrector = new IMUcorrector(params);
         // Why is this here? Because Virtual Robot is slow, I guess?
         pid = params.pid;
-        gamepad = new GamepadTrueDTS(gamepad1, gamepad2);
+        controlScheme = new IMUDriveTunerScheme(gamepad1, gamepad2);
         // totally a safety mechanism - try moving during init without a gamepad :)
     }
 
     @Override
     public void loop() {
-        robot.drive.applyDTS(scaler.scale(imuCorrector.correctDTS(gamepad.dts())));
+        gamepad = controlScheme.getState();
+
+        robot.drive.applyDTS(imuCorrector.correctDTS(gamepad.getDts()).normalize());
         // Yup. That's the OpMode. That line lets you drive the robot.
 
         if (gamepad.pUp()) {
@@ -93,7 +93,8 @@ public class RobotBIMUDriveTuner extends OpMode {
 
         if (gamepad.save()) {
             // modified from SensorBNO055IMUCalibration example
-            String filename = "RobotB.pid";
+            // TODO: Detect robot and/or parameterize filename
+            String filename = "RobotA.pid";
             File file = AppUtil.getInstance().getSettingsFile(filename);
             PIDconsts constsToWrite = new PIDconsts(pid.getProportional(), pid.getIntegralMultiplier(), pid.getDerivativeMultiplier());
             ReadWriteFile.writeFile(file, constsToWrite.serialize());
@@ -108,9 +109,9 @@ public class RobotBIMUDriveTuner extends OpMode {
         telemetry.addLine("D-Pad right/left - heading (ignores change amount)");
         telemetry.addLine("Right Bumper - save to RobotB.pid");
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("Requested turn", gamepad.dts().turn);
+        telemetry.addData("Requested turn", gamepad.getDts().turn);
 //        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
-        telemetry.addData("Actual turn", scaler.scaledTurn);
+        telemetry.addData("Actual turn", gamepad.getDts().normalize().turn);
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Proportional", pid.getProportional());
         telemetry.addData("Integral", pid.getIntegral());

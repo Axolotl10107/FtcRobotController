@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 /*
  * Constants shared between multiple drive types.
  *
- * TODO: Tune or adjust the following constants to fit your robot. Note that the non-final
+ * TODON'T: Tune or adjust the following constants to fit your robot. Note that the non-final
  * fields may also be edited through the dashboard (connect to the robot's WiFi network and
  * navigate to https://192.168.49.1:8080/dash). Make sure to save the values here after you
  * adjust them in the dashboard; **config variable changes don't persist between app restarts**.
@@ -15,7 +15,16 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  * These are not the only parameters; some are located in the localizer classes, drive base classes,
  * and op modes themselves.
  */
+
+/* The above section says TODON'T for a reason: please don't use this file!
+* Please use the appropriate field ("dc", or drive constants) in the RRMecanumDrive parameters.
+* It should be populated with a modified version of this class that RRMecanumDrive provides.
+* Make sure you use the class from the interface, not this file!
+* And if you're working on RRMecanumDrive, make sure you use drive constants from the parameters
+* rather than the ones from this file.
+* Perhaps the Deprecated annotation will help you. */
 @Config
+@Deprecated
 public class DriveConstants {
 
     /*

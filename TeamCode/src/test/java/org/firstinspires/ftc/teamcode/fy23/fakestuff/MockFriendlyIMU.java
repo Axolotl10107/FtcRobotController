@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.fakestuff;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 
 public class MockFriendlyIMU implements FriendlyIMU {
@@ -19,8 +20,18 @@ public class MockFriendlyIMU implements FriendlyIMU {
     }
 
     @Override
+    public double pitch(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(pitch);
+    }
+
+    @Override
     public double pitchVel() {
         return pitchVel;
+    }
+
+    @Override
+    public double pitchVel(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(pitchVel);
     }
 
     @Override
@@ -29,8 +40,18 @@ public class MockFriendlyIMU implements FriendlyIMU {
     }
 
     @Override
+    public double roll(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(roll);
+    }
+
+    @Override
     public double rollVel() {
         return rollVel;
+    }
+
+    @Override
+    public double rollVel(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(rollVel);
     }
 
     @Override
@@ -39,8 +60,18 @@ public class MockFriendlyIMU implements FriendlyIMU {
     }
 
     @Override
+    public double yaw(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(yaw);
+    }
+
+    @Override
     public double yawVel() {
         return yawVel;
+    }
+
+    @Override
+    public double yawVel(AngleUnit angleUnit) {
+        return angleUnit.fromDegrees(yawVel);
     }
 
     @Override

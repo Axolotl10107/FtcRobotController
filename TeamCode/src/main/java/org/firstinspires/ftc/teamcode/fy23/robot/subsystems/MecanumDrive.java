@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.DTS;
  * implementation will handle mapping that to the individual motors.
  * {@link MecanumDrive} has been superseded by {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive}.
  * Please use that instead. */
+@Deprecated
 public interface MecanumDrive {
 
     /** Contains motor names and settings - usually part of a set of Robot parameters */

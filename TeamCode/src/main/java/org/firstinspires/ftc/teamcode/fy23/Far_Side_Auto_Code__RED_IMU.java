@@ -59,6 +59,8 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
         params.turnThreshold = 0.05;
         params.imu = robot.imu;
         params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        params.errorSampleTimer = new ElapsedTime();
+        params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
 
         stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);

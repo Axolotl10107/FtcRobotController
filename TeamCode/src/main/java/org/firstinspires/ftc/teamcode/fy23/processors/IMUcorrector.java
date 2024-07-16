@@ -24,6 +24,8 @@ public class IMUcorrector {
         public double haveHitTargetTolerance;
         /** An ElapsedTime (or MockElapsedTime for testing) */
         public ElapsedTime errorSampleTimer;
+        /** How long to wait between updates of lastHdgError (milliseconds) (default 1150) */
+        public int errorSampleDelay;
     }
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
@@ -50,6 +52,7 @@ public class IMUcorrector {
     private TunablePID pid;
 
     private ElapsedTime errorSampleTimer;
+    private int errorSampleDelay;
 //    public ElapsedTime postSquaringUpPatienceTimer;
 
     public IMUcorrector(Parameters parameters) {
@@ -60,6 +63,7 @@ public class IMUcorrector {
         imu = parameters.imu;
         pid = parameters.pid;
         errorSampleTimer = parameters.errorSampleTimer;
+        errorSampleDelay = parameters.errorSampleDelay;
     }
 
     private DTS applyCorrection(DTS dts) {
@@ -73,9 +77,9 @@ public class IMUcorrector {
     public DTS correctDTS(DTS driver) {
 
 //        returnDTS = new DTS(driver.drive, 0, driver.strafe); // we'll populate turn ourselves
-        returnDTS = driver;
+        returnDTS = driver; // actually, let's replace turn when we need to instead of never passing theirs through :)
 
-        if (errorSampleTimer.milliseconds() > 1150) {
+        if (errorSampleTimer.milliseconds() > errorSampleDelay) {
             lastHdgError = headingError;
             errorSampleTimer.reset();
         }

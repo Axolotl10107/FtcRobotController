@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-@TeleOp
+@TeleOp(group="TeleTest")
 public class RobotATestTeleOp extends OpMode {
 
     Robot robot;
@@ -32,6 +32,7 @@ public class RobotATestTeleOp extends OpMode {
         params.imu = robot.imu;
         params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
         params.errorSampleTimer = new ElapsedTime();
+        params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
     }
 

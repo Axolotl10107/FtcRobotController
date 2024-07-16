@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.fy23.robot.teletest;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
@@ -10,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-@TeleOp
+@TeleOp(group="TeleTest")
 public class VirtualRobotTestTeleOp extends OpMode {
 
     Robot robot;
@@ -29,6 +31,8 @@ public class VirtualRobotTestTeleOp extends OpMode {
         params.turnThreshold = 0.05;
         params.imu = robot.imu;
         params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        params.errorSampleTimer = new ElapsedTime();
+        params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
     }
 

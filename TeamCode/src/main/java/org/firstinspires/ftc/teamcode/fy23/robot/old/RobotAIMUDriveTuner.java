@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -43,6 +44,8 @@ public class RobotAIMUDriveTuner extends OpMode {
         params.turnThreshold = 0.05;
         params.imu = robot.imu;
         params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
+        params.errorSampleTimer = new ElapsedTime();
+        params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
         // Why is this here? Because Virtual Robot is slow, I guess?
         pid = params.pid;

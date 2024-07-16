@@ -14,6 +14,7 @@ import java.util.List;
 /** A normal implementation of {@link MecanumDrive} featuring acceleration control.
  * {@link MecanumDrive} has been superseded by {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive}.
  * Please use that instead. */
+@Deprecated
 public class MecanumDriveImpl implements MecanumDrive {
 
     public DcMotorEx leftFront;
