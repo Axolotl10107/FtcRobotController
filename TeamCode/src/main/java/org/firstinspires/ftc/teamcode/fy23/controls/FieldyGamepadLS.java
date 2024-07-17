@@ -28,7 +28,7 @@ public class FieldyGamepadLS extends NoDriveAxes {
     }
 
     public DTS dts() {
-        rrVector = new Vector2d(GamepadInputs.leftStickYLinear(driver, 1), GamepadInputs.leftStickXLinear(driver, 1)).rotated(Math.toRadians(imu.yaw()));
+        rrVector = new Vector2d((GamepadInputs.rightTriggerLinear(driver, 1) - GamepadInputs.leftTriggerLinear(driver, 1)), GamepadInputs.rightStickXLinear(driver, 1)).rotated(Math.toRadians(imu.yaw()));
 //        return new DTS(
 //                GamepadInputs.rightTriggerLinear(driver, 1) - GamepadInputs.leftTriggerLinear(driver, 1),
 //                -GamepadInputs.leftStickXLinear(driver, 1),
@@ -36,7 +36,7 @@ public class FieldyGamepadLS extends NoDriveAxes {
 //        );
         return new DTS(
                 rrVector.component1(),
-                GamepadInputs.leftTriggerLinear(driver, 1) - GamepadInputs.rightTriggerLinear(driver, 1),
+                GamepadInputs.leftStickXLinear(driver, 1),
                 // Positive turn is counterclockwise!
                 rrVector.component2()
         );

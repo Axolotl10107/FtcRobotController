@@ -25,6 +25,7 @@ public class Robot {
         double maxForwardSpeed;
 //        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
+        @Deprecated
         PIDconsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
         Claw.Parameters clawParameters;

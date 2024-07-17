@@ -29,6 +29,38 @@ public class RobotRoundhouse {
         imuParams.present = true;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
+        RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
+
+        dc.TICKS_PER_REV = 537.7;
+        dc.MAX_RPM = 312;
+        dc.RUN_USING_ENCODER = true;
+        dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
+                dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
+
+        dc.WHEEL_RADIUS = 1.88976;
+        dc.GEAR_RATIO = 1;
+        dc.TRACK_WIDTH = 16.25;
+
+        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
+        dc.kA = 0;
+        dc.kStatic = 0;
+
+        // TODO: Tune these!
+        dc.MAX_VEL = 50;
+        dc.MAX_ACCEL = 50;
+        dc.MAX_ANG_VEL = Math.toRadians(60);
+        dc.MAX_ANG_ACCEL = Math.toRadians(60);
+
+        driveParams.dc = dc;
+
+        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+        driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
+        driveParams.LATERAL_MULTIPLIER = 1;
+        driveParams.VX_WEIGHT = 1;
+        driveParams.VY_WEIGHT = 1;
+        driveParams.OMEGA_WEIGHT = 1;
+
+
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
@@ -42,7 +74,7 @@ public class RobotRoundhouse {
         driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
         driveParams.leftBackMotor.setDirection(REVERSE);
 
-        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
+        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
         driveParams.rightBackMotor.setDirection(FORWARD);
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
@@ -50,7 +82,7 @@ public class RobotRoundhouse {
 
         PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = true;
-        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
+        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
         armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
@@ -97,6 +129,9 @@ public class RobotRoundhouse {
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         driveParams.present = true;
+
+        // The defaults in DriveConstants should work here
+        driveParams.dc = new RRMecanumDrive.DriveConstants();
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
 

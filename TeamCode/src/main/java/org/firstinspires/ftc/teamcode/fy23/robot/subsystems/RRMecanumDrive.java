@@ -33,9 +33,9 @@ public interface RRMecanumDrive {
         public PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
-        public double WHEEL_RADIUS = 3.77953; // inches
+        public double WHEEL_RADIUS = 1.88976; // inches (converetd from 48mm)
         public double GEAR_RATIO = 1;
-        public double TRACK_WIDTH = 413.2;
+        public double TRACK_WIDTH = 16.25; // wheelbase is about 13.125  // TODO: Check against a *stock* Strafer
 
         public double kV = 1.0 / rpmToVelocity(MAX_RPM);
         public double kA = 0;
