@@ -52,8 +52,8 @@ public class RobotBTestTeleOp extends OpMode {
         telemetry.addData("turn", normalizedDTS.turn);
         telemetry.addData("strafe", normalizedDTS.strafe);
         telemetry.addData("heading", robot.imu.yaw());
-        telemetry.addData("heading error", imuCorrector.headingError);
-        telemetry.addData("haveHitTarget?", imuCorrector.haveHitTarget);
-        telemetry.addData("turning?", imuCorrector.turning);
+        telemetry.addData("heading error", imuCorrector.getHeadingError());
+        telemetry.addData("haveHitTarget?", imuCorrector.haveHitTarget());
+        telemetry.addData("turning?", imuCorrector.isTurning());
     }
 }

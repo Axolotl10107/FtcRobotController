@@ -182,7 +182,7 @@ public class VisionAutonomous extends LinearOpMode
             case LEFT:
             {
                 telemetry.addData("Object Position", "Left");
-                imuCorrector.targetHeading = 90;
+                imuCorrector.setTargetHeading(90);
                 while (robot.imu.yaw() < 89) {
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }
@@ -200,7 +200,7 @@ public class VisionAutonomous extends LinearOpMode
             case RIGHT:
             {
                 telemetry.addData("Object Position", "Right");
-                imuCorrector.targetHeading = -90;
+                imuCorrector.setTargetHeading(-90);
                 while (robot.imu.yaw() > -89) {
                     robot.drive.applyDTS(imuCorrector.correctDTS(new DTS(0,0,0)));
                 }

@@ -9,23 +9,22 @@ import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 public class IMUcorrector {
 
     public static class Parameters {
-        /** Already instantiated and configured */
+        /** Please pass through the Robot's IMU ( robot.imu ). */
         public FriendlyIMU imu;
-        /** Already instantiated and configured */
+        /** Pass in an object, already instantiated and configured */
         public TunablePID pid;
         /** Maximum correction power that can be applied */
-        public double maxCorrection;
-        /** Minimum actionable heading error */
-        public double hdgErrTolerance;
-        /** Minimum absolute value of the turn axis that is considered an intentional turn (which
-         * will pause correction) */
-        public double turnThreshold;
-        /** Proximity to the target that counts as hitting the target */
-        public double haveHitTargetTolerance;
+        public double maxCorrection = 0.1;
+        /** Minimum actionable heading error (in degrees) */
+        public double hdgErrTolerance = 1.0;
+        /** Minimum absolute value of the turn axis that is considered an intentional turn (which will pause correction) */
+        public double turnThreshold = 0.05;
+        /** Proximity to the target (in degrees) that counts as hitting the target */
+        public double haveHitTargetTolerance = 0.1;
         /** An ElapsedTime (or MockElapsedTime for testing) */
-        public ElapsedTime errorSampleTimer;
+        public ElapsedTime errorSampleTimer = new ElapsedTime();
         /** How long to wait between updates of lastHdgError (milliseconds) (default 1150) */
-        public int errorSampleDelay;
+        public int errorSampleDelay = 1150;
     }
 
     // __Positive turn is counterclockwise!__ That's just how the IMU works.
@@ -36,15 +35,15 @@ public class IMUcorrector {
     private double turnThreshold;
     private double haveHitTargetTolerance;
 
-    public double targetHeading = 0; // public for telemetry
-    public double headingError = 0; // public for telemetry
-    public double lastHdgError = 0; // public for telemetry
+    private double targetHeading = 0; // public for telemetry
+    private double headingError = 0; // public for telemetry
+    private double lastHdgError = 0; // public for telemetry
     private double lastTurn = 0;
     private double currentTurn = 0;
     private double lastHeading = 0;
     //    public boolean squaringUp = false;
-    public boolean haveHitTarget = false;
-    public boolean turning = false;
+    private boolean haveHitTarget = false;
+    private boolean turning = false;
 
     private DTS returnDTS;
 
@@ -124,5 +123,30 @@ public class IMUcorrector {
     public void squareUp() {
         targetHeading = 90 * Math.round(targetHeading / 90);
         haveHitTarget = false;
+    }
+
+
+    public double getTargetHeading() {
+        return targetHeading;
+    }
+
+    public void setTargetHeading(double targetHeading) {
+        this.targetHeading = targetHeading;
+    }
+
+    public double getHeadingError() {
+        return headingError;
+    }
+
+    public double getLastHeadingError() {
+        return lastHdgError;
+    }
+
+    public boolean haveHitTarget() {
+        return haveHitTarget;
+    }
+
+    public boolean isTurning() {
+        return turning;
     }
 }

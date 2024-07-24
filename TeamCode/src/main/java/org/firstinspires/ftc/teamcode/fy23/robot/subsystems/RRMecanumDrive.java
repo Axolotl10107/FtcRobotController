@@ -82,6 +82,9 @@ public interface RRMecanumDrive {
 
         /** An AccelLimiter object, already instantiated */
         public AccelLimiter accelLimiter;
+        /** Whether or not to apply acceleration control. If this is set to <b>false</b>, the accelLimiter parameter
+         * does not need to be populated. Defaults to <b>true</b>. */
+        public boolean useAccelLimiter = true;
         /** An ElapsedTime or MockElapsedTime object, already instantiated */
         public ElapsedTime stopwatch;
 

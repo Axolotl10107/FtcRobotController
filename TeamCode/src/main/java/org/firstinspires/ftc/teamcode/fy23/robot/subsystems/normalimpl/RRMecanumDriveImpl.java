@@ -41,6 +41,8 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, 
     private double rfPowerTarget = 0;
     private double lbPowerTarget = 0;
     private double rbPowerTarget = 0;
+
+    private final boolean useAccelLimiter;
     private boolean inDTSMode = false;
 
     private AccelLimiter accelLimiter;
@@ -97,6 +99,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, 
         TICKS_PER_REV = parameters.dc.TICKS_PER_REV;
 
         accelLimiter = parameters.accelLimiter;
+        useAccelLimiter = parameters.useAccelLimiter;
         stopwatch = parameters.stopwatch;
         imu = parameters.imu;
 
@@ -150,11 +153,18 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, 
 
     @Override
     public void applyDTS(DTS dts) {
-        lfPowerTarget = dts.drive - dts.turn + dts.strafe;
-        rfPowerTarget = dts.drive + dts.turn - dts.strafe;
-        lbPowerTarget = dts.drive - dts.turn - dts.strafe;
-        rbPowerTarget = dts.drive + dts.turn + dts.strafe;
-        inDTSMode = true;
+        if (useAccelLimiter) {
+            lfPowerTarget = dts.drive - dts.turn + dts.strafe;
+            rfPowerTarget = dts.drive + dts.turn - dts.strafe;
+            lbPowerTarget = dts.drive - dts.turn - dts.strafe;
+            rbPowerTarget = dts.drive + dts.turn + dts.strafe;
+            inDTSMode = true;
+        } else {
+            leftFront.setPower(dts.drive - dts.turn + dts.strafe);
+            rightFront.setPower(dts.drive + dts.turn - dts.strafe);
+            leftBack.setPower(dts.drive - dts.turn - dts.strafe);
+            rightBack.setPower(dts.drive + dts.turn + dts.strafe);
+        }
     }
 
     @Override

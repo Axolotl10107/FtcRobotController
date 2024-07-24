@@ -85,10 +85,10 @@ public class RobotAIMUDriveTuner extends OpMode {
         }
 
         if (gamepad.hdgUp()) {
-            imuCorrector.targetHeading += 1;
+            imuCorrector.setTargetHeading(imuCorrector.getTargetHeading() + 1);
         }
         if (gamepad.hdgDown()) {
-            imuCorrector.targetHeading -= 1;
+            imuCorrector.setTargetHeading(imuCorrector.getTargetHeading() - 1);
         }
 
         if (gamepad.save()) {
@@ -119,9 +119,9 @@ public class RobotAIMUDriveTuner extends OpMode {
         telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Current Heading", robot.imu.yaw());
-        telemetry.addData("Target Heading", imuCorrector.targetHeading);
-        telemetry.addData("Heading Error", imuCorrector.headingError);
-        telemetry.addData("Last Error", imuCorrector.lastHdgError);
+        telemetry.addData("Target Heading", imuCorrector.getTargetHeading());
+        telemetry.addData("Heading Error", imuCorrector.getHeadingError());
+        telemetry.addData("Last Error", imuCorrector.getLastHeadingError());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("leftFront encoder", robot.drive.leftFront.getCurrentPosition());
         telemetry.addData("rightFront encoder", robot.drive.rightFront.getCurrentPosition());

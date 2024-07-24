@@ -45,7 +45,7 @@ public class IMUDriveTuner extends OpMode {
         params.errorSampleTimer = new ElapsedTime();
         params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
-        // Why is this here? Because Virtual Robot is slow, I guess?
+        // Why is this down here instead of in init()? Because virtual_robot is slow, I guess?
         pid = params.pid;
         controlScheme = new IMUDriveTunerScheme(gamepad1, gamepad2);
         // totally a safety mechanism - try moving during init without a gamepad :)
@@ -85,10 +85,10 @@ public class IMUDriveTuner extends OpMode {
         }
 
         if (gamepad.hdgUp()) {
-            imuCorrector.targetHeading += 1;
+            imuCorrector.setTargetHeading(imuCorrector.getTargetHeading() + 1);
         }
         if (gamepad.hdgDown()) {
-            imuCorrector.targetHeading -= 1;
+            imuCorrector.setTargetHeading(imuCorrector.getTargetHeading() - 1);
         }
 
         if (gamepad.save()) {
@@ -110,7 +110,6 @@ public class IMUDriveTuner extends OpMode {
         telemetry.addLine("Right Bumper - save to RobotB.pid");
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Requested turn", gamepad.getDts().turn);
-//        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
         telemetry.addData("Actual turn", gamepad.getDts().normalize().turn);
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Proportional", pid.getProportional());
@@ -120,9 +119,9 @@ public class IMUDriveTuner extends OpMode {
         telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Current Heading", robot.imu.yaw());
-        telemetry.addData("Target Heading", imuCorrector.targetHeading);
-        telemetry.addData("Heading Error", imuCorrector.headingError);
-        telemetry.addData("Last Error", imuCorrector.lastHdgError);
+        telemetry.addData("Target Heading", imuCorrector.getTargetHeading());
+        telemetry.addData("Heading Error", imuCorrector.getHeadingError());
+        telemetry.addData("Last Error", imuCorrector.getLastHeadingError());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("leftFront encoder", robot.drive.leftFront.getCurrentPosition());
         telemetry.addData("rightFront encoder", robot.drive.rightFront.getCurrentPosition());

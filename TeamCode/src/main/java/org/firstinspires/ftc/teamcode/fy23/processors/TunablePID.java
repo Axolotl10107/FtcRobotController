@@ -15,13 +15,13 @@ public class TunablePID {
     public TunablePID(double p, double im, double dm) {
         proportional = p;
         integralMultiplier = im;
-        //TODO: GM0 recommends multiplying the integral by the time the last loop took to complete
-        //so that a consistent amount is added each time. I would probably also need a multiplier on
-        //that time, though, and I don't feel like tuning that right now.
+        /* TODO: GM0 recommends multiplying the integral by the time the last loop took to complete
+         * so that a consistent amount is added each time. A multiplier would probably be needed on
+         * that time, though. */
         derivativeMultiplier = dm;
     }
 
-    public TunablePID(PIDconsts pidConsts) { // function overloading
+    public TunablePID(PIDconsts pidConsts) { // method overloading
         proportional = pidConsts.p;
         integralMultiplier = pidConsts.im;
         derivativeMultiplier = pidConsts.dm;
@@ -90,7 +90,7 @@ public class TunablePID {
         double finalp = proportional * error;
         double finali = integralMultiplier * integral;
         double finald = derivativeMultiplier * derivative;
-        double gcd = Math.max((finalp + finali + finald), 1);
-        return finalp/gcd + finali/gcd + finald/gcd;
+        double div= Math.max((finalp + finali + finald), 1);
+        return finalp/div + finali/div + finald/div;
     }
 }
