@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.robot;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
@@ -27,6 +28,8 @@ public class RobotRoundhouse {
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
+        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
@@ -126,6 +129,8 @@ public class RobotRoundhouse {
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
+        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         driveParams.present = true;

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@TeleOp(name="IMUprinter", group="TeleTest")
+@TeleOp(name="IMUinterfacePrinter", group="TeleTest")
 public class IMUinterfacePrinter extends OpMode {
 
     IMU imu;
@@ -61,9 +61,10 @@ public class IMUinterfacePrinter extends OpMode {
             telemetry.addLine("Please set the REV Logo facing direction.");
             telemetry.addLine("Use D-Pad, or RB/LB for up/down.");
             telemetry.addLine("(You can change this later while the OpMode is running.)");
+            telemetry.update();
 
             checkLogoDirControls();
-            if (logoDir != null) {
+            if (logoDir != null || Thread.currentThread().isInterrupted()) {
                 break;
             }
         }
@@ -72,9 +73,10 @@ public class IMUinterfacePrinter extends OpMode {
             telemetry.addLine("Please set the USB port facing direction.");
             telemetry.addLine("Use face buttons, or RT/LT for up/down.");
             telemetry.addLine("(You can change this later while the OpMode is running.)");
+            telemetry.update();
 
             checkUsbDirControls();
-            if (usbDir != null) {
+            if (usbDir != null || Thread.currentThread().isInterrupted()) {
                 break;
             }
         }
@@ -124,5 +126,12 @@ public class IMUinterfacePrinter extends OpMode {
         telemetry.addData("1", orientation.firstAngle);
         telemetry.addData("2", orientation.secondAngle);
         telemetry.addData("3", orientation.thirdAngle);
+        telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        telemetry.addLine("Stop called");
+        telemetry.update();
     }
 }

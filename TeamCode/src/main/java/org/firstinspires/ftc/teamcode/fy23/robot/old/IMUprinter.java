@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-@Disabled
+//@Disabled
 @TeleOp(name="IMUprinter", group="TeleTest")
 public class IMUprinter extends OpMode {
     BNO055IMU imu;
