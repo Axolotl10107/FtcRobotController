@@ -1,5 +1,6 @@
-//Michael's test program for running a motor to encoder positions
+//Test program for running a motor to encoder positions
 //Now with safety!
+//This file is from July 24, 2024.
 
 package org.firstinspires.ftc.teamcode.fy23.teletest;
 
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 @TeleOp(name="EncoderTeleTest23", group="TeleTest")
 public class EncoderTeleTest23 extends OpMode {
@@ -19,21 +21,6 @@ public class EncoderTeleTest23 extends OpMode {
     int safetyPatience = 100; // in milliseconds, how long while the motor is not moving before stop
     double velocitySnapshot;
     boolean lockedOut = false;
-//    int safetyCheckInterval = 100;
-//    int requiredDistance = 50;
-
-//    int currentPos = 0;
-//    boolean safetyCheck() { //returns true if continued operation is safe, false if unsafe
-//        int currentPos = motor.getCurrentPosition();
-//        if ((lastMotorPos > Math.abs(currentPos - requiredDistance)) && (Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)) {
-//            //if we haven't moved requiredDistance ticks since last we checked (since the safetyCheckInterval last came around)
-//            //and we actually have somewhere to go
-//            return false;
-//        } else {
-//            lastMotorPos = currentPos;
-//            return true;
-//        }
-//    }
 
     void safetyLockout(String trigger) {
         telemetry.clearAll();
@@ -66,8 +53,8 @@ public class EncoderTeleTest23 extends OpMode {
     int downDebTime = 200;
     int otherDebTime = 200;
 
-    //    ArrayList<String> motorList = new ArrayList<>(6);
-    ArrayList<String> motorList = new ArrayList<>(2);
+    ArrayList<DcMotorEx> motorList = new ArrayList<>(8); //A robot can have up to 8 motors.
+//    ArrayList<String> motorList = new ArrayList<>(2);
 
     int targetPosA = 0; //Stage target here - we'll send it to the motor later
     int targetPosB = 0;
@@ -75,22 +62,25 @@ public class EncoderTeleTest23 extends OpMode {
     boolean bActive = false;
     int listIdx = 0;
     double motorPower = 0.4;
-//    int lastMotorPos = 0;
 
     boolean hasPassedSafetyCheck = false;
 
     void initMotor(int idx) {
-        String motorString = motorList.get(idx);
-        telemetry.addData("Task", "Initializing motor...");
-        motor = hardwareMap.get(DcMotorEx.class, motorString);
-
-        //Put the motor into a known configuration
-        motor.setDirection(DcMotorEx.Direction.REVERSE);
-        motor.setPower(0);
-        motor.setTargetPosition(0);
-        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
-        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        telemetry.addData("Task", "Done initializing motor");
+        if (idx < motorList.size()) {
+            motor = motorList.get(idx);
+        }
+//        motor = hardwareMap.get(DcMotorEx.class, "motor");
+//        String motorString = motorList.get(idx);
+//        telemetry.addData("Task", "Initializing motor...");
+//        motor = hardwareMap.get(DcMotorEx.class, motorString);
+//
+//        //Put the motor into a known configuration
+//        motor.setDirection(DcMotorEx.Direction.REVERSE);
+//        motor.setPower(0);
+//        motor.setTargetPosition(0);
+//        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
+//        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+//        telemetry.addData("Task", "Done initializing motor");
     }
 
     void changeStagedTarget(int change) {
@@ -121,12 +111,22 @@ public class EncoderTeleTest23 extends OpMode {
     public void init() {
         telemetry.addData("Task", "Initializing program...");
         //Add entries to motorList
-        motorList.add("leftFront");
-        motorList.add("leftBack");
-        motorList.add("rightFront");
-        motorList.add("rightBack");
-        motorList.add("armPivot");
-        motorList.add("armExtend");
+        Iterator motorIterator = hardwareMap.dcMotor.iterator();
+        while (motorIterator.hasNext()) {
+            // *.next() just returns an Object. Here it's casted to a DcMotorEx.
+            // (We're just making it the specific thing it actually is.)
+            DcMotorEx tempMotor = (DcMotorEx) motorIterator.next();
+            tempMotor.setPower(0.0);
+            tempMotor.setTargetPosition(tempMotor.getCurrentPosition());
+            tempMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorList.add(tempMotor);
+        }
+//        motorList.add("leftFront");
+//        motorList.add("leftBack");
+//        motorList.add("rightFront");
+//        motorList.add("rightBack");
+//        motorList.add("armPivot");
+//        motorList.add("armExtend");
 //        motorList.add("leftFront");
 //        motorList.add("armPivot");
 
@@ -145,7 +145,7 @@ public class EncoderTeleTest23 extends OpMode {
         if (lockedOut) {
             telemetry.update();
             if (gamepad1.x) {
-                requestOpModeStop();
+                requestOpModeStop(); //This method does nothing in virtual_robot.
             }
         } else {
             if (aActive) {
@@ -160,7 +160,8 @@ public class EncoderTeleTest23 extends OpMode {
             }
             telemetry.addData("Active Target", motor.getTargetPosition());
             telemetry.addData("Actual Position", motor.getCurrentPosition());
-            telemetry.addData("Active Motor", motorList.get(listIdx));
+            telemetry.addData("Active Motor", hardwareMap.getNamesOf(motor).iterator().next());
+            telemetry.addData("Port Number", motor.getPortNumber());
             telemetry.addLine(motor.getDeviceName());
             telemetry.addData("Motor runmode", motor.getMode());
             telemetry.addData("Set Motor Power", motorPower);
@@ -169,13 +170,6 @@ public class EncoderTeleTest23 extends OpMode {
             telemetry.addLine("");
             telemetry.addData("Safety Patience (ms)", safetyPatience);
             telemetry.addData("hasPassedSafetyCheck", hasPassedSafetyCheck);
-//        telemetry.addData("Safety Check Passing", safetyCheck());
-//        telemetry.addData("lastMotorPos", lastMotorPos);
-//        telemetry.addData("Difference", Math.abs(currentPos - lastMotorPos));
-//        telemetry.addLine("(lastMotorPos > Math.abs(currentPos - requiredDistance))");
-//        telemetry.addLine(String.valueOf((lastMotorPos > Math.abs(currentPos - requiredDistance))));
-//        telemetry.addLine("(Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)");
-//        telemetry.addLine(String.valueOf((Math.abs(lastMotorPos - motor.getTargetPosition()) > requiredDistance)));
             telemetry.addLine("------------------------------------------");
             telemetry.addLine("D-Pad: Up/Down 10, Left/Right 100");
             telemetry.addLine("Bumpers: 1000");
@@ -191,34 +185,7 @@ public class EncoderTeleTest23 extends OpMode {
             telemetry.addLine("B sets RUN_TO_POSITION");
             telemetry.addLine("Triggers do analog control when in RUN_WITHOUT_ENCODER");
 
-            //Safety Check
-//        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
-//            if (!(motor.getTargetPosition()-20 < motor.getCurrentPosition() && motor.getCurrentPosition() < motor.getTargetPosition()+20)) {
-//                //If we are not at our target position, then...
-//                int diff = motor.getCurrentPosition() - getStagedTarget();
-//                if (!(diff > 100 || diff < 100)) { //Both ways - could be moving either direction
-//                    motor.setPower(0);
-//                    motor.setTargetPosition(motor.getCurrentPosition());
-//                    telemetry.addData("Task", "Safety check tripped");
-//                }
-//            }
-//        }
-
-//        if (safetyCheckClock.milliseconds() > safetyCheckInterval) {
-//            safetyCheckClock.reset();
-////            if (!safetyCheck()) {
-//            if (false) { //disabled feature :(
-//                motor.setPower(0);
-//                motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//                telemetry.clearAll();
-//                telemetry.addLine("||||||||||||||||||||||");
-//                telemetry.addLine("||| Safety Lockout |||");
-//                telemetry.addLine("||||||||||||||||||||||");
-//                telemetry.update();
-////                while (true) {} //Yes, this is intentional.
-//            }
-//        }
-
+            // Safety Check
             if (Math.abs(motor.getPower()) > 0.05) {
                 if (Math.abs(motor.getCurrentPosition()) < Math.abs(motor.getTargetPosition()) - 50) {
                     if (!hasPassedSafetyCheck) {
@@ -253,10 +220,10 @@ public class EncoderTeleTest23 extends OpMode {
             }
 
             //Motor power adjustment
-            else if (gamepad1.right_stick_button && motor.getPower() < 1.0 && otherDeb.milliseconds() > otherDebTime) {
+            else if (gamepad1.right_stick_button && motorPower < 1.0 && otherDeb.milliseconds() > otherDebTime) {
                 motorPower = (motorPower + 0.1);
                 otherDeb.reset();
-            } else if (gamepad1.left_stick_button && motor.getPower() > 0 && otherDeb.milliseconds() > otherDebTime) {
+            } else if (gamepad1.left_stick_button && motorPower > 0.0 && otherDeb.milliseconds() > otherDebTime) {
                 motorPower = (motorPower - 0.1);
                 otherDeb.reset();
             }

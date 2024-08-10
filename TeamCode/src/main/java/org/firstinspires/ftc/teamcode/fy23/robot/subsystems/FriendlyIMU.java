@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 /** Represents the IMU built into the control hub. Currently only supports the BNO055, but there is a task on the board
@@ -13,6 +14,12 @@ public interface FriendlyIMU {
     class Parameters {
         /** Is this subsystem installed on this robot? */
         public boolean present;
+
+        /** The direction that the REV logo on your Control Hub faces */
+        public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
+
+        /** The direction that the USB port on your Control Hub faces */
+        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
     }
 
     /** X rotation */

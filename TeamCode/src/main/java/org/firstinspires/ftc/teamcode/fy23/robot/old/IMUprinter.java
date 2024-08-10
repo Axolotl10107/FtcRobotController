@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.teletest;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-//@Disabled
+@Disabled
 @TeleOp(name="IMUprinter", group="TeleTest")
 public class IMUprinter extends OpMode {
     BNO055IMU imu;

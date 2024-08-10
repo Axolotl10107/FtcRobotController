@@ -1,46 +1,42 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.*;
 
 /** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU}.
- * <b>This class has an open task:</b> Robot and Subsystems / Remake FriendlyIMUImpl */
+ * The IMU is read each time you call a method. Values are always current (and it's not reading the IMU when you
+ * don't need it to). */
 public class FriendlyIMUImpl implements org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU {
 
-    private double pitch;
     private double pitchVel;
-
-    private double roll;
     private double rollVel;
-
-    private double yaw;
     private double yawVel;
 
-    public BNO055IMU imu; //our control hubs should have this type
-    private BNO055IMU.Parameters imuParams; //stores configuration stuff for the IMU
+    public IMU imu;
 
-    Orientation orientation;
+    YawPitchRollAngles orientation;
 
-    public FriendlyIMUImpl(org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters parameters, HardwareMap hardwareMap) {
-        imuParams = new BNO055IMU.Parameters();
-        imuParams.calibrationDataFile = "BNO055IMUCalibration.json";
-        //see "SensorBNO055IMUCalibration" example
-
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(imuParams);
+    public FriendlyIMUImpl(Parameters parameters, HardwareMap hardwareMap) {
+        imu = hardwareMap.get(IMU.class,"imu");
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                parameters.logoFacingDirection,
+                                parameters.usbFacingDirection
+                        )
+                )
+        );
     }
 
     private void updateOrientation() {
-        orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        pitch = orientation.thirdAngle;
-        roll = orientation.secondAngle;
-        yaw = orientation.firstAngle;
+        orientation = imu.getRobotYawPitchRollAngles();
     }
 
     private void updateVelocity() {
-        AngularVelocity angVel = imu.getAngularVelocity();
+        AngularVelocity angVel = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         pitchVel = angVel.xRotationRate;
         rollVel = angVel.yRotationRate;
         yawVel = angVel.zRotationRate;
@@ -49,13 +45,13 @@ public class FriendlyIMUImpl implements org.firstinspires.ftc.teamcode.fy23.robo
     @Override
     public double pitch() {
         updateOrientation();
-        return pitch;
+        return orientation.getPitch(AngleUnit.DEGREES);
     }
 
     @Override
     public double pitch(AngleUnit angleUnit) {
         updateOrientation();
-        return angleUnit.fromDegrees(pitch);
+        return orientation.getPitch(angleUnit);
     }
 
     @Override
@@ -73,13 +69,13 @@ public class FriendlyIMUImpl implements org.firstinspires.ftc.teamcode.fy23.robo
     @Override
     public double roll() {
         updateOrientation();
-        return roll;
+        return orientation.getRoll(AngleUnit.DEGREES);
     }
 
     @Override
     public double roll(AngleUnit angleUnit) {
         updateOrientation();
-        return angleUnit.fromDegrees(roll);
+        return orientation.getRoll(angleUnit);
     }
 
     @Override
@@ -97,13 +93,13 @@ public class FriendlyIMUImpl implements org.firstinspires.ftc.teamcode.fy23.robo
     @Override
     public double yaw() {
         updateOrientation();
-        return yaw;
+        return orientation.getYaw(AngleUnit.DEGREES);
     }
 
     @Override
     public double yaw(AngleUnit angleUnit) {
         updateOrientation();
-        return angleUnit.fromDegrees(yaw);
+        return orientation.getYaw(angleUnit);
     }
 
     @Override
