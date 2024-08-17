@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** A controller scheme for field-oriented driving. Matches the "FieldyGamepadLS" diagram. */
-public class FieldyTeleOpScheme {
+public class FieldyTeleOpScheme implements TeleOpScheme {
 
     private Gamepad driver;
     private Gamepad manipulator;
@@ -31,9 +33,12 @@ public class FieldyTeleOpScheme {
 
     private boolean armMovementSet = false;
 
-    public FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+    private FriendlyIMU imu;
+
+    public FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator, FriendlyIMU imu) {
         this.driver = driver;
         this.manipulator = manipulator;
+        this.imu = imu;
 
         state = new TeleOpState();
 
@@ -117,9 +122,10 @@ public class FieldyTeleOpScheme {
         state.setSquareUp(squareUpButton.isActive());
     }
 
-    public TeleOpState getState(double heading) {
+    @Override
+    public TeleOpState getState() {
         armMovementSet = false;
-        updateMovementState(heading);
+        updateMovementState(imu.yaw(AngleUnit.RADIANS));
 //        updateArmMediumMovementState();
 //        updateArmSlowMovementState();
         updateArmFastMovementState();

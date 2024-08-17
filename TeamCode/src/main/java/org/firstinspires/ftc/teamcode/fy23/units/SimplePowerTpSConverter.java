@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.units;
 
+@Deprecated
 public class SimplePowerTpSConverter implements PowerTpSConverter {
 
     private int TpSAtFullPower;

@@ -22,7 +22,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/** A port of RoadRunner Quickstart's SampleMecanumDrive to our new architecture. */
+/** A port of RoadRunner Quickstart's SampleMecanumDrive to our new architecture.
+ * Learn more at learnroadrunner.com. */
 public interface RRMecanumDrive {
 
     /** See the RoadRunner Quickstart's DriveConstants class. The default values model a perfect goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration will be needed. */
@@ -143,11 +144,14 @@ public interface RRMecanumDrive {
     /** Called by robot.update(). You do not need to call this method. */
     void update();
 
-
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading);
 
+    /** Learn more at https://learnroadrunner.com/trajectory-sequence.html.*/
     TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose);
 
     void turnAsync(double angle);

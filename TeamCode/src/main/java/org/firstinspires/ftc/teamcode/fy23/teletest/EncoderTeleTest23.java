@@ -54,7 +54,6 @@ public class EncoderTeleTest23 extends OpMode {
     int otherDebTime = 200;
 
     ArrayList<DcMotorEx> motorList = new ArrayList<>(8); //A robot can have up to 8 motors.
-//    ArrayList<String> motorList = new ArrayList<>(2);
 
     int targetPosA = 0; //Stage target here - we'll send it to the motor later
     int targetPosB = 0;
@@ -69,18 +68,6 @@ public class EncoderTeleTest23 extends OpMode {
         if (idx < motorList.size()) {
             motor = motorList.get(idx);
         }
-//        motor = hardwareMap.get(DcMotorEx.class, "motor");
-//        String motorString = motorList.get(idx);
-//        telemetry.addData("Task", "Initializing motor...");
-//        motor = hardwareMap.get(DcMotorEx.class, motorString);
-//
-//        //Put the motor into a known configuration
-//        motor.setDirection(DcMotorEx.Direction.REVERSE);
-//        motor.setPower(0);
-//        motor.setTargetPosition(0);
-//        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);//Set our current position as 0
-//        motor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-//        telemetry.addData("Task", "Done initializing motor");
     }
 
     void changeStagedTarget(int change) {
@@ -121,14 +108,6 @@ public class EncoderTeleTest23 extends OpMode {
             tempMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorList.add(tempMotor);
         }
-//        motorList.add("leftFront");
-//        motorList.add("leftBack");
-//        motorList.add("rightFront");
-//        motorList.add("rightBack");
-//        motorList.add("armPivot");
-//        motorList.add("armExtend");
-//        motorList.add("leftFront");
-//        motorList.add("armPivot");
 
         initMotor(0); //Initialize the first motor
 

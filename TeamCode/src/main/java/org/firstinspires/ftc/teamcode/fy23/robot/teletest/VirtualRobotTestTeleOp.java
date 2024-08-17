@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
@@ -17,13 +18,13 @@ public class VirtualRobotTestTeleOp extends OpMode {
 
     Robot robot;
     TeleOpState controlsState;
-    FieldyTeleOpScheme controlsScheme;
+    TeleOpScheme controlsScheme;
     IMUcorrector imuCorrector;
 
     @Override
     public void init() {
         robot = new Robot(RobotRoundhouse.getVirtualRobotParams(hardwareMap), hardwareMap);
-        controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2);
+        controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
         IMUcorrector.Parameters params = new IMUcorrector.Parameters();
         params.haveHitTargetTolerance = 0.1;
         params.hdgErrTolerance = 1.0;
@@ -39,7 +40,7 @@ public class VirtualRobotTestTeleOp extends OpMode {
     @Override
     public void loop() {
         robot.update();
-        controlsState = controlsScheme.getState(Math.toRadians(robot.imu.yaw()));
+        controlsState = controlsScheme.getState();
         DTS normalizedDTS = controlsState.getDts().normalize();
         robot.drive.applyDTS(imuCorrector.correctDTS(normalizedDTS));
         robot.drive.applyDTS(normalizedDTS);

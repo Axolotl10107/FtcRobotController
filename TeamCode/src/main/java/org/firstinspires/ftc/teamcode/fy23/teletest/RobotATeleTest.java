@@ -34,7 +34,7 @@ public class RobotATeleTest extends OpMode {
         params.errorSampleTimer = new ElapsedTime();
         params.errorSampleDelay = 1150;
         imuCorrector = new IMUcorrector(params);
-        controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2);
+        controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class RobotATeleTest extends OpMode {
     @Override
     public void loop() {
         double currentHeading = robot.imu.yaw();
-        TeleOpState controlState = controlScheme.getState(currentHeading);
+        TeleOpState controlState = controlScheme.getState();
 
         // MecanumDrive
         DTS correctedDTS = imuCorrector.correctDTS(controlState.getDts());

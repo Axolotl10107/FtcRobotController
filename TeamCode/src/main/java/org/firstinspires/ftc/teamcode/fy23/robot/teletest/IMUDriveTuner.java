@@ -32,6 +32,7 @@ public class IMUDriveTuner extends OpMode {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         // TODO: Detect and/or parameterize which robot to use
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        // <b>Don't forget to change the filename to save to below!</b>
     }
 
     public void start() {
