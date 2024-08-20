@@ -17,13 +17,13 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     private AccelLimiter pivotAccelLimiter;
     private AccelLimiter elevatorAccelLimiter;
 
-    private PowerTpSConverter pivotConverter;
-    private PowerTpSConverter elevatorConverter;
-
-    private int pivotStoppingDistanceAtHalfPower;
-    private int pivotStoppingDistanceAtFullPower;
-    private int elevatorStoppingDistanceAtHalfPower;
-    private int elevatorStoppingDistanceAtFullPower;
+//    private PowerTpSConverter pivotConverter;
+//    private PowerTpSConverter elevatorConverter;
+//
+//    private int pivotStoppingDistanceAtHalfPower;
+//    private int pivotStoppingDistanceAtFullPower;
+//    private int elevatorStoppingDistanceAtHalfPower;
+//    private int elevatorStoppingDistanceAtFullPower;
 
     private int pivotUpperLimit;
     private int pivotLowerLimit;
@@ -63,16 +63,16 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         elevatorLowerLimitSwitch = parameters.elevatorLowerLimitSwitch;
 
         pivotAccelLimiter = parameters.pivotAccelLimiter;
-        pivotConverter = parameters.pivotPowerTpSConverter;
-        pivotStoppingDistanceAtHalfPower = pivotConverter.powerToTpS(0.5);
-        pivotStoppingDistanceAtFullPower = pivotConverter.powerToTpS(1.0);
+//        pivotConverter = parameters.pivotPowerTpSConverter;
+//        pivotStoppingDistanceAtHalfPower = pivotConverter.powerToTpS(0.5);
+//        pivotStoppingDistanceAtFullPower = pivotConverter.powerToTpS(1.0);
         pivotTicksPerDegree = parameters.pivotTicksPerDegree;
         maxPivotRecoveryPower = parameters.maxPivotRecoveryPower;
 
         elevatorAccelLimiter = parameters.elevatorAccelLimiter;
-        elevatorConverter = parameters.elevatorPowerTpSConverter;
-        elevatorStoppingDistanceAtHalfPower = elevatorConverter.powerToTpS(0.5);
-        elevatorStoppingDistanceAtFullPower = elevatorConverter.powerToTpS(1.0);
+//        elevatorConverter = parameters.elevatorPowerTpSConverter;
+//        elevatorStoppingDistanceAtHalfPower = elevatorConverter.powerToTpS(0.5);
+//        elevatorStoppingDistanceAtFullPower = elevatorConverter.powerToTpS(1.0);
         elevatorTicksPerMillimeter = parameters.elevatorTicksPerMillimeter;
         maxElevatorRecoveryPower = parameters.maxElevatorRecoveryPower;
 
@@ -138,20 +138,24 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     private void handlePivotHitUpperLimit(double requestedPower) {
         killPivotMotor();
         double safeRequest = Range.clip(requestedPower, -maxPivotRecoveryPower, 0);
-        if (safeRequest < 0) {
+        if (safeRequest <= 0) {
             double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-            pivotMotor.setPower(limited);
-            killPivotMotorLatch = false;
+            pivotMotor.setPower(safeRequest);
+            if (pivotMotor.getCurrentPosition() < pivotUpperLimit) {
+                killPivotMotorLatch = false;
+            }
         }
     }
 
     private void handlePivotHitLowerLimit(double requestedPower) {
         killPivotMotor();
         double safeRequest = Range.clip(requestedPower, 0, maxPivotRecoveryPower);
-        if (safeRequest > 0) {
+        if (safeRequest >= 0) {
             double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-            pivotMotor.setPower(limited);
-            killPivotMotorLatch = false;
+            pivotMotor.setPower(safeRequest);
+            if (pivotMotor.getCurrentPosition() > pivotLowerLimit) {
+                killPivotMotorLatch = false;
+            }
         }
     }
 
@@ -168,8 +172,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     }
 
     private void updatePivotPower() {
-        // checks in a sequence: hard limits, then soft limits, then stopping distances, then apply
-        // power as normal
+        // checks in a sequence: hard limits, then soft limits, then stopping distances, then apply power as normal
 
         // limit switches
 
@@ -194,20 +197,20 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
                 // stopping distances
 
-                double stoppingDist = pivotAccelLimiter.stoppingDistance(getPivotPower(), 1000);
-                if (currentPos > (pivotUpperLimit - stoppingDist)) {
-                    System.out.println("Upper stopping distance reached");
-                    handlePivotHitUpperSD(setPivotPower);
-                } else if (currentPos > (pivotLowerLimit + stoppingDist)) {
-                    System.out.println("Lower stopping distance reached");
-                    handlePivotHitLowerSD(setPivotPower);
-                } else {
+//                double stoppingDist = pivotAccelLimiter.stoppingDistance(getPivotPower(), 1000);
+//                if (currentPos > (pivotUpperLimit - stoppingDist)) {
+//                    System.out.println("Upper stopping distance reached");
+//                    handlePivotHitUpperSD(setPivotPower);
+//                } else if (currentPos > (pivotLowerLimit + stoppingDist)) {
+//                    System.out.println("Lower stopping distance reached");
+//                    handlePivotHitLowerSD(setPivotPower);
+                // } else {
 
-                    // it's safe to go, so run through the AccelLimiter as usual
-                    System.out.println("No safety measures activated, so proceeding normally");
-                    double limited = pivotAccelLimiter.requestVel(setPivotPower, getPivotPower(), stopwatch.seconds());
-                    pivotMotor.setPower(limited);
-                }
+                // it's safe to go, so run through the AccelLimiter as usual
+                System.out.println("No safety measures activated, so proceeding normally");
+                double limited = pivotAccelLimiter.requestVel(setPivotPower, getPivotPower(), stopwatch.seconds());
+                pivotMotor.setPower(limited);
+                //}
             }
         }
 
@@ -283,22 +286,22 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
             requestedElevatorPower = Math.min(setElevatorPower, 0);
 
             // stopping distances
-        } else {
-            int stoppingDistance;
-            // choose the correct stopping distance...
-            if (getElevatorPower() <= 0.5) {
-                stoppingDistance = elevatorStoppingDistanceAtHalfPower;
-            } else {
-                stoppingDistance = elevatorStoppingDistanceAtFullPower;
-            }
+        }// else {
+//            int stoppingDistance;
+//            // choose the correct stopping distance...
+//            if (getElevatorPower() <= 0.5) {
+//                stoppingDistance = elevatorStoppingDistanceAtHalfPower;
+//            } else {
+//                stoppingDistance = elevatorStoppingDistanceAtFullPower;
+//            }
 
-            // ... then check our position against it
-            if (getElevatorPosition() - elevatorLowerLimit < stoppingDistance) {
-                requestedElevatorPower = Math.max(setElevatorPower, 0);
-            } else if (elevatorUpperLimit - getElevatorPosition() < stoppingDistance) {
-                requestedElevatorPower = Math.min(setElevatorPower, 0);
-            }
-        }
+        // ... then check our position against it
+//            if (getElevatorPosition() - elevatorLowerLimit < stoppingDistance) {
+//                requestedElevatorPower = Math.max(setElevatorPower, 0);
+//            } else if (elevatorUpperLimit - getElevatorPosition() < stoppingDistance) {
+//                requestedElevatorPower = Math.min(setElevatorPower, 0);
+//            }
+        // }
 
         elevatorMotor.setPower(elevatorAccelLimiter.requestVel(requestedElevatorPower, getElevatorPosition(), stopwatch.seconds()));
     }

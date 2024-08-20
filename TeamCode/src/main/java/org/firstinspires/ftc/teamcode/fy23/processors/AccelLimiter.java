@@ -143,18 +143,21 @@ public class AccelLimiter {
 
     /** How much distance is needed to stop from the given initial velocity at the maximum acceleration set for your
      * AccelLimiter instance? Note that negative velocities still return positive stopping distances.
-     * @param currentVel How fast you are currently going
+     * This method sums the area under the curve of the acceleration (the integral). This is not necessary for the
+     * linear acceleration that AccelLimiter does exclusively at the moment (see the simpleStoppingDistance method), but
+     * it may become useful with new functionality in the future.
+     * @param initialVel How fast you are going at the moment you start ramping down
      * @param resolution Higher resolution values make the calculation take longer but yield more accurate results. Use
      * the "stoppingDistancePrinter" Unit Test to determine what resolution you need. */
     // TODO: Acceleration is linear, so you can just find the area of a right triangle...
-    public double stoppingDistance(double currentVel, int resolution) {
-        currentVel = Math.abs(currentVel);
+    public double stoppingDistance(double initialVel, int resolution) {
+        initialVel = Math.abs(initialVel);
         double timeStep = 1.0 / resolution;
         double currentTime = 0.0;
         double totalDistance = 0.0;
-        while (currentVel > 0.01) {
-            currentVel = requestVel(0, currentVel, currentTime);
-            totalDistance += currentVel / 1000 * (timeStep * 1000); // dimensional analysis - velocity to milliseconds to distance each iter
+        while (initialVel > 0.01) {
+            initialVel = requestVel(0, initialVel, currentTime);
+            totalDistance += initialVel / 1000 * (timeStep * 1000); // dimensional analysis - velocity to milliseconds to distance each iter
             // example: (5 meters / 1 second) * (1 second / 1000 ms) * ((0.1 seconds / 1 iteration) * (1000 ms / 1 second) = (0.5 meters / 1 iteration)
 //            System.out.println(String.format("{%f} | {%f} | {%f}", currentTime, currentVel, totalDistance));
             currentTime += timeStep;
@@ -162,21 +165,31 @@ public class AccelLimiter {
         return totalDistance;
     }
 
+    /** A much faster stopping distance calculation that can be used for linear acceleration (which is all AccelLimiter
+     * supports at the moment anyway). */
+    public double simpleStoppingDistance(double initialVel) {
+        initialVel = Math.abs(initialVel);
+        double stoppingTime = initialVel / maxAccel;
+        // For a triangle, A = 0.5 * b * h. Here, time * initialVel would create a rectangle, but the line of
+        // acceleration cuts it in half, hence the 0.5 factor.
+        return 0.5 * stoppingTime * initialVel;
+    }
+
     /** Sets up ramping up to maxVelocity and back down along the specified distance. Will also reset this instance!
-     * @param distance How far you want to travel
+     * @param targetPos The position you want to end at (in whatever units you want, as long as you are consistent)
      * @param maxVelocity The top speed along that distance */
-    public void setupRampAlongDistance(double distance, double maxVelocity) {
-        setupRampAlongDistance(distance, maxVelocity, new ElapsedTime());
+    public void setupRampToTarget(double targetPos, double maxVelocity) {
+        setupRampToTarget(targetPos, maxVelocity, new ElapsedTime());
     }
 
     /** Used for dependency injection in UnitTests
-     * @param distance How far you want to travel
+     * @param targetPos The position you want to end at (in whatever units you want, as long as you are consistent)
      * @param maxVelocity The top speed along that distance
      * @param stopwatch Pass in a MockElapsedTime to control time in UnitTests. */
-    public void setupRampAlongDistance(double distance, double maxVelocity, ElapsedTime stopwatch) {
+    public void setupRampToTarget(double targetPos, double maxVelocity, ElapsedTime stopwatch) {
         this.maxVelocity = maxVelocity;
         double stoppingDistance = stoppingDistance(maxVelocity, 10000);
-        stoppingPoint = distance - stoppingDistance;
+        stoppingPoint = targetPos - stoppingDistance;
         System.out.println(stoppingDistance);
         System.out.println(stoppingPoint);
         this.stopwatch = stopwatch;
@@ -185,7 +198,7 @@ public class AccelLimiter {
 
     /** Run this every loop. Takes the current position and returns the current velocity along the ramp.
      * @param currentPos Where are you currently? Should be in the same distance unit as the maximum acceleration. */
-    public double updateRampAlongDistance(double currentPos) {
+    public double updateRampToTarget(double currentPos) {
         if (currentPos < stoppingPoint) {
             lastOutput = requestVel(maxVelocity, lastOutput, stopwatch.seconds());
         } else {

@@ -204,6 +204,13 @@ public class AccelLimiterTest {
     }
 
     @Test
+    public void manyPixelArmProblemTests() {
+        for (int i=0; i<1000000; i++) {
+            PixelArmProblemTest();
+        }
+    }
+
+    @Test
     public void PixelArmProblemTest() {
         AccelLimiter accelLimiter = new AccelLimiter(1.0, 0.1);
         MockElapsedTime stopwatch = new MockElapsedTime();
@@ -295,18 +302,18 @@ public class AccelLimiterTest {
         double maxAccel = 10; // in meters per second
         double maxDeltaVEachLoop = 10;
         double timeStep = 0.1; // in seconds
-        double distance = 1000; // in meters
+        double targetPos = 1000; // in meters
         double maxVelocity = 30;
         AccelLimiter accelLimiter = new AccelLimiter(maxAccel, maxDeltaVEachLoop);
         MockElapsedTime stopwatch = new MockElapsedTime();
-        accelLimiter.setupRampAlongDistance(distance, maxVelocity, stopwatch);
+        accelLimiter.setupRampToTarget(targetPos, maxVelocity, stopwatch);
         double currentPos = 0;
         double lastOutput;
         int iters = 0;
         System.out.println("iter | time | velocity | position");
-        while ((currentPos < (distance - 1)) && (iters < 1000)) {
+        while ((currentPos < (targetPos - 1)) && (iters < 1000)) {
             iters += 1;
-            lastOutput = accelLimiter.updateRampAlongDistance(currentPos);
+            lastOutput = accelLimiter.updateRampToTarget(currentPos);
             currentPos += lastOutput * timeStep;
             System.out.println(String.format("{%d} | {%f} | {%f} | {%f}", iters, stopwatch.seconds(), lastOutput, currentPos));
             stopwatch.setNanos((long) (stopwatch.nanoseconds() + (timeStep * 1000000000)));
@@ -318,7 +325,7 @@ public class AccelLimiterTest {
     public void rampAlongDistancePathTest() {
         AccelLimiter accelLimiter = new AccelLimiter(5, 5);
         MockElapsedTime stopwatch = new MockElapsedTime();
-        accelLimiter.setupRampAlongDistance(50, 15, stopwatch);
+        accelLimiter.setupRampToTarget(50, 15, stopwatch);
         List<Double> distanceList = Arrays.asList(0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0);
         List<Long> timeList = Arrays.asList(0L, 5L, 10L, 15L, 20L, 25L, 30L, 35L, 40L, 45L, 50L);
         List<Double> expectedVelList = Arrays.asList(0.0, 5.0, 10.0, 15.0, 15.0, 15.0, 15.0, 15.0, 10.0, 5.0, 0.0);
@@ -327,7 +334,7 @@ public class AccelLimiterTest {
         System.out.println("iter | time | distance | output vel | expected vel");
         for (int i=0; i < distanceList.size(); i++) {
             stopwatch.setNanos(TimeUnit.SECONDS.toNanos(timeList.get(i)));
-            lastOutput = accelLimiter.updateRampAlongDistance(distanceList.get(i));
+            lastOutput = accelLimiter.updateRampToTarget(distanceList.get(i));
             System.out.println(String.format("{%d} | {%f} | {%f} | {%f} | {%f}", i, stopwatch.seconds(), distanceList.get(i), lastOutput, expectedVelList.get(i)));
             if (Math.abs(expectedVelList.get(i) - lastOutput) > 0.01) {
                 failureCount += 1;
