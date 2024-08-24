@@ -112,6 +112,11 @@ public class OldPixelArmImplToManuallyMerge implements PixelArm {
     }
 
     @Override
+    public double getPivotVelocity() {
+        return 0;
+    }
+
+    @Override
     public int getPivotPosition() {
         return pivotMotor.getCurrentPosition();
     }

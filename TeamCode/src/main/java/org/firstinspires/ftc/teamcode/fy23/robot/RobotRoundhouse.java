@@ -90,15 +90,19 @@ public class RobotRoundhouse {
         PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = true;
         armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
+        armParams.pivotMotor.setDirection(REVERSE);
+        armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
-        armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
+        armParams.pivotAccelLimiter = new AccelLimiter(8000, 8000); // TODO: not tuned!!
         armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
         armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
-        armParams.pivotUpperLimit = 2000; // TODO: not measured on real hardware!!
+        armParams.pivotUpperLimit = 5000; // TODO: not measured on real hardware!!
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
         armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxPivotRecoveryPower = 0.2;
+        armParams.maxPivotVelocity = 800;
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
@@ -107,6 +111,7 @@ public class RobotRoundhouse {
         armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxElevatorRecoveryPower = 0.2;
+        armParams.stopwatch = new ElapsedTime();
 
         PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
         planeLauncherParams.present = true;

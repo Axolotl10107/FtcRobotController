@@ -39,6 +39,7 @@ public interface PixelArm {
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
         public double maxPivotRecoveryPower;
+        public double maxPivotVelocity;
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
         public AccelLimiter elevatorAccelLimiter;
         /** Pass in a PowerTpSConverter object (an implementation of your choice) that has already been instantiated
@@ -74,6 +75,7 @@ public interface PixelArm {
     void setPivotPower(double power);
     /** Get the current power of the pivot motor. */
     double getPivotPower();
+    double getPivotVelocity();
     /** Get the current position of the pivot motor. */
     int getPivotPosition();
 

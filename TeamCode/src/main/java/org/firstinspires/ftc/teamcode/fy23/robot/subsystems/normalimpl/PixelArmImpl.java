@@ -38,7 +38,9 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     private double pivotTicksPerDegree;
     private double elevatorTicksPerMillimeter;
 
-    private double setPivotPower;
+//    private double setPivotPower;
+    private double setPivotVelocity;
+    private double maxPivotVelocity;
     private double setElevatorPower;
 
     private ElapsedTime stopwatch;
@@ -68,6 +70,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 //        pivotStoppingDistanceAtFullPower = pivotConverter.powerToTpS(1.0);
         pivotTicksPerDegree = parameters.pivotTicksPerDegree;
         maxPivotRecoveryPower = parameters.maxPivotRecoveryPower;
+        maxPivotVelocity = parameters.maxPivotVelocity;
 
         elevatorAccelLimiter = parameters.elevatorAccelLimiter;
 //        elevatorConverter = parameters.elevatorPowerTpSConverter;
@@ -91,12 +94,17 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
     @Override
     public void setPivotPower(double power) {
-        setPivotPower = power;
+        setPivotVelocity = maxPivotVelocity * power;
     }
 
     @Override
     public double getPivotPower() {
         return pivotMotor.getPower();
+    }
+
+    @Override
+    public double getPivotVelocity() {
+        return pivotMotor.getVelocity();
     }
 
     @Override
@@ -129,7 +137,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
     private void killPivotMotor() {
         if (!killPivotMotorLatch) {
-            pivotMotor.setPower(0);
+            pivotMotor.setVelocity(0);
             pivotAccelLimiter.reset();
             killPivotMotorLatch = true;
         }
@@ -137,38 +145,38 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
     private void handlePivotHitUpperLimit(double requestedPower) {
         killPivotMotor();
-        double safeRequest = Range.clip(requestedPower, -maxPivotRecoveryPower, 0);
+        double safeRequest = Range.clip(requestedPower, -maxPivotVelocity * maxPivotRecoveryPower, 0);
         if (safeRequest <= 0) {
-            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-            pivotMotor.setPower(safeRequest);
+            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+            pivotMotor.setVelocity(safeRequest);
             if (pivotMotor.getCurrentPosition() < pivotUpperLimit) {
                 killPivotMotorLatch = false;
             }
         }
     }
 
-    private void handlePivotHitLowerLimit(double requestedPower) {
+    private void handlePivotHitLowerLimit(double requestedVelocity) {
         killPivotMotor();
-        double safeRequest = Range.clip(requestedPower, 0, maxPivotRecoveryPower);
+        double safeRequest = Range.clip(requestedVelocity, 0, maxPivotVelocity * maxPivotRecoveryPower);
         if (safeRequest >= 0) {
-            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-            pivotMotor.setPower(safeRequest);
+            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+            pivotMotor.setVelocity(safeRequest);
             if (pivotMotor.getCurrentPosition() > pivotLowerLimit) {
                 killPivotMotorLatch = false;
             }
         }
     }
 
-    private void handlePivotHitUpperSD(double requestedPower) {
-        double safeRequest = Range.clip(requestedPower, -maxPivotRecoveryPower, 0);
-        double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-        pivotMotor.setPower(limited);
+    private void handlePivotHitUpperSD(double requestedVelocity) {
+        double safeRequest = Range.clip(requestedVelocity, -maxPivotVelocity * maxPivotRecoveryPower, 0);
+        double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+        pivotMotor.setVelocity(limited);
     }
 
     private void handlePivotHitLowerSD(double requestedPower) {
-        double safeRequest = Range.clip(requestedPower, 0, maxPivotRecoveryPower);
-        double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotPower(), stopwatch.seconds());
-        pivotMotor.setPower(limited);
+        double safeRequest = Range.clip(requestedPower, 0, maxPivotVelocity * maxPivotRecoveryPower);
+        double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+        pivotMotor.setVelocity(limited);
     }
 
     private void updatePivotPower() {
@@ -178,10 +186,10 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
         if (pivotUpperLimitSwitch.isActive()) {
             System.out.println("Upper limit switch activated");
-            handlePivotHitUpperLimit(setPivotPower);
+            handlePivotHitUpperLimit(setPivotVelocity);
         } else if (pivotLowerLimitSwitch.isActive()) {
             System.out.println("Lower limit switch activated");
-            handlePivotHitLowerLimit(setPivotPower);
+            handlePivotHitLowerLimit(setPivotVelocity);
         } else {
 
             // soft limits
@@ -189,10 +197,10 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
             int currentPos = getPivotPosition();
             if (currentPos > pivotUpperLimit) {
                 System.out.println("Upper soft limit hit");
-                handlePivotHitUpperLimit(setPivotPower);
+                handlePivotHitUpperLimit(setPivotVelocity);
             } else if (currentPos < pivotLowerLimit) {
                 System.out.println("Lower soft limit hit");
-                handlePivotHitLowerLimit(setPivotPower);
+                handlePivotHitLowerLimit(setPivotVelocity);
             } else {
 
                 // stopping distances
@@ -208,8 +216,8 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
                 // it's safe to go, so run through the AccelLimiter as usual
                 System.out.println("No safety measures activated, so proceeding normally");
-                double limited = pivotAccelLimiter.requestVel(setPivotPower, getPivotPower(), stopwatch.seconds());
-                pivotMotor.setPower(limited);
+                double limited = pivotAccelLimiter.requestVel(setPivotVelocity, pivotMotor.getVelocity(), stopwatch.seconds());
+                pivotMotor.setVelocity(limited);
                 //}
             }
         }

@@ -25,6 +25,11 @@ public class PixelArmBlank implements PixelArm {
     }
 
     @Override
+    public double getPivotVelocity() {
+        return 0;
+    }
+
+    @Override
     public int getPivotPosition() {
         return 0;
     }
