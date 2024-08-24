@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected.
  * <b>This class has an open task:</b> Filters / Make IMUcorrector Testable */
@@ -38,20 +38,20 @@ public class IMUcorrectorBackup {
     private ElapsedTime errorSampleTimer;
     private ElapsedTime pidEnableTimer;
 
-    public IMUcorrectorBackup(HardwareMap hardwareMap, double p, double im, double dm) {
+    public IMUcorrectorBackup(HardwareMap hardwareMap, double p, double im, double maxi, double dm) {
         FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
-        pid = new TunablePID(p, im, dm);
+        pid = new TunablePID(p, im, maxi, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
-    public IMUcorrectorBackup(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
+    public IMUcorrectorBackup(HardwareMap hardwareMap, PIDConsts pidConsts) { // function overloading
         FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
-        pid = new TunablePID(pidConsts.p, pidConsts.im, pidConsts.dm);
+        pid = new TunablePID(pidConsts.kP, pidConsts.kI, pidConsts.maxI, pidConsts.kD);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         pidEnableTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
@@ -72,14 +72,12 @@ public class IMUcorrectorBackup {
             returnDTS = returnDTS.withTurn(dts.turn);
             // if the driver is turning, let them turn
             pid.clearIntegral();
-            pid.clearDerivative();
             pidEnableTimer.reset();
             //we don't need PID while turning
         } else if ((Math.abs(headingError) > hdgErrThresholdStill && Math.abs(dts.drive) < turnThreshold && Math.abs(dts.strafe) < turnThreshold) || (Math.abs(headingError) > hdgErrThresholdMoving && (Math.abs(dts.drive) > turnThreshold) || Math.abs(dts.strafe) > turnThreshold)) {
-            returnDTS = returnDTS.withTurn(Range.clip(pid.getCorrectionPower(headingError, lastError), -maxTotalCorrection, maxTotalCorrection));
+            returnDTS = returnDTS.withTurn(Range.clip(pid.correctFor(headingError), -maxTotalCorrection, maxTotalCorrection));
             if (pidEnableTimer.milliseconds() < 800) {
                 pid.clearIntegral();
-                pid.clearDerivative();
             }
             // otherwise, we have it to ourselves :) The TunablePID does the PID for us. We just
             //determine when we can use it and give it the numbers it needs.
@@ -90,7 +88,6 @@ public class IMUcorrectorBackup {
             targetHeading = imu.yaw();
             // if they just got done turning, set the current heading as our new target to hold
             pid.clearIntegral();
-            pid.clearDerivative();
             headingError = 0; // this will end up in lastError, where I want it, next iteration
             // and reset the accumulated corrections now that they are irrelevant
         }

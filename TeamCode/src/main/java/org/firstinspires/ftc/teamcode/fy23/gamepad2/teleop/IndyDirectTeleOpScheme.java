@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
@@ -110,24 +109,24 @@ public class IndyDirectTeleOpScheme {
     }
 
     private void updateDriveSpeedUpState(Robot robot) {
-        if (driveSpeedUpButton.isActive()) {
-            driveSpeed += 1;
+        if (driveSpeedUpButton.isActive() && driveSpeed < 1) {
+            driveSpeed += 0.1;
         }
     }
 
     private void updateDriveSpeedDownState(Robot robot) {
-        if (driveSpeedDownButton.isActive()) {
-            driveSpeed -= 1;
+        if (driveSpeedDownButton.isActive() && driveSpeed > 0) {
+            driveSpeed -= 0.1;
         }
     }
 
-    private void updateSquareUpState(IMUcorrector imuCorrector) {
+    private void updateSquareUpState(IMUCorrector imuCorrector) {
         if (squareUpButton.isActive()) {
             imuCorrector.squareUp();
         }
     }
 
-    public void update(Robot robot, IMUcorrector imuCorrector) {
+    public void update(Robot robot, IMUCorrector imuCorrector) {
         armMovementSet = false;
         updateMovementState(robot);
         updateArmMediumMovementState(robot);

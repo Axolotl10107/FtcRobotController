@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode.fy23.processors;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected. Also lets you "square up".*/
-public class IMUcorrector {
+public class OldIMUcorrector {
 
     public static class Parameters {
         /** Please pass through the Robot's IMU ( robot.imu ). */
@@ -54,7 +55,7 @@ public class IMUcorrector {
     private int errorSampleDelay;
 //    public ElapsedTime postSquaringUpPatienceTimer;
 
-    public IMUcorrector(Parameters parameters) {
+    public OldIMUcorrector(Parameters parameters) {
         maxCorrection = parameters.maxCorrection;
         hdgErrTolerance = parameters.hdgErrTolerance;
         turnThreshold = parameters.turnThreshold;
@@ -66,7 +67,7 @@ public class IMUcorrector {
     }
 
     private DTS applyCorrection(DTS dts) {
-        double correctionPower = pid.getCorrectionPower(headingError, lastHdgError);
+        double correctionPower = pid.correctFor(headingError);
         double safeCorrectionPower = Range.clip(correctionPower, -maxCorrection, maxCorrection);
         return dts.withTurn(safeCorrectionPower);
     }
@@ -96,7 +97,6 @@ public class IMUcorrector {
                 turning = false;
                 // clear old cumulative values
                 pid.clearIntegral();
-                pid.clearDerivative();
                 lastHdgError = 0;
                 targetHeading = currentHeading; // set the target to the direction the driver wants to go now
             }

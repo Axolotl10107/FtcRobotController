@@ -87,7 +87,7 @@ public interface RRMecanumDrive {
          * does not need to be populated. Defaults to <b>true</b>. */
         public boolean useAccelLimiter = true;
         /** An ElapsedTime or MockElapsedTime object, already instantiated */
-        public ElapsedTime stopwatch;
+        public ElapsedTime stopwatch = new ElapsedTime();
 
         /** Applies to all motors */
         public DcMotor.RunMode runMode = DcMotor.RunMode.RUN_USING_ENCODER;
@@ -157,37 +157,47 @@ public interface RRMecanumDrive {
     void turnAsync(double angle);
     void turn(double angle);
 
+    /** Asynchronously follows a trajectory created by TrajectoryBuilder (<i>NOT TrajectorySequenceBuilder</i>). */
     void followTrajectoryAsync(Trajectory trajectory);
+    /** Blocking method to follow a trajectory created by TrajectoryBuilder (<i>NOT TrajectorySequenceBuilder</i>). */
     void followTrajectory(Trajectory trajectory);
 
+    /** Asynchronously follows a trajectory created by Trajectory<i>Sequence</i>Builder. */
     void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence);
+    /** Blocking method to follow a trajectory created by Trajectory<i>Sequence</i>Builder. */
     void followTrajectorySequence(TrajectorySequence trajectorySequence);
 
     Pose2d getLastError();
 
+    /** A poorly named RoadRunner update method that only updates RR stuff (like async(?) trajectory following) when the
+     * OpMode thread is active. */
     void waitForIdle();
 
+    /** Is RoadRunner doing something right now? */
     boolean isBusy();
 
     void setPIDFCoefficients(DcMotor.RunMode runMode, PIDFCoefficients coefficients);
 
+    /** Please use applyDTS() instead. This only exists for compatibility with stuff written for SampleMecanumDrive. */
     void setWeightedDrivePower(Pose2d drivePower);
 
     @NonNull
     List<Double> getWheelPositions();
     List<Double> getWheelVelocities();
 
+    /** Please use applyDTS() instead. This only exists for compatibility with stuff written for SampleMecanumDrive. */
     void setMotorPowers(double v, double v1, double v2, double v3);
 
-    /** This exists only to match SampleMecanumDrive. Attempting to use it will throw an UnsupportedOperationException. Use your robot's FriendlyIMU instead. */
+    /** Use your robot's FriendlyIMU instead. This exists only to match SampleMecanumDrive. */
     double getRawExternalHeading();
-    /** This exists only to match SampleMecanumDrive. Attempting to use it will throw an UnsupportedOperationException. Use your robot's FriendlyIMU instead. */
+    /** Use your robot's FriendlyIMU instead. This exists only to match SampleMecanumDrive. */
     Double getExternalHeadingVelocity();
 
     TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth);
     TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel);
 
     // methods from RR's MecanumDrive that are not overridden in SampleMecanumDrive
+    /** Please use applyDTS() instead. This only exists for compatibility with stuff written for RoadRunner's MecanumDrive. */
     void setDrivePower();
     void setDriveSignal();
     void updatePoseEstimate();

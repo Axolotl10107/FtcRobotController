@@ -12,8 +12,14 @@ public class TeleOpState {
     private double elevatorMovement = 0;
     private Claw.State clawState = Claw.State.NONE;
     private boolean launchPlane = false;
+
+    private double maxDriveSpeed = 1;
+
+    @Deprecated
     private boolean driveSpeedUp = false;
+    @Deprecated
     private boolean driveSpeedDown = false;
+
     private boolean squareUp = false;
 
     public DTS getDts() {
@@ -56,18 +62,30 @@ public class TeleOpState {
         this.launchPlane = launchPlane;
     }
 
+    public double getMaxDriveSpeed() {
+        return maxDriveSpeed;
+    }
+
+    public void setMaxDriveSpeed(double newSpeed) {
+        maxDriveSpeed = newSpeed;
+    }
+
+    @Deprecated
     public boolean isDriveSpeedUp() {
         return driveSpeedUp;
     }
 
+    @Deprecated
     public void setDriveSpeedUp(boolean driveSpeedUp) {
         this.driveSpeedUp = driveSpeedUp;
     }
 
+    @Deprecated
     public boolean isDriveSpeedDown() {
         return driveSpeedDown;
     }
 
+    @Deprecated
     public void setDriveSpeedDown(boolean driveSpeedDown) {
         this.driveSpeedDown = driveSpeedDown;
     }

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.fy23.controls.FieldyGamepadLS;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyI
 public class RobotBIMUDriveTest extends OpMode {
 
     FieldyGamepadLS gamepad;
-    IMUcorrector imuCorrector;
+    IMUCorrector imuCorrector;
     DTSscaler scaler;
     Robot robot;
 
@@ -30,14 +30,12 @@ public class RobotBIMUDriveTest extends OpMode {
     }
 
     public void start() {
-        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
-        params.haveHitTargetTolerance = 0.1;
-        params.hdgErrTolerance = 1.0;
-        params.maxCorrection = 0.1;
-        params.turnThreshold = 0.05;
-        params.imu = robot.imu;
-        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
-        imuCorrector = new IMUcorrector(params);
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        params.haveHitTargetToleranceDegrees = 0.1;
+        params.hdgErrToleranceDegrees = 1.0;
+        params.maxCorrectionPower = 0.1;
+        params.turnPowerThreshold = 0.05;
+        imuCorrector = new IMUCorrector(params);
         // Why is this here? Because Virtual Robot is slow, I guess?
         pid = params.pid;
         gamepad = new FieldyGamepadLS(gamepad1, gamepad2, (FriendlyIMUImpl) robot.imu);
@@ -78,11 +76,10 @@ public class RobotBIMUDriveTest extends OpMode {
 //        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
         telemetry.addData("Actual turn", scaler.scaledTurn);
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("Proportional", pid.getProportional());
-        telemetry.addData("Integral", pid.getIntegral());
-        telemetry.addData("Integral Multiplier", pid.getIntegralMultiplier());
-        telemetry.addData("Derivative", pid.getDerivative());
-        telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
+        telemetry.addData("Proportional", pid.kP());
+        telemetry.addData("Integral", pid.currentIntegralValue());
+        telemetry.addData("Integral Multiplier", pid.kI());
+        telemetry.addData("Derivative Multiplier", pid.kD());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Current Heading", robot.imu.yaw());
         telemetry.addData("Target Heading", imuCorrector.getTargetHeading());

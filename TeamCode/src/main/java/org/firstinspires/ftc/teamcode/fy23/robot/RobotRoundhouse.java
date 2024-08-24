@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
@@ -11,7 +12,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy23.units.SimplePowerTpSConverter;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
@@ -67,6 +68,7 @@ public class RobotRoundhouse {
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
+        driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         driveParams.leftFrontMotor.setDirection(REVERSE);
@@ -82,6 +84,8 @@ public class RobotRoundhouse {
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
+
+        driveParams.stopwatch = new ElapsedTime();
 
         PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = true;
@@ -112,7 +116,7 @@ public class RobotRoundhouse {
         params.tpr = 537.7; // ticks per rotation
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;
@@ -139,6 +143,7 @@ public class RobotRoundhouse {
         driveParams.dc = new RRMecanumDrive.DriveConstants();
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
+        driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         driveParams.leftFrontMotor.setDirection(REVERSE);
@@ -155,6 +160,8 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
+        driveParams.stopwatch = new ElapsedTime();
+
         PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = false;
 
@@ -165,7 +172,7 @@ public class RobotRoundhouse {
         params.tpr = 537.7;
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;
@@ -182,6 +189,8 @@ public class RobotRoundhouse {
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
         imuParams.present = true;
+        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
@@ -197,9 +206,12 @@ public class RobotRoundhouse {
         dc.kA = 0;
         dc.kStatic = 0;
 
+        driveParams.dc = dc;
+
         driveParams.present = true;
 
         driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
+        driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "front_left_motor");
         driveParams.leftFrontMotor.setDirection(REVERSE);
@@ -216,6 +228,8 @@ public class RobotRoundhouse {
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
+        driveParams.stopwatch = new ElapsedTime();
+
         PixelArm.Parameters armParams = new PixelArm.Parameters();
         armParams.present = false;
 
@@ -226,7 +240,7 @@ public class RobotRoundhouse {
         params.tpr = 1120;
         params.wheelDiameter = 0.1016; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDConsts(0, 0, 0, 0);
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;
@@ -297,7 +311,7 @@ public class RobotRoundhouse {
         params.tpr = 537.7; // ticks per rotation
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDconsts(0.023, 0, 0);
+        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
 
         params.clawParameters = clawParams;
         params.imuParameters = imuParams;

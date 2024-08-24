@@ -151,6 +151,11 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, 
         }
     }
 
+    /**
+     * Apply motor powers from a DTS (Drive-Turn-Strafe).
+     * This implementation will apply acceleration control before it reaches the motors.
+     * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior.
+     */
     @Override
     public void applyDTS(DTS dts) {
         if (useAccelLimiter) {

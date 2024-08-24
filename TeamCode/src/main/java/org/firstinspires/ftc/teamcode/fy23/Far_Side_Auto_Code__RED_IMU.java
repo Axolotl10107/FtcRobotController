@@ -9,8 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 @Autonomous(name="IMU AutoCodeFarSide__RED", group="AutoCodeFarSide__RED")
@@ -22,7 +21,7 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     private DcMotor armExtend = null;
 
     private Robot robot; // this contains your motors
-    private IMUcorrector imuCorrector;
+    private IMUCorrector imuCorrector;
 
     DTS desiredMotion;
     DTS corrected;
@@ -52,16 +51,12 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     public void runOpMode() {
 
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
-        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
-        params.haveHitTargetTolerance = 0.1;
-        params.hdgErrTolerance = 1.0;
-        params.maxCorrection = 0.1;
-        params.turnThreshold = 0.05;
-        params.imu = robot.imu;
-        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
-        params.errorSampleTimer = new ElapsedTime();
-        params.errorSampleDelay = 1150;
-        imuCorrector = new IMUcorrector(params);
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        params.haveHitTargetToleranceDegrees = 0.1;
+        params.hdgErrToleranceDegrees = 1.0;
+        params.maxCorrectionPower = 0.1;
+        params.turnPowerThreshold = 0.05;
+        imuCorrector = new IMUCorrector(params);
 
         stopwatch = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 

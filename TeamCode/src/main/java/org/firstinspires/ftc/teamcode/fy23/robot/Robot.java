@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.*;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** Encapsulates all of the components that make up a robot. A simple way to centralize initialization in one place
  * (to avoid duplicated code across OpModes) and make it easier to work with multiple different robots, each of which is
@@ -26,7 +26,7 @@ public class Robot {
 //        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
         @Deprecated
-        PIDconsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
+PIDConsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
         Claw.Parameters clawParameters;
         FriendlyIMU.Parameters imuParameters;
@@ -43,7 +43,7 @@ public class Robot {
     public final double wheelCircumference;
     @Deprecated
     public final double maxForwardSpeed;
-    public final PIDconsts hdgCorrectionPIDconsts;
+    public final PIDConsts hdgCorrectionPIDconsts;
 
     public final Claw claw;
     public final FriendlyIMU imu;

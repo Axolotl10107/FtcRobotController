@@ -107,11 +107,15 @@ public class IndyTeleOpScheme implements TeleOpScheme {
     }
 
     private void updateDriveSpeedUpState() {
-        state.setDriveSpeedUp(driveSpeedUpButton.isActive());
+        if (driveSpeedUpButton.isActive()) {
+            state.setMaxDriveSpeed( state.getMaxDriveSpeed() + 0.1 );
+        }
     }
 
     private void updateDriveSpeedDownState() {
-        state.setDriveSpeedDown(driveSpeedDownButton.isActive());
+        if (driveSpeedDownButton.isActive()) {
+            state.setMaxDriveSpeed( state.getMaxDriveSpeed() - 0.1 );
+        }
     }
 
     private void updateSquareUpState() {

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** Hopefully allows something to accept any robot, when that makes any sense */
 public interface AnyRobot {
@@ -16,10 +16,10 @@ public interface AnyRobot {
 
     /** Default TunablePID tuning, for when using the IMUdrive pipeline */
     // TODO: This needs a better name
-    public final PIDconsts pidConsts = new PIDconsts(0,0,0);
+    public final PIDConsts pidConsts = new PIDConsts(0,0,0,0);
 
     /** Default PID constants for the SDK's PID algorithm on individual DcMotorEx devices. Useful
      * for {@link RudimentaryRampToTarget}, perhaps, which
      * uses DcMotorEx.setVelocity() in the RUN_USING_ENCODER runmode. */
-    public final PIDconsts sdkMotorPidConsts = new PIDconsts(0,0,0);
+    public final PIDConsts sdkMotorPidConsts = new PIDConsts(0,0,0,0);
 }

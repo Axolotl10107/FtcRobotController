@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.MecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** RobotA represents the competition robot. It contains five subsystems: a {@link MecanumDriveImpl},
  * and a {@link FriendlyIMUImpl}. */
@@ -32,12 +32,12 @@ public class VirtualRobot implements AnyRobot {
     /** There's a few different preset things that this can get set to. The default is loaded from
      * a file called "RobotA.pid" that gets saved by RobotAIMUDriveTuner,
      * but you can also use a hard-coded value or disable PID entirely. */
-    public final PIDconsts pidConsts;
+    public final PIDConsts pidConsts;
 
     /** Default PID constants for the SDK's PID algorithm on individual DcMotorEx devices. Useful
      * for {@link RudimentaryRampToTarget}, perhaps, which
      * uses DcMotorEx.setVelocity() in the RUN_USING_ENCODER runmode. */
-    public final PIDconsts sdkMotorPidConsts;
+    public final PIDConsts sdkMotorPidConsts;
 
     /** Pass in the hardwareMap that OpMode / LinearOpMode provides. */
     public VirtualRobot(HardwareMap hardwareMap) {
@@ -62,14 +62,14 @@ public class VirtualRobot implements AnyRobot {
 
         // TunablePID tuning for this robot - select exactly one
 //        pidConsts = new PIDconsts(0.023, 0.00, 0.00); // use the constants I've had the most success with so far
-        pidConsts = new PIDconsts(0, 0, 0); // disable PID (and therefore IMU correction)
+        pidConsts = new PIDConsts(0, 0, 0, 0); // disable PID (and therefore IMU correction)
         { // load from the file that RobotBIMUDriveTuner saved (comment out the entire code block to disable)
             // modified from SensorBNO055IMUCalibration example
 //            File file = AppUtil.getInstance().getSettingsFile("VirtualRobot.pid");
 //            pidConsts = new PIDconsts(ReadWriteFile.readFile(file));
         }
 
-        sdkMotorPidConsts = new PIDconsts(0.05, 0, 0);
+        sdkMotorPidConsts = new PIDConsts(0.05, 0, 0, 0);
 
         FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;

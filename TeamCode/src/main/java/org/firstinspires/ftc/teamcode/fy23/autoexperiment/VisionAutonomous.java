@@ -30,9 +30,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.old.RobotA;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RampTwo;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -50,7 +49,7 @@ public class VisionAutonomous extends LinearOpMode
 
     Robot robot;
     RampTwo ramper;
-    IMUcorrector imuCorrector;
+    IMUCorrector imuCorrector;
 
     DcMotor armPivot;
 
@@ -97,14 +96,12 @@ public class VisionAutonomous extends LinearOpMode
         webcam.setPipeline(pipeline);
 
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
-        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
-        params.haveHitTargetTolerance = 0.1;
-        params.hdgErrTolerance = 1.0;
-        params.maxCorrection = 0.1;
-        params.turnThreshold = 0.05;
-        params.imu = robot.imu;
-        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
-        imuCorrector = new IMUcorrector(params);
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        params.haveHitTargetToleranceDegrees = 0.1;
+        params.hdgErrToleranceDegrees = 1.0;
+        params.maxCorrectionPower = 0.1;
+        params.turnPowerThreshold = 0.05;
+        imuCorrector = new IMUCorrector(params);
 
         armPivot = hardwareMap.get(DcMotor.class, "armPivot");
         armPivot.setTargetPosition(-500);

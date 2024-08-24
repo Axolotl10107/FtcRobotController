@@ -8,11 +8,11 @@ import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUcorrector;
+import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 import java.io.File;
 
@@ -21,7 +21,7 @@ import java.io.File;
 public class RobotAIMUDriveTuner extends OpMode {
 
     GamepadTrueDTS gamepad;
-    IMUcorrector imuCorrector;
+    IMUCorrector imuCorrector;
     DTSscaler scaler;
     Robot robot;
 
@@ -37,16 +37,12 @@ public class RobotAIMUDriveTuner extends OpMode {
     }
 
     public void start() {
-        IMUcorrector.Parameters params = new IMUcorrector.Parameters();
-        params.haveHitTargetTolerance = 0.1;
-        params.hdgErrTolerance = 1.0;
-        params.maxCorrection = 0.1;
-        params.turnThreshold = 0.05;
-        params.imu = robot.imu;
-        params.pid = new TunablePID(robot.hdgCorrectionPIDconsts);
-        params.errorSampleTimer = new ElapsedTime();
-        params.errorSampleDelay = 1150;
-        imuCorrector = new IMUcorrector(params);
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        params.haveHitTargetToleranceDegrees = 0.1;
+        params.hdgErrToleranceDegrees = 1.0;
+        params.maxCorrectionPower = 0.1;
+        params.turnPowerThreshold = 0.05;
+        imuCorrector = new IMUCorrector(params);
         // Why is this here? Because Virtual Robot is slow, I guess?
         pid = params.pid;
         gamepad = new GamepadTrueDTS(gamepad1, gamepad2);
@@ -59,22 +55,22 @@ public class RobotAIMUDriveTuner extends OpMode {
         // Yup. That's the OpMode. That line lets you drive the robot.
 
         if (gamepad.pUp()) {
-            pid.setProportional(pid.getProportional() + changeAmount);
+            pid.setkP(pid.kP() + changeAmount);
         }
         if (gamepad.pDown()) {
-            pid.setProportional(pid.getProportional() - changeAmount);
+            pid.setkP(pid.kP() - changeAmount);
         }
         if (gamepad.imUp()) {
-            pid.setIntegralMultiplier(pid.getIntegralMultiplier() + changeAmount);
+            pid.setkI(pid.kI() + changeAmount);
         }
         if (gamepad.imDown()) {
-            pid.setIntegralMultiplier(pid.getIntegralMultiplier() - changeAmount);
+            pid.setkI(pid.kI() - changeAmount);
         }
         if (gamepad.dmUp()) {
-            pid.setDerivativeMultiplier(pid.getDerivativeMultiplier() + changeAmount);
+            pid.setkD(pid.kD() + changeAmount);
         }
         if (gamepad.dmDown()) {
-            pid.setDerivativeMultiplier(pid.getDerivativeMultiplier() - changeAmount);
+            pid.setkD(pid.kD() - changeAmount);
         }
 
         if (gamepad.changeUp()) {
@@ -95,7 +91,7 @@ public class RobotAIMUDriveTuner extends OpMode {
             // modified from SensorBNO055IMUCalibration example
             String filename = "RobotA.pid";
             File file = AppUtil.getInstance().getSettingsFile(filename);
-            PIDconsts constsToWrite = new PIDconsts(pid.getProportional(), pid.getIntegralMultiplier(), pid.getDerivativeMultiplier());
+            PIDConsts constsToWrite = new PIDConsts(pid.kP(), pid.kI(), pid.maxI(), pid.kD());
             ReadWriteFile.writeFile(file, constsToWrite.serialize());
             telemetry.log().add("saved to '%s'", filename);
         }
@@ -112,11 +108,10 @@ public class RobotAIMUDriveTuner extends OpMode {
 //        telemetry.addData("Corrected turn", imuCorrector.correctedTurnPower);
         telemetry.addData("Actual turn", scaler.scaledTurn);
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("Proportional", pid.getProportional());
-        telemetry.addData("Integral", pid.getIntegral());
-        telemetry.addData("Integral Multiplier", pid.getIntegralMultiplier());
-        telemetry.addData("Derivative", pid.getDerivative());
-        telemetry.addData("Derivative Multiplier", pid.getDerivativeMultiplier());
+        telemetry.addData("Proportional", pid.kP());
+        telemetry.addData("Integral", pid.currentIntegralValue());
+        telemetry.addData("Integral Multiplier", pid.kI());
+        telemetry.addData("Derivative Multiplier", pid.kD());
         telemetry.addLine("-------------------------------------");
         telemetry.addData("Current Heading", robot.imu.yaw());
         telemetry.addData("Target Heading", imuCorrector.getTargetHeading());

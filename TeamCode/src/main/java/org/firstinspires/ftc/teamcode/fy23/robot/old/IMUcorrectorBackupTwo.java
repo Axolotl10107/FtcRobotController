@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
-import org.firstinspires.ftc.teamcode.fy23.units.PIDconsts;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** Uses the IMU to actively maintain the current heading unless a deliberate turn is detected.
  * <b>This class has an open task:</b> Filters / Make IMUcorrector Testable */
@@ -42,21 +42,21 @@ public class IMUcorrectorBackupTwo {
     private ElapsedTime errorSampleTimer;
     public ElapsedTime postSquaringUpPatienceTimer;
 
-    public IMUcorrectorBackupTwo(HardwareMap hardwareMap, double p, double im, double dm) {
+    public IMUcorrectorBackupTwo(HardwareMap hardwareMap, double p, double im, double maxI, double dm) {
         FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
         imuParams.present = true;
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
-        pid = new TunablePID(p, im, dm);
+        pid = new TunablePID(p, im, maxI, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
         postSquaringUpPatienceTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
     }
 
-    public IMUcorrectorBackupTwo(HardwareMap hardwareMap, PIDconsts pidConsts) { // function overloading
-        this(hardwareMap, pidConsts.p, pidConsts.im, pidConsts.dm);
+    public IMUcorrectorBackupTwo(HardwareMap hardwareMap, PIDConsts pidConsts) { // function overloading
+        this(hardwareMap, pidConsts.kP, pidConsts.kI, pidConsts.maxI, pidConsts.kD);
     }
 
     private DTS applyCorrection(DTS dts) {
-        double correctionPower = pid.getCorrectionPower(headingError, lastError);
+        double correctionPower = pid.correctFor(headingError);
         double safeCorrectionPower = Range.clip(correctionPower, -maxTotalCorrection, maxTotalCorrection);
         return dts.withTurn(safeCorrectionPower);
     }
@@ -84,7 +84,6 @@ public class IMUcorrectorBackupTwo {
                 // if we're actually done turning (we just fell below the turning threshold
                 targetHeading = imu.yaw(); // we want to face the direction they turned to now
                 pid.clearIntegral(); // accumulated corrections are irrelevant now
-                pid.clearDerivative();
                 headingError = 0; // this will go into lastError
             }
             if (moving(dts) || squaringUp) {
