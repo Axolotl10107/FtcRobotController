@@ -151,6 +151,26 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, 
         }
     }
 
+    @Override
+    public DcMotorEx getLeftFrontMotor() {
+        return leftFront;
+    }
+
+    @Override
+    public DcMotorEx getRightFrontMotor() {
+        return rightFront;
+    }
+
+    @Override
+    public DcMotorEx getLeftBackMotor() {
+        return leftBack;
+    }
+
+    @Override
+    public DcMotorEx getRightBackMotor() {
+        return rightBack;
+    }
+
     /**
      * Apply motor powers from a DTS (Drive-Turn-Strafe).
      * This implementation will apply acceleration control before it reaches the motors.

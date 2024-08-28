@@ -5,13 +5,19 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 public interface DigitalDevice {
 
     class Parameters {
-        /** The name of the device in the HardwareMap (robot configuration) */
-        public String deviceName;
+        /** Create a Parameters object and provide parameters that don't have default values.
+         * @param deviceName The name of the device in the HardwareMap (robot configuration)
+         */
+        public Parameters(String deviceName) {
+            this.deviceName = deviceName;
+        }
+
+        /** You already set this in the constructor and cannot set it again. */
+        public final String deviceName;
         /** If this is true, the reported state of the device is inverted. */
-        public boolean invert;
+        public boolean invert = false;
     }
 
-    /** Given the implementation and the parameters you set, should the state of this device be considered active (true)
-     * right now? */
+    /** When a device is "active" depends on the implementation. */
     boolean isActive();
 }

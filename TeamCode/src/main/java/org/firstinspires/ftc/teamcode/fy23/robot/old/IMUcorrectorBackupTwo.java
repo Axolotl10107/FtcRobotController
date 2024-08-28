@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -43,8 +44,7 @@ public class IMUcorrectorBackupTwo {
     public ElapsedTime postSquaringUpPatienceTimer;
 
     public IMUcorrectorBackupTwo(HardwareMap hardwareMap, double p, double im, double maxI, double dm) {
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(p, im, maxI, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);

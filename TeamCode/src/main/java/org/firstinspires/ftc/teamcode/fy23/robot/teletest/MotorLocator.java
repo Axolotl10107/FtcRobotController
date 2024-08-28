@@ -19,27 +19,27 @@ public class MotorLocator extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.dpad_up) {
-            robot.drive.leftFront.setPower(1);
+            robot.drive.getLeftFrontMotor().setPower(1);
         } else {
-            robot.drive.leftFront.setPower(0);
+            robot.drive.getLeftFrontMotor().setPower(0);
         }
 
         if (gamepad1.dpad_down) {
-            robot.drive.leftBack.setPower(1);
+            robot.drive.getLeftBackMotor().setPower(1);
         } else {
-            robot.drive.leftBack.setPower(0);
+            robot.drive.getLeftBackMotor().setPower(0);
         }
 
         if (gamepad1.y) {
-            robot.drive.rightFront.setPower(1);
+            robot.drive.getRightFrontMotor().setPower(1);
         } else {
-            robot.drive.rightFront.setPower(0);
+            robot.drive.getRightFrontMotor().setPower(0);
         }
 
         if (gamepad1.b) {
-            robot.drive.rightBack.setPower(1);
+            robot.drive.getRightBackMotor().setPower(1);
         } else {
-            robot.drive.rightBack.setPower(0);
+            robot.drive.getRightBackMotor().setPower(0);
         }
 
         robot.update();

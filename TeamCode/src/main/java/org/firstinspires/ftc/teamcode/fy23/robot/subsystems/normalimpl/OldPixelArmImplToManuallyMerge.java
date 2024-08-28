@@ -65,7 +65,6 @@ public class OldPixelArmImplToManuallyMerge implements PixelArm {
         elevatorLowerLimitSwitch = parameters.elevatorLowerLimitSwitch;
 
         pivotAccelLimiter = parameters.pivotAccelLimiter;
-        pivotConverter = parameters.pivotPowerTpSConverter;
         pivotTicksPerDegree = parameters.pivotTicksPerDegree;
 
         double originalPivotMaxAccel = pivotAccelLimiter.getMaxAccel();
@@ -83,7 +82,6 @@ public class OldPixelArmImplToManuallyMerge implements PixelArm {
         pivotAccelLimiter.setParameters(originalPivotMaxAccel, orignalPivotMaxDeltaVEachLoop);
 
         elevatorAccelLimiter = parameters.elevatorAccelLimiter;
-        elevatorConverter = parameters.elevatorPowerTpSConverter;
         elevatorStoppingDistanceAtHalfPower = elevatorConverter.powerToTpS(0.5);
         elevatorStoppingDistanceAtFullPower = elevatorConverter.powerToTpS(1.0);
         elevatorTicksPerMillimeter = parameters.elevatorTicksPerMillimeter;

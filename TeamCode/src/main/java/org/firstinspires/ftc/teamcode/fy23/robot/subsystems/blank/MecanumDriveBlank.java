@@ -8,12 +8,14 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.*;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.apache.commons.math3.analysis.function.Min;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +25,28 @@ import java.util.List;
 
 /** A blank implementation of {@link MecanumDrive} that does nothing. Can also be
  * used for any variant of that interface. Never returns null (returns blank objects
- * instead where applicable), so hopefully no null pointers.*/
+ * instead where applicable), so hopefully no null pointers. */
 public class MecanumDriveBlank implements MecanumDrive, RRMecanumDrive {
+
+    @Override
+    public DcMotorEx getLeftFrontMotor() {
+        return new BlankMotor();
+    }
+
+    @Override
+    public DcMotorEx getRightFrontMotor() {
+        return new BlankMotor();
+    }
+
+    @Override
+    public DcMotorEx getLeftBackMotor() {
+        return new BlankMotor();
+    }
+
+    @Override
+    public DcMotorEx getRightBackMotor() {
+        return new BlankMotor();
+    }
 
     @Override
     public void applyDTS(DTS dts) {

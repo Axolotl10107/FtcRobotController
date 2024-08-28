@@ -25,7 +25,7 @@ public class RobotATestTeleOp extends OpMode {
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
         controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         // IMUcorrector has other parameters, but they already have good defaults and don't usually need to be changed.
         imuCorrector = new IMUCorrector(params);
     }

@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ import java.util.List;
  * Learn more at learnroadrunner.com. */
 public interface RRMecanumDrive {
 
-    /** See the RoadRunner Quickstart's DriveConstants class. The default values model a perfect goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration will be needed. */
+    /** See the RoadRunner Quickstart's DriveConstants class. The default values model a goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration will be needed. */
     class DriveConstants {
         public double TICKS_PER_REV = 537.7;
         public double MAX_RPM = 312;
@@ -48,9 +48,9 @@ public interface RRMecanumDrive {
         public double MAX_ANG_VEL = Math.toRadians(60);
         public double MAX_ANG_ACCEL = Math.toRadians(60);
 
-        /** Make sure to adjust this */
+        /** The direction the REV logo on your Control Hub faces */
         public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        /** Make sure to adjust this */
+        /** The direction the USB port on your Control Hub faces */
         public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         public double rpmToVelocity(double rpm) {
@@ -63,26 +63,36 @@ public interface RRMecanumDrive {
 
     /** Contains motor names and settings - usually part of a set of Robot parameters. For fields without descriptions, see RoadRunner Quickstart's SampleMecanumDrive. */
     class Parameters {
-        /** Is this subsystem installed on this robot? */
-        public boolean present;
+        /** Create a Parameters object and provide parameters that don't have default values.
+         * @param present Is this subsystem installed on this robot?
+         * @param dc Use the {@link DriveConstants} class included in the {@link RRMecanumDrive} interface.
+         * @param accelLimiter The AccelLimiter object to be used for drivebase acceleration control, already instantiated and configured */
+        public Parameters(boolean present, DriveConstants dc, AccelLimiter accelLimiter) {
+            this.present = present;
+            this.dc = dc;
+            this.accelLimiter = accelLimiter;
+        }
 
-        /** Use the {@link DriveConstants} class included in the RRMecanumDrive interface. */
-        public DriveConstants dc;
+        /** You already set this in the constructor and cannot set it again. */
+        public final boolean present;
+
+        /** You already set this in the constructor and cannot set it again. */
+        public final DriveConstants dc;
 
         /** Ignore this - it will be handled by the Robot class */
         public FriendlyIMU imu;
 
         /** The motor object on the left front corner of the drivebase, already instantiated */
-        public DcMotorEx leftFrontMotor;
+        public DcMotorEx leftFrontMotor = new BlankMotor();
         /** The motor object on the right front corner of the drivebase, already instantiated */
-        public DcMotorEx rightFrontMotor;
+        public DcMotorEx rightFrontMotor = new BlankMotor();
         /** The motor object on the left back corner of the drivebase, already instantiated */
-        public DcMotorEx leftBackMotor;
+        public DcMotorEx leftBackMotor = new BlankMotor();
         /** The motor object on the right back corner of the drivebase, already instantiated */
-        public DcMotorEx rightBackMotor;
+        public DcMotorEx rightBackMotor = new BlankMotor();
 
-        /** An AccelLimiter object, already instantiated */
-        public AccelLimiter accelLimiter;
+        /** You already set this in the constructor and cannot set it again. */
+        public final AccelLimiter accelLimiter;
         /** Whether or not to apply acceleration control. If this is set to <b>false</b>, the accelLimiter parameter
          * does not need to be populated. Defaults to <b>true</b>. */
         public boolean useAccelLimiter = true;
@@ -95,15 +105,22 @@ public interface RRMecanumDrive {
         /** Applies to all motors */
         public DcMotor.ZeroPowerBehavior zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public double LATERAL_MULTIPLIER = 1;
 
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public double VX_WEIGHT = 1;
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public double VY_WEIGHT = 1;
+        /** For RoadRunner - learn more at <a href="https://www.learnroadrunner.com">learnroadrunner.com</a> */
         public double OMEGA_WEIGHT = 1;
 
+        /** Ignore this - it will be handled by the Robot class */
         public VoltageSensor batteryVoltageSensor;
     }
 
@@ -120,14 +137,14 @@ public interface RRMecanumDrive {
         }
     };
 
-    /** The leftFront motor, if direct access is needed */
-    DcMotorEx leftFront = new BlankMotor();
-    /** The rightFront motor, if direct access is needed */
-    DcMotorEx rightFront = new BlankMotor();
-    /** The leftBack motor, if direct access is needed */
-    DcMotorEx leftBack = new BlankMotor();
-    /** The rightBack motor, if direct access is needed */
-    DcMotorEx rightBack = new BlankMotor();
+    /** Get the leftFront motor, if direct access is needed */
+    DcMotorEx getLeftFrontMotor();
+    /** Get the rightFront motor, if direct access is needed */
+    DcMotorEx getRightFrontMotor();
+    /** Get the leftBack motor, if direct access is needed */
+    DcMotorEx getLeftBackMotor();
+    /** Get the rightBack motor, if direct access is needed */
+    DcMotorEx getRightBackMotor();
 
     /** Apply motor powers from a DTS (Drive-Turn-Strafe).
      * @param dts The DTS to apply. Normalize it before passing it in for desirable behavior. */

@@ -12,14 +12,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public interface FriendlyIMU {
 
     class Parameters {
-        /** Is this subsystem installed on this robot? */
-        public boolean present;
+        /** Create a Parameters object and provide parameters that don't have default values.
+         * @param present Is this subsystem installed on this robot?
+         * @param logoFacingDirection The direction that the REV logo on your Control Hub faces
+         * @param usbFacingDirection The direction that the USB port on your Control Hub faces */
+        public Parameters(boolean present, RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection, RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection) {
+            this.present = present;
+            this.logoFacingDirection = logoFacingDirection;
+            this.usbFacingDirection = usbFacingDirection;
+        }
 
-        /** The direction that the REV logo on your Control Hub faces */
-        public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
+        /** You already set this in the constructor and cannot set it again. */
+        public final boolean present;
 
-        /** The direction that the USB port on your Control Hub faces */
-        public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
+        /** You already set this in the constructor and cannot set it again. */
+        public final RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection;
+
+        /** You already set this in the constructor and cannot set it again. */
+        public final RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection;
     }
 
     /** X rotation */

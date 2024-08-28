@@ -55,10 +55,10 @@ public class VisionAutonomous extends LinearOpMode
 
     private int getAvgEncoderPos() {
         return (
-                robot.drive.leftFront.getCurrentPosition() +
-                robot.drive.rightFront.getCurrentPosition() +
-                robot.drive.leftBack.getCurrentPosition() +
-                robot.drive.rightBack.getCurrentPosition()
+                robot.drive.getLeftFrontMotor().getCurrentPosition() +
+                robot.drive.getRightFrontMotor().getCurrentPosition() +
+                robot.drive.getLeftBackMotor().getCurrentPosition() +
+                robot.drive.getRightBackMotor().getCurrentPosition()
         ) / 4;
     }
 
@@ -96,7 +96,7 @@ public class VisionAutonomous extends LinearOpMode
         webcam.setPipeline(pipeline);
 
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;
         params.maxCorrectionPower = 0.1;
@@ -161,15 +161,15 @@ public class VisionAutonomous extends LinearOpMode
     void analyzeImage() {
         ramper = new RampTwo(5, 10, 1, 2, 50, 0);
         while (ticksToCM(getAvgEncoderPos()) < 49) {
-            robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-            robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-            robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-            robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.getLeftFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.getRightFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.getLeftBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+            robot.drive.getRightBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
             telemetry.addData("currentPos", ticksToCM(getAvgEncoderPos()));
-            telemetry.addData("leftFront", robot.drive.leftFront.getCurrentPosition());
-            telemetry.addData("rightFront", robot.drive.rightFront.getCurrentPosition());
-            telemetry.addData("leftBack", robot.drive.leftBack.getCurrentPosition());
-            telemetry.addData("rightBack", robot.drive.rightBack.getCurrentPosition());
+            telemetry.addData("leftFront", robot.drive.getLeftFrontMotor().getCurrentPosition());
+            telemetry.addData("rightFront", robot.drive.getRightFrontMotor().getCurrentPosition());
+            telemetry.addData("leftBack", robot.drive.getLeftBackMotor().getCurrentPosition());
+            telemetry.addData("rightBack", robot.drive.getRightBackMotor().getCurrentPosition());
             telemetry.addData("armPivot", armPivot.getCurrentPosition());
             telemetry.update();
         }
@@ -185,10 +185,10 @@ public class VisionAutonomous extends LinearOpMode
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
                 while (ticksToCM(getAvgEncoderPos()) < 19) {
-                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getLeftFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getRightFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getLeftBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getRightBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;
@@ -203,10 +203,10 @@ public class VisionAutonomous extends LinearOpMode
                 }
                 ramper = new RampTwo(5, 10, 1, 2, 20, 0);
                 while (ticksToCM(getAvgEncoderPos()) < 19) {
-                    robot.drive.leftFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.rightFront.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.leftBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
-                    robot.drive.rightBack.setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getLeftFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getRightFrontMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getLeftBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
+                    robot.drive.getRightBackMotor().setVelocity(cmToTicks(ramper.getSuggestionAtPos(ticksToCM(getAvgEncoderPos()))));
                 }
                 requestOpModeStop(); // We're there!
 //                break;

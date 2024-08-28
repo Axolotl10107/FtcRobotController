@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
@@ -21,18 +21,11 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 public class RobotRoundhouse {
 
     public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
-        Claw.Parameters clawParams = new Claw.Parameters();
-        clawParams.present = true;
+        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
         clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
-        clawParams.openPosition = 0.1;
-        clawParams.closePosition = 0.01;
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
-        imuParams.present = true;
-        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
-        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
         dc.TICKS_PER_REV = 537.7;
@@ -55,7 +48,9 @@ public class RobotRoundhouse {
         dc.MAX_ANG_VEL = Math.toRadians(60);
         dc.MAX_ANG_ACCEL = Math.toRadians(60);
 
-        driveParams.dc = dc;
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
+                dc,
+                new AccelLimiter(2.0, 0.1));
 
         driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
         driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
@@ -65,9 +60,6 @@ public class RobotRoundhouse {
         driveParams.OMEGA_WEIGHT = 1;
 
 
-        driveParams.present = true;
-
-        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
         driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -87,15 +79,13 @@ public class RobotRoundhouse {
 
         driveParams.stopwatch = new ElapsedTime();
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
-        armParams.present = true;
+        PixelArm.Parameters armParams = new PixelArm.Parameters(true);
         armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
         armParams.pivotMotor.setDirection(REVERSE);
         armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
         armParams.pivotAccelLimiter = new AccelLimiter(8000, 8000); // TODO: not tuned!!
-        armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
         armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
         armParams.pivotUpperLimit = 5000; // TODO: not measured on real hardware!!
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
@@ -104,7 +94,6 @@ public class RobotRoundhouse {
         armParams.maxPivotRecoveryPower = 0.2;
         armParams.maxPivotVelocity = 800;
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
@@ -113,41 +102,30 @@ public class RobotRoundhouse {
         armParams.maxElevatorRecoveryPower = 0.2;
         armParams.stopwatch = new ElapsedTime();
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
-        planeLauncherParams.present = true;
+        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(true, 1, 0);
         planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
-        Robot.Parameters params = new Robot.Parameters();
+        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
+
+        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, planeLauncherParams, extendedParams);
         params.tpr = 537.7; // ticks per rotation
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
-
-        params.clawParameters = clawParams;
-        params.imuParameters = imuParams;
-        params.driveParameters = driveParams;
-        params.pixelArmParameters = armParams;
-        params.planeLauncherParameters = planeLauncherParams;
 
         return params;
     }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
     public static Robot.Parameters getRobotBParams(HardwareMap hardwareMap) {
-        Claw.Parameters clawParams = new Claw.Parameters();
-        clawParams.present = false;
+        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
-        imuParams.present = true;
-        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
-        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
-        driveParams.present = true;
-
-        // The defaults in DriveConstants should work here
-        driveParams.dc = new RRMecanumDrive.DriveConstants();
-
-        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
+                new RRMecanumDrive.DriveConstants(),
+                new AccelLimiter(2.0, 0.1));
         driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
@@ -167,41 +145,29 @@ public class RobotRoundhouse {
 
         driveParams.stopwatch = new ElapsedTime();
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
-        armParams.present = false;
+        PixelArm.Parameters armParams = new PixelArm.Parameters(false);
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters();
-        planeLauncherParams.present = false;
+        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
-        Robot.Parameters params = new Robot.Parameters();
+        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+
+        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, planeLauncherParams, extendedParams);
         params.tpr = 537.7;
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
-
-        params.clawParameters = clawParams;
-        params.imuParameters = imuParams;
-        params.driveParameters = driveParams;
-        params.pixelArmParameters = armParams;
-        params.planeLauncherParameters = planeLauncherParams;
 
         return params;
     }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
     public static Robot.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
-        Claw.Parameters clawParams = new Claw.Parameters();
-        clawParams.present = false;
+        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters();
-        imuParams.present = true;
-        imuParams.logoFacingDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        imuParams.usbFacingDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
-
-        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters();
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
-        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
-        driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
         dc.TICKS_PER_REV = 1120;
         dc.MAX_RPM = 133.9;
         dc.WHEEL_RADIUS = 2;
@@ -211,11 +177,12 @@ public class RobotRoundhouse {
         dc.kA = 0;
         dc.kStatic = 0;
 
-        driveParams.dc = dc;
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
+                true,
+                dc,
+                new AccelLimiter(2.0, 0.1)
+        );
 
-        driveParams.present = true;
-
-        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
         driveParams.useAccelLimiter = true;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "front_left_motor");
@@ -235,64 +202,58 @@ public class RobotRoundhouse {
 
         driveParams.stopwatch = new ElapsedTime();
 
-        PixelArm.Parameters armParams = new PixelArm.Parameters();
-        armParams.present = false;
+        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
+        driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters();
-        planeLauncherParams.present = false;
 
-        Robot.Parameters params = new Robot.Parameters();
+        PixelArm.Parameters armParams = new PixelArm.Parameters(false);
+
+
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters(false, 1, 0);
+
+
+        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+
+
+        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, planeLauncherParams, extendedParams);
         params.tpr = 1120;
         params.wheelDiameter = 0.1016; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDConsts(0, 0, 0, 0);
-
-        params.clawParameters = clawParams;
-        params.imuParameters = imuParams;
-        params.driveParameters = driveParams;
-        params.pixelArmParameters = armParams;
-        params.planeLauncherParameters = planeLauncherParams;
 
         return params;
     }
 
+// ---------------------------------------------------------------------------------------------------------------------
+
     public static Robot.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
-        Claw.Parameters clawParams = new Claw.Parameters();
-        clawParams.present = false;
-        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
-        clawParams.openPosition = 0.1;
-        clawParams.closePosition = 0.01;
+        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+//        clawParams.clawServo = hardwareMap.get(Servo.class, "servo");
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters();
-        imuParams.present = false;
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters driveParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters();
-        driveParams.present = false;
 
-        driveParams.accelLimiter = new AccelLimiter(2.0, 0.1);
+        RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters driveParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive.Parameters(
+                true,
+                dc,
+                new AccelLimiter(2.0, 0.1)
+        );
 
-        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
-        driveParams.leftFrontMotor.setDirection(REVERSE);
-
-        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "rightFront");
-        driveParams.rightFrontMotor.setDirection(FORWARD);
-
-        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "leftBack");
-        driveParams.leftBackMotor.setDirection(REVERSE);
-
-        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "rightBack");
-        driveParams.rightBackMotor.setDirection(FORWARD);
+//        driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "motor");
+//        driveParams.rightFrontMotor = hardwareMap.get(DcMotorEx.class, "motor");
+//        driveParams.leftBackMotor = hardwareMap.get(DcMotorEx.class, "motor");
+//        driveParams.rightBackMotor = hardwareMap.get(DcMotorEx.class, "motor");
 
         driveParams.runMode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters armParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters();
-        armParams.present = true;
-        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "motor");
-//        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
+
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters armParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters(true);
+//        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "motor");
+//        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "motor");
         armParams.elevatorMotor = new BlankMotor();
         armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
         armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
         armParams.pivotUpperLimit = 2000; // TODO: not measured on real hardware!!
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
@@ -300,7 +261,6 @@ public class RobotRoundhouse {
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxPivotRecoveryPower = 0.2;
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
@@ -308,21 +268,17 @@ public class RobotRoundhouse {
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxElevatorRecoveryPower = 0.2;
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters();
-        planeLauncherParams.present = false;
-        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeServo");
 
-        Robot.Parameters params = new Robot.Parameters();
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters(true, 1, 0);
+//        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"servo");
+
+        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+
+        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, planeLauncherParams, extendedParams);
         params.tpr = 537.7; // ticks per rotation
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
-        params.hdgCorrectionPIDconsts = new PIDConsts(0.023, 0, 0, 0);
-
-        params.clawParameters = clawParams;
-        params.imuParameters = imuParams;
-        params.driveParameters = driveParams;
-        params.pixelArmParameters = armParams;
-        params.planeLauncherParameters = planeLauncherParams;
 
         return params;
     }

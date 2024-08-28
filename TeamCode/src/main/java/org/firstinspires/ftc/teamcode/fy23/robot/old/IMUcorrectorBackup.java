@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -39,8 +40,7 @@ public class IMUcorrectorBackup {
     private ElapsedTime pidEnableTimer;
 
     public IMUcorrectorBackup(HardwareMap hardwareMap, double p, double im, double maxi, double dm) {
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(p, im, maxi, dm);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -48,8 +48,7 @@ public class IMUcorrectorBackup {
     }
 
     public IMUcorrectorBackup(HardwareMap hardwareMap, PIDConsts pidConsts) { // function overloading
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
         pid = new TunablePID(pidConsts.kP, pidConsts.kI, pidConsts.maxI, pidConsts.kD);
         errorSampleTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);

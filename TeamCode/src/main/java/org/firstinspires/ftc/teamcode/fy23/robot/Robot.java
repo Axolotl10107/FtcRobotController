@@ -16,7 +16,21 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
  * create a robot and use the powerful and convenient methods provided by its subsystems. */
 public class Robot {
 
+    public static class ExtendedParameters {
+        /** used by IMUCorrector */
+        public PIDConsts hdgCorrectionPIDConsts;
+    }
+
     public static class Parameters {
+        public Parameters(Claw.Parameters clawParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters, ExtendedParameters extendedParameters) {
+            this.clawParameters = clawParameters;
+            this.imuParameters = imuParameters;
+            this.driveParameters = driveParameters;
+            this.pixelArmParameters = pixelArmParameters;
+            this.planeLauncherParameters = planeLauncherParameters;
+            this.extendedParameters = extendedParameters;
+        }
+
         @Deprecated
         double tpr; /** ticks per rotation */
         @Deprecated
@@ -25,14 +39,13 @@ public class Robot {
         double maxForwardSpeed;
 //        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
-        @Deprecated
-PIDConsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
 
-        Claw.Parameters clawParameters;
-        FriendlyIMU.Parameters imuParameters;
-        RRMecanumDrive.Parameters driveParameters;
-        PixelArm.Parameters pixelArmParameters;
-        PlaneLauncher.Parameters planeLauncherParameters;
+        final Claw.Parameters clawParameters;
+        final FriendlyIMU.Parameters imuParameters;
+        final RRMecanumDrive.Parameters driveParameters;
+        final PixelArm.Parameters pixelArmParameters;
+        final PlaneLauncher.Parameters planeLauncherParameters;
+        final ExtendedParameters extendedParameters;
     }
 
     @Deprecated
@@ -43,7 +56,7 @@ PIDConsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
     public final double wheelCircumference;
     @Deprecated
     public final double maxForwardSpeed;
-    public final PIDConsts hdgCorrectionPIDconsts;
+    public final ExtendedParameters extendedParameters;
 
     public final Claw claw;
     public final FriendlyIMU imu;
@@ -60,7 +73,7 @@ PIDConsts hdgCorrectionPIDconsts; /** used by IMUcorrector */
         wheelDiameter = parameters.wheelDiameter;
         wheelCircumference = Math.PI * wheelDiameter;
         maxForwardSpeed = parameters.maxForwardSpeed;
-        hdgCorrectionPIDconsts = parameters.hdgCorrectionPIDconsts;
+        extendedParameters = parameters.extendedParameters;
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 

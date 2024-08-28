@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -81,20 +82,16 @@ public class RobotA implements AnyRobot {
 
         sdkMotorPidConsts = new PIDConsts(0.05, 0, 0, 0);
 
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters();
-        imuParams.present = true;
+        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters imuParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
 
-        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters();
-        armParams.present = true;
+        PixelArmImpl.Parameters armParams = new PixelArmImpl.Parameters(true);
         pixelArmImpl = new PixelArmImpl(armParams);
 
-        Claw.Parameters clawParams = new Claw.Parameters();
-        clawParams.present = true;
+        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
         claw = new ClawImpl(clawParams);
 
-        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters();
-        planeLauncherParams.present = true;
+        PlaneLauncherImpl.Parameters planeLauncherParams = new PlaneLauncherImpl.Parameters(true, 1, 0);
         planeLauncher = new PlaneLauncherImpl(planeLauncherParams);
     }
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockDcMotorEx;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockDigitalDevice;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockElapsedTime;
@@ -13,30 +14,28 @@ import java.util.concurrent.TimeUnit;
 
 public class PixelArmTest {
 
-    org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters params = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters();
+    org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters params = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters(true);
     MockElapsedTime pivotStopwatch = new MockElapsedTime();
     MockElapsedTime elevatorStopwatch = new MockElapsedTime();
     MockDcMotorEx pivotMotor = new MockDcMotorEx(pivotStopwatch);
     MockDcMotorEx elevatorMotor = new MockDcMotorEx(elevatorStopwatch);
 
     void initializeParams() {
-        params.present = true;
         params.pivotMotor = pivotMotor;
         params.elevatorMotor = elevatorMotor;
         params.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        params.pivotPowerTpSConverter = new SimplePowerTpSConverter(6472, 12949); // TODO: not measured on real hardware!!
         params.pivotTicksPerDegree = 10; // TODO: not measured!!
         params.pivotUpperLimit = 2000; // TODO: not measured on real hardware!!
         params.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
         params.pivotUpperLimitSwitch = new MockDigitalDevice(false); // not installed
         params.pivotLowerLimitSwitch = new MockDigitalDevice(true); // not installed
         params.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        params.elevatorPowerTpSConverter = new SimplePowerTpSConverter(1249, 2499); // TODO: not measured on real hardware!!
         params.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
         params.elevatorUpperLimit = 2500;
         params.elevatorLowerLimit = 0;
         params.elevatorUpperLimitSwitch = new MockDigitalDevice(false); // not installed
         params.elevatorLowerLimitSwitch = new MockDigitalDevice(true); // not installed
+        params.stopwatch = new ElapsedTime();
     }
 
     @Test

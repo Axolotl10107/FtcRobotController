@@ -33,10 +33,10 @@ public class RampTwoTest extends OpMode {
 
     private int getAvgEncoderPos() {
         return (
-                robot.drive.leftFront.getCurrentPosition() +
-                robot.drive.rightFront.getCurrentPosition() +
-                robot.drive.leftBack.getCurrentPosition() +
-                robot.drive.rightBack.getCurrentPosition()
+                robot.drive.getLeftFrontMotor().getCurrentPosition() +
+                robot.drive.getRightFrontMotor().getCurrentPosition() +
+                robot.drive.getLeftBackMotor().getCurrentPosition() +
+                robot.drive.getRightBackMotor().getCurrentPosition()
         ) / 4;
     }
 
@@ -69,15 +69,15 @@ public class RampTwoTest extends OpMode {
         toApply = cmToTicks(suggestion); // convert back to encoder ticks for the motors
 
         if (suggestion != 0 && flag == false) { // if it's forwards time
-            robot.drive.leftFront.setVelocity(toApply);
-            robot.drive.rightFront.setVelocity(toApply);
-            robot.drive.leftBack.setVelocity(toApply);
-            robot.drive.rightBack.setVelocity(toApply);
+            robot.drive.getLeftFrontMotor().setVelocity(toApply);
+            robot.drive.getRightFrontMotor().setVelocity(toApply);
+            robot.drive.getLeftBackMotor().setVelocity(toApply);
+            robot.drive.getRightBackMotor().setVelocity(toApply);
         } else if (suggestion != 0 && flag == true) { // if it's backwards time
-            robot.drive.leftFront.setVelocity(-toApply);
-            robot.drive.rightFront.setVelocity(-toApply);
-            robot.drive.leftBack.setVelocity(-toApply);
-            robot.drive.rightBack.setVelocity(-toApply);
+            robot.drive.getLeftFrontMotor().setVelocity(-toApply);
+            robot.drive.getRightFrontMotor().setVelocity(-toApply);
+            robot.drive.getLeftBackMotor().setVelocity(-toApply);
+            robot.drive.getRightBackMotor().setVelocity(-toApply);
         } else if (suggestion == 0 && flag == false) { // if it's time to switch
             if (!flag) {
                 flag = true;

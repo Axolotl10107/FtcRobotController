@@ -4,65 +4,72 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
 import org.firstinspires.ftc.teamcode.fy23.units.PowerTpSConverter;
 
-/** Represents the combination pivot (tilt, really) and elevator mechanism and allows both to be controlled by setting
+/** Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
  * their powers independently or by specifying a point on the planar region containing all possible points that this
  * mechanism can reach. */
 public interface PixelArm {
 
     class Parameters {
-        /** Is this subsystem installed on this robot? */
-        public boolean present;
+        /** Create a Parameters object and provide parameters that don't have default values.
+         * @param present Is this subsystem installed on this robot?
+         */
+        public Parameters(boolean present) {
+            this.present = present;
+        }
+
+        /** You already set this in the constructor and cannot set it again. */
+        public final boolean present;
         /** The pivot motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing) */
-        public DcMotorEx pivotMotor;
+        public DcMotorEx pivotMotor = new BlankMotor();
         /** The elevator motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing) */
-        public DcMotorEx elevatorMotor;
+        public DcMotorEx elevatorMotor = new BlankMotor();
+
+
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
-        public AccelLimiter pivotAccelLimiter;
-        /** Pass in a PowerTpSConverter (an implementation of your choice) that has already been instantiated with the
-         * correct parameters for your motor. */
-        public PowerTpSConverter pivotPowerTpSConverter;
+        public AccelLimiter pivotAccelLimiter = new AccelLimiter(0, 0);
         /** How many encoder ticks are traveled by the pivot motor per degree of pivot arm rotation */
-        public double pivotTicksPerDegree;
+        public double pivotTicksPerDegree = 0;
         /** The upper limit of the pivot motor's range in encoder ticks */
-        public int pivotUpperLimit;
+        public int pivotUpperLimit = 0;
         /** The lower limit of the pivot motor's range in encoder ticks */
-        public int pivotLowerLimit;
+        public int pivotLowerLimit = 0;
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the pivot arm reaches its maximum position (in encoder ticks!). */
-        public DigitalDevice pivotUpperLimitSwitch;
+        public DigitalDevice pivotUpperLimitSwitch = new DigitalDeviceBlank();
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the pivot arm reaches its minimum position (in encoder ticks!). */
-        public DigitalDevice pivotLowerLimitSwitch;
+        public DigitalDevice pivotLowerLimitSwitch = new DigitalDeviceBlank();
         /** The maximum power to use while the pivot arm has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
-        public double maxPivotRecoveryPower;
-        public double maxPivotVelocity;
+        public double maxPivotRecoveryPower = 0;
+        public double maxPivotVelocity = 0;
+
+
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
-        public AccelLimiter elevatorAccelLimiter;
-        /** Pass in a PowerTpSConverter object (an implementation of your choice) that has already been instantiated
-         * with the correct parameters for your motor. */
-        public PowerTpSConverter elevatorPowerTpSConverter;
+        public AccelLimiter elevatorAccelLimiter = new AccelLimiter(0, 0);
         /** How many encoder ticks are traveled by the elevator motor per degree of elevator travel */
-        public double elevatorTicksPerMillimeter;
+        public double elevatorTicksPerMillimeter = 0;
         /** The upper limit of the elevator motor's range in encoder ticks */
-        public int elevatorUpperLimit;
+        public int elevatorUpperLimit = 0;
         /** The lower limit of the elevator motor's range in encoder ticks */
-        public int elevatorLowerLimit;
+        public int elevatorLowerLimit = 0;
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its maximum position (in encoder ticks!). */
-        public DigitalDevice elevatorUpperLimitSwitch;
+        public DigitalDevice elevatorUpperLimitSwitch = new DigitalDeviceBlank();
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its minimum position (in encoder ticks!). */
-        public DigitalDevice elevatorLowerLimitSwitch;
+        public DigitalDevice elevatorLowerLimitSwitch = new DigitalDeviceBlank();
         /** The maximum power to use while the elevator has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
-        public double maxElevatorRecoveryPower;
-        /** An ElapsedTime or MockElapsedTime object, already instantiated */
-        public ElapsedTime stopwatch;
+        public double maxElevatorRecoveryPower = 0;
+        /** UnitTests can pass in a MockElapsedTime. */
+        public ElapsedTime stopwatch = new ElapsedTime();
     }
 
     /** Set the target position of the pivot motor to an angle. Safety limits apply.

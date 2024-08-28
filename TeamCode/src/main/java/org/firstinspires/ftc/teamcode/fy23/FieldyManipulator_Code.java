@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -52,8 +53,7 @@ public class FieldyManipulator_Code extends LinearOpMode {
     }
 
     public void realOpMode() {
-        FriendlyIMU.Parameters params = new FriendlyIMU.Parameters();
-        params.present = true;
+        FriendlyIMU.Parameters params = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         FieldyGamepadLS controls = new FieldyGamepadLS(gamepad1, gamepad2, new FriendlyIMUImpl(params, hardwareMap));
 
         telemetry.addData("Status", "Ready for Initialisation");

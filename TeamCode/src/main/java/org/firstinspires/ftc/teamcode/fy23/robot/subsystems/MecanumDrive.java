@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.BlankMotor;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** Represents a "mecanum" drive motor layout. Pass in a DTS with the intended movement of the drivebase, and the
  * implementation will handle mapping that to the individual motors.
- * {@link MecanumDrive} has been superseded by {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive}.
+ * {@link MecanumDrive} is known to have serious bugs and has been superseded by {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive}.
  * Please use that instead. */
 @Deprecated
 public interface MecanumDrive {

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -71,8 +72,7 @@ public class VirtualRobot implements AnyRobot {
 
         sdkMotorPidConsts = new PIDConsts(0.05, 0, 0, 0);
 
-        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters();
-        imuParams.present = true;
+        FriendlyIMUImpl.Parameters imuParams = new FriendlyIMUImpl.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
         imu = new FriendlyIMUImpl(imuParams, hardwareMap);
     }
 }

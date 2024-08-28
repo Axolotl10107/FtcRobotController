@@ -1,0 +1,121 @@
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+The above line is 80 columns. Please wrap text to that width. Thank you!
+
+This file lists every parameter of every object that has parameters. This
+includes the Robot, every subsystem, and every processor.
+
+Legend of parameter types (multiple may be listed on a single parameter):
+Type- Parameter = default value  | description
+C- Constructor arguments (required)
+R (condition)- Required under certain conditions
+O- Optional
+D- Deprecated (please don't use anymore, and remove old usages when convenient)
+I- Ignore (the Robot handles this for you)
+
+-------------------------------------------------------------------------------
+
+Robot:
+D- double tpr                       | ticks per rotation
+D- double wheelDiameter             | in meters
+D- double maxForwardSpeed           | in meters per second
+
+C- clawParameters                   | subsystems are encapsulated in this class,
+                                     so their parameters are too
+C- imuParameters                    | [same as above]
+C- driveParameters                  | [same as above]
+C- pixelArmParameters               | [same as above]
+C- planeLauncherParameters          | [same as above]
+
+C- ExtendedParameters extendedParameters
+    - (This one's a bit special. All of these are R (c), and it contains things
+    like parameters for processors that are definitely tied to the robot but
+    not needed by all robots. If your robot has no extended parameters, this
+    can be set to a new ExtendedParameters() with no arguments.)
+    R (has RRMecanumDrive)- hdgCorrectionPIDConsts | used by IMUCorrector
+
+-------------------------------------------------------------------------------
+
+Claw:
+C- boolean present                 | Is this subsystem installed on this robot?
+R (present)- String clawServo      | The Servo object, already grabbed from the
+                                     HardwareMap
+C- double openPosition             | The position (between 0 and 1) where the
+                                     claw is considered "open" - determined
+                                     experimentally (defaults to a BlankServo)
+C- double closedPosition           | [same as above], except "closed"
+
+-------------------------------------------------------------------------------
+
+FriendlyIMU:
+C- boolean present                         | Is this subsystem installed on this robot?
+C- LogoFacingDirection logoFacingDirection | The direction the REV logo on your
+                                             Control Hub faces
+C- UsbFacingDirection usbFacingDirection   | The direction the USB port on your
+                                             Control Hub faces
+
+-------------------------------------------------------------------------------
+
+RRMecanumDrive:
+C- boolean present                            | Is this subsystem installed
+                                                on this robot?
+C- RRMecanumDrive.DriveConstants dc           | See RoadRunner's DriveConstants
+                                                and learnroadrunner.com
+C- AccelLimiter accelLimiter                  | An AccelLimiter object, already
+                                                instantiated and configured
+R (have real motor)- DcMotorEx leftFrontMotor | The DcMotorEx object for the
+                      = new BlankMotor()        motor on the left front corner
+                                                of the drivebase, already
+                                                instantiated and configured
+R (same)- DcMotorEx rightFrontMotor           | [same as above]
+R (same)- DcMotorEx leftBackMotor             | [same as above]
+R (same)- DcMotorEx rightBackMotor            | [same as above]
+R (not using AL)- boolean useAccelLimiter = true        | Whether to use accel.
+                                                          control
+R (UnitTest)- ElapsedTime stopwatch = new ElapsedTime() | An ElapsedTime or
+                                                          MockElapsedTime,
+                                                          already instantiated
+R (non-default)- DcMotor.RunMode runMode                | The RunMode of all
+                                 = RUN_USING_ENCODER      four motors
+R (FLOAT)- DcMotor.ZeroPowerBehavior zeroPowerBehavior  | The ZeroPowerBehavior of all
+                                     = BRAKE              four motors
+R (RR)- PIDCoefficients TRANSLATIONAL_PID               | see learnroadrunner.com
+R (RR)- PIDCoefficients HEADING_PID                     | see learnroadrunner.com
+R (RR)- double LATERAL_MULTIPLIER                       | see learnroadrunner.com
+R (RR)- double VX_WEIGHT                                | see learnroadrunner.com
+R (RR)- double VY_WEIGHT                                | see learnroadrunner.com
+R (RR)- double OMEGA_WEIGHT                             | see learnroadrunner.com
+I- FriendlyIMU imu                                      |
+I- VoltageSensor batteryVoltageSensor                   |
+
+-------------------------------------------------------------------------------
+
+PixelArm:
+- boolean present                             | Is this subsystem installed on this robot?
+- String pivotMotor                           | The pivot motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
+- String elevatorMotor                        | The elevator motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
+- AccelLimiter pivotAccelLimiter              | An AccelLimiter object that has been configured for the pivot motor
+- PowerTpSConverter pivotPowerTpSConverter    | A PowerTpSConverter set up for the pivot motor
+- double pivotTicksPerDegree                  | Encoder ticks traveled per degree of rotation
+- int pivotUpperLimit                         | The upper limit of the pivot motor's motion, in encoder ticks
+- int pivotLowerLimit                         | 
+- DigitalDevice pivotUpperLimitSwitch         | A DigitalDevice that represents a physical upper limit switch (high limit in encoder ticks!) for the pivot motor
+- DigitalDevice pivotLowerLimitSwitch         | 
+- double maxPivotRecoveryPower                | The maximum power to use while the pivot arm is returning from a dangerous position
+- AccelLimiter elevatorAccelLimiter           | An AccelLimiter object that has been configured for the elevator motor 
+- PowerTpSConverter elevatorPowerTpSConverter | 
+- double elevatorTicksPerMillimeter           | Encoder ticks (or fraction of a tick) traveled per millimeter of slide travel
+- int elevatorUpperLimit                      | 
+- int elevatorLowerLimit                      | 
+- DigitalDevice elevatorUpperLimitSwitch      | 
+- DigitalDevice elevatorLowerLimitSwitch      | 
+- double maxElevatorRecoveryPower                | The maximum power to use while the elevator is returning from a dangerous position
+
+-------------------------------------------------------------------------------
+
+PlaneLauncher:
+C- boolean present                    | Is this subsystem installed on this robot?
+C- double releasePosition             | The position the servo moves to to
+                                        release the rubberband
+C- double restPosition                | The position the servo returns to
+R (have real servo)- Servo planeServo | The Servo object, already grabbed
+                   = new BlankServo()   from the HardwareMap

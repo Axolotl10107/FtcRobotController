@@ -40,10 +40,10 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
 
     private int getAvgEncoderPos() {
         return (
-                robot.drive.leftFront.getCurrentPosition() +
-                robot.drive.rightFront.getCurrentPosition() +
-                robot.drive.leftBack.getCurrentPosition() +
-                robot.drive.rightBack.getCurrentPosition()
+                robot.drive.getLeftFrontMotor().getCurrentPosition() +
+                robot.drive.getRightFrontMotor().getCurrentPosition() +
+                robot.drive.getLeftBackMotor().getCurrentPosition() +
+                robot.drive.getRightBackMotor().getCurrentPosition()
         ) / 4;
     }
 
@@ -51,7 +51,7 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     public void runOpMode() {
 
         robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;
         params.maxCorrectionPower = 0.1;

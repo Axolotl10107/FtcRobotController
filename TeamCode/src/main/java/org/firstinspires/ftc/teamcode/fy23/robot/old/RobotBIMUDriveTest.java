@@ -30,7 +30,7 @@ public class RobotBIMUDriveTest extends OpMode {
     }
 
     public void start() {
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;
         params.maxCorrectionPower = 0.1;
@@ -86,9 +86,9 @@ public class RobotBIMUDriveTest extends OpMode {
         telemetry.addData("Heading Error", imuCorrector.getHeadingError());
         telemetry.addData("Last Error", imuCorrector.getLastHeadingError());
         telemetry.addLine("-------------------------------------");
-        telemetry.addData("leftFront encoder", robot.drive.leftFront.getCurrentPosition());
-        telemetry.addData("rightFront encoder", robot.drive.rightFront.getCurrentPosition());
-        telemetry.addData("leftBack encoder", robot.drive.leftBack.getCurrentPosition());
-        telemetry.addData("rightBack encoder", robot.drive.rightBack.getCurrentPosition());
+        telemetry.addData("leftFront encoder", robot.drive.getLeftFrontMotor().getCurrentPosition());
+        telemetry.addData("rightFront encoder", robot.drive.getRightFrontMotor().getCurrentPosition());
+        telemetry.addData("leftBack encoder", robot.drive.getLeftBackMotor().getCurrentPosition());
+        telemetry.addData("rightBack encoder", robot.drive.getRightBackMotor().getCurrentPosition());
     }
 }

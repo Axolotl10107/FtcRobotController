@@ -25,7 +25,7 @@ public class RobotBTestTeleOp extends OpMode {
     public void init() {
         robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
         controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.hdgCorrectionPIDconsts));
+        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;
         params.maxCorrectionPower = 0.1;
