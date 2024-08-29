@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
-public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, org.firstinspires.ftc.teamcode.fy23.robot.subsystems.MecanumDrive {
+public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive, org.firstinspires.ftc.teamcode.fy23.robot.old.MecanumDrive {
 
     public DcMotorEx leftFront;
     public DcMotorEx rightFront;

@@ -25,6 +25,11 @@ public class PixelArmBlank implements PixelArm {
     }
 
     @Override
+    public void setPivotVelocity(int velocity) {
+
+    }
+
+    @Override
     public double getPivotVelocity() {
         return 0;
     }
@@ -46,6 +51,16 @@ public class PixelArmBlank implements PixelArm {
 
     @Override
     public double getElevatorPower() {
+        return 0;
+    }
+
+    @Override
+    public void setElevatorVelocity(int velocity) {
+
+    }
+
+    @Override
+    public double getElevatorVelocity() {
         return 0;
     }
 

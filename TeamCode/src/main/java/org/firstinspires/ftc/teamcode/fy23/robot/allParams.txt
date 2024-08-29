@@ -90,25 +90,58 @@ I- VoltageSensor batteryVoltageSensor                   |
 -------------------------------------------------------------------------------
 
 PixelArm:
-- boolean present                             | Is this subsystem installed on this robot?
-- String pivotMotor                           | The pivot motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
-- String elevatorMotor                        | The elevator motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing)
-- AccelLimiter pivotAccelLimiter              | An AccelLimiter object that has been configured for the pivot motor
-- PowerTpSConverter pivotPowerTpSConverter    | A PowerTpSConverter set up for the pivot motor
-- double pivotTicksPerDegree                  | Encoder ticks traveled per degree of rotation
-- int pivotUpperLimit                         | The upper limit of the pivot motor's motion, in encoder ticks
-- int pivotLowerLimit                         | 
-- DigitalDevice pivotUpperLimitSwitch         | A DigitalDevice that represents a physical upper limit switch (high limit in encoder ticks!) for the pivot motor
-- DigitalDevice pivotLowerLimitSwitch         | 
-- double maxPivotRecoveryPower                | The maximum power to use while the pivot arm is returning from a dangerous position
-- AccelLimiter elevatorAccelLimiter           | An AccelLimiter object that has been configured for the elevator motor 
-- PowerTpSConverter elevatorPowerTpSConverter | 
-- double elevatorTicksPerMillimeter           | Encoder ticks (or fraction of a tick) traveled per millimeter of slide travel
-- int elevatorUpperLimit                      | 
-- int elevatorLowerLimit                      | 
-- DigitalDevice elevatorUpperLimitSwitch      | 
-- DigitalDevice elevatorLowerLimitSwitch      | 
-- double maxElevatorRecoveryPower                | The maximum power to use while the elevator is returning from a dangerous position
+C- boolean present                                   | Is this subsystem installed
+                                                       on this robot?
+R (have motor)- DcMotorEx pivotMotor                 | The pivot motor object,
+                                                       already grabbed from the
+                                                       HardwareMap
+R (not using AL)- AccelLimiter pivotAccelLimiter     | An AccelLimiter object
+                                                       configured for the pivot
+                                                       motor
+R (have motor)- double pivotTicksPerDegree           | Encoder ticks traveled
+                                                       per degree of rotation
+R (have motor)- int pivotUpperLimit                  | The upper limit of the
+                                                       pivot motor's motion,
+                                                       in encoder ticks
+R (have motor)- int pivotLowerLimit                  |
+R (have switch)- DigitalDevice pivotUpperLimitSwitch | A DigitalDevice for a
+                                                       physical limit switch
+R (have switch)- DigitalDevice pivotLowerLimitSwitch | A DigitalDevice for a
+                                                       physical limit switch
+R (have motor)- double maxPivotRecoveryPower         | The maximum power to use
+                                                       while returning from a
+                                                       dangerous position
+R (have motor)- int maxPivotVelocity                 | Maximum velocity of the
+                                                       pivot motor in ticks
+                                                       per second
+
+R (have motor)- DcMotorEx elevatorMotor                 | The elevator motor
+                                                          object, already grabbed
+                                                          from the HardwareMap
+R (not using AL)- AccelLimiter elevatorAccelLimiter     | An AccelLimiter object
+                                                          configured for the
+                                                          elevator motor
+R (have motor)- double elevatorTicksPerMillimeter       | Encoder ticks (or
+                                                          fraction of a tick)
+                                                          traveled per millimeter
+                                                          of slide travel
+R (have motor)- int elevatorUpperLimit                  | Upper end of motor's
+                                                          safe range in encoder
+                                                          ticks
+R (have motor)- int elevatorLowerLimit                  | Lower end of motor's
+                                                          safe range in encoder
+                                                          ticks
+R (have switch)- DigitalDevice elevatorUpperLimitSwitch | A DigitalDevice for a
+                                                          physical limit switch
+R (have switch)- DigitalDevice elevatorLowerLimitSwitch | A DigitalDevice for a
+                                                          physical limit switch
+R (have motor)- double maxElevatorRecoveryPower         | The maximum power to
+                                                          use while returning
+                                                          from a dangerous
+                                                          position
+R (have motor)- int maxElevatorVelocity                 | Maxiumum velocity of
+                                                          the elevator motor in
+                                                          ticks per second
 
 -------------------------------------------------------------------------------
 

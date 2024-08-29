@@ -47,7 +47,8 @@ public interface PixelArm {
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
         public double maxPivotRecoveryPower = 0;
-        public double maxPivotVelocity = 0;
+        /** The maximum velocity of the pivot motor in ticks per second. */
+        public int maxPivotVelocity = 0;
 
 
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
@@ -68,6 +69,8 @@ public interface PixelArm {
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
         public double maxElevatorRecoveryPower = 0;
+        /** The maximum velocity of the elevator motor in ticks per second. */
+        public int maxElevatorVelocity;
         /** UnitTests can pass in a MockElapsedTime. */
         public ElapsedTime stopwatch = new ElapsedTime();
     }
@@ -78,10 +81,15 @@ public interface PixelArm {
     void setPivotAngle(AngleUnit unit, double angle);
     /** Set the power of the pivot motor. Important when setting an angle - this works like setPower() does on a normal
      * motor in RUN_TO_POSITION mode.
-     * @param power from 0 to 1 just like setPower() on a normal motor */
+     * This does not actually set power anymore - this sets the velocity to the max. velocity multiplied by your requested power.
+     * @param power from -1 to 1 just like setPower() on a normal motor */
     void setPivotPower(double power);
     /** Get the current power of the pivot motor. */
     double getPivotPower();
+    /** Set the velocity of the pivot motor in ticks per second.
+     * @param velocity The velocity to set, in ticks per second */
+    void setPivotVelocity(int velocity);
+    /** Get the current velocity of the pivot motor. */
     double getPivotVelocity();
     /** Get the current position of the pivot motor. */
     int getPivotPosition();
@@ -91,10 +99,15 @@ public interface PixelArm {
     void setElevatorDistance(double distance);
     /** Set the power of the elevator motor. Important when setting a distance - this works like setPower() does on a
      * normal motor in RUN_TO_POSITION mode.
-     * @param power from 0 to 1, just like setPower() on a normal motor */
+     * @param power from -1 to 1, just like setPower() on a normal motor */
     void setElevatorPower(double power);
     /** Get the current power of the elevator motor. */
     double getElevatorPower();
+    /** Set the velocity of the elevator motor in ticks per second.
+     * @param velocity The velocity to set, in ticks per second */
+    void setElevatorVelocity(int velocity);
+    /** Get the current velocity of the elevator motor. */
+    double getElevatorVelocity();
     /** Get the current position of the elevator motor. */
     int getElevatorPosition();
 

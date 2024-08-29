@@ -6,14 +6,8 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
-import org.firstinspires.ftc.teamcode.fy23.units.SimplePowerTpSConverter;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
@@ -21,6 +15,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 public class RobotRoundhouse {
 
     public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
+
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
         clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
 
@@ -80,26 +75,40 @@ public class RobotRoundhouse {
         driveParams.stopwatch = new ElapsedTime();
 
         PixelArm.Parameters armParams = new PixelArm.Parameters(true);
+
         armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
         armParams.pivotMotor.setDirection(REVERSE);
         armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
+
         armParams.pivotAccelLimiter = new AccelLimiter(8000, 8000); // TODO: not tuned!!
         armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
+
         armParams.pivotUpperLimit = 5000; // TODO: not measured on real hardware!!
         armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
         armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+
         armParams.maxPivotRecoveryPower = 0.2;
-        armParams.maxPivotVelocity = 800;
+        armParams.maxPivotVelocity = 800; // TODO: not measured!!
+
+
+        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
+        armParams.elevatorMotor.setDirection(REVERSE);
+        armParams.elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armParams.elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
         armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
+
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
         armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+
         armParams.maxElevatorRecoveryPower = 0.2;
+        armParams.maxElevatorVelocity = 800; // TODO: not measured!!
+
         armParams.stopwatch = new ElapsedTime();
 
         PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(true, 1, 0);
@@ -119,12 +128,13 @@ public class RobotRoundhouse {
 // ---------------------------------------------------------------------------------------------------------------------
 
     public static Robot.Parameters getRobotBParams(HardwareMap hardwareMap) {
+
         Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
-                new RRMecanumDrive.DriveConstants(),
+                new RRMecanumDrive.DriveConstants(), // the defaults in DriveConstants should work here
                 new AccelLimiter(2.0, 0.1));
         driveParams.useAccelLimiter = true;
 
@@ -145,6 +155,8 @@ public class RobotRoundhouse {
 
         driveParams.stopwatch = new ElapsedTime();
 
+        // the rest of the defaults in RRMecanumDrive.Parameters should work here
+
         PixelArm.Parameters armParams = new PixelArm.Parameters(false);
 
         PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
@@ -163,11 +175,17 @@ public class RobotRoundhouse {
 // ---------------------------------------------------------------------------------------------------------------------
 
     public static Robot.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
+
         Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
+
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+
+
+        // the defaults in DriveConstants should work here
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
+        // These are NOT for a goBILDA Strafer! virtual_robot uses these different values.
         dc.TICKS_PER_REV = 1120;
         dc.MAX_RPM = 133.9;
         dc.WHEEL_RADIUS = 2;
@@ -227,6 +245,9 @@ public class RobotRoundhouse {
 // ---------------------------------------------------------------------------------------------------------------------
 
     public static Robot.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
+        // Only one motor and one servo can be used at a time. Un-comment the hardwareMap.get() line you need at the
+        // moment, and comment out any others.
+
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "servo");
 
@@ -252,21 +273,19 @@ public class RobotRoundhouse {
         org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters armParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters(true);
 //        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "motor");
 //        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "motor");
-        armParams.elevatorMotor = new BlankMotor();
         armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
-        armParams.pivotUpperLimit = 2000; // TODO: not measured on real hardware!!
-        armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
-        armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
-        armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
+        armParams.pivotTicksPerDegree = 10;
+        armParams.pivotUpperLimit = 2000;
+        armParams.pivotLowerLimit = 0;
         armParams.maxPivotRecoveryPower = 0.2;
+        armParams.maxPivotVelocity = 800;
+
         armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
+        armParams.elevatorTicksPerMillimeter = 10;
         armParams.elevatorUpperLimit = 2500;
         armParams.elevatorLowerLimit = 0;
-        armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
-        armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.maxElevatorRecoveryPower = 0.2;
+        armParams.maxElevatorVelocity = 800;
 
 
         org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters(true, 1, 0);
