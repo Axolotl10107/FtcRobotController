@@ -81,16 +81,16 @@ public class RobotRoundhouse {
         armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        armParams.pivotAccelLimiter = new AccelLimiter(8000, 8000); // TODO: not tuned!!
+        armParams.pivotAccelLimiter = new AccelLimiter(12000, 8000); // TODO: not tuned!!
         armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
 
-        armParams.pivotUpperLimit = 5000; // TODO: not measured on real hardware!!
-        armParams.pivotLowerLimit = 0; // TODO: not measured on real hardware!!
+        armParams.pivotUpperLimit = 3800; // correct value is 3800
+        armParams.pivotLowerLimit = 0;
         armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
         armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
 
         armParams.maxPivotRecoveryPower = 0.2;
-        armParams.maxPivotVelocity = 800; // TODO: not measured!!
+        armParams.maxPivotVelocity = 1200; // correct value is 2400
 
 
         armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");

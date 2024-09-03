@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DigitalDevice;
+import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
 
 /** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm} featuring
  * acceleration control and hard and soft safety limits.
@@ -38,7 +42,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     private double pivotTicksPerDegree;
     private double elevatorTicksPerMillimeter;
 
-    private int setPivotVelocity;
+    private double setPivotVelocity;
     private int maxPivotVelocity;
 
     private int setElevatorVelocity;
@@ -51,6 +55,12 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
     private double maxPivotRecoveryPower;
     private boolean killElevatorMotorLatch = false;
     private double maxElevatorRecoveryPower;
+
+    // TODO: TESTING
+    private PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
+    private double heartbeat = 0.0001;
+    private TunablePID pivotPID = new TunablePID(pivotPIDConsts);
+    private boolean useSdkPid = false;
 
     public PixelArmImpl(Parameters parameters) {
         pivotMotor = parameters.pivotMotor;
@@ -159,7 +169,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         killPivotMotor();
         double safeRequest = Range.clip(requestedPower, -maxPivotVelocity * maxPivotRecoveryPower, 0);
         if (safeRequest <= 0) {
-            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+//            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
             pivotMotor.setVelocity(safeRequest);
             if (pivotMotor.getCurrentPosition() < pivotUpperLimit) {
                 killPivotMotorLatch = false;
@@ -171,7 +181,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         killPivotMotor();
         double safeRequest = Range.clip(requestedVelocity, 0, maxPivotVelocity * maxPivotRecoveryPower);
         if (safeRequest >= 0) {
-            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
+//            double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
             pivotMotor.setVelocity(safeRequest);
             if (pivotMotor.getCurrentPosition() > pivotLowerLimit) {
                 killPivotMotorLatch = false;
@@ -189,6 +199,37 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         double safeRequest = Range.clip(requestedPower, 0, maxPivotVelocity * maxPivotRecoveryPower);
         double limited = pivotAccelLimiter.requestVel(safeRequest, getPivotVelocity(), stopwatch.seconds());
         pivotMotor.setVelocity(limited);
+    }
+
+    private void setPivotVelSDK() {
+        double limited = pivotAccelLimiter.requestVel(
+                setPivotVelocity,                               // newVel
+                pivotMotor.getVelocity(),                       // currentVel
+                stopwatch.seconds()                             // currentTime
+        );
+        pivotMotor.setVelocity(limited);
+//        System.out.println(pivotMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+    }
+
+    //TODO: Testing
+    private void setPivotVelTunablePID() {
+        double velError = setPivotVelocity - pivotMotor.getVelocity();
+        System.out.println(velError);
+//        double limitedVelError = pivotAccelLimiter.requestDeltaVel( velError, stopwatch.seconds() );
+        double limitedVelError = velError;
+        double deltaPower = pivotPID.correctFor( limitedVelError );
+        pivotMotor.setPower( pivotMotor.getPower() + deltaPower );
+        System.out.println(String.format("velError: {%f}  |  limitedVelError: {%f}", velError, limitedVelError));
+        System.out.println(String.format("deltaPower: {%f}  |  currentPower: {%f}", deltaPower, pivotMotor.getPower()));
+        System.out.println("-----------------------------------------------");
+        TelemetrySingleton.getInstance().addData("Current Integral", pivotPID.currentIntegralValue());
+        TelemetrySingleton.getInstance().addData("Velocity Error", velError);
+        TelemetrySingleton.getInstance().addData("Limited Velocity Error (PID input)", limitedVelError);
+        TelemetrySingleton.getInstance().addData("Delta Power (PID output)", deltaPower);
+        TelemetrySingleton.getInstance().addData("Scaled Delta Power (PID output)", deltaPower * maxPivotVelocity);
+        TelemetrySingleton.getInstance().addData("Requested Velocity (user input)", setPivotVelocity);
+        heartbeat = -heartbeat;
+        TelemetrySingleton.getInstance().addData("Heartbeat", heartbeat);
     }
 
     private void updatePivotPower() {
@@ -217,24 +258,24 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 
                 // stopping distances
 
-//                double stoppingDist = pivotAccelLimiter.stoppingDistance(getPivotPower(), 1000);
+//                double stoppingDist = pivotAccelLimiter.simpleStoppingDistance(getPivotVelocity() * 10);
+//                TelemetrySingleton.getInstance().addData("pivotStoppingDist", stoppingDist);
 //                if (currentPos > (pivotUpperLimit - stoppingDist)) {
 //                    System.out.println("[Pivot] Upper stopping distance reached");
-//                    handlePivotHitUpperSD(setPivotPower);
-//                } else if (currentPos > (pivotLowerLimit + stoppingDist)) {
+//                    handlePivotHitUpperSD(setPivotVelocity);
+//                } else if (currentPos < (pivotLowerLimit + stoppingDist)) {
 //                    System.out.println("[Pivot] Lower stopping distance reached");
-//                    handlePivotHitLowerSD(setPivotPower);
-                // } else {
+//                    handlePivotHitLowerSD(setPivotVelocity);
+//                 } else {
 
-                // it's safe to go, so run through the AccelLimiter as usual
+//                 it's safe to go, so run through the AccelLimiter as usual
                 System.out.println("[Pivot] No safety measures activated, so proceeding normally");
-                double limited = pivotAccelLimiter.requestVel(
-                        setPivotVelocity,                               // newVel
-                        (int) Math.round(pivotMotor.getVelocity()),     // currentVel
-                        stopwatch.seconds()                             // currentTime
-                );
-                pivotMotor.setVelocity(limited);
-                //}
+                if (useSdkPid) {
+                    setPivotVelSDK();
+                } else {
+                    setPivotVelTunablePID();
+                }
+//                }
             }
         }
     }
@@ -251,7 +292,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         killElevatorMotor();
         double safeRequest = Range.clip(requestedPower, -maxElevatorVelocity * maxElevatorRecoveryPower, 0);
         if (safeRequest <= 0) {
-            double limited = elevatorAccelLimiter.requestVel(safeRequest, getElevatorVelocity(), stopwatch.seconds());
+//            double limited = elevatorAccelLimiter.requestVel(safeRequest, getElevatorVelocity(), stopwatch.seconds());
             elevatorMotor.setVelocity(safeRequest);
             if (elevatorMotor.getCurrentPosition() < elevatorUpperLimit) {
                 killElevatorMotorLatch = false;
@@ -263,7 +304,7 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         killElevatorMotor();
         double safeRequest = Range.clip(requestedVelocity, 0, maxElevatorVelocity * maxElevatorRecoveryPower);
         if (safeRequest >= 0) {
-            double limited = elevatorAccelLimiter.requestVel(safeRequest, getElevatorVelocity(), stopwatch.seconds());
+//            double limited = elevatorAccelLimiter.requestVel(safeRequest, getElevatorVelocity(), stopwatch.seconds());
             elevatorMotor.setVelocity(safeRequest);
             if (elevatorMotor.getCurrentPosition() > elevatorLowerLimit) {
                 killElevatorMotorLatch = false;
@@ -281,6 +322,19 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         double safeRequest = Range.clip(requestedPower, 0, maxElevatorVelocity * maxElevatorRecoveryPower);
         double limited = elevatorAccelLimiter.requestVel(safeRequest, getElevatorVelocity(), stopwatch.seconds());
         elevatorMotor.setVelocity(limited);
+    }
+
+    private void setElevatorVelSDK() {
+        double limited = elevatorAccelLimiter.requestVel(
+                setElevatorVelocity,                               // newVel
+                (int) Math.round(elevatorMotor.getVelocity()),     // currentVel
+                stopwatch.seconds()                                // currentTime
+        );
+        elevatorMotor.setVelocity(limited);
+    }
+
+    private void setElevatorVelTunablePID() {
+        // TODO: Implement this!
     }
 
     private void updateElevatorPower() {
@@ -319,13 +373,12 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
                 // } else {
 
                 // it's safe to go, so run through the AccelLimiter as usual
-                System.out.println("[Elevator] No safety measures activated, so proceeding normally");
-                double limited = elevatorAccelLimiter.requestVel(
-                        setElevatorVelocity,                               // newVel
-                        (int) Math.round(elevatorMotor.getVelocity()),     // currentVel
-                        stopwatch.seconds()                                // currentTime
-                );
-                elevatorMotor.setVelocity(limited);
+//                System.out.println("[Elevator] No safety measures activated, so proceeding normally");
+                if (useSdkPid) {
+                    setElevatorVelSDK();
+                } else {
+                    setElevatorVelTunablePID();
+                }
                 //}
             }
         }

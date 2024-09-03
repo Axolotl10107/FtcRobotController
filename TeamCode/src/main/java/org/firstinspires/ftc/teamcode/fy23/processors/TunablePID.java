@@ -6,7 +6,8 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 /** A simple PID algorithm that allows its constants to be changed on the fly. Useful for tuning
  * them in a TeleOp to instantly see the results of changes. It can also import a {@link PIDConsts}.
- * Implementation based on <a href="https://gm0.org/en/latest/docs/software/concepts/control-loops.html#pid-pseudocode">this pseudocode from GM0.</a> */
+ * Implementation based on <a href="https://gm0.org/en/latest/docs/software/concepts/control-loops.html#pid-pseudocode">this pseudocode from GM0.</a>
+ * Positive error = positive correction. */
 public class TunablePID {
 
     private double _kP;
