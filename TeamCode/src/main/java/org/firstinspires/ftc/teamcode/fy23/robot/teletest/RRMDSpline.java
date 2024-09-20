@@ -30,6 +30,8 @@ public class RRMDSpline extends OpMode {
                 .build();
 
         robot.drive.followTrajectorySequence(trajSeq);
+        robot.drive.turn(Math.toRadians(90));
+        robot.drive.followTrajectorySequence(trajSeq);
 
         requestOpModeStop();
     }

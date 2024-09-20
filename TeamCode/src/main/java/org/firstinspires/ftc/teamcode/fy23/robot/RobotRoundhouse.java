@@ -133,8 +133,11 @@ public class RobotRoundhouse {
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
+        RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
+        dc.LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        dc.USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
-                new RRMecanumDrive.DriveConstants(), // the defaults in DriveConstants should work here
+                dc, // most of the defaults in DriveConstants should work here
                 new AccelLimiter(2.0, 0.1));
         driveParams.useAccelLimiter = true;
 
