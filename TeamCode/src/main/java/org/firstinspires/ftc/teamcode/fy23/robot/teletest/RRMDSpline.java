@@ -31,14 +31,15 @@ public class RRMDSpline extends OpMode {
 
         stage.setValue("Coordinates");
         telemetry.update();
+        telemetry.update();
         TrajectorySequence trajSeq = robot.drive.trajectorySequenceBuilder(startPose)
-                .lineToConstantHeading(new Vector2d(10, 10))
-                .lineToConstantHeading(new Vector2d(10, 0))
-                .lineToConstantHeading(new Vector2d(0, 0))
+                .splineToConstantHeading(new Vector2d(10, 10), 0)
+                .splineToConstantHeading(new Vector2d(10, 0), 0)
+                .splineToConstantHeading(new Vector2d(0, 0), 0)
                 .build();
         robot.drive.followTrajectorySequence(trajSeq);
-        robot.drive.turn(Math.toRadians(90));
-        robot.drive.followTrajectorySequence(trajSeq);
+//        robot.drive.turn(Math.toRadians(90));
+//        robot.drive.followTrajectorySequence(trajSeq);
 
         telemetry.addData("Current Heading (RR)", robot.drive.getPoseEstimate().getHeading());
         telemetry.addData("Current Heading (IMU)", robot.imu.yaw());
