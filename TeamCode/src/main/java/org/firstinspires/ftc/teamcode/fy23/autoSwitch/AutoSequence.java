@@ -1,4 +1,8 @@
-import org.firstinspires.ftc.teamcode.fy23;
+package org.firstinspires.ftc.teamcode.fy23.autoSwitch;
+
+import org.firstinspires.ftc.teamcode.fy23.*;
+import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
 
 public class AutoSequence {
     private Robot robot;
