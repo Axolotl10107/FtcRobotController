@@ -49,6 +49,8 @@ public class RobotATestTeleOp extends OpMode {
             robot.planeLauncher.launch();
         }
 
+        robot.claw.setState(controlsState.getClawState());
+
         telemetry.addData("drive", normalizedDTS.drive);
         telemetry.addData("turn", normalizedDTS.turn);
         telemetry.addData("strafe", normalizedDTS.strafe);

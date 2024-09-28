@@ -11,19 +11,19 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-@Autonomous(name="Read Playbook")
+@Autonomous(name="Find April Tags")
 public class FindAprilTags extends LinearOpMode {
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     /**
      * The variable to store our instance of the AprilTag processor.
      */
-    private AprilTagProcessor aprilTag;
+    public AprilTagProcessor aprilTag;
 
     /**
      * The variable to store our instance of the vision portal.
      */
-    private VisionPortal visionPortal;
+    public VisionPortal visionPortal;
 
     @Override
     public void runOpMode() {
@@ -64,7 +64,7 @@ public class FindAprilTags extends LinearOpMode {
     /**
      * Initialize the AprilTag processor.
      */
-    private void initAprilTag() {
+    public void initAprilTag() {
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
@@ -133,7 +133,7 @@ public class FindAprilTags extends LinearOpMode {
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
+    public void telemetryAprilTag() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
