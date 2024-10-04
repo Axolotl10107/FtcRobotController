@@ -83,7 +83,7 @@ public class AutoSequenceSwitcher {
     }
 
     public AutoSequence getSelected() {
-        return currentSequence;
+        return forceInBounds(currentSequence);
     }
 
     public int getSequenceNumber(String name) {
@@ -103,13 +103,13 @@ public class AutoSequenceSwitcher {
 
     public AutoSequence selectNext() {
         int i = currentSequenceNumber();
-        currentSequence = getAutoSequence(forceInBounds(i+1));
+        currentSequence = getAutoSequence(i+1);
         return currentSequence;
     }
 
     public AutoSequence selectPrevious() {
         int i = currentSequenceNumber();
-        currentSequence = getAutoSequence(forceInBounds(i-1));
+        currentSequence = getAutoSequence(i-1);
         return currentSequence;
     }
 
