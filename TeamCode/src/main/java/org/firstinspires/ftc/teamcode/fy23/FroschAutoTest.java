@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
@@ -28,6 +29,7 @@ public class FroschAutoTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry.update();
         robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
@@ -38,15 +40,41 @@ public class FroschAutoTest extends LinearOpMode {
         controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 
         Pose2d startPose = new Pose2d(0, 0, 0);
-        TrajectorySequence seq = robot.drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence seq1 = robot.drive.trajectorySequenceBuilder(startPose)
                 .forward(100)
                 .build();
 
+        TrajectorySequence seq2 = robot.drive.trajectorySequenceBuilder(startPose)
+                .back(100)
+                .build();
 
+        AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
+        switcher.addSequence("seq1", seq1);
+        switcher.addSequence("seq2", seq2);
+
+        boolean lock = false;
+        while (!gamepad1.a) {
+            if (gamepad1.dpad_up && !lock) {
+                switcher.selectNext();
+                lock = true;
+            } else if (gamepad1.dpad_down && !lock) {
+                switcher.selectPrevious();
+                lock = true;
+            } else if (!gamepad1.dpad_down && !gamepad1.dpad_up) {
+                lock = false;
+            }
+            telemetry.addData("selected:", switcher.getSelected().getName());
+            telemetry.addLine("press A to lock");
+            telemetry.update();
+        }
+        telemetry.addLine("selection locked");
+        telemetry.update();
 
         waitForStart();
 
-        robot.drive.followTrajectorySequence(seq);
+        robot.drive.followTrajectorySequence(switcher.getSelected().getTrajectorySequence());
         robot.update();
     }
+
+
 }

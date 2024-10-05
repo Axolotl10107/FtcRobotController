@@ -19,6 +19,9 @@ public class AutoSequenceSwitcher {
             }
         }
         sequences.put(name, sequence);
+        if (sequences.size() == 1){
+            selectFirst();
+        }
     }
 
     public void addSequence(String name, TrajectorySequence sequence) {
