@@ -214,7 +214,7 @@ public class Manipulator_Code extends LinearOpMode {
            // Plane Servo Code Continue
 
             if (gamepad1.right_bumper) {
-                servo123456789.setPosition(1);
+                    servo123456789.setPosition(1);
             }
             else {
                 servo123456789.setPosition(0);
