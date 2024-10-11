@@ -13,7 +13,7 @@ public class MotorLocator extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override
