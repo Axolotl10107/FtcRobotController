@@ -367,14 +367,15 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
 //                if (currentPos > (elevatorUpperLimit - stoppingDist)) {
 //                    System.out.println("[Elevator] Upper stopping distance reached");
 //                    handleElevatorHitUpperSD(setElevatorPower);
-//                } else if (currentPos > (elevatorLowerLimit + stoppingDist)) {
+//                } else if (currentPos < (elevatorLowerLimit + stoppingDist)) {
 //                    System.out.println("[Elevator] Lower stopping distance reached");
 //                    handleElevatorHitLowerSD(setElevatorPower);
                 // } else {
 
                 // it's safe to go, so run through the AccelLimiter as usual
 //                System.out.println("[Elevator] No safety measures activated, so proceeding normally");
-                if (useSdkPid) {
+//                if (useSdkPid) {
+                if (true) {
                     setElevatorVelSDK();
                 } else {
                     setElevatorVelTunablePID();

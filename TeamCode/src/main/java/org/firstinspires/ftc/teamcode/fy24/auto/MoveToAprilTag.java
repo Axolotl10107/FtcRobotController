@@ -1,18 +1,26 @@
 package org.firstinspires.ftc.teamcode.fy24.auto;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-@Autonomous(name="Find April Tags")
-public class FindAprilTags extends LinearOpMode {
+@Autonomous(name="Move To April Tag")
+public class MoveToAprilTag extends LinearOpMode {
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     /**
@@ -155,5 +163,40 @@ public class FindAprilTags extends LinearOpMode {
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+
+
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        Robot robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        RRMecanumDrive drive = robot.drive;
+
+        for (AprilTagDetection detection : currentDetections) {
+            double DISTANCE_y = 0;
+            double DISTANCE_x = 0;
+            if(detection.id == 11) {
+                DISTANCE_y = detection.ftcPose.y;
+                DISTANCE_x = detection.ftcPose.x;
+            } else {
+                break;
+            }
+
+            Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
+                    .forward(DISTANCE_y)
+                    .strafeRight(DISTANCE_x)
+                    .build();
+            waitForStart();
+
+            if (isStopRequested()) return;
+
+            drive.followTrajectory(trajectory);
+        }
+
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        telemetry.addData("finalX", poseEstimate.getX());
+        telemetry.addData("finalY", poseEstimate.getY());
+        telemetry.addData("finalHeading", poseEstimate.getHeading());
+        telemetry.update();
+
+        while (!isStopRequested() && opModeIsActive()) ;
     }
 }
