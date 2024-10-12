@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
@@ -41,11 +39,11 @@ public class FroschAutoTest extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         TrajectorySequence seq1 = robot.drive.trajectorySequenceBuilder(startPose)
-                .forward(100)
+                .forward(10)
                 .build();
 
         TrajectorySequence seq2 = robot.drive.trajectorySequenceBuilder(startPose)
-                .back(100)
+                .back(10)
                 .build();
 
         AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
