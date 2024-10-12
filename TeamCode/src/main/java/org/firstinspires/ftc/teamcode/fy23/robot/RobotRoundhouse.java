@@ -33,9 +33,13 @@ public class RobotRoundhouse {
         dc.GEAR_RATIO = 1;
         dc.TRACK_WIDTH = 16.25;
 
-        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
-        dc.kA = 0;
-        dc.kStatic = 0;
+//        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
+//        dc.kA = 0;
+//        dc.kStatic = 0;
+
+        dc.kV = .018;
+        dc.kA = .001;
+        dc.kStatic = 0.01;
 
         // TODO: Tune these!
         dc.MAX_VEL = 50;
@@ -140,6 +144,10 @@ public class RobotRoundhouse {
                 dc, // most of the defaults in DriveConstants should work here
                 new AccelLimiter(2.0, 0.1));
         driveParams.useAccelLimiter = true;
+
+        dc.kV = .018;
+        dc.kA = .001;
+        dc.kStatic = 0.01;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         driveParams.leftFrontMotor.setDirection(REVERSE);
