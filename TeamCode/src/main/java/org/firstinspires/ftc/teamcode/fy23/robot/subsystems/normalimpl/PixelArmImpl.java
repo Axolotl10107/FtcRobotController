@@ -392,4 +392,12 @@ public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.s
         updateElevatorPower();
     }
 
+    public void setElevatorUpperLimit(int i) {
+        elevatorUpperLimit = i;
+    }
+
+    public void setElevatorLowerLimit(int i) {
+        elevatorLowerLimit = i;
+    }
+
 }
