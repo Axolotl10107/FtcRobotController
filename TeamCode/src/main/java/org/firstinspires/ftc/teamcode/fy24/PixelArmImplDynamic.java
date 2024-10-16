@@ -13,12 +13,12 @@ public class PixelArmImplDynamic extends PixelArmImpl {
     public void update() {
         super.update();
 
-        int currentPosition = getPivotPosition(); // Hypotenuse adjacent angle
-        int armPosition = getElevatorPosition(); // Hypotenuse
-        if(currentPosition < 49.5) {
-            setElevatorUpperLimit((int) (tickInchRatio * (Math.floor(Math.hypot(Math.tan(currentPosition) * 36, 36)))));
+        int currentPosition = getPivotPosition(); // Hypotenuse adjacent angle; in degrees(?)
+        int armPosition = getElevatorPosition(); // Hypotenuse; in inches(?)
+        if(currentPosition < 49.5 ) { // 49.5 degrees, change to unit of currentPosition
+            setElevatorUpperLimit((int) (tickInchRatio * (Math.floor(Math.hypot(Math.tan(currentPosition) * 36, 36))))); // 36 inches, change to unit of armPosition
         } else if (currentPosition > 49.5) {
-            setElevatorUpperLimit((int) Math.floor(55.5 * tickInchRatio));
+            setElevatorUpperLimit((int) Math.floor(55.5 * tickInchRatio)); // 55.5 inches, change to unit of armPosition
         }
 
         // Find motor tick to inch ratio, currently set to 100.
