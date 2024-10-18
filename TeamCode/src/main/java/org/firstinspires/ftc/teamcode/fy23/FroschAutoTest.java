@@ -36,24 +36,40 @@ public class FroschAutoTest extends LinearOpMode {
 //        params.hdgErrToleranceDegrees = 1.0;
 //        params.maxCorrectionPower = 0.1;
 //        params.turnPowerThreshold = 0.05;
+
         imuCorrector = new IMUCorrector(params);
         controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         TrajectorySequence seq1 = robot.drive.trajectorySequenceBuilder(startPose)
                 .strafeLeft(20)
-                .waitSeconds(1)
-                .strafeRight(10)
-//                .forward(10)
                 .build();
 
         TrajectorySequence seq2 = robot.drive.trajectorySequenceBuilder(startPose)
-                .back(10)
+                .strafeRight(20)
+                .build();
+
+        TrajectorySequence leftRight1 = robot.drive.trajectorySequenceBuilder(startPose)
+                .strafeLeft(10)
+                .waitSeconds(1)
+                .strafeRight(10)
+                .waitSeconds(1)
+                .strafeRight(10)
+                .build();
+
+        TrajectorySequence leftRight5 = robot.drive.trajectorySequenceBuilder(startPose)
+                .strafeLeft(10)
+                .waitSeconds(5)
+                .strafeRight(10)
+                .waitSeconds(5)
+                .strafeRight(10)
                 .build();
 
         AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
-        switcher.addSequence("seq1", seq1);
-//        switcher.addSequence("seq2", seq2);
+        switcher.addSequence("left", seq1);
+        switcher.addSequence("right", seq2);
+        switcher.addSequence("left-right 1", leftRight1);
+        switcher.addSequence("left-right 5", leftRight5);
 
         boolean lock = false;
         while (!gamepad1.a) {
@@ -76,7 +92,7 @@ public class FroschAutoTest extends LinearOpMode {
         waitForStart();
 
         robot.drive.followTrajectorySequence(switcher.getSelected().getTrajectorySequence());
-        robot.update();
+//        robot.update();
     }
 
 

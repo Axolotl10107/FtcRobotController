@@ -17,7 +17,7 @@ public class RobotRoundhouse {
     public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
-        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
+//        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
@@ -29,9 +29,9 @@ public class RobotRoundhouse {
         dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
 
-        dc.WHEEL_RADIUS = 1.88976;
+        dc.WHEEL_RADIUS = 2;//1.88976;
         dc.GEAR_RATIO = 1;
-        dc.TRACK_WIDTH = 16.25;
+        dc.TRACK_WIDTH = 16.5;//16.25
 
 //        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
 //        dc.kA = 0;
@@ -42,10 +42,13 @@ public class RobotRoundhouse {
         dc.kStatic = 0.01;
 
         // TODO: Tune these!
-        dc.MAX_VEL = 50;
-        dc.MAX_ACCEL = 50;
+//        dc.MAX_VEL = 50;
+//        dc.MAX_ACCEL = 50;
         dc.MAX_ANG_VEL = Math.toRadians(60);
         dc.MAX_ANG_ACCEL = Math.toRadians(60);
+
+        dc.MAX_VEL = 10;
+        dc.MAX_ACCEL = 10;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
                 dc,
@@ -80,7 +83,7 @@ public class RobotRoundhouse {
 
         PixelArm.Parameters armParams = new PixelArm.Parameters(true);
 
-        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
+//        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
         armParams.pivotMotor.setDirection(REVERSE);
         armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -97,7 +100,7 @@ public class RobotRoundhouse {
         armParams.maxPivotVelocity = 1200; // correct value is 2400
 
 
-        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
+//        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
         armParams.elevatorMotor.setDirection(REVERSE);
         armParams.elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         armParams.elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -116,7 +119,7 @@ public class RobotRoundhouse {
         armParams.stopwatch = new ElapsedTime();
 
         PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(true, 1, 0);
-        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
+//        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
         Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
