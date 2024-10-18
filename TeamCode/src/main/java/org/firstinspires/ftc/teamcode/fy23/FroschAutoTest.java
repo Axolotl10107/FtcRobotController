@@ -30,27 +30,30 @@ public class FroschAutoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         telemetry.update();
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
-        params.haveHitTargetToleranceDegrees = 0.1;
-        params.hdgErrToleranceDegrees = 1.0;
-        params.maxCorrectionPower = 0.1;
-        params.turnPowerThreshold = 0.05;
+//        params.haveHitTargetToleranceDegrees = 0.1;
+//        params.hdgErrToleranceDegrees = 1.0;
+//        params.maxCorrectionPower = 0.1;
+//        params.turnPowerThreshold = 0.05;
         imuCorrector = new IMUCorrector(params);
         controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 
         Pose2d startPose = new Pose2d(0, 0, 0);
         TrajectorySequence seq1 = robot.drive.trajectorySequenceBuilder(startPose)
-                .forward(100)
+                .strafeLeft(20)
+                .waitSeconds(1)
+                .strafeRight(10)
+//                .forward(10)
                 .build();
 
         TrajectorySequence seq2 = robot.drive.trajectorySequenceBuilder(startPose)
-                .back(100)
+                .back(10)
                 .build();
 
         AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
         switcher.addSequence("seq1", seq1);
-        switcher.addSequence("seq2", seq2);
+//        switcher.addSequence("seq2", seq2);
 
         boolean lock = false;
         while (!gamepad1.a) {

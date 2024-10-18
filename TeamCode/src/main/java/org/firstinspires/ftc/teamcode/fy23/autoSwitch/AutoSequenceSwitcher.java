@@ -73,7 +73,7 @@ public class AutoSequenceSwitcher {
         if (!hasName(getNames()[number])) {
             return null;
         }
-        currentSequence = getAutoSequence(getNames()[number]);
+        currentSequence = getAutoSequence(getNames()[forceInBounds(number)]);
         return currentSequence;
     }
 
@@ -86,7 +86,7 @@ public class AutoSequenceSwitcher {
     }
 
     public AutoSequence getSelected() {
-        return forceInBounds(currentSequence);
+        return currentSequence;
     }
 
     public int getSequenceNumber(String name) {
