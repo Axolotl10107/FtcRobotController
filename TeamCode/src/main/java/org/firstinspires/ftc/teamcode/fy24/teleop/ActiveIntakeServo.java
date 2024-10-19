@@ -21,11 +21,9 @@ public class ActiveIntakeServo extends LinearOpMode {
         while  (opModeIsActive()) {
             if (gamepad1.a) {
                 servoClaw.setPower(1);
-            }
-            if (gamepad1.b) {
+            } else if (gamepad1.b) {
                 servoClaw.setPower(-1);
-            }
-            if (gamepad1.atRest()) {
+            } else if (gamepad1.atRest()) {
                 servoClaw.setPower(0);
             }
             telemetry.addData("Power: ", servoClaw.getPower());
