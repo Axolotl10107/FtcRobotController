@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadDTS;
 
 
-@TeleOp(name="Manipulator Opmode", group="Manipulator Opmode")
+@TeleOp(name="2023 Competition Opmode ------ ------ ------", group="Manipulator Opmode")
 public class Manipulator_Code extends LinearOpMode {
 
     Servo servo123456789;

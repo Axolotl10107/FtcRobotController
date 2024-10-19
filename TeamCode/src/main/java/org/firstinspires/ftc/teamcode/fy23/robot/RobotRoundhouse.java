@@ -14,6 +14,22 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 public class RobotRoundhouse {
 
+    public static Robot.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
+        Robot.Parameters params = getRobotAParams(hardwareMap);
+
+        switch (serialNumber) {
+            case "10107-A-RC":
+                params = getRobotAParams(hardwareMap);
+                break;
+            case "10107-B-RC":
+            case "10107-B":
+                params = getRobotBParams(hardwareMap);
+                break;
+        }
+
+        return params;
+    }
+
     public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
@@ -29,9 +45,9 @@ public class RobotRoundhouse {
         dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
 
-        dc.WHEEL_RADIUS = 2;//1.88976;
+        dc.WHEEL_RADIUS = 1.88976;
         dc.GEAR_RATIO = 1;
-        dc.TRACK_WIDTH = 16.5;//16.25
+        dc.TRACK_WIDTH = 16.25;
 
 //        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
 //        dc.kA = 0;
@@ -47,8 +63,8 @@ public class RobotRoundhouse {
         dc.MAX_ANG_VEL = Math.toRadians(60);
         dc.MAX_ANG_ACCEL = Math.toRadians(60);
 
-        dc.MAX_VEL = 10;
-        dc.MAX_ACCEL = 10;
+        dc.MAX_VEL = 30;
+        dc.MAX_ACCEL = 30;
 
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
                 dc,
@@ -56,7 +72,7 @@ public class RobotRoundhouse {
 
         driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
         driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
-        driveParams.LATERAL_MULTIPLIER = 1;
+        driveParams.LATERAL_MULTIPLIER = 1.22;
         driveParams.VX_WEIGHT = 1;
         driveParams.VY_WEIGHT = 1;
         driveParams.OMEGA_WEIGHT = 1;
@@ -315,5 +331,7 @@ public class RobotRoundhouse {
 
         return params;
     }
+
+
 
 }
