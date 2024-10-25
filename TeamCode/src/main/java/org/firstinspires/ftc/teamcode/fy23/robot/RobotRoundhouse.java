@@ -53,9 +53,9 @@ public class RobotRoundhouse {
 //        dc.kA = 0;
 //        dc.kStatic = 0;
 
-        dc.kV = .018;
-        dc.kA = .001;
-        dc.kStatic = 0.01;
+        dc.kV = .017;
+        dc.kA = .002;
+        dc.kStatic = 0.0001;
 
         // TODO: Tune these!
 //        dc.MAX_VEL = 50;
@@ -164,9 +164,9 @@ public class RobotRoundhouse {
                 new AccelLimiter(2.0, 0.1));
         driveParams.useAccelLimiter = true;
 
-        dc.kV = .018;
-        dc.kA = .001;
-        dc.kStatic = 0.01;
+        dc.kV = .017;
+        dc.kA = .002;
+        dc.kStatic = 0.0001;
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         driveParams.leftFrontMotor.setDirection(REVERSE);
