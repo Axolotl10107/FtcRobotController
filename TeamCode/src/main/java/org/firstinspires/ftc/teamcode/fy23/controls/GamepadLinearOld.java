@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.fy23.controls;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadLinearOld extends GamepadDefault {
