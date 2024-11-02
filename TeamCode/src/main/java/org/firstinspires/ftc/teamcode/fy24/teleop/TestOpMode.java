@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -20,16 +21,16 @@ public class TestOpMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     //    private ArmMotor armPivot = null;
     //motors for driving
-    private DcMotor leftFront = null;
-    private DcMotor rightFront = null;
-    private DcMotor leftBack = null;
-    private DcMotor rightBack = null;
+    private DcMotorEx leftFront = null;
+    private DcMotorEx rightFront = null;
+    private DcMotorEx leftBack = null;
+    private DcMotorEx rightBack = null;
 
     // Arm motors
     private DcMotorEx armLeftExtend = null;
     private DcMotorEx armRightExtend = null;
-//    private DcMotorEx armLeftPivot = null;
-//    private DcMotorEx armRightPivot = null;
+    private DcMotorEx armLeftPivot = null;
+    private DcMotorEx armRightPivot = null;
 
     double driveClip = 0.7;
     ElapsedTime driveClipDeb = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
@@ -53,17 +54,17 @@ public class TestOpMode extends LinearOpMode {
 
         armLeftExtend = hardwareMap.get(DcMotorEx.class, "armLeftExtend");
         armRightExtend = hardwareMap.get(DcMotorEx.class, "armRightExtend");
-//        armLeftPivot = hardwareMap.get(DcMotor.class, "armLeftPivot");
-//        armRightPivot = hardwareMap.get(DcMotor.class, "armRightPivot");
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        armLeftPivot = hardwareMap.get(DcMotorEx.class, "armLeftPivot");
+        armRightPivot = hardwareMap.get(DcMotorEx.class, "armRightPivot");
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
+        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
 
         armLeftExtend.setDirection(DcMotor.Direction.FORWARD);
         armRightExtend.setDirection(DcMotor.Direction.REVERSE);
-//        armLeftPivot.setDirection(DcMotor.Direction.FORWARD);
-//        armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+        armLeftPivot.setDirection(DcMotor.Direction.FORWARD);
+        armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -71,15 +72,18 @@ public class TestOpMode extends LinearOpMode {
 
         armLeftExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armRightExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        armLeftPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        armRightPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armLeftPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armRightPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        CRServo servoClaw;
+        servoClaw = hardwareMap.get(CRServo.class, "clawServo");
+
         double armExtendSpeed = 1110;
-        double armPivotSpeed = 0.15;
+        double armPivotSpeed = 1115;
 
         waitForStart();
 
@@ -87,8 +91,8 @@ public class TestOpMode extends LinearOpMode {
 
         armLeftExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         armRightExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        armLeftPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        armRightPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armLeftPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armRightPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -106,23 +110,46 @@ public class TestOpMode extends LinearOpMode {
             }
             telemetry.addData("Max Drive Power", driveClip);
 
-            /*
-            Consider this - might not be what you want but it's a potential option:
-            if (controls.armMovement() != 0) {
-                armPivot.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                armPivot.setPower(controls.armMovement());
+            // Emergency Brake
+
+            if (controls.emergencyBrakeX() != 0 && controls.emergencyBrakeA() != 0) {
+                double currentVelocity = leftFront.getVelocity();
+                while (leftFront.getVelocity() > 0 && currentVelocity > 0) {
+                    leftFront.setVelocity(-leftFront.getVelocity());
+                    rightFront.setVelocity(-rightFront.getVelocity());
+                    leftBack.setVelocity(-leftBack.getVelocity());
+                    rightBack.setVelocity(-rightBack.getVelocity());
+                }
+                while (leftFront.getVelocity() < 0 && currentVelocity < 0) {
+                    leftFront.setVelocity(-leftFront.getVelocity());
+                    rightFront.setVelocity(-rightFront.getVelocity());
+                    leftBack.setVelocity(-leftBack.getVelocity());
+                    rightBack.setVelocity(-rightBack.getVelocity());
+                }
+                leftFront.setVelocity(0);
+                rightFront.setVelocity(0);
+                leftBack.setVelocity(0);
+                rightBack.setVelocity(0);
+                leftFront.setMotorDisable();
+                rightFront.setMotorDisable();
+                leftBack.setMotorDisable();
+                rightBack.setMotorDisable();
             } else {
-                armPivot.setTargetPosition(armPivot.getCurrentPosition());
-                armPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                // controls the wheels
+                leftFront.setMotorEnable();
+                rightFront.setMotorEnable();
+                leftBack.setMotorEnable();
+                rightBack.setMotorEnable();
+                leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+                rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip);
+                leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+                rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip);
+
             }
-            */
-            // controls the wheels
-            leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
-//            rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip);
-            leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip);
-//            rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip);
 
             // Control arm
+
             if (controls.armForward() != 0) {
                 armLeftExtend.setVelocity(armExtendSpeed);
                 armRightExtend.setVelocity(armExtendSpeed);
@@ -134,9 +161,36 @@ public class TestOpMode extends LinearOpMode {
                 armRightExtend.setVelocity(0);
             }
 
-//            armLeftPivot.setPower(armPivotSpeed * controls.armPivot());
-//            armRightPivot.setPower(armPivotSpeed * controls.armPivot());
+            if (controls.armPivot() < 0) {
+                armLeftPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+            } else {
+                armLeftPivot.setDirection(DcMotorSimple.Direction.FORWARD);
+                armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
+            }
 
+            if (controls.armPivot() != 0) {
+                armLeftPivot.setVelocity(armPivotSpeed * controls.armPivot());
+                armRightPivot.setVelocity(armPivotSpeed * controls.armPivot());
+            } else {
+                armRightPivot.setVelocity(0);
+                armLeftPivot.setVelocity(0);
+            }
+
+            // Control active intake
+
+            if (controls.intakeServoIn() != 0) {
+                servoClaw.setPower(1);
+            } else if (controls.intakeServoOut() != 0) {
+                servoClaw.setPower(-1);
+            } else {
+                servoClaw.setPower(0);
+            }
+
+            telemetry.addData("Power: ", servoClaw.getPower());
+            telemetry.addData("Pivot Input: ", controls.armPivot());
+            telemetry.addData("Expected Pivot Velocity: ", armPivotSpeed * controls.armPivot());
+            telemetry.addData("Actual Pivot Velocity: ", armRightPivot.getVelocity());
             telemetry.update();
         }
     }

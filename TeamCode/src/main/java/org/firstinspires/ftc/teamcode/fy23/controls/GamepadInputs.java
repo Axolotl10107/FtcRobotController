@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadInputs {
 // sticks linear
-    static double rightStickYLinear(Gamepad gamepad, double scaling) {
+    public static double rightStickYLinear(Gamepad gamepad, double scaling) {
         return -gamepad.right_stick_y * scaling;
     }
 
@@ -60,7 +60,7 @@ public class GamepadInputs {
         }
     }
 
-    static double buttonB(Gamepad gamepad){
+    public static double buttonB(Gamepad gamepad){
         if (gamepad.b) {
             return 1;
         } else {

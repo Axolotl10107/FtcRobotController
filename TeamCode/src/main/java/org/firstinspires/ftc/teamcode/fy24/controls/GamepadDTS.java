@@ -41,6 +41,18 @@ public class GamepadDTS extends GamepadDefault {
     }
 
     public double armPivot() {
-        return GamepadInputs.rightStickXLinear(gamepad2, 1);
+        return GamepadInputs.leftStickYExponential(gamepad2, 2);
     }
+
+    public double intakeServoIn() {
+        return GamepadInputs.buttonA(gamepad2);
+    }
+
+    public double intakeServoOut() {
+        return GamepadInputs.buttonB(gamepad2);
+    }
+
+    public double emergencyBrakeX() {return GamepadInputs.buttonX(gamepad1);}
+
+    public double emergencyBrakeA() {return GamepadInputs.buttonA(gamepad1);}
 }
