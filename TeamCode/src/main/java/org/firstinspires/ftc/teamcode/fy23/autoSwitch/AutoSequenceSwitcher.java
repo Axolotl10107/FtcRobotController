@@ -33,7 +33,7 @@ public class AutoSequenceSwitcher {
     }
 
     public AutoSequence getAutoSequence(int number) {
-        return sequences.get(getNames()[number]);
+        return sequences.get(getNames()[forceInBounds(number)]);
     }
 
     public TrajectorySequence getTrajectorySequence(String name) {

@@ -19,8 +19,7 @@ public class TurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
-        RRMecanumDrive drive = robot.drive;
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         waitForStart();
 

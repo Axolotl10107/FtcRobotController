@@ -4,6 +4,8 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
@@ -30,6 +32,10 @@ public class RobotRoundhouse {
         return params;
     }
 
+    public static Robot.Parameters getParamsAuto(HardwareMap hardwareMap) {
+        return getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap);
+    }
+
     public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
@@ -40,14 +46,14 @@ public class RobotRoundhouse {
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
         dc.TICKS_PER_REV = 537.7;
-        dc.MAX_RPM = 312;
+        dc.MAX_RPM = 117;
         dc.RUN_USING_ENCODER = true;
         dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
 
         dc.WHEEL_RADIUS = 1.88976;
         dc.GEAR_RATIO = 1;
-        dc.TRACK_WIDTH = 16.25;
+        dc.TRACK_WIDTH = 15.9;
 
 //        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
 //        dc.kA = 0;
@@ -60,8 +66,8 @@ public class RobotRoundhouse {
         // TODO: Tune these!
 //        dc.MAX_VEL = 50;
 //        dc.MAX_ACCEL = 50;
-        dc.MAX_ANG_VEL = Math.toRadians(60);
-        dc.MAX_ANG_ACCEL = Math.toRadians(60);
+        dc.MAX_ANG_VEL = 3;
+        dc.MAX_ANG_ACCEL = 3;
 
         dc.MAX_VEL = 30;
         dc.MAX_ACCEL = 30;
@@ -70,9 +76,12 @@ public class RobotRoundhouse {
                 dc,
                 new AccelLimiter(2.0, 0.1));
 
-        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(1, 0, 0);
-        driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
-        driveParams.LATERAL_MULTIPLIER = 1.22;
+//        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
+//        driveParams.HEADING_PID = new PIDCoefficients(8, 0, .1);
+
+        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
+        driveParams.HEADING_PID = new PIDCoefficients(4, 0, 0);
+        driveParams.LATERAL_MULTIPLIER = 1.2;
         driveParams.VX_WEIGHT = 1;
         driveParams.VY_WEIGHT = 1;
         driveParams.OMEGA_WEIGHT = 1;
