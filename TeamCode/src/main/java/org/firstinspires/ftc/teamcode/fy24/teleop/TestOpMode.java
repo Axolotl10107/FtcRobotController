@@ -6,10 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
@@ -45,6 +42,10 @@ public class TestOpMode extends LinearOpMode {
             log.add(x.getStackTrace().toString());
             throw x;
         }
+    }
+
+    public boolean armLimit() {
+        return false;
     }
 
     public void realOpMode() {
@@ -150,7 +151,7 @@ public class TestOpMode extends LinearOpMode {
 
             // Control arm
 
-            if (controls.armForward() != 0) {
+            if (controls.armForward() != 0 && !armLimit()) {
                 armLeftExtend.setVelocity(armExtendSpeed);
                 armRightExtend.setVelocity(armExtendSpeed);
             } else if (controls.armBackward() != 0) {
@@ -161,12 +162,12 @@ public class TestOpMode extends LinearOpMode {
                 armRightExtend.setVelocity(0);
             }
 
-            if (controls.armPivot() < 0) {
+            if (controls.armPivot() != 0) {
                 armLeftPivot.setDirection(DcMotorSimple.Direction.REVERSE);
-                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+                armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
             } else {
                 armLeftPivot.setDirection(DcMotorSimple.Direction.FORWARD);
-                armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
+                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
             }
 
             if (controls.armPivot() != 0) {
@@ -191,6 +192,7 @@ public class TestOpMode extends LinearOpMode {
             telemetry.addData("Pivot Input: ", controls.armPivot());
             telemetry.addData("Expected Pivot Velocity: ", armPivotSpeed * controls.armPivot());
             telemetry.addData("Actual Pivot Velocity: ", armRightPivot.getVelocity());
+            telemetry.addData("Limit Test: ", armLeftExtend.getCurrentPosition());
             telemetry.update();
         }
     }

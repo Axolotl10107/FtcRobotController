@@ -41,7 +41,7 @@ public class GamepadDTS extends GamepadDefault {
     }
 
     public double armPivot() {
-        return GamepadInputs.leftStickYExponential(gamepad2, 2);
+        return GamepadInputs.buttonDpadUp(gamepad2) - GamepadInputs.buttonDpadDown(gamepad2);
     }
 
     public double intakeServoIn() {
