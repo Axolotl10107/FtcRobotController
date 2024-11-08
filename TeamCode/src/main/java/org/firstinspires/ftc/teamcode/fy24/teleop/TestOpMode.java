@@ -44,8 +44,28 @@ public class TestOpMode extends LinearOpMode {
         }
     }
 
+    final double limitBuffer = 5;
+    final double armOffset = -1.5;
+
+    final double horizontalLimit = 36 - armOffset - limitBuffer;
+    final double ticksPerInch = 100; // Find actual value ASAP
+    final double ticksPerDegree = 7.74;
+
+    double pivotPos = ((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree;
+    double armPos = ((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch;
+
+    double armLimit = (1 / Math.cos(pivotPos)) * horizontalLimit;
     public boolean armLimit() {
-        return false;
+        if (armPos <= 41) {
+            if (armPos < armLimit) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
 
     public void realOpMode() {
@@ -85,6 +105,7 @@ public class TestOpMode extends LinearOpMode {
 
         double armExtendSpeed = 1110;
         double armPivotSpeed = 1115;
+        double driveSpeed = 1;
 
         waitForStart();
 
@@ -111,9 +132,17 @@ public class TestOpMode extends LinearOpMode {
             }
             telemetry.addData("Max Drive Power", driveClip);
 
-            // Emergency Brake
+            // Change speed
 
-            if (controls.emergencyBrakeX() != 0 && controls.emergencyBrakeA() != 0) {
+            if (controls.driveSpeedUp() != 0 && driveSpeed < 1) {
+                driveSpeed += 0.05;
+            } else if (controls.driveSpeedDown() != 0 && driveSpeed > 0.25) {
+                driveSpeed -= 0.05;
+            }
+
+            // Brake
+
+            if (controls.brake() != 0) {
                 double currentVelocity = leftFront.getVelocity();
                 while (leftFront.getVelocity() > 0 && currentVelocity > 0) {
                     leftFront.setVelocity(-leftFront.getVelocity());
@@ -142,10 +171,10 @@ public class TestOpMode extends LinearOpMode {
                 rightFront.setMotorEnable();
                 leftBack.setMotorEnable();
                 rightBack.setMotorEnable();
-                leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
-                rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip);
-                leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip);
-                rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip);
+                leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip * driveSpeed);
+                rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip * driveSpeed);
+                leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip * driveSpeed);
+                rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip * driveSpeed);
 
             }
 
