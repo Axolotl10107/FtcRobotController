@@ -48,25 +48,25 @@ public class TestOpMode extends LinearOpMode {
     final double armOffset = -1.5;
 
     final double horizontalLimit = 36 - armOffset - limitBuffer;
-    final double ticksPerInch = 100; // Find actual value ASAP
+    final double ticksPerInch = 205; // Find actual value ASAP
     final double ticksPerDegree = 7.74;
 
-    double pivotPos = ((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree;
-    double armPos = ((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch;
+    double pivotPos;
+    double armPos;
 
     double armLimit = (1 / Math.cos(pivotPos)) * horizontalLimit;
-    public boolean armLimit() {
-        if (armPos <= 41) {
-            if (armPos < armLimit) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+//    public boolean armLimit() {
+//        if (armPos <= 41) {
+//            if (armPos < armLimit) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        }
+//        else {
+//            return false;
+//        }
+//    }
 
     public void realOpMode() {
         GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
@@ -121,6 +121,9 @@ public class TestOpMode extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (opModeIsActive()) {
+
+            armPos = (double) ((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch;
+            pivotPos = (double) ((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree;
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
                 driveClip += 0.1;
@@ -179,16 +182,28 @@ public class TestOpMode extends LinearOpMode {
             }
 
             // Control arm
-
-            if (controls.armForward() != 0 && !armLimit()) {
-                armLeftExtend.setVelocity(armExtendSpeed);
-                armRightExtend.setVelocity(armExtendSpeed);
-            } else if (controls.armBackward() != 0) {
-                armLeftExtend.setVelocity(-armExtendSpeed);
-                armRightExtend.setVelocity(-armExtendSpeed);
-            } else {
-                armLeftExtend.setVelocity(0);
-                armRightExtend.setVelocity(0);
+            if (pivotPos >= 70) {
+                if (controls.armForward() != 0) {
+                    armLeftExtend.setVelocity(armExtendSpeed);
+                    armRightExtend.setVelocity(armExtendSpeed);
+                } else if (controls.armBackward() != 0) {
+                    armLeftExtend.setVelocity(-armExtendSpeed);
+                    armRightExtend.setVelocity(-armExtendSpeed);
+                } else {
+                    armLeftExtend.setVelocity(0);
+                    armRightExtend.setVelocity(0);
+                }
+            } else if (armPos <= 35) {
+                if (controls.armForward() != 0) {
+                    armLeftExtend.setVelocity(armExtendSpeed);
+                    armRightExtend.setVelocity(armExtendSpeed);
+                } else if (controls.armBackward() != 0) {
+                    armLeftExtend.setVelocity(-armExtendSpeed);
+                    armRightExtend.setVelocity(-armExtendSpeed);
+                } else {
+                    armLeftExtend.setVelocity(0);
+                    armRightExtend.setVelocity(0);
+                }
             }
 
             if (controls.armPivot() != 0) {
@@ -217,11 +232,14 @@ public class TestOpMode extends LinearOpMode {
                 servoClaw.setPower(0);
             }
 
-            telemetry.addData("Power: ", servoClaw.getPower());
-            telemetry.addData("Pivot Input: ", controls.armPivot());
-            telemetry.addData("Expected Pivot Velocity: ", armPivotSpeed * controls.armPivot());
-            telemetry.addData("Actual Pivot Velocity: ", armRightPivot.getVelocity());
-            telemetry.addData("Limit Test: ", armLeftExtend.getCurrentPosition());
+            telemetry.addData("Power", servoClaw.getPower());
+            telemetry.addData("Pivot Input", controls.armPivot());
+            telemetry.addData("Expected Pivot Velocity", armPivotSpeed * controls.armPivot());
+            telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());
+            telemetry.addData("Left Extend", armLeftExtend.getCurrentPosition());
+            telemetry.addData("Right Extend", armRightExtend.getCurrentPosition());
+            telemetry.addData("Arm Pos", armPos);
+            telemetry.addData("Pivot Pos", pivotPos);
             telemetry.update();
         }
     }
