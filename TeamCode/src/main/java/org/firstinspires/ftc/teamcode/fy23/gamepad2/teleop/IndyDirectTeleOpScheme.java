@@ -102,11 +102,11 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    private void updateLaunchPlaneState(Robot robot) {
-        if (planeLaunchButton.isActive()) {
-            robot.planeLauncher.launch();
-        }
-    }
+//    private void updateLaunchPlaneState(Robot robot) {
+//        if (planeLaunchButton.isActive()) {
+//            robot.planeLauncher.launch();
+//        }
+//    }
 
     private void updateDriveSpeedUpState(Robot robot) {
         if (driveSpeedUpButton.isActive() && driveSpeed < 1) {
@@ -134,7 +134,7 @@ public class IndyDirectTeleOpScheme {
         updateArmFastMovementState(robot);
         updateElevatorMovementState(robot);
         updateClawState(robot);
-        updateLaunchPlaneState(robot);
+//        updateLaunchPlaneState(robot);
         updateDriveSpeedUpState(robot);
         updateDriveSpeedDownState(robot);
         updateSquareUpState(imuCorrector);

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.*;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.DoubleArmBlank;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.*;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
@@ -22,12 +23,13 @@ public class Robot {
     }
 
     public static class Parameters {
-        public Parameters(Claw.Parameters clawParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters, ExtendedParameters extendedParameters) {
+        public Parameters(Claw.Parameters clawParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, DoubleArm.Parameters doubleArmParameters,/*PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters,*/ ExtendedParameters extendedParameters) {
             this.clawParameters = clawParameters;
             this.imuParameters = imuParameters;
             this.driveParameters = driveParameters;
-            this.pixelArmParameters = pixelArmParameters;
-            this.planeLauncherParameters = planeLauncherParameters;
+//            this.pixelArmParameters = pixelArmParameters;
+//            this.planeLauncherParameters = planeLauncherParameters;
+            this.doubleArmParameters = doubleArmParameters;
             this.extendedParameters = extendedParameters;
         }
 
@@ -43,8 +45,9 @@ public class Robot {
         final Claw.Parameters clawParameters;
         final FriendlyIMU.Parameters imuParameters;
         final RRMecanumDrive.Parameters driveParameters;
-        final PixelArm.Parameters pixelArmParameters;
-        final PlaneLauncher.Parameters planeLauncherParameters;
+//        final PixelArm.Parameters pixelArmParameters;
+//        final PlaneLauncher.Parameters planeLauncherParameters;
+        final DoubleArm.Parameters doubleArmParameters;
         final ExtendedParameters extendedParameters;
     }
 
@@ -61,8 +64,10 @@ public class Robot {
     public final Claw claw;
     public final FriendlyIMU imu;
     public final RRMecanumDrive drive;
-    public final PixelArm arm;
-    public final PlaneLauncher planeLauncher;
+//    public final PixelArm arm;
+//    public final PlaneLauncher planeLauncher;
+    public final DoubleArm arm;
+
 
     public final VoltageSensor voltageSensor;
 
@@ -87,9 +92,9 @@ public class Robot {
         parameters.driveParameters.imu = imu; // RRMecanumDrive needs an IMU, so we pass in the one we want here
         parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
         drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : (RRMecanumDrive) new MecanumDriveBlank();
-        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters) : new PixelArmBlank();
-        planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
-
+//        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters) : new PixelArmBlank();
+//        planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
+        arm = (parameters.doubleArmParameters.present) ? new DoubleArmImpl(parameters.doubleArmParameters) : new DoubleArmBlank();
         // Lynx stuff found in RR's SampleMecanumDrive
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -107,7 +112,7 @@ public class Robot {
         imu.update();
         drive.update();
         arm.update();
-        planeLauncher.update();
+//        planeLauncher.update();
     }
 
 }

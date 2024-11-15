@@ -45,9 +45,9 @@ public class RobotATestTeleOp extends OpMode {
         robot.arm.setPivotPower(controlsState.getArmMovement());
         robot.arm.setElevatorPower(controlsState.getElevatorMovement());
 
-        if (controlsState.isLaunchPlane()) {
-            robot.planeLauncher.launch();
-        }
+//        if (controlsState.isLaunchPlane()) {
+//            robot.planeLauncher.launch();
+//        }
 
         robot.claw.setState(controlsState.getClawState());
 

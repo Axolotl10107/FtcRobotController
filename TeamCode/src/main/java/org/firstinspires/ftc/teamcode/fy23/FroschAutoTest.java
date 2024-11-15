@@ -36,41 +36,12 @@ public class FroschAutoTest extends LinearOpMode {
         telemetry.update();
 //        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
 //        robot = new Robot(RobotRoundhouse.getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap), hardwareMap);
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
         RRMecanumDrive drive = robot.drive;
 
 //        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(0, 0, 0);
-//        TrajectorySequence seq1 = drive.trajectorySequenceBuilder(startPose)
-//                .strafeLeft(20)
-//                .build();
-//
-//        TrajectorySequence seq2 = drive.trajectorySequenceBuilder(startPose)
-//                .strafeRight(20)
-//                .build();
-//
-//        TrajectorySequence leftRight1 = drive.trajectorySequenceBuilder(startPose)
-//                .strafeLeft(10)
-//                .waitSeconds(1)
-//                .strafeRight(10)
-//                .waitSeconds(1)
-//                .strafeRight(10)
-//                .build();
-//
-//        TrajectorySequence leftRight5 = drive.trajectorySequenceBuilder(startPose)
-//                .strafeLeft(10)
-//                .waitSeconds(5)
-//                .strafeRight(10)
-//                .waitSeconds(5)
-//                .strafeRight(10)
-//                .build();
-//
-//        TrajectorySequence forwardBack = drive.trajectorySequenceBuilder(startPose)
-//                .forward(10)
-//                .back(30)
-//                .forward(20)
-//                .build();
 
         AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
         drive.setPoseEstimate(new Pose2d(-24*2, -24*2, 0));

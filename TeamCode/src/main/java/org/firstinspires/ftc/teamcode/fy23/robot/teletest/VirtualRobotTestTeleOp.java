@@ -23,7 +23,7 @@ public class VirtualRobotTestTeleOp extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getVirtualRobotParams(hardwareMap), hardwareMap);
+        robot = new Robot(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
         controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;

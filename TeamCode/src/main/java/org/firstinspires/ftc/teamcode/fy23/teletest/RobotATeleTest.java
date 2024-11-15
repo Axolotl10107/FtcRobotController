@@ -74,9 +74,9 @@ public class RobotATeleTest extends OpMode {
         robot.arm.setElevatorPower(controlState.getElevatorMovement());
 
         // PlaneLauncher
-        if (controlState.isLaunchPlane()) {
-            robot.planeLauncher.launch();
-        }
+//        if (controlState.isLaunchPlane()) {
+//            robot.planeLauncher.launch();
+//        }
 
         // telemetry
         telemetry.addData("Max. Drive Power", maxDrivePower);
