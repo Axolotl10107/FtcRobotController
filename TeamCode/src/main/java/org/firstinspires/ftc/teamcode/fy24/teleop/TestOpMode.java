@@ -46,12 +46,12 @@ public class TestOpMode extends LinearOpMode {
 
     final double horizontalLimit = 36;
     final double ticksPerInch = 157.86; // Find actual value ASAP
-    final double ticksPerDegree = 7.74;
+    final double ticksPerDegree = 32.06;
 
     double pivotPos;
     double armPos;
     public boolean checkArmLimit(Double angle) {
-        if (armPos < (1 / Math.cos(angle)) * horizontalLimit) {
+        if (armPos < (1 / Math.cos(Math.toRadians(angle))) * horizontalLimit) {
             return true;
         } else {
             return false;
@@ -117,7 +117,7 @@ public class TestOpMode extends LinearOpMode {
         while (opModeIsActive()) {
 
             armPos = (((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
-            pivotPos = (double) ((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree;
+            pivotPos = Math.abs(((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree);
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
                 driveClip += 0.1;
@@ -174,19 +174,16 @@ public class TestOpMode extends LinearOpMode {
                 rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip * driveSpeed);
 
             }
-
             // Control arm
-            if (checkArmLimit(pivotPos)) {
-                if (controls.armForward() != 0) {
-                    armLeftExtend.setVelocity(armExtendSpeed);
-                    armRightExtend.setVelocity(armExtendSpeed);
-                } else if (controls.armBackward() != 0) {
-                    armLeftExtend.setVelocity(-armExtendSpeed);
-                    armRightExtend.setVelocity(-armExtendSpeed);
-                } else {
-                    armLeftExtend.setPower(0);
-                    armRightExtend.setPower(0);
-                }
+            if (controls.armForward() != 0 && checkArmLimit(pivotPos)) {
+                armLeftExtend.setVelocity(armExtendSpeed);
+                armRightExtend.setVelocity(armExtendSpeed);
+            } else if (controls.armBackward() != 0) {
+                armLeftExtend.setVelocity(-armExtendSpeed);
+                armRightExtend.setVelocity(-armExtendSpeed);
+            } else {
+                armLeftExtend.setPower(0);
+                armRightExtend.setPower(0);
             }
 
             if (controls.armPivot() != 0) {
@@ -217,8 +214,10 @@ public class TestOpMode extends LinearOpMode {
             telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());
             telemetry.addData("Left Extend", armLeftExtend.getCurrentPosition());
             telemetry.addData("Right Extend", armRightExtend.getCurrentPosition());
+            telemetry.addData("Arm Limit", (1 / Math.cos(Math.toRadians(pivotPos))) * horizontalLimit);
             telemetry.addData("Arm Pos", armPos);
-            telemetry.addData("Pivot Pos", pivotPos);
+            telemetry.addData("Pivot Pos", (armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2);
+            telemetry.addData("Pivot Pos Degrees", pivotPos);
             telemetry.update();
         }
     }
