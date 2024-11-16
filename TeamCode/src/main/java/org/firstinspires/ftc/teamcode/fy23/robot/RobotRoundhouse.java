@@ -210,6 +210,14 @@ public class RobotRoundhouse {
         armParams.pivotMotorLeft.setDirection(FORWARD);
         armParams.pivotMotorRight.setDirection(REVERSE);
 
+        armParams.pivotAccelLimiter = new AccelLimiter(40, 40);
+        armParams.elevatorAccelLimiter = new AccelLimiter(40, 40);
+
+        armParams.pivotUpperLimit = 1000;
+        armParams.elevatorUpperLimit = 1000;
+
+        armParams.maxPivotVelocity = 400;
+        armParams.maxElevatorVelocity = 400;
 //        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
         Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
