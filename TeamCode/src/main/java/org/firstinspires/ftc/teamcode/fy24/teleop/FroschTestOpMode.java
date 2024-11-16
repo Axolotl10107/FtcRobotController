@@ -63,6 +63,14 @@ public class FroschTestOpMode extends LinearOpMode {
             telemetry.addLine("----------------------");
             telemetry.addData("arm position", robot.arm.getPivotPosition());
             telemetry.addData("elevator position", robot.arm.getElevatorPosition());
+            telemetry.addData("arm velocity", robot.arm.getPivotVelocity());
+            telemetry.addData("elevator velocity", robot.arm.getElevatorVelocity());
+            telemetry.addData("arm power", robot.arm.getPivotPower());
+            telemetry.addData("elevator power", robot.arm.getElevatorPower());
+
+            telemetry.addData("triggers", -gamepad2.left_trigger + gamepad2.right_trigger);
+            telemetry.addData("right stick", gamepad2.right_stick_y);
+
             telemetry.update();
         }
     }

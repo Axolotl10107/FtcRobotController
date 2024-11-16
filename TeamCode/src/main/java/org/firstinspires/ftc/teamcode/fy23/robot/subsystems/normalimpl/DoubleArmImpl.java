@@ -62,7 +62,7 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
     private PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
     private double heartbeat = 0.0001;
     private TunablePID pivotPID = new TunablePID(pivotPIDConsts);
-    private boolean useSdkPid = false;
+    private boolean useSdkPid = true;
 
     public DoubleArmImpl(Parameters parameters) {
 

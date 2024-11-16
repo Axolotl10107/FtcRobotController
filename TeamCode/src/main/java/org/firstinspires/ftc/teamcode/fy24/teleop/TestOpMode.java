@@ -44,29 +44,19 @@ public class TestOpMode extends LinearOpMode {
         }
     }
 
-    final double limitBuffer = 5;
-    final double armOffset = -1.5;
-
-    final double horizontalLimit = 36 - armOffset - limitBuffer;
-    final double ticksPerInch = 205; // Find actual value ASAP
+    final double horizontalLimit = 36;
+    final double ticksPerInch = 157.86; // Find actual value ASAP
     final double ticksPerDegree = 7.74;
 
     double pivotPos;
     double armPos;
-
-    double armLimit = (1 / Math.cos(pivotPos)) * horizontalLimit;
-//    public boolean armLimit() {
-//        if (armPos <= 41) {
-//            if (armPos < armLimit) {
-//                return false;
-//            } else {
-//                return true;
-//            }
-//        }
-//        else {
-//            return false;
-//        }
-//    }
+    public boolean checkArmLimit(Double angle) {
+        if (armPos < (1 / Math.cos(angle)) * horizontalLimit) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public void realOpMode() {
         GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
@@ -122,7 +112,7 @@ public class TestOpMode extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            armPos = (double) ((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch;
+            armPos = (((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
             pivotPos = (double) ((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree;
 
             if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
@@ -182,7 +172,7 @@ public class TestOpMode extends LinearOpMode {
             }
 
             // Control arm
-            if (pivotPos >= 70) {
+            if (checkArmLimit(pivotPos)) {
                 if (controls.armForward() != 0) {
                     armLeftExtend.setVelocity(armExtendSpeed);
                     armRightExtend.setVelocity(armExtendSpeed);
@@ -190,36 +180,21 @@ public class TestOpMode extends LinearOpMode {
                     armLeftExtend.setVelocity(-armExtendSpeed);
                     armRightExtend.setVelocity(-armExtendSpeed);
                 } else {
-                    armLeftExtend.setVelocity(0);
-                    armRightExtend.setVelocity(0);
-                }
-            } else if (armPos <= 35) {
-                if (controls.armForward() != 0) {
-                    armLeftExtend.setVelocity(armExtendSpeed);
-                    armRightExtend.setVelocity(armExtendSpeed);
-                } else if (controls.armBackward() != 0) {
-                    armLeftExtend.setVelocity(-armExtendSpeed);
-                    armRightExtend.setVelocity(-armExtendSpeed);
-                } else {
-                    armLeftExtend.setVelocity(0);
-                    armRightExtend.setVelocity(0);
+                    armLeftExtend.setPower(0);
+                    armRightExtend.setPower(0);
                 }
             }
 
             if (controls.armPivot() != 0) {
                 armLeftPivot.setDirection(DcMotorSimple.Direction.REVERSE);
                 armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
-            } else {
-                armLeftPivot.setDirection(DcMotorSimple.Direction.FORWARD);
-                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
-            }
-
-            if (controls.armPivot() != 0) {
                 armLeftPivot.setVelocity(armPivotSpeed * controls.armPivot());
                 armRightPivot.setVelocity(armPivotSpeed * controls.armPivot());
             } else {
-                armRightPivot.setVelocity(0);
-                armLeftPivot.setVelocity(0);
+                armLeftPivot.setDirection(DcMotorSimple.Direction.FORWARD);
+                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+                armRightPivot.setPower(0);
+                armLeftPivot.setPower(0);
             }
 
             // Control active intake

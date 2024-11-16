@@ -198,26 +198,18 @@ public class RobotRoundhouse {
 
         armParams.stopwatch = new ElapsedTime();
 
-        armParams.elevatorMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftPivot");
-        armParams.elevatorMotorRight = hardwareMap.get(DcMotorEx.class, "armRightPivot");
+        armParams.elevatorMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftExtend");
+        armParams.elevatorMotorRight = hardwareMap.get(DcMotorEx.class, "armRightExtend");
 
         armParams.elevatorMotorLeft.setDirection(FORWARD);
         armParams.elevatorMotorRight.setDirection(REVERSE);
 
-        armParams.pivotMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftExtend");
-        armParams.pivotMotorRight = hardwareMap.get(DcMotorEx.class, "armRightExtend");
+        armParams.pivotMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftPivot");
+        armParams.pivotMotorRight = hardwareMap.get(DcMotorEx.class, "armRightPivot");
 
-        armParams.pivotMotorLeft.setDirection(FORWARD);
-        armParams.pivotMotorRight.setDirection(REVERSE);
+        armParams.pivotMotorLeft.setDirection(REVERSE);
+        armParams.pivotMotorRight.setDirection(FORWARD);
 
-        armParams.pivotAccelLimiter = new AccelLimiter(40, 40);
-        armParams.elevatorAccelLimiter = new AccelLimiter(40, 40);
-
-        armParams.pivotUpperLimit = 1000;
-        armParams.elevatorUpperLimit = 1000;
-
-        armParams.maxPivotVelocity = 400;
-        armParams.maxElevatorVelocity = 400;
 //        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
         Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
