@@ -44,8 +44,9 @@ public class TestOpMode extends LinearOpMode {
         }
     }
 
-    final double horizontalLimit = 36;
-    final double ticksPerInch = 157.86; // Find actual value ASAP
+    final double motorLength = 3.50;
+    final double horizontalLimit = 42 - motorLength;
+    final double ticksPerInch = 157.86;
     final double ticksPerDegree = 32.06;
 
     double pivotPos;
@@ -184,6 +185,8 @@ public class TestOpMode extends LinearOpMode {
             } else {
                 armLeftExtend.setPower(0);
                 armRightExtend.setPower(0);
+                armRightExtend.setTargetPosition(armRightExtend.getCurrentPosition());
+                armLeftExtend.setTargetPosition(armLeftExtend.getCurrentPosition());
             }
 
             if (controls.armPivot() != 0) {
@@ -196,6 +199,8 @@ public class TestOpMode extends LinearOpMode {
                 armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
                 armRightPivot.setPower(0);
                 armLeftPivot.setPower(0);
+                armRightPivot.setTargetPosition(armRightPivot.getCurrentPosition());
+                armLeftPivot.setTargetPosition(armLeftPivot.getCurrentPosition());
             }
 
             // Control active intake
