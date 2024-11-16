@@ -109,6 +109,10 @@ public class TestOpMode extends LinearOpMode {
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armLeftExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armRightExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armLeftPivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armRightPivot.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive()) {
 
