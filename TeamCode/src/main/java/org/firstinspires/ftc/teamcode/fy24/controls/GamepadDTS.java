@@ -52,6 +52,10 @@ public class GamepadDTS extends GamepadDefault {
         return GamepadInputs.buttonB(gamepad2);
     }
 
+//    public double clawServoIn() {return GamepadInputs.buttonX(gamepad2);} still does not currently exist
+//
+//    public double clawServoOut() {return GamepadInputs.buttonY(gamepad2);}
+
     public double brake() {return GamepadInputs.buttonX(gamepad1);}
 
     @Override

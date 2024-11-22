@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -44,8 +45,9 @@ public class TestOpMode extends LinearOpMode {
         }
     }
 
+    final double limitBuffer = 2;
     final double motorLength = 3.50;
-    final double horizontalLimit = 42 - motorLength;
+    final double horizontalLimit = 42 - motorLength - limitBuffer;
     final double ticksPerInch = 157.86;
     final double ticksPerDegree = 32.06;
 
@@ -75,8 +77,8 @@ public class TestOpMode extends LinearOpMode {
 
         armLeftExtend.setDirection(DcMotor.Direction.FORWARD);
         armRightExtend.setDirection(DcMotor.Direction.REVERSE);
-        armLeftPivot.setDirection(DcMotor.Direction.FORWARD);
-        armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+        armLeftPivot.setDirection(DcMotorSimple.Direction.REVERSE);
+        armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -91,8 +93,10 @@ public class TestOpMode extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        CRServo servoClaw;
-        servoClaw = hardwareMap.get(CRServo.class, "clawServo");
+        CRServo servoIntake;
+        Servo servoClaw;
+        servoIntake = hardwareMap.get(CRServo.class, "intakeServo");
+        servoClaw = hardwareMap.get(Servo.class, "clawServo");
 
         double armExtendSpeed = 1110;
         double armPivotSpeed = 1115;
@@ -176,7 +180,16 @@ public class TestOpMode extends LinearOpMode {
 
             }
             // Control arm
-            if (controls.armForward() != 0 && checkArmLimit(pivotPos)) {
+            if (!checkArmLimit(pivotPos)) {
+                while (!checkArmLimit(pivotPos)) {
+                    armPos = (((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
+                    pivotPos = Math.abs(((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree);
+                    armLeftExtend.setVelocity(-armExtendSpeed);
+                    armRightExtend.setVelocity(-armExtendSpeed);
+                }
+                armLeftExtend.setPower(0);
+                armRightExtend.setPower(0);
+            } else if (controls.armForward() != 0 && checkArmLimit(pivotPos)) {
                 armLeftExtend.setVelocity(armExtendSpeed);
                 armRightExtend.setVelocity(armExtendSpeed);
             } else if (controls.armBackward() != 0) {
@@ -185,44 +198,48 @@ public class TestOpMode extends LinearOpMode {
             } else {
                 armLeftExtend.setPower(0);
                 armRightExtend.setPower(0);
-                armRightExtend.setTargetPosition(armRightExtend.getCurrentPosition());
-                armLeftExtend.setTargetPosition(armLeftExtend.getCurrentPosition());
             }
 
             if (controls.armPivot() != 0) {
-                armLeftPivot.setDirection(DcMotorSimple.Direction.REVERSE);
-                armRightPivot.setDirection(DcMotorSimple.Direction.FORWARD);
                 armLeftPivot.setVelocity(armPivotSpeed * controls.armPivot());
                 armRightPivot.setVelocity(armPivotSpeed * controls.armPivot());
             } else {
-                armLeftPivot.setDirection(DcMotorSimple.Direction.FORWARD);
-                armRightPivot.setDirection(DcMotorSimple.Direction.REVERSE);
                 armRightPivot.setPower(0);
                 armLeftPivot.setPower(0);
-                armRightPivot.setTargetPosition(armRightPivot.getCurrentPosition());
-                armLeftPivot.setTargetPosition(armLeftPivot.getCurrentPosition());
             }
 
             // Control active intake
 
             if (controls.intakeServoIn() != 0) {
-                servoClaw.setPower(1);
+                servoIntake.setPower(1);
             } else if (controls.intakeServoOut() != 0) {
-                servoClaw.setPower(-1);
+                servoIntake.setPower(-1);
             } else {
-                servoClaw.setPower(0);
+                servoIntake.setPower(0);
             }
 
-            telemetry.addData("Power", servoClaw.getPower());
+            // Control claw (currently does not exist)
+//
+//            if (controls.clawServoIn() != 0) {
+//                servoClaw.setPosition(0);
+//            } else if (controls.clawServoOut() != 0) {
+//                servoClaw.setPosition(1);
+//            }
+
+            telemetry.addData("Power", servoIntake.getPower());
             telemetry.addData("Pivot Input", controls.armPivot());
             telemetry.addData("Expected Pivot Velocity", armPivotSpeed * controls.armPivot());
             telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());
             telemetry.addData("Left Extend", armLeftExtend.getCurrentPosition());
             telemetry.addData("Right Extend", armRightExtend.getCurrentPosition());
             telemetry.addData("Arm Limit", (1 / Math.cos(Math.toRadians(pivotPos))) * horizontalLimit);
+            telemetry.addData("Extension Input", controls.armForward() - controls.armBackward());
             telemetry.addData("Arm Pos", armPos);
+            telemetry.addData("Pivot Pos Left", armLeftPivot.getCurrentPosition());
+            telemetry.addData("Pos Pos Right", armRightPivot.getCurrentPosition());
             telemetry.addData("Pivot Pos", (armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2);
             telemetry.addData("Pivot Pos Degrees", pivotPos);
+            telemetry.addData("Pivot Input", controls.armPivot());
             telemetry.update();
         }
     }
