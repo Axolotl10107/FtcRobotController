@@ -54,7 +54,8 @@ public class TestOpMode extends LinearOpMode {
     double pivotPos;
     double armPos;
     public boolean checkArmLimit(Double angle) {
-        if (armPos < (1 / Math.cos(Math.toRadians(angle))) * horizontalLimit) {
+        // horizontalLimit / Math.cos(Math.toRadians(angle))
+        if (armPos < Math.abs((1 / Math.cos(Math.toRadians(angle))) * horizontalLimit)) {
             return true;
         } else {
             return false;
@@ -180,15 +181,19 @@ public class TestOpMode extends LinearOpMode {
 
             }
             // Control arm
-            if (!checkArmLimit(pivotPos)) {
+            if (!checkArmLimit(pivotPos) && Math.abs(pivotPos) <= 75) {
+                // TODO: bug - pivot takes off around position abs(2000) or something if we don't set its velocity to 0
+                // TODO: Put controller movement above limit check so it doesn't bounce when you try to push it out too far
                 while (!checkArmLimit(pivotPos)) {
-                    armPos = (((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
-                    pivotPos = Math.abs(((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree);
+                    armPos = ( (double) ((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
+                    pivotPos = Math.abs(( (double) (armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree);
                     armLeftExtend.setVelocity(-armExtendSpeed);
                     armRightExtend.setVelocity(-armExtendSpeed);
+                    armLeftPivot.setVelocity(0);
+                    armRightPivot.setVelocity(0);
                 }
-                armLeftExtend.setPower(0);
-                armRightExtend.setPower(0);
+//                armLeftExtend.setVelocity(0);
+//                armRightExtend.setVelocity(0);
             } else if (controls.armForward() != 0 && checkArmLimit(pivotPos)) {
                 armLeftExtend.setVelocity(armExtendSpeed);
                 armRightExtend.setVelocity(armExtendSpeed);
@@ -196,8 +201,8 @@ public class TestOpMode extends LinearOpMode {
                 armLeftExtend.setVelocity(-armExtendSpeed);
                 armRightExtend.setVelocity(-armExtendSpeed);
             } else {
-                armLeftExtend.setPower(0);
-                armRightExtend.setPower(0);
+                armLeftExtend.setVelocity(0);
+                armRightExtend.setVelocity(0);
             }
 
             if (controls.armPivot() != 0) {
@@ -232,7 +237,7 @@ public class TestOpMode extends LinearOpMode {
             telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());
             telemetry.addData("Left Extend", armLeftExtend.getCurrentPosition());
             telemetry.addData("Right Extend", armRightExtend.getCurrentPosition());
-            telemetry.addData("Arm Limit", (1 / Math.cos(Math.toRadians(pivotPos))) * horizontalLimit);
+            telemetry.addData("Arm Limit", Math.abs((1 / Math.cos(Math.toRadians(pivotPos))) * horizontalLimit));
             telemetry.addData("Extension Input", controls.armForward() - controls.armBackward());
             telemetry.addData("Arm Pos", armPos);
             telemetry.addData("Pivot Pos Left", armLeftPivot.getCurrentPosition());
