@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
 
 
-@TeleOp(name="TestOpMode")
-public class TestOpMode extends LinearOpMode {
+@TeleOp(name="In Theory 24-25 Competition TeleOp")
+public class CompetitionOpMode extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     //    private ArmMotor armPivot = null;
