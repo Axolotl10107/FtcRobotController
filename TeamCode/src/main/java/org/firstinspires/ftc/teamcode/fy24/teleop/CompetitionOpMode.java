@@ -205,9 +205,12 @@ public class CompetitionOpMode extends LinearOpMode {
                 armRightExtend.setVelocity(0);
             }
 
-            if (controls.armPivot() != 0) {
-                armLeftPivot.setVelocity(armPivotSpeed * controls.armPivot());
-                armRightPivot.setVelocity(armPivotSpeed * controls.armPivot());
+            if (controls.armPivot() > 0 && (pivotPos < 90)) {
+                armLeftPivot.setVelocity(armPivotSpeed);
+                armRightPivot.setVelocity(armPivotSpeed);
+            } else if (controls.armPivot() < 0) {
+                armLeftPivot.setVelocity(-armPivotSpeed);
+                armRightPivot.setVelocity(-armPivotSpeed);
             } else {
                 armRightPivot.setPower(0);
                 armLeftPivot.setPower(0);

@@ -3,17 +3,17 @@ package org.firstinspires.ftc.teamcode.fy23.robot.teletest;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 
 @TeleOp()
 public class MotorLocator extends OpMode {
 
-    Robot robot;
+    Robot24 robot;
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.old.RampTwo;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
@@ -47,7 +47,7 @@ public class VisionAutonomous extends LinearOpMode
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition snapshotAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystonePosition.LEFT; // default
     AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor colorAnalysis = AlliedDeterminationExample.SkystoneDeterminationPipeline.SkystoneColor.BLUE; //default
 
-    Robot robot;
+    Robot24 robot;
     RampTwo ramper;
     IMUCorrector imuCorrector;
 
@@ -95,7 +95,7 @@ public class VisionAutonomous extends LinearOpMode
         pipeline = new AlliedDeterminationExample.SkystoneDeterminationPipeline(telemetry);
         webcam.setPipeline(pipeline);
 
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;

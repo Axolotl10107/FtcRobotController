@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
@@ -55,14 +55,14 @@ public class IndyDirectTeleOpScheme {
         armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
     }
 
-    private void updateMovementState(Robot robot) {
+    private void updateMovementState(Robot24 robot) {
         double drive = Range.clip(driver.right_trigger - driver.left_trigger, -driveSpeed, driveSpeed);
         double turn = Range.clip(-driver.left_stick_x, -driveSpeed, driveSpeed); // positive turn is counterclockwise
         double strafe = Range.clip(driver.right_stick_x, -driveSpeed, driveSpeed);
         robot.drive.applyDTS(new DTS(drive, turn, strafe));
     }
 
-    private void updateArmFastMovementState(Robot robot) {
+    private void updateArmFastMovementState(Robot24 robot) {
         if (!armMovementSet) {
             // if all three run, then the last one is the only one that sets it - the other two have no effect
             robot.arm.setPivotPower(-manipulator.left_stick_y); // Y-Axis is negated (nobody knows why, don't ask)
@@ -72,7 +72,7 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    private void updateArmMediumMovementState(Robot robot) {
+    private void updateArmMediumMovementState(Robot24 robot) {
         if (!armMovementSet) {
             robot.arm.setPivotPower((armMediumUp.value() - armMediumDown.value()) * 0.2);
         }
@@ -81,7 +81,7 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    private void updateArmSlowMovementState(Robot robot) {
+    private void updateArmSlowMovementState(Robot24 robot) {
         if (!armMovementSet) {
             robot.arm.setPivotPower((armSlowUp.value() - armSlowDown.value()) * 0.15);
         }
@@ -90,11 +90,11 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    private void updateElevatorMovementState(Robot robot) {
+    private void updateElevatorMovementState(Robot24 robot) {
         robot.arm.setElevatorPower(manipulator.right_trigger - manipulator.left_trigger);
     }
 
-    private void updateClawState(Robot robot) {
+    private void updateClawState(Robot24 robot) {
         if (clawOpenButton.isActive()) {
             robot.claw.setState(Claw.State.OPEN);
         } else if (clawCloseButton.isActive()) {
@@ -108,13 +108,13 @@ public class IndyDirectTeleOpScheme {
 //        }
 //    }
 
-    private void updateDriveSpeedUpState(Robot robot) {
+    private void updateDriveSpeedUpState(Robot24 robot) {
         if (driveSpeedUpButton.isActive() && driveSpeed < 1) {
             driveSpeed += 0.1;
         }
     }
 
-    private void updateDriveSpeedDownState(Robot robot) {
+    private void updateDriveSpeedDownState(Robot24 robot) {
         if (driveSpeedDownButton.isActive() && driveSpeed > 0) {
             driveSpeed -= 0.1;
         }
@@ -126,7 +126,7 @@ public class IndyDirectTeleOpScheme {
         }
     }
 
-    public void update(Robot robot, IMUCorrector imuCorrector) {
+    public void update(Robot24 robot, IMUCorrector imuCorrector) {
         armMovementSet = false;
         updateMovementState(robot);
         updateArmMediumMovementState(robot);

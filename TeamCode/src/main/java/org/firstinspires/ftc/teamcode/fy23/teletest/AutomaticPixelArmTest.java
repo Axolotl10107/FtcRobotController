@@ -5,13 +5,13 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 
 @TeleOp()
 public class AutomaticPixelArmTest extends LinearOpMode {
 
-    Robot robot;
+    Robot24 robot;
     double telemetryPower;
     Telemetry opModeTelemetry;
 
@@ -28,7 +28,7 @@ public class AutomaticPixelArmTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         opModeTelemetry = telemetry;
 
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
 
         waitForStart();
 

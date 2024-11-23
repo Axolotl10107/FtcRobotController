@@ -6,9 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal

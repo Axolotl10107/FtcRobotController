@@ -8,21 +8,21 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpScheme;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 @TeleOp(group="TeleTest")
 public class RobotATestTeleOp extends OpMode {
 
-    Robot robot;
+    Robot24 robot;
     TeleOpState controlsState;
     TeleOpScheme controlsScheme;
     IMUCorrector imuCorrector;
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
         controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));

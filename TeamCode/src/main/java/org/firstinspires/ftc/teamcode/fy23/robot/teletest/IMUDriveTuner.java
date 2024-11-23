@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fy23.robot.teletest;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
@@ -10,7 +9,7 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.specific.imudrivetuner.IMUDr
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.specific.imudrivetuner.IMUDriveTunerState;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
@@ -22,7 +21,7 @@ public class IMUDriveTuner extends OpMode {
     IMUDriveTunerState gamepad;
     IMUDriveTunerScheme controlScheme;
     IMUCorrector imuCorrector;
-    Robot robot;
+    Robot24 robot;
     TunablePID pid;
 
     double changeAmount = 0.01;
@@ -31,7 +30,7 @@ public class IMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         // TODO: Detect and/or parameterize which robot to use
-        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
         // <b>Don't forget to change the filename to save to below!</b>
     }
 

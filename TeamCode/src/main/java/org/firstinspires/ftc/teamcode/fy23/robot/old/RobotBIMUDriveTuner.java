@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode.fy23.robot.old;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.fy23.controls.GamepadTrueDTS;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
@@ -23,7 +22,7 @@ public class RobotBIMUDriveTuner extends OpMode {
     GamepadTrueDTS gamepad;
     IMUCorrector imuCorrector;
     DTSscaler scaler;
-    Robot robot;
+    Robot24 robot;
 
     TunablePID pid;
 
@@ -33,7 +32,7 @@ public class RobotBIMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         scaler = new DTSscaler();
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     public void start() {

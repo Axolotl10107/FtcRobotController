@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.PowerTpSConverter;
 /** Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
  * their powers independently or by specifying a point on the planar region containing all possible points that this
  * mechanism can reach. */
+@Deprecated
 public interface PixelArm {
 
     class Parameters {

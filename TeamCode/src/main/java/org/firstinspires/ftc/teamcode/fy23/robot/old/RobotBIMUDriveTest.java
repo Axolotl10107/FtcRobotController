@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.fy23.controls.FieldyGamepadLS;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
 
@@ -18,7 +18,7 @@ public class RobotBIMUDriveTest extends OpMode {
     FieldyGamepadLS gamepad;
     IMUCorrector imuCorrector;
     DTSscaler scaler;
-    Robot robot;
+    Robot24 robot;
 
     TunablePID pid;
 
@@ -26,7 +26,7 @@ public class RobotBIMUDriveTest extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         scaler = new DTSscaler();
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     public void start() {

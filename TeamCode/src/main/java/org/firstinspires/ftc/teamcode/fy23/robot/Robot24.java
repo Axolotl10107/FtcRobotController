@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
  * defined by a {@link Parameters} class. The Parameters also contain calibration values that tune certain fine
  * behaviors to each robot. An OpMode no longer needs to set up every individual motor and servo. It needs only to
  * create a robot and use the powerful and convenient methods provided by its subsystems. */
-public class Robot {
+public class Robot24 {
 
     public static class ExtendedParameters {
         /** used by IMUCorrector */
@@ -73,7 +73,7 @@ public class Robot {
 
     /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
      * a normal ElapsedTime. */
-    public Robot(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
+    public Robot24(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
         TPR = parameters.tpr;
         wheelDiameter = parameters.wheelDiameter;
         wheelCircumference = Math.PI * wheelDiameter;
@@ -102,7 +102,7 @@ public class Robot {
         }
     }
 
-    public Robot(Parameters parameters, HardwareMap hardwareMap) {
+    public Robot24(Parameters parameters, HardwareMap hardwareMap) {
         this(parameters, hardwareMap, new ElapsedTime());
     }
 

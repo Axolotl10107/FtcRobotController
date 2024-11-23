@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
 import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.*;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
@@ -16,7 +15,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 public class RobotRoundhouse {
 
-    public static Robot.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
+    public static Robot24.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
         switch (serialNumber) {
             case "10107-A-RC":
                 return getRobotAParams(hardwareMap);
@@ -28,11 +27,11 @@ public class RobotRoundhouse {
         }
     }
 
-    public static Robot.Parameters getParamsAuto(HardwareMap hardwareMap) {
+    public static Robot24.Parameters getParamsAuto(HardwareMap hardwareMap) {
         return getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap);
     }
 
-    public static Robot.Parameters getRobotAParams(HardwareMap hardwareMap) {
+    public static Robot24.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -143,10 +142,10 @@ public class RobotRoundhouse {
 //        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(true, 1, 0);
 //        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
-        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
 
-        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
+        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
         params.tpr = 537.7; // ticks per rotation
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second
@@ -156,7 +155,7 @@ public class RobotRoundhouse {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-    public static Robot.Parameters getRobotBParams(HardwareMap hardwareMap) {
+    public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
@@ -210,8 +209,8 @@ public class RobotRoundhouse {
         armParams.pivotMotorLeft.setDirection(REVERSE);
         armParams.pivotMotorRight.setDirection(FORWARD);
 
-        armParams.pivotAccelLimiter = new AccelLimiter(400, 400);
-        armParams.elevatorAccelLimiter = new AccelLimiter(400, 400);
+        armParams.pivotAccelLimiter = new AccelLimiter(4000, 4000);
+        armParams.elevatorAccelLimiter = new AccelLimiter(4000, 4000);
 
         armParams.pivotUpperLimit = 1000;
         armParams.elevatorUpperLimit = 1000;
@@ -220,10 +219,10 @@ public class RobotRoundhouse {
         armParams.maxElevatorVelocity = 400;
 //        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
-        Robot.ExtendedParameters extendedParams = new Robot.ExtendedParameters();
+        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
-        Robot.Parameters params = new Robot.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
+        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
         params.tpr = 537.7;
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second

@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
  * <hr>
  *
  * */
+@Deprecated
 public class PixelArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm {
 
     private DcMotorEx pivotMotor;

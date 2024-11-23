@@ -5,16 +5,15 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.old.RampTwo;
 
 @Disabled
 @TeleOp
 public class RampTwoTest extends OpMode {
     // TODO: I changed the wheelDiameter in the Robots to meters.
 
-    Robot robot;
+    Robot24 robot;
     RampTwo ramper;
 
     double currentPos;
@@ -42,7 +41,7 @@ public class RampTwoTest extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
         robot.drive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.drive.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // This will be applied to all of the drive motors.
 

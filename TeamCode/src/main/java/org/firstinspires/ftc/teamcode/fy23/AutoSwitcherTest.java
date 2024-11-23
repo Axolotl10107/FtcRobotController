@@ -6,20 +6,17 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
-import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
+import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 
 @Autonomous()
 public class AutoSwitcherTest extends LinearOpMode {
 
-    Robot robot;
+    Robot24 robot;
     double telemetryPower;
     Telemetry opModeTelemetry;
 
@@ -36,7 +33,7 @@ public class AutoSwitcherTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         opModeTelemetry = telemetry;
 
-        robot = new Robot(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
 
         FieldyTeleOpScheme controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
 

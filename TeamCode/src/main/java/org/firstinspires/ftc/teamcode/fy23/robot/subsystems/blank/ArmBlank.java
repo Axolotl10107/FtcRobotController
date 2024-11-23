@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DoubleArm;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm;
 
-/** A blank implementation of {@link PixelArm} that does nothing.
+/** A blank implementation of {@link PixelArm} and {@link DoubleArm} that does nothing.
  * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
-public class PixelArmBlank implements PixelArm {
+public class ArmBlank implements PixelArm, DoubleArm {
 
     @Override
     public void setPivotAngle(AngleUnit unit, double angle) {

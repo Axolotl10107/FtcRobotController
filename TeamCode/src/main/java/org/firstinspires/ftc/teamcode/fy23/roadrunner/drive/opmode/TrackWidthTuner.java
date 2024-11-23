@@ -13,9 +13,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 
 /*
  * This routine determines the effective track width. The procedure works by executing a point turn

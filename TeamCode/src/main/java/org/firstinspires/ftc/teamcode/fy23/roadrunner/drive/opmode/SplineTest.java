@@ -7,9 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 
 /*
  * This is an example of a more complex path to really test the tuning.
