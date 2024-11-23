@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
+import com.qualcomm.robotcore.hardware.CRServo;
+
+import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankCRServo;
+
 /** Represents a claw and its state (open or closed). */
 public interface RotaryIntake {
 
@@ -27,15 +31,19 @@ public interface RotaryIntake {
         public final boolean present;
 
         /** The servo that drives the claw, already instantiated and configured */
-        public CRServo intakeServo = new CRServo();
+        public CRServo intakeServo = new BlankCRServo();
 
-        public final double servoPower;
+        public double servoPower = 1;
     }
 
     /** Set the desired state of the claw, and it will move to reach that state. */
     void setState(State state);
     /** Get the currently set state of the claw. */
     State getState();
+
+    void setPower(double power);
+
+    double getPower();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();
