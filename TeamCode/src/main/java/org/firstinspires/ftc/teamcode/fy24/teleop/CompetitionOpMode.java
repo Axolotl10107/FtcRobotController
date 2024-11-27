@@ -62,6 +62,20 @@ public class CompetitionOpMode extends LinearOpMode {
         }
     }
 
+    public void pivotToNormalMode() {
+        armLeftPivot.setPower(0);
+        armRightPivot.setPower(0);
+        armLeftPivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armRightPivot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void extendToNormalMode() {
+        armLeftExtend.setPower(0);
+        armRightExtend.setPower(0);
+        armLeftExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        armRightExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
     public void realOpMode() {
         GamepadDTS controls = new GamepadDTS(gamepad1, gamepad2);
 
@@ -195,25 +209,41 @@ public class CompetitionOpMode extends LinearOpMode {
 //                armLeftExtend.setVelocity(0);
 //                armRightExtend.setVelocity(0);
             } else if (controls.armForward() != 0 && checkArmLimit(pivotPos)) {
+                extendToNormalMode();
                 armLeftExtend.setVelocity(armExtendSpeed);
                 armRightExtend.setVelocity(armExtendSpeed);
             } else if (controls.armBackward() != 0) {
+                extendToNormalMode();
                 armLeftExtend.setVelocity(-armExtendSpeed);
                 armRightExtend.setVelocity(-armExtendSpeed);
             } else {
-                armLeftExtend.setVelocity(0);
-                armRightExtend.setVelocity(0);
+//                armLeftExtend.setVelocity(0);
+//                armRightExtend.setVelocity(0);
+                armLeftExtend.setTargetPosition(armLeftExtend.getCurrentPosition());
+                armRightExtend.setTargetPosition(armRightExtend.getCurrentPosition());
+                armLeftExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armRightExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armLeftExtend.setPower(1);
+                armRightExtend.setPower(1);
             }
 
             if (controls.armPivot() > 0 && (pivotPos < 90)) {
+                pivotToNormalMode();
                 armLeftPivot.setVelocity(armPivotSpeed);
                 armRightPivot.setVelocity(armPivotSpeed);
             } else if (controls.armPivot() < 0) {
+                pivotToNormalMode();
                 armLeftPivot.setVelocity(-armPivotSpeed);
                 armRightPivot.setVelocity(-armPivotSpeed);
             } else {
-                armRightPivot.setPower(0);
-                armLeftPivot.setPower(0);
+//                armRightPivot.setPower(0);
+//                armLeftPivot.setPower(0);
+                armRightPivot.setTargetPosition(armRightPivot.getCurrentPosition());
+                armLeftPivot.setTargetPosition(armLeftPivot.getCurrentPosition());
+                armRightPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armLeftPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armRightPivot.setPower(1);
+                armLeftPivot.setPower(1);
             }
 
             // Control active intake
