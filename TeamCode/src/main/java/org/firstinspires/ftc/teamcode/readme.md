@@ -1,13 +1,36 @@
-# In Theory 2024-24 TeamCode
+# In Theory 2024-25 TeamCode
 This is the *master* branch.
 
-OpModes:
-Requirements | Name | Purpose | Notes
-__Encoder__ | EncoderTeleTest23 | Test program for motors with encoders | Updated for our new "Standard23-24" config file
+## Currently Commissioned Stuff
+Competition OpModes:
+Type | Name | Purpose | Notes
+Auto | ParkFromFar | Park from far away from the observation zone
+Auto | ParkFromNear | Park from near to the observation zone
+Auto | HighBasket | Place as many pieces as possible in the high basket
+Tele | CompetitionOpMode | Built on last year's Manipulator OpMode, but with a number of changes and improvements for this year's game
 
-Libraries, of sorts:
+Teletest - standalone test OpModes:
+Requirements | Name | Purpose | Notes
+__Encoder__ | EncoderTeleTest23 | Test program for motors with encoders | Now with safety features and motor auto-detection
+IMUinterfacePrinter | Prints IMU readings to telemetry
+IMUsubsystemPrinter | Prints readings from the IMU subsystem to telemetry
+PowerTeleTest | Finely control the power of a motor | No motor auto-detection. Set which motor you're using in Android Studio first.
+RobotATeleTest / RobotBTeleTest | Kinda' broken
+__Servo__ | ServoTeleTestOld | Basic test of a single (non-CR) servo | "old", but there is no "new" alternative yet - wait for ServoTeleTest24, coming soon!
+
+Libraries:
 Name | Purpose | Notes
-controls | A package which provides a controller interface. Implementations can be swapped to change controls without changing OpModes.
+autoSwitch | Cycle through a list of available autonomous sequences, select one, and run it.
+controls   | Legacy configurable control schemes
+gamepad2   | Modern configurable control schemes (recommended for new projects)
+roadrunner | http://learnroadrunner.com
+robot      | Provides the Robot24 class, RobotRoundhouse which supplies parameters for it, and subsystem interfaces and implementations
+
+Processors:
+Name | Purpose | Notes
+AccelLimiter | A suite of tools for controlling acceleration in one dimension | currently has one or two major mystery bugs, see task board
+IMUCorrector | Use the IMU to actively correct for heading errors when you're trying to move straight | probably doesn't have critical bugs anymore
+TunablePID | A PID algorithm whose constants can be changed on the fly. Useful for tuning. | built from the Game Manual 0 implementation at https://gm0.org/en/latest/docs/software/concepts/control-loops.html#pid-pseudocode
 
 #### Original ReadMe stuff is below.
 ----

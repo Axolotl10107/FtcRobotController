@@ -50,17 +50,10 @@ public class RobotRoundhouse {
         dc.GEAR_RATIO = 1;
         dc.TRACK_WIDTH = 15.9;
 
-//        dc.kV = 1.0 / dc.rpmToVelocity(dc.MAX_RPM);
-//        dc.kA = 0;
-//        dc.kStatic = 0;
-
         dc.kV = .017;
         dc.kA = .002;
         dc.kStatic = 0.0001;
 
-        // TODO: Tune these!
-//        dc.MAX_VEL = 50;
-//        dc.MAX_ACCEL = 50;
         dc.MAX_ANG_VEL = 3;
         dc.MAX_ANG_ACCEL = 3;
 
@@ -70,9 +63,6 @@ public class RobotRoundhouse {
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
                 dc,
                 new AccelLimiter(2.0, 0.1));
-
-//        driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
-//        driveParams.HEADING_PID = new PIDCoefficients(8, 0, .1);
 
         driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
         driveParams.HEADING_PID = new PIDCoefficients(4, 0, 0);
@@ -101,46 +91,7 @@ public class RobotRoundhouse {
 
         driveParams.stopwatch = new ElapsedTime();
 
-//        PixelArm.Parameters armParams = new PixelArm.Parameters(true);
         DoubleArm.Parameters armParams = new DoubleArm.Parameters(false);
-
-//        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "armPivot");
-//        armParams.pivotMotor.setDirection(REVERSE);
-//        armParams.pivotMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        armParams.pivotMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//        armParams.pivotAccelLimiter = new AccelLimiter(12000, 8000); // TODO: not tuned!!
-//        armParams.pivotTicksPerDegree = 10; // TODO: not measured!!
-//
-//        armParams.pivotUpperLimit = 3800; // correct value is 3800
-//        armParams.pivotLowerLimit = 0;
-//        armParams.pivotUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
-//        armParams.pivotLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
-//
-//        armParams.maxPivotRecoveryPower = 0.2;
-//        armParams.maxPivotVelocity = 1200; // correct value is 2400
-//
-//
-////        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "armExtend");
-//        armParams.elevatorMotor.setDirection(REVERSE);
-//        armParams.elevatorMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        armParams.elevatorMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//
-//        armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-//        armParams.elevatorTicksPerMillimeter = 10; // TODO: not measured!!
-//
-//        armParams.elevatorUpperLimit = 2500;
-//        armParams.elevatorLowerLimit = 0;
-//        armParams.elevatorUpperLimitSwitch = new DigitalDeviceBlank(); // not installed
-//        armParams.elevatorLowerLimitSwitch = new DigitalDeviceBlank(); // not installed
-//
-//        armParams.maxElevatorRecoveryPower = 0.2;
-//        armParams.maxElevatorVelocity = 800; // TODO: not measured!!
-//
-//        armParams.stopwatch = new ElapsedTime();
-
-//        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(true, 1, 0);
-//        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"planeservo");
 
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
@@ -162,11 +113,12 @@ public class RobotRoundhouse {
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
-        dc.LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-        dc.USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+        dc.LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        dc.USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
                 dc, // most of the defaults in DriveConstants should work here
                 new AccelLimiter(2.0, 0.1));
+        // TODO: make RRMecanumDrive use velocity instead of power
         driveParams.useAccelLimiter = true;
 
         dc.kV = .017;
@@ -192,7 +144,6 @@ public class RobotRoundhouse {
 
         // the rest of the defaults in RRMecanumDrive.Parameters should work here
 
-//        PixelArm.Parameters armParams = new PixelArm.Parameters(false);
         DoubleArm.Parameters armParams = new DoubleArm.Parameters(true);
 
         armParams.stopwatch = new ElapsedTime();
@@ -209,6 +160,8 @@ public class RobotRoundhouse {
         armParams.pivotMotorLeft.setDirection(REVERSE);
         armParams.pivotMotorRight.setDirection(FORWARD);
 
+        // Due to a bug in AccelLimiter (I think?), these values should be 10 times higher than
+        // what you actually want.
         armParams.pivotAccelLimiter = new AccelLimiter(4000, 4000);
         armParams.elevatorAccelLimiter = new AccelLimiter(4000, 4000);
 
@@ -217,12 +170,11 @@ public class RobotRoundhouse {
 
         armParams.maxPivotVelocity = 400;
         armParams.maxElevatorVelocity = 400;
-//        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
+        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, extendedParams);
         params.tpr = 537.7;
         params.wheelDiameter = 0.096; // in meters
         params.maxForwardSpeed = 1.50; // in meters per second

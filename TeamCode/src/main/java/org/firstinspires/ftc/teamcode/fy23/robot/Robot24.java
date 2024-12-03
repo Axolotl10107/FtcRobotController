@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
  * create a robot and use the powerful and convenient methods provided by its subsystems. */
 public class Robot24 {
 
+    /** Extra stuff that external stuff (like IMUCorrector) uses*/
     public static class ExtendedParameters {
         /** used by IMUCorrector */
         public PIDConsts hdgCorrectionPIDConsts;
@@ -27,8 +28,6 @@ public class Robot24 {
             this.clawParameters = clawParameters;
             this.imuParameters = imuParameters;
             this.driveParameters = driveParameters;
-//            this.pixelArmParameters = pixelArmParameters;
-//            this.planeLauncherParameters = planeLauncherParameters;
             this.doubleArmParameters = doubleArmParameters;
             this.extendedParameters = extendedParameters;
         }
@@ -45,8 +44,6 @@ public class Robot24 {
         final Claw.Parameters clawParameters;
         final FriendlyIMU.Parameters imuParameters;
         final RRMecanumDrive.Parameters driveParameters;
-//        final PixelArm.Parameters pixelArmParameters;
-//        final PlaneLauncher.Parameters planeLauncherParameters;
         final DoubleArm.Parameters doubleArmParameters;
         final ExtendedParameters extendedParameters;
     }
@@ -64,8 +61,6 @@ public class Robot24 {
     public final Claw claw;
     public final FriendlyIMU imu;
     public final RRMecanumDrive drive;
-//    public final PixelArm arm;
-//    public final PlaneLauncher planeLauncher;
     public final DoubleArm arm;
 
 
@@ -73,7 +68,7 @@ public class Robot24 {
 
     /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
      * a normal ElapsedTime. */
-    public Robot24(Parameters parameters, HardwareMap hardwareMap, ElapsedTime stopwatch) {
+    public Robot24(Parameters parameters, HardwareMap hardwareMap) {
         TPR = parameters.tpr;
         wheelDiameter = parameters.wheelDiameter;
         wheelCircumference = Math.PI * wheelDiameter;
@@ -92,8 +87,6 @@ public class Robot24 {
         parameters.driveParameters.imu = imu; // RRMecanumDrive needs an IMU, so we pass in the one we want here
         parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
         drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : (RRMecanumDrive) new MecanumDriveBlank();
-//        arm = (parameters.pixelArmParameters.present) ? new PixelArmImpl(parameters.pixelArmParameters) : new PixelArmBlank();
-//        planeLauncher = (parameters.planeLauncherParameters.present) ? new PlaneLauncherImpl(parameters.planeLauncherParameters) : new PlaneLauncherBlank();
         arm = (parameters.doubleArmParameters.present) ? new DoubleArmImpl(parameters.doubleArmParameters) : new DoubleArmBlank();
         // Lynx stuff found in RR's SampleMecanumDrive
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -102,17 +95,12 @@ public class Robot24 {
         }
     }
 
-    public Robot24(Parameters parameters, HardwareMap hardwareMap) {
-        this(parameters, hardwareMap, new ElapsedTime());
-    }
-
     /** Call this method in the loop portion of your OpMode. */
     public void update() {
         claw.update();
         imu.update();
         drive.update();
         arm.update();
-//        planeLauncher.update();
     }
 
 }

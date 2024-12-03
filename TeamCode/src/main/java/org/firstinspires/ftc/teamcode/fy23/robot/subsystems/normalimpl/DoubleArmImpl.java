@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DigitalDevice;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
 
-/** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm} featuring
+/** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DoubleArm} featuring
  * acceleration control and hard and soft safety limits.
  * Note that this now uses velocity, not power, under the hood, so motor behavior may be just a bit different (and
  * hopefully better) than what you're used to.
@@ -215,19 +215,15 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
     }
 
     private void setPivotVelSDK() {
-        double limitedLeft = pivotAccelLimiter.requestVel(
+        double limited = pivotAccelLimiter.requestVel(
                 setPivotVelocity,                               // newVel
-                pivotMotorLeft.getVelocity(),                       // currentVel
+                getPivotVelocity(),                             // currentVel
                 stopwatch.seconds()                             // currentTime
         );
-        pivotMotorLeft.setVelocity(limitedLeft);
-
-        double limitedRight = pivotAccelLimiter.requestVel(
-                setPivotVelocity,                               // newVel
-                pivotMotorRight.getVelocity(),                       // currentVel
-                stopwatch.seconds()                             // currentTime
-        );
-        pivotMotorRight.setVelocity(limitedRight);
+        // If we limited them separately, they might de-synchronize more easily.
+        // TODO: make DualMotor!
+        pivotMotorLeft.setVelocity(limited);
+        pivotMotorRight.setVelocity(limited);
 //        System.out.println(pivotMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
     }
 
@@ -248,6 +244,9 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
         pivotMotorRight.setPower( pivotMotorRight.getPower() + deltaPowerRight );
 
         // TODO re-add telemetry
+        // When re-enabling, make sure something (right now it needs to be your OpMode) populates
+        // TelemetrySingleton with the telemetry instance the SDK gives you.
+        // it would be TelemetrySingleton.setInstance(telemetry);
 //        System.out.println(String.format("velError: {%f}  |  limitedVelError: {%f}", velError, limitedVelError));
 //        System.out.println(String.format("deltaPower: {%f}  |  currentPower: {%f}", deltaPower, pivotMotor.getPower()));
 //        System.out.println("-----------------------------------------------");
@@ -286,6 +285,7 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
             } else {
 
                 // stopping distances
+                // Re-enabling these will probably break stuff. Only do it if you have time to burn.
 
 //                double stoppingDist = pivotAccelLimiter.simpleStoppingDistance(getPivotVelocity() * 10);
 //                TelemetrySingleton.getInstance().addData("pivotStoppingDist", stoppingDist);
@@ -359,19 +359,14 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
     }
 
     private void setElevatorVelSDK() {
-        double limitedLeft = elevatorAccelLimiter.requestVel(
+        double limited = elevatorAccelLimiter.requestVel(
                 setElevatorVelocity,                               // newVel
-                (int) Math.round(elevatorMotorLeft.getVelocity()),     // currentVel
+                getElevatorVelocity(),                             // currentVel
                 stopwatch.seconds()                                // currentTime
         );
-        elevatorMotorLeft.setVelocity(limitedLeft);
-
-        double limitedRight = elevatorAccelLimiter.requestVel(
-                setElevatorVelocity,                               // newVel
-                (int) Math.round(elevatorMotorRight.getVelocity()),     // currentVel
-                stopwatch.seconds()                                // currentTime
-        );
-        elevatorMotorRight.setVelocity(limitedRight);
+        // If we limited them separately, they might de-synchronize more easily.
+        elevatorMotorLeft.setVelocity(limited);
+        elevatorMotorRight.setVelocity(limited);
     }
 
     private void setElevatorVelTunablePID() {
@@ -403,6 +398,7 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
             } else {
 
                 // stopping distances
+                // Re-enabling these will probably break stuff. Only do it if you have time to burn.
 
 //                double stoppingDist = elevatorAccelLimiter.stoppingDistance(getElevatorPower(), 1000);
 //                if (currentPos > (elevatorUpperLimit - stoppingDist)) {

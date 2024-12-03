@@ -72,7 +72,7 @@ public interface DoubleArm {
          * so a large value here will cause jolts. */
         public double maxElevatorRecoveryPower = 0;
         /** The maximum velocity of the elevator motor in ticks per second. */
-        public int maxElevatorVelocity;
+        public int maxElevatorVelocity = 0;
         /** UnitTests can pass in a MockElapsedTime. */
         public ElapsedTime stopwatch = new ElapsedTime();
     }

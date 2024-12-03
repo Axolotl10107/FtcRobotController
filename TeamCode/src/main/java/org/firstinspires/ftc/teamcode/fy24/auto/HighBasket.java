@@ -116,7 +116,8 @@ public class HighBasket extends LinearOpMode {
                         telemetry.update();
                     }
                 })
-                .splineToConstantHeading(new Vector2d(0, 0), 0)
+                .turn(Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(0, 0))
                 .build()
         );
 
