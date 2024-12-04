@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
@@ -17,7 +17,7 @@ public class FroschAutoTest extends LinearOpMode {
 
     Robot24 robot;
     IMUCorrector imuCorrector;
-    FieldyTeleOpScheme controlScheme;
+    FieldyTeleOpScheme23 controlScheme;
     double maxDrivePower = 1.0;
     double maxDrivePowerStep = 0.1;
 

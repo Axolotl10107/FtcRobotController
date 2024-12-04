@@ -2,13 +2,8 @@ package org.firstinspires.ftc.teamcode.fy23.gamepad2.specific.imudrivetuner;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes and providing

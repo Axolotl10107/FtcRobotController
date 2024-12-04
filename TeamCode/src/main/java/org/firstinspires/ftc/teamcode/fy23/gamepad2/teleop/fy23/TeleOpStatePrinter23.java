@@ -1,23 +1,23 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
+package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /** A testing OpMode that prints TeleOpState to telemetry. */
 @TeleOp
-public class TeleOpStatePrinter extends OpMode {
+public class TeleOpStatePrinter23 extends OpMode {
 
-    IndyTeleOpScheme scheme;
+    IndyTeleOpScheme23 scheme;
     private double driveSpeed;
 
     @Override
     public void init() {
-        scheme = new IndyTeleOpScheme(gamepad1, gamepad2);
+        scheme = new IndyTeleOpScheme23(gamepad1, gamepad2);
     }
 
     @Override
     public void loop() {
-        TeleOpState state = scheme.getState();
+        TeleOpState23 state = scheme.getState();
         telemetry.addData("Drive", state.getDts().drive);
         telemetry.addData("Turn", state.getDts().turn);
         telemetry.addData("Strafe", state.getDts().strafe);

@@ -1,23 +1,22 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
+package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
-/** A controller scheme for field-oriented driving. Matches the "FieldyGamepadLS" diagram. */
-public class FieldyTeleOpScheme implements TeleOpScheme {
+/** A controller scheme for driving with independent drive, turn, and strafe axes. Matches the "Dual23 r2" diagram. */
+public class IndyTeleOpScheme23 implements TeleOpScheme23 {
 
     private Gamepad driver;
     private Gamepad manipulator;
 
-    private TeleOpState state;
+    private TeleOpState23 state;
 
     private Button clawOpenButton;
     private Button clawCloseButton;
@@ -33,14 +32,11 @@ public class FieldyTeleOpScheme implements TeleOpScheme {
 
     private boolean armMovementSet = false;
 
-    private FriendlyIMU imu;
-
-    public FieldyTeleOpScheme(Gamepad driver, Gamepad manipulator, FriendlyIMU imu) {
+    public IndyTeleOpScheme23(Gamepad driver, Gamepad manipulator) {
         this.driver = driver;
         this.manipulator = manipulator;
-        this.imu = imu;
 
-        state = new TeleOpState();
+        state = new TeleOpState23();
 
         clawOpenButton = new TriggerButton( () -> manipulator.x );
         clawCloseButton = new TriggerButton( () -> manipulator.a );
@@ -54,21 +50,21 @@ public class FieldyTeleOpScheme implements TeleOpScheme {
         armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
     }
 
-    private void updateMovementState(double heading) {
+    private void updateMovementState() {
         double drive = driver.right_trigger - driver.left_trigger;
         double turn = -driver.left_stick_x; // positive turn is counterclockwise
         double strafe = driver.right_stick_x;
-        state.setDts(new DTS(drive, turn, strafe).rotate(heading));
+        state.setDts(new DTS(drive, turn, strafe));
     }
 
     private void updateArmFastMovementState() {
-//        if (!armMovementSet) {
+        if (!armMovementSet) {
             // if all three run, then the last one is the only one that sets it - the other two have no effect
             state.setArmMovement(-manipulator.left_stick_y); // Y-Axis is negated (nobody knows why, don't ask)
-//        }
-//        if (Math.abs(state.getArmMovement()) > 0.05) { // if we set something meaningful...
-//            armMovementSet = true;
-//        }
+        }
+        if (Math.abs(state.getArmMovement()) > 0.05) { // if we set something meaningful...
+            armMovementSet = true;
+        }
     }
 
     private void updateArmMediumMovementState() {
@@ -127,11 +123,11 @@ public class FieldyTeleOpScheme implements TeleOpScheme {
     }
 
     @Override
-    public TeleOpState getState() {
+    public TeleOpState23 getState() {
         armMovementSet = false;
-        updateMovementState(imu.yaw(AngleUnit.RADIANS));
-//        updateArmMediumMovementState();
-//        updateArmSlowMovementState();
+        updateMovementState();
+        updateArmMediumMovementState();
+        updateArmSlowMovementState();
         updateArmFastMovementState();
         updateElevatorMovementState();
         updateClawState();
@@ -142,4 +138,5 @@ public class FieldyTeleOpScheme implements TeleOpScheme {
 
         return state;
     }
+
 }

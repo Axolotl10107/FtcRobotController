@@ -151,8 +151,8 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
 
     @Override
     public void setElevatorVelocity(int velocity) {
-        elevatorMotorLeft.setVelocity(velocity);
-        elevatorMotorRight.setVelocity(velocity);
+        elevatorMotorLeft.setVelocity(Range.clip(velocity, -maxElevatorVelocity, maxElevatorVelocity));
+        elevatorMotorRight.setVelocity(Range.clip(velocity, -maxElevatorVelocity, maxElevatorVelocity));
     }
 
     @Override

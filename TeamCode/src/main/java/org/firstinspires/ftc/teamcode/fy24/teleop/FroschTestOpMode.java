@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpScheme;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.TeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.TeleOpState23;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
@@ -18,8 +18,8 @@ public class FroschTestOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Robot24 robot = new Robot24(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
-        TeleOpState controlsState;
-        TeleOpScheme controlsScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
+        TeleOpState23 controlsState;
+        TeleOpScheme23 controlsScheme = new FieldyTeleOpScheme23(gamepad1, gamepad2, robot.imu);
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         IMUCorrector imuCorrector = new IMUCorrector(params);

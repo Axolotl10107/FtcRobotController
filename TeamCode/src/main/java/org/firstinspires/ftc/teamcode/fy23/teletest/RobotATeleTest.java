@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.fy23.teletest;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.FieldyTeleOpScheme;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.TeleOpState;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.TeleOpState23;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
@@ -16,7 +16,7 @@ public class RobotATeleTest extends OpMode {
 
     Robot24 robot;
     IMUCorrector imuCorrector;
-    FieldyTeleOpScheme controlScheme;
+    FieldyTeleOpScheme23 controlScheme;
     double maxDrivePower = 1.0;
     double maxDrivePowerStep = 0.1;
 
@@ -29,7 +29,7 @@ public class RobotATeleTest extends OpMode {
         params.maxCorrectionPower = 0.1;
         params.turnPowerThreshold = 0.05;
         imuCorrector = new IMUCorrector(params);
-        controlScheme = new FieldyTeleOpScheme(gamepad1, gamepad2, robot.imu);
+        controlScheme = new FieldyTeleOpScheme23(gamepad1, gamepad2, robot.imu);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class RobotATeleTest extends OpMode {
     @Override
     public void loop() {
         double currentHeading = robot.imu.yaw();
-        TeleOpState controlState = controlScheme.getState();
+        TeleOpState23 controlState = controlScheme.getState();
 
         // MecanumDrive
         DTS correctedDTS = imuCorrector.correctDTS(controlState.getDts());

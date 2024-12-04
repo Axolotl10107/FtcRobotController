@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop;
+package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
@@ -15,12 +15,12 @@ import org.firstinspires.ftc.teamcode.fy23.units.DTS;
  * one does not return a TeleOpState to your OpMode, opting to call subsystem methods directly. The OpMode needs only to
  * call the update() method each loop. This is a proof-of-concept, and the non-direct schemes are recommended for better
  * readibility and configurability of the OpMode. */
-public class IndyDirectTeleOpScheme {
+public class IndyDirectTeleOpScheme23 {
 
     private Gamepad driver;
     private Gamepad manipulator;
 
-    private TeleOpState state;
+    private TeleOpState23 state;
 
     private Button clawOpenButton;
     private Button clawCloseButton;
@@ -37,11 +37,11 @@ public class IndyDirectTeleOpScheme {
     private boolean armMovementSet = false;
     private double driveSpeed;
 
-    public IndyDirectTeleOpScheme(Gamepad driver, Gamepad manipulator) {
+    public IndyDirectTeleOpScheme23(Gamepad driver, Gamepad manipulator) {
         this.driver = driver;
         this.manipulator = manipulator;
 
-        state = new TeleOpState();
+        state = new TeleOpState23();
 
         clawOpenButton = new TriggerButton( () -> manipulator.x );
         clawCloseButton = new TriggerButton( () -> manipulator.a );
