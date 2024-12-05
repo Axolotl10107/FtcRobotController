@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 
+import kotlin.NotImplementedError;
+
 @Disabled
 @TeleOp
 public class RampTwoTest extends OpMode {
@@ -22,12 +24,16 @@ public class RampTwoTest extends OpMode {
 
     boolean flag = false;
 
+    // Please use RoadRunner instead!
     double ticksToCM(double ticks) {
-        return (ticks / robot.TPR) * robot.wheelCircumference;
+//        return (ticks / robot.TPR) * robot.wheelCircumference;
+        throw new NotImplementedError();
     }
 
+    // Please use RoadRunner instead!
     double cmToTicks(double cm) {
-        return (cm * robot.TPR) / robot.wheelCircumference;
+//        return (cm * robot.TPR) / robot.wheelCircumference;
+        throw new NotImplementedError();
     }
 
     private int getAvgEncoderPos() {

@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
+import kotlin.NotImplementedError;
+
 @Autonomous(name="IMU AutoCodeFarSide__BLUE", group="AutoCodeFarSide__RED")
 public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
 
@@ -30,12 +32,16 @@ public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
 
     ElapsedTime stopwatch;
 
+    // Please use RoadRunner instead!
     double ticksToCM(double ticks) {
-        return (ticks / robot.TPR) * robot.wheelCircumference;
+//        return (ticks / robot.TPR) * robot.wheelCircumference;
+        throw new NotImplementedError();
     }
 
+    // Please use RoadRunner instead!
     double cmToTicks(double cm) {
-        return (cm * robot.TPR) / robot.wheelCircumference;
+//        return (cm * robot.TPR) / robot.wheelCircumference;
+        throw new NotImplementedError();
     }
 
     private int getAvgEncoderPos() {

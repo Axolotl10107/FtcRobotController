@@ -38,6 +38,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import kotlin.NotImplementedError;
+
 // Incomplete. Theoretically gets the position and color of the team element and moves accordingly.
 @Autonomous
 public class VisionAutonomous extends LinearOpMode
@@ -73,12 +75,16 @@ public class VisionAutonomous extends LinearOpMode
         }
     }
 
+    // Please use RoadRunner instead!
     double ticksToCM(double ticks) {
-        return (ticks / robot.TPR) * robot.wheelDiameter;
+//        return (ticks / robot.TPR) * robot.wheelDiameter;
+        throw new NotImplementedError();
     }
 
+    // Please use RoadRunner instead!
     double cmToTicks(double cm) {
-        return (cm * robot.TPR) / robot.wheelDiameter;
+//        return (cm * robot.TPR) / robot.wheelDiameter;
+        throw new NotImplementedError();
     }
 
     public void realOpMode()

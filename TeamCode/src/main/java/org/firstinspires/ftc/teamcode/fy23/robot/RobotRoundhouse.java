@@ -33,8 +33,10 @@ public class RobotRoundhouse {
 
     public static Robot24.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
+
+        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
@@ -96,10 +98,10 @@ public class RobotRoundhouse {
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
-        params.tpr = 537.7; // ticks per rotation
-        params.wheelDiameter = 0.096; // in meters
-        params.maxForwardSpeed = 1.50; // in meters per second
+        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
+//        params.tpr = 537.7; // ticks per rotation
+//        params.wheelDiameter = 0.096; // in meters
+//        params.maxForwardSpeed = 1.50; // in meters per second
 
         return params;
     }
@@ -108,7 +110,8 @@ public class RobotRoundhouse {
 
     public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
@@ -174,10 +177,10 @@ public class RobotRoundhouse {
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, imuParams, driveParams, armParams, extendedParams);
-        params.tpr = 537.7;
-        params.wheelDiameter = 0.096; // in meters
-        params.maxForwardSpeed = 1.50; // in meters per second
+        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+//        params.tpr = 537.7;
+//        params.wheelDiameter = 0.096; // in meters
+//        params.maxForwardSpeed = 1.50; // in meters per second
 
         return params;
     }

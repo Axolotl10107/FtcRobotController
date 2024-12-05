@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RotaryIntake;
 

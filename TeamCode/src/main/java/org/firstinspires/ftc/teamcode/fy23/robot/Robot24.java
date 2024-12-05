@@ -24,41 +24,44 @@ public class Robot24 {
     }
 
     public static class Parameters {
-        public Parameters(Claw.Parameters clawParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, DoubleArm.Parameters doubleArmParameters,/*PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters,*/ ExtendedParameters extendedParameters) {
+        public Parameters(Claw.Parameters clawParameters, RotaryIntake.Parameters intakeParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, DoubleArm.Parameters doubleArmParameters,/*PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters,*/ ExtendedParameters extendedParameters) {
             this.clawParameters = clawParameters;
+            this.intakeParameters = intakeParameters;
             this.imuParameters = imuParameters;
             this.driveParameters = driveParameters;
             this.doubleArmParameters = doubleArmParameters;
             this.extendedParameters = extendedParameters;
         }
 
-        @Deprecated
-        double tpr; /** ticks per rotation */
-        @Deprecated
-        double wheelDiameter;
-        @Deprecated
-        double maxForwardSpeed;
+//        @Deprecated
+//        double tpr; /** ticks per rotation */
+//        @Deprecated
+//        double wheelDiameter;
+//        @Deprecated
+//        double maxForwardSpeed;
 //        double driveToStrafeDistCV; // conversion factor from driving distance to equivalent
         // strafing distance, in encoder ticks
 
         final Claw.Parameters clawParameters;
+        final RotaryIntake.Parameters intakeParameters;
         final FriendlyIMU.Parameters imuParameters;
         final RRMecanumDrive.Parameters driveParameters;
         final DoubleArm.Parameters doubleArmParameters;
         final ExtendedParameters extendedParameters;
     }
 
-    @Deprecated
-    public final double TPR;
-    @Deprecated
-    public final double wheelDiameter;
-    @Deprecated
-    public final double wheelCircumference;
-    @Deprecated
-    public final double maxForwardSpeed;
+//    @Deprecated
+//    public final double TPR;
+//    @Deprecated
+//    public final double wheelDiameter;
+//    @Deprecated
+//    public final double wheelCircumference;
+//    @Deprecated
+//    public final double maxForwardSpeed;
     public final ExtendedParameters extendedParameters;
 
     public final Claw claw;
+    public final RotaryIntake intake;
     public final FriendlyIMU imu;
     public final RRMecanumDrive drive;
     public final DoubleArm arm;
@@ -69,10 +72,10 @@ public class Robot24 {
     /** Pass in an ElapsedTime to be used by subsystems. Useful for dependency injection. The other constructor creates
      * a normal ElapsedTime. */
     public Robot24(Parameters parameters, HardwareMap hardwareMap) {
-        TPR = parameters.tpr;
-        wheelDiameter = parameters.wheelDiameter;
-        wheelCircumference = Math.PI * wheelDiameter;
-        maxForwardSpeed = parameters.maxForwardSpeed;
+//        TPR = parameters.tpr;
+//        wheelDiameter = parameters.wheelDiameter;
+//        wheelCircumference = Math.PI * wheelDiameter;
+//        maxForwardSpeed = parameters.maxForwardSpeed;
         extendedParameters = parameters.extendedParameters;
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
@@ -83,6 +86,7 @@ public class Robot24 {
             claw = new ClawBlank();
         }
         // above block and below statements work the same way
+        intake = (parameters.intakeParameters.present) ? new RotaryIntakeImpl(parameters.intakeParameters): new RotaryIntakeBlank();
         imu = (parameters.imuParameters.present) ? new FriendlyIMUImpl(parameters.imuParameters, hardwareMap) : new FriendlyIMUBlank();
         parameters.driveParameters.imu = imu; // RRMecanumDrive needs an IMU, so we pass in the one we want here
         parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
@@ -98,6 +102,7 @@ public class Robot24 {
     /** Call this method in the loop portion of your OpMode. */
     public void update() {
         claw.update();
+        intake.update();
         imu.update();
         drive.update();
         arm.update();

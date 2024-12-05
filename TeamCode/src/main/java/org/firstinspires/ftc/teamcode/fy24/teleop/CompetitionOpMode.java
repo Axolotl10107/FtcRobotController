@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
 
 
-@TeleOp(name="In Theory 24-25 Competition TeleOp")
+@TeleOp(name="In Theory 24-25 Competition TeleOp", group="TeleOp24")
 public class CompetitionOpMode extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
