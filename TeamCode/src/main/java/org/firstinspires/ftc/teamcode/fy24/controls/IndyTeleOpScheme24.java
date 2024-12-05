@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy24;
+package org.firstinspires.ftc.teamcode.fy24.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ButtonAsAxis;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ExponentialAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.LinearAxis;
+import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.MergedAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.TwoButtonsAsAxis;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
@@ -28,9 +29,6 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
 
 
 
-    private Gamepad driver;
-    private Gamepad manipulator;
-
     private TeleOpState24 state;
 
     private Button clawOpenButton;
@@ -47,17 +45,20 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
     private Axis armMedium;
     private Axis armSlow;
 
-    private Axis armSlowUp;
-    private Axis armSlowDown;
-    private Axis armMediumUp;
-    private Axis armMediumDown;
+    private Axis elevatorIn;
+    private Axis elevatorOut;
+    private Axis elevator;
+
+    private Axis driveForward;
+    private Axis driveBackward;
+    private Axis drive;
+
+    private Axis turn;
+    private Axis strafe;
 
     private boolean armMovementSet = false;
 
     public IndyTeleOpScheme24(Gamepad driver, Gamepad manipulator) {
-        this.driver = driver;
-        this.manipulator = manipulator;
-
         state = new TeleOpState24();
 
         // claw close is analogous to intake in
@@ -71,21 +72,23 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         squareUpButton = new TriggerButton( () -> driver.left_bumper );
         brakeButton = new TriggerButton( () -> driver.x );
 
-        armFast = new LinearAxis( () -> manipulator.left_stick_y, -1);
-        armMedium = new TwoButtonsAsAxis( () -> manipulator.dpad_left, () -> manipulator.dpad_right);
-        armSlow = new TwoButtonsAsAxis( () -> manipulator.dpad_down, () -> manipulator.dpad_up );
+        armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
+        armMedium = new TwoButtonsAsAxis( () -> manipulator.dpad_left, () -> manipulator.dpad_right, armMediumSpeed);
+        armSlow = new TwoButtonsAsAxis( () -> manipulator.dpad_down, () -> manipulator.dpad_up, armSlowSpeed );
 
-        armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
-        armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
-        armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
-        armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
+        elevatorIn = new LinearAxis( () -> manipulator.left_trigger );
+        elevatorOut = new LinearAxis( () -> manipulator.right_trigger );
+        elevator = new MergedAxis( elevatorIn, elevatorOut );
+
+        driveForward = new LinearAxis( () -> driver.right_trigger );
+        driveBackward = new LinearAxis( () -> driver.left_trigger );
+        drive = new MergedAxis( driveBackward, driveForward );
+        turn = new ExponentialAxis( () -> -driver.left_stick_x, 2); // positive turn is counterclockwise
+        strafe = new LinearAxis( () -> driver.right_stick_x);
     }
 
     private void updateMovementState() {
-        double drive = driver.right_trigger - driver.left_trigger;
-        double turn = -driver.left_stick_x; // positive turn is counterclockwise
-        double strafe = driver.right_stick_x;
-        state.setDts( new DTS( drive, turn, strafe ) );
+        state.setDts( new DTS( drive.value(), turn.value(), strafe.value() ) );
     }
 
     private void applyArmSetpoint( double setpoint ) {
@@ -95,20 +98,21 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         }
     }
 
+    // Scaling factor of -1 above will negate the left stick
     private void updateArmFastMovementState() {
-        applyArmSetpoint( -manipulator.left_stick_y );
+        armFast.value();
     }
 
     private void updateArmMediumMovementState() {
-        applyArmSetpoint( ( armMediumUp.value() - armMediumDown.value() ) * armMediumSpeed );
+        applyArmSetpoint( armMedium.value() );
     }
 
     private void updateArmSlowMovementState() {
-        applyArmSetpoint( ( armSlowUp.value() - armSlowDown.value() ) * armSlowSpeed );
+        applyArmSetpoint( armSlow.value() );
     }
 
     private void updateElevatorMovementState() {
-        state.setElevatorMovement( manipulator.right_trigger - manipulator.left_trigger );
+        state.setElevatorMovement( elevator.value() );
     }
 
     private void updateClawState() {
@@ -151,7 +155,8 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
     public TeleOpState24 getState() {
         armMovementSet = false;
         updateMovementState();
-        // if all three run, then the last one is the only one that sets it - the other two have no effect
+
+        // if one runs, don't have the next one just immediately reset the arm power to 0
         updateArmMediumMovementState();
         if (!armMovementSet) {
             updateArmSlowMovementState();
@@ -159,6 +164,7 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         if (!armMovementSet) {
             updateArmFastMovementState();
         }
+
         updateElevatorMovementState();
         updateClawState();
         updateIntakeState();

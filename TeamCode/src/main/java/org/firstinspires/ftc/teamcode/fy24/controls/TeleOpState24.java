@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy24;
+package org.firstinspires.ftc.teamcode.fy24.controls;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RotaryIntake;

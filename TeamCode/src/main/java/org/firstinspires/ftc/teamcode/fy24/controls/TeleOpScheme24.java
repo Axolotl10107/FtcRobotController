@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy24;
+package org.firstinspires.ftc.teamcode.fy24.controls;
 
 /** With this interface, you only need to change one thing to change control schemes: the constructor.
  * Also, anything special about a particular scheme (i.e. fieldy schemes needing the current heading) is passed into the
