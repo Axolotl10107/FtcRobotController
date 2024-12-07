@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
 import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
@@ -22,13 +23,17 @@ public class GenericRobotTeleOp extends OpMode {
     @Override
     public void init() {
         robot = new Robot24( RobotRoundhouse.getParamsAuto( hardwareMap ), hardwareMap );
+
         IMUCorrector.Parameters params = new IMUCorrector.Parameters( robot.imu, new TunablePID( robot.extendedParameters.hdgCorrectionPIDConsts ) );
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;
         params.maxCorrectionPower = 0.1;
         params.turnPowerThreshold = 0.05;
         imuCorrector = new IMUCorrector( params );
+
         controlScheme = new IndyTeleOpScheme24( gamepad1, gamepad2 );
+
+        TelemetrySingleton.setInstance(telemetry);
     }
 
     @Override
@@ -64,10 +69,5 @@ public class GenericRobotTeleOp extends OpMode {
         // telemetry
         telemetry.addData( "Max. Drive Power", controlState.getMaxDriveSpeed() );
         telemetry.addData( "Current Heading", currentHeading );
-    }
-
-    @Override
-    public void stop() {
-
     }
 }

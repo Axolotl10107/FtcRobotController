@@ -169,18 +169,20 @@ public class RobotRoundhouse {
         armParams.elevatorAccelLimiter = new AccelLimiter(4000, 4000);
 
         armParams.pivotUpperLimit = 1000;
-        armParams.elevatorUpperLimit = 1000;
+        armParams.elevatorUpperLimit = 42;
+        armParams.elevatorLimitBuffer = 2;
+        armParams.elevatorOffsetLength = 3.5;
 
         armParams.maxPivotVelocity = 400;
         armParams.maxElevatorVelocity = 400;
+
+        armParams.pivotTicksPerDegree = 32.06;
+        armParams.elevatorTicksPerInch = 157.86;
 
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
         Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
-//        params.tpr = 537.7;
-//        params.wheelDiameter = 0.096; // in meters
-//        params.maxForwardSpeed = 1.50; // in meters per second
 
         return params;
     }

@@ -139,11 +139,11 @@ public class CompetitionOpMode extends LinearOpMode {
             armPos = (((armLeftExtend.getCurrentPosition() + armRightExtend.getCurrentPosition()) / 2) / ticksPerInch) + 17.5;
             pivotPos = Math.abs(((armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2) / ticksPerDegree);
 
-            if (gamepad1.start && driveClipDeb.milliseconds() > 300) {
+            if (gamepad1.start && driveClip < 1 && driveClipDeb.milliseconds() > 300) {
                 driveClip += 0.1;
                 driveClipDeb.reset();
             }
-            if (gamepad1.back && driveClipDeb.milliseconds() > 300) {
+            if (gamepad1.back && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
                 driveClip -= 0.1;
                 driveClipDeb.reset();
             }
@@ -151,10 +151,12 @@ public class CompetitionOpMode extends LinearOpMode {
 
             // Change speed
 
-            if (controls.driveSpeedUp() != 0 && driveSpeed < 1) {
-                driveSpeed += 0.05;
-            } else if (controls.driveSpeedDown() != 0 && driveSpeed > 0.25) {
-                driveSpeed -= 0.05;
+            if (controls.driveSpeedUp() != 0 && driveClip < 1 && driveClipDeb.milliseconds() > 300) {
+                driveClip += 0.05;
+                driveClipDeb.reset();
+            } else if (controls.driveSpeedDown() != 0 && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
+                driveClip -= 0.05;
+                driveClipDeb.reset();
             }
 
             // Brake
@@ -188,10 +190,10 @@ public class CompetitionOpMode extends LinearOpMode {
                 rightFront.setMotorEnable();
                 leftBack.setMotorEnable();
                 rightBack.setMotorEnable();
-                leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip * driveSpeed);
-                rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip * driveSpeed);
-                leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip * driveSpeed);
-                rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip * driveSpeed);
+                leftFront.setPower((controls.forwardMovement() + controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+                rightFront.setPower((controls.forwardMovement() - controls.strafeMovement() - controls.rotateMovement()) * driveClip);
+                leftBack.setPower((controls.forwardMovement() - controls.strafeMovement() + controls.rotateMovement()) * driveClip);
+                rightBack.setPower((controls.forwardMovement() + controls.strafeMovement() - controls.rotateMovement()) * driveClip);
 
             }
             // Control arm

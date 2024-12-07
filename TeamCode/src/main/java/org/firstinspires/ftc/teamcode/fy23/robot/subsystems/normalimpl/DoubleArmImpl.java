@@ -9,7 +9,6 @@ import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DigitalDevice;
 import org.firstinspires.ftc.teamcode.fy23.units.PIDConsts;
-import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
 
 /** A normal implementation of {@link org.firstinspires.ftc.teamcode.fy23.robot.subsystems.DoubleArm} featuring
  * acceleration control and hard and soft safety limits.
@@ -40,9 +39,11 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
     private int elevatorLowerLimit;
     private DigitalDevice elevatorUpperLimitSwitch;
     private DigitalDevice elevatorLowerLimitSwitch;
+    private double elevatorLimitBuffer;
+    private double elevatorOffsetLength;
 
     private double pivotTicksPerDegree;
-    private double elevatorTicksPerMillimeter;
+    private double elevatorTicksPerInch;
 
     private double setPivotVelocity;
     private int maxPivotVelocity;
@@ -58,11 +59,14 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
     private boolean killElevatorMotorLatch = false;
     private double maxElevatorRecoveryPower;
 
+    private double armPos;
+    private double pivotPos;
+
     // TODO: TESTING
     private PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
     private double heartbeat = 0.0001;
     private TunablePID pivotPID = new TunablePID(pivotPIDConsts);
-    private boolean useSdkPid = true;
+    private boolean useSdkPid = true; // This should always be true (for now, at least)
 
     public DoubleArmImpl(Parameters parameters) {
 
@@ -80,6 +84,8 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
         elevatorLowerLimit = parameters.elevatorLowerLimit;
         elevatorUpperLimitSwitch = parameters.elevatorUpperLimitSwitch;
         elevatorLowerLimitSwitch = parameters.elevatorLowerLimitSwitch;
+        elevatorLimitBuffer = parameters.elevatorLimitBuffer;
+        elevatorOffsetLength = parameters.elevatorOffsetLength;
 
         pivotAccelLimiter = parameters.pivotAccelLimiter;
         pivotTicksPerDegree = parameters.pivotTicksPerDegree;
@@ -87,7 +93,7 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
         maxPivotVelocity = parameters.maxPivotVelocity;
 
         elevatorAccelLimiter = parameters.elevatorAccelLimiter;
-        elevatorTicksPerMillimeter = parameters.elevatorTicksPerMillimeter;
+        elevatorTicksPerInch = parameters.elevatorTicksPerInch;
         maxElevatorRecoveryPower = parameters.maxElevatorRecoveryPower;
         maxElevatorVelocity = parameters.maxElevatorVelocity;
 
@@ -133,7 +139,7 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
 
     @Override
     public void setElevatorDistance(double distance) {
-        int distanceInTicks = (int) Math.round(distance * elevatorTicksPerMillimeter);
+        int distanceInTicks = (int) Math.round(distance * elevatorTicksPerInch);
         int applyPos = Range.clip(distanceInTicks, elevatorLowerLimit, elevatorUpperLimit);
         elevatorMotorRight.setTargetPosition(applyPos);
         elevatorMotorLeft.setTargetPosition(applyPos);
@@ -373,6 +379,16 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
         // TODO: Implement this!
     }
 
+    private boolean checkArmLimit(Double angle) {
+        double horizontalLimit = elevatorLowerLimit - elevatorLimitBuffer - elevatorOffsetLength;
+        // horizontalLimit / Math.cos(Math.toRadians(angle))
+        if (armPos < Math.abs((1 / Math.cos(Math.toRadians(angle))) * horizontalLimit)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void updateElevatorPower() {
         // checks in a sequence: hard limits, then soft limits, then stopping distances, then apply power as normal
 
@@ -388,13 +404,24 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
 
             // soft limits
 
+//            if (currentPos > elevatorUpperLimit) {
+//                System.out.println("[Elevator] Upper soft limit hit");
+//                handleElevatorHitUpperLimit(setElevatorVelocity);
             int currentPos = getElevatorPosition();
-            if (currentPos > elevatorUpperLimit) {
-                System.out.println("[Elevator] Upper soft limit hit");
-                handleElevatorHitUpperLimit(setElevatorVelocity);
-            } else if (currentPos < elevatorLowerLimit) {
+            armPos = (((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2) / elevatorTicksPerInch) + 17.5;
+            pivotPos = Math.abs(((pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2) / pivotTicksPerDegree);
+            if (currentPos < elevatorLowerLimit) {
                 System.out.println("[Elevator] Lower soft limit hit");
                 handleElevatorHitLowerLimit(setElevatorVelocity);
+            } else if (!checkArmLimit(pivotPos) && Math.abs(pivotPos) <= 75) {
+                while (!checkArmLimit(pivotPos)) {
+                    armPos = ((double) ((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2) / elevatorTicksPerInch) + 17.5;
+                    pivotPos = Math.abs(((double) (pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2) / pivotTicksPerDegree);
+                    elevatorMotorLeft.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
+                    elevatorMotorRight.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
+                    pivotMotorLeft.setVelocity(0);
+                    pivotMotorRight.setVelocity(0);
+                }
             } else {
 
                 // stopping distances

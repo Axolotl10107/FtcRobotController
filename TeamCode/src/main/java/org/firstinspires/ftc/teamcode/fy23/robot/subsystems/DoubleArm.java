@@ -8,9 +8,28 @@ import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.digitaldevice.DigitalDeviceBlank;
 
-/** Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
- * their powers independently or by specifying a point on the planar region containing all possible points that this
- * mechanism can reach. */
+/**
+ * ATTENTION: New for 2024:
+ * <br>New parameters:
+ * <ul>
+ *     <li>elevatorLimitBuffer</li>
+ *     <li>elevatorOffsetLength</li>
+ * </ul>
+ * These, as well as elevator upper and lower limits, are now in <b>inches, measured from the back
+ * of the robot.</b> This change was made because of:
+ * <ul>
+ *     <li>The new game rule this year - our robot cannot be more than 42 inches long in that direction</li>
+ *     <li>How the new extension limit code works</li>
+ * </ul>
+ * <hr><br>
+ * Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
+ * their powers independently or by setting a pivot angle (degrees) and extension distance (<b>inches</b> - see above).
+ * The "setPower()" methods do not actually set power. They set a percentage of the max. velocity.
+ * <br><br><hr><br>
+ * To work around an unknown bug (presumably in AccelLimiter?), when passing an AccelLimiter into
+ * this subsystem (or creating one anywhere), multiply the maxAccel and maxDeltaVEachLoop arguments
+ * by 10.
+ * */
 public interface DoubleArm {
 
     class Parameters {
@@ -55,11 +74,15 @@ public interface DoubleArm {
 
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
         public AccelLimiter elevatorAccelLimiter = new AccelLimiter(0, 0);
-        /** How many encoder ticks are traveled by the elevator motor per degree of elevator travel */
-        public double elevatorTicksPerMillimeter = 0;
-        /** The upper limit of the elevator motor's range in encoder ticks */
+        /** How many encoder ticks are traveled by the elevator motor per inch of elevator travel */
+        public double elevatorTicksPerInch = 0;
+        /** How much extra space in <b>inches</b> to leave in front of the elevator */
+        public double elevatorLimitBuffer = 0;
+        /** The distance in <b>inches</b> from the back of the robot to the start of the elevator <i>slides</i> (the actual slides, not the motor) */
+        public double elevatorOffsetLength = 0;
+        /** The upper limit of the elevator motor's range in <b>inches</b>, measured from the back of the robot */
         public int elevatorUpperLimit = 0;
-        /** The lower limit of the elevator motor's range in encoder ticks */
+        /** The lower limit of the elevator motor's range in <b>inches</b> */
         public int elevatorLowerLimit = 0;
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its maximum position (in encoder ticks!). */
@@ -77,40 +100,40 @@ public interface DoubleArm {
         public ElapsedTime stopwatch = new ElapsedTime();
     }
 
-    /** Set the target position of the pivot motor to an angle. Safety limits apply.
+    /** Set the target position of the pivot motors to an angle. Safety limits apply.
      * @param unit See {@link AngleUnit}.
      * @param angle in the AngleUnit you set */
     void setPivotAngle(AngleUnit unit, double angle);
-    /** Set the power of the pivot motor. Important when setting an angle - this works like setPower() does on a normal
+    /** Set the power of the pivot motors. Important when setting an angle - this works like setPower() does on a normal
      * motor in RUN_TO_POSITION mode.
      * This does not actually set power anymore - this sets the velocity to the max. velocity multiplied by your requested power.
      * @param power from -1 to 1 just like setPower() on a normal motor */
     void setPivotPower(double power);
-    /** Get the current power of the pivot motor. */
+    /** Get the current average power of the pivot motors. */
     double getPivotPower();
-    /** Set the velocity of the pivot motor in ticks per second.
+    /** Set the velocity of the pivot motors in ticks per second.
      * @param velocity The velocity to set, in ticks per second */
     void setPivotVelocity(int velocity);
-    /** Get the current velocity of the pivot motor. */
+    /** Get the current average velocity of the pivot motors. */
     double getPivotVelocity();
-    /** Get the current position of the pivot motor. */
+    /** Get the current average position of the pivot motors. */
     int getPivotPosition();
 
-    /** Set the target position of the elevator motor to a distance from the fully retracted position.
-     * @param distance in millimeters */
+    /** Set the target position of the elevator motors to a distance from the back of the robot.
+     * @param distance in inches */
     void setElevatorDistance(double distance);
-    /** Set the power of the elevator motor. Important when setting a distance - this works like setPower() does on a
+    /** Set the power of the elevator motors. Important when setting a distance - this works like setPower() does on a
      * normal motor in RUN_TO_POSITION mode.
      * @param power from -1 to 1, just like setPower() on a normal motor */
     void setElevatorPower(double power);
-    /** Get the current power of the elevator motor. */
+    /** Get the current average power of the elevator motors. */
     double getElevatorPower();
-    /** Set the velocity of the elevator motor in ticks per second.
+    /** Set the velocity of the elevator motors in ticks per second.
      * @param velocity The velocity to set, in ticks per second */
     void setElevatorVelocity(int velocity);
-    /** Get the current velocity of the elevator motor. */
+    /** Get the current average velocity of the elevator motors. */
     double getElevatorVelocity();
-    /** Get the current position of the elevator motor. */
+    /** Get the current average position of the elevator motors. */
     int getElevatorPosition();
 
     /** Called by robot.update(). You do not need to call this method. */
