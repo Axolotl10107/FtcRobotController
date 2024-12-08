@@ -28,6 +28,8 @@ public class RobotRoundhouse {
     }
 
     public static Robot24.Parameters getParamsAuto(HardwareMap hardwareMap) {
+        // ControlHubDeviceNameManager doesn't exist in virtual_robot, so if you're using that, comment this out in your
+        // virtual_robot project and have this return the virtualRobot or programmingBoard parameters.
         return getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap);
     }
 

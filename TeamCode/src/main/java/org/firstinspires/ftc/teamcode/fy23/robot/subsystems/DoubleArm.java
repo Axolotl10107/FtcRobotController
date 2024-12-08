@@ -126,7 +126,8 @@ public interface DoubleArm {
      * normal motor in RUN_TO_POSITION mode.
      * @param power from -1 to 1, just like setPower() on a normal motor */
     void setElevatorPower(double power);
-    /** Get the current average power of the elevator motors. */
+    /** Get the current average power of the elevator motors.
+     * This does not actually set power anymore - this sets the velocity to the max. velocity multiplied by your requested power. */
     double getElevatorPower();
     /** Set the velocity of the elevator motors in ticks per second.
      * @param velocity The velocity to set, in ticks per second */
