@@ -82,13 +82,13 @@ public class HighBasket extends LinearOpMode {
 //                    armRightPivot.setVelocity(0);
 //                    armLeftPivot.setVelocity(0);
 
-                    armRightExtend.setTargetPosition(4600);
-                    armLeftExtend.setTargetPosition(4600);
+                    armRightExtend.setTargetPosition(4400);
+                    armLeftExtend.setTargetPosition(4400);
                     armRightExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     armLeftExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    armRightExtend.setPower(0.5);
-                    armLeftExtend.setPower(0.5);
-                    while (armLeftExtend.getCurrentPosition() < 4500) {
+                    armRightExtend.setPower(0.25);
+                    armLeftExtend.setPower(0.25);
+                    while (armLeftExtend.getCurrentPosition() < 4300) {
                         telemetry.addData("leftExtendPos", armLeftExtend.getCurrentPosition());
                         telemetry.update();
                     }
@@ -118,6 +118,12 @@ public class HighBasket extends LinearOpMode {
                 .lineToConstantHeading(new Vector2d(0, 0))
                 .build()
         );
+
+
+        telemetry.addLine("Ready.");
+        telemetry.update();
+        waitForStart();
+
 
         switcher.selectName("HighBasket");
         robot.drive.followTrajectorySequence(switcher.getSelected().getTrajectorySequence());
