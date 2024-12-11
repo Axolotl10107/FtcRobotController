@@ -258,13 +258,13 @@ public class CompetitionOpMode extends LinearOpMode {
                 servoIntake.setPower(0);
             }
 
-            // Control claw (currently does not exist)
-//
-//            if (controls.clawServoIn() != 0) {
-//                servoClaw.setPosition(0);
-//            } else if (controls.clawServoOut() != 0) {
-//                servoClaw.setPosition(1);
-//            }
+            if (controls.clawServoIn() != 0) {
+                telemetry.addLine("in");
+                servoClaw.setPosition(0);
+            } else if (controls.clawServoOut() != 0) {
+                telemetry.addLine("out");
+                servoClaw.setPosition(1);
+            }
 
             telemetry.addData("Power", servoIntake.getPower());
             telemetry.addData("Pivot Input", controls.armPivot());
@@ -280,6 +280,7 @@ public class CompetitionOpMode extends LinearOpMode {
             telemetry.addData("Pivot Pos", (armLeftPivot.getCurrentPosition() + armRightPivot.getCurrentPosition()) / 2);
             telemetry.addData("Pivot Pos Degrees", pivotPos);
             telemetry.addData("Pivot Input", controls.armPivot());
+            telemetry.addData("Claw Servo", controls.clawServoIn() - controls.clawServoOut());
             telemetry.update();
         }
     }

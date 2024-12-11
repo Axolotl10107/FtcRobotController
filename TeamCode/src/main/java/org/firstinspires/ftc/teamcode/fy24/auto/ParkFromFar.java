@@ -21,8 +21,8 @@ public class ParkFromFar extends OpMode {
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         trajSeq = robot.drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
-                .lineToConstantHeading(new Vector2d(0, (24*2)+5))
-                .lineToConstantHeading(new Vector2d((24*3)-7, (24*2)+5)) // -2 for some clearance between bots
+                .lineToConstantHeading(new Vector2d(0, (22*2)+5))
+                .lineToConstantHeading(new Vector2d((24*3)-7, (22*2)+5)) // -2 for some clearance between bots
                 .lineToConstantHeading(new Vector2d((24*3)-7, 0))
                 .build();
     }
