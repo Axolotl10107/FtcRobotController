@@ -50,6 +50,7 @@ public class CompetitionOpMode extends LinearOpMode {
     final double horizontalLimit = 42 - motorLength - limitBuffer;
     final double ticksPerInch = 157.86;
     final double ticksPerDegree = 32.06;
+    boolean zeroed = false;
 
     double pivotPos;
     double armPos;
@@ -157,6 +158,14 @@ public class CompetitionOpMode extends LinearOpMode {
             } else if (controls.driveSpeedDown() != 0 && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
                 driveClip -= 0.05;
                 driveClipDeb.reset();
+            }
+
+            // Reset arm vars
+
+            if (controls.resetArmVars() != 0 && zeroed == false) {
+                zeroed = true;
+                armRightPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                armLeftPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
 
             // Brake

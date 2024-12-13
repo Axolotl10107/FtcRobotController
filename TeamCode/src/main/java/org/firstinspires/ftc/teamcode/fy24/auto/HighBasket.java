@@ -69,25 +69,25 @@ public class HighBasket extends LinearOpMode {
 //                        armRightPivot.setVelocity(armPivotSpeed);
 //                        armLeftPivot.setVelocity(armPivotSpeed);
 //                    }
-                    armRightPivot.setTargetPosition(2300);
-                    armLeftPivot.setTargetPosition(2300);
+                    armRightPivot.setTargetPosition(2200);
+                    armLeftPivot.setTargetPosition(2200);
                     armRightPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     armLeftPivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    armRightPivot.setPower(0.5);
-                    armLeftPivot.setPower(0.5);
-                    while(armLeftPivot.getCurrentPosition() < 2200) {
+                    armRightPivot.setPower(0.75);
+                    armLeftPivot.setPower(0.75);
+                    while(armLeftPivot.getCurrentPosition() < 2000) {
                         telemetry.addData("leftPivotPos", armLeftPivot.getCurrentPosition());
                         telemetry.update();
                     }
 //                    armRightPivot.setVelocity(0);
 //                    armLeftPivot.setVelocity(0);
 
-                    armRightExtend.setTargetPosition(4400);
-                    armLeftExtend.setTargetPosition(4400);
+                    armRightExtend.setTargetPosition(4600);
+                    armLeftExtend.setTargetPosition(4600);
                     armRightExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     armLeftExtend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    armRightExtend.setPower(0.25);
-                    armLeftExtend.setPower(0.25);
+                    armRightExtend.setPower(0.5);
+                    armLeftExtend.setPower(0.5);
                     while (armLeftExtend.getCurrentPosition() < 4300) {
                         telemetry.addData("leftExtendPos", armLeftExtend.getCurrentPosition());
                         telemetry.update();
@@ -98,24 +98,30 @@ public class HighBasket extends LinearOpMode {
                     sleep(5000);
                     intakeServo.setPower(0);
 
-                    armRightPivot.setTargetPosition(armRightExtend.getCurrentPosition() + 50);
-                    armLeftPivot.setTargetPosition(armLeftExtend.getCurrentPosition() + 50);
+                    armLeftExtend.setTargetPosition(0);
+                    armRightExtend.setTargetPosition(0);
 
-                    armLeftExtend.setTargetPosition(50);
-                    armRightExtend.setTargetPosition(50);
+                    sleep(3000);
+
+                    armRightPivot.setTargetPosition(0);
+                    armLeftPivot.setTargetPosition(0);
+
                     while(armLeftExtend.getCurrentPosition() > 100) {
                         telemetry.addData("leftExtendPos", armLeftExtend.getCurrentPosition());
                         telemetry.update();
                     }
-                    armRightPivot.setTargetPosition(50);
-                    armLeftPivot.setTargetPosition(50);
                     while (armLeftPivot.getCurrentPosition() > 100) {
                         telemetry.addData("leftPivotPos", armLeftPivot.getCurrentPosition());
                         telemetry.update();
                     }
+                    sleep(2000);
+                    armRightPivot.setTargetPosition(3000);
+                    armLeftPivot.setTargetPosition(3000);
                 })
-                .turn(Math.toRadians(0))
-                .lineToConstantHeading(new Vector2d(0, 0))
+                .turn(Math.toRadians(-45))
+                .back(10)
+                .strafeRight(39)
+                .back(17)
                 .build()
         );
 

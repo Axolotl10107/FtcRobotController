@@ -58,6 +58,8 @@ public class GamepadDTS extends GamepadDefault {
 
     public double brake() {return GamepadInputs.buttonX(gamepad1);}
 
+    public double resetArmVars() {return GamepadInputs.buttonDpadRight(gamepad2);}
+
     @Override
     public double driveSpeedUp() {return GamepadInputs.buttonDpadUp(gamepad1);}
 
