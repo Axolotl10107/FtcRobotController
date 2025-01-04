@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy23;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 
 @Autonomous(name="FroschAutoTest", group="")
+@Disabled
 public class FroschAutoTest extends LinearOpMode {
 
     Robot24 robot;

@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpSche
 import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
 import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 
-@Autonomous(name="HighBasket")
-public class HighBasket extends LinearOpMode {
+@Autonomous(name="1 Sample from Near", group="HighBasket")
+public class OneSampleNear extends LinearOpMode {
     Robot24 robot;
     Telemetry opModeTelemetry;
 

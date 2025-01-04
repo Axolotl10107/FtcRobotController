@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -44,6 +45,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  */
 
 @TeleOp(name = "Sensor: Digital touch", group = "TeleTest")
+@Disabled
 
 public class SensorDigitalTouch extends LinearOpMode {
     /**

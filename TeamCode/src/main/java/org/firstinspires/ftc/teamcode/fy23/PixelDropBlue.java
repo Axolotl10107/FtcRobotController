@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="PixelDropBlue", group="Auto Test")
+@Disabled
 public class PixelDropBlue extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();

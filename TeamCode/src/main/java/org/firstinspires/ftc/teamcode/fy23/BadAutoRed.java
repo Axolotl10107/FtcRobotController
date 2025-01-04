@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.fy23;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Bad Autonomous Red", group="Autonomous")
+@Disabled
 public class BadAutoRed extends LinearOpMode {
 
     private DcMotor leftFront= null;

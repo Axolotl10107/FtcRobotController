@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 import kotlin.NotImplementedError;
 
 @Autonomous(name="IMU AutoCodeFarSide__BLUE", group="AutoCodeFarSide__RED")
+@Disabled
 public class Far_Side_Auto_Code__BLUE_IMU extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();

@@ -1,5 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy23.teletest;
+package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
 
 @TeleOp(name="Robot B Test", group="")
+@Disabled
 public class RobotBTeleTest extends OpMode {
 
     Robot24 robot;

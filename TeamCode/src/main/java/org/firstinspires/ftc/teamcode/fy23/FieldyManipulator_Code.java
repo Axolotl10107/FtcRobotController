@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyI
 
 
 @TeleOp(name="Fieldy Manipulator Opmode", group="Manipulator Opmode")
+@Disabled
 public class FieldyManipulator_Code extends LinearOpMode {
 
     Servo servo123456789;
