@@ -190,9 +190,11 @@ public class ThreeSampleNearTwo extends LinearOpMode {
         robot.drive.setPoseEstimate(startPose);
         TrajectorySequence toBasket1 = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
                 .lineToLinearHeading(new Pose2d(15, -13, Math.toRadians(45)))
+                .forward(2)
                 .build();
 
         TrajectorySequence toBasket2 = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
+                .back(2)
                 .lineToLinearHeading(new Pose2d(17, -8, Math.toRadians(45)))
                 .build();
 
