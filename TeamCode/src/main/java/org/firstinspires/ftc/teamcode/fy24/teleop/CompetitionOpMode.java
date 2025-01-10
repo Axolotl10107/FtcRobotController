@@ -113,8 +113,8 @@ public class CompetitionOpMode extends LinearOpMode {
         servoIntake = hardwareMap.get(CRServo.class, "intakeServo");
         servoClaw = hardwareMap.get(Servo.class, "clawServo");
 
-        double armExtendSpeed = 1110;
-        double armPivotSpeed = 1115;
+        double armExtendSpeed = 1600;
+        double armPivotSpeed = 1600;
         double driveSpeed = 1;
 
         waitForStart();

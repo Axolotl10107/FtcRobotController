@@ -37,7 +37,7 @@ public class ThreeSampleNearTwo extends LinearOpMode {
     final double ticksPerDegree = 32.06;
 
     final int highPivotPos = 2300;
-    final int highExtendPos = 4600;
+    final int highExtendPos = 4500;
 
     // for grabbing additional samples
     final int firstGrabExtendPos = 750;
@@ -68,7 +68,7 @@ public class ThreeSampleNearTwo extends LinearOpMode {
     }
 
     void waitForExtendToBasket() {
-        while (armLeftExtend.getCurrentPosition() < (highExtendPos - 100)) {
+        while (armLeftExtend.getCurrentPosition() < (highExtendPos - 300)) {
             telemetry.addLine("Extend --> Basket");
             telemetry.addData("leftExtendPos", armLeftExtend.getCurrentPosition());
             telemetry.update();
