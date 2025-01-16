@@ -56,13 +56,17 @@ public class GamepadDTS extends GamepadDefault {
 
     public double clawServoOut() {return GamepadInputs.buttonY(gamepad2);}
 
+    public double clawPivotUp() {return GamepadInputs.buttonDpadRight(gamepad2);}
+
+    public double clawPivotDown() {return GamepadInputs.buttonDpadLeft(gamepad2);}
+
     public double brake() {return GamepadInputs.buttonX(gamepad1);}
 
-    public double resetArmVars() {return GamepadInputs.buttonDpadRight(gamepad2);}
+    public double resetArmVars() {return GamepadInputs.rightBumper(gamepad2) * GamepadInputs.leftBumper(gamepad2);}
 
     @Override
-    public double driveSpeedUp() {return GamepadInputs.buttonDpadUp(gamepad1);}
+    public double driveSpeedUp() {return GamepadInputs.buttonDpadRight(gamepad1);}
 
     @Override
-    public double driveSpeedDown() {return GamepadInputs.buttonDpadDown(gamepad1);}
+    public double driveSpeedDown() {return GamepadInputs.buttonDpadLeft(gamepad1);}
 }

@@ -109,8 +109,10 @@ public class CompetitionOpMode extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         CRServo servoIntake;
+        Servo servoClawPivot;
         Servo servoClaw;
         servoIntake = hardwareMap.get(CRServo.class, "intakeServo");
+        servoClawPivot = hardwareMap.get(Servo.class, "clawPivotServo");
         servoClaw = hardwareMap.get(Servo.class, "clawServo");
 
         double armExtendSpeed = 1600;
@@ -152,16 +154,18 @@ public class CompetitionOpMode extends LinearOpMode {
             // Change speed
 
             if (controls.driveSpeedUp() != 0 && driveClip < 1 && driveClipDeb.milliseconds() > 300) {
-                driveClip += 0.05;
+                driveClip = 1;
                 driveClipDeb.reset();
             } else if (controls.driveSpeedDown() != 0 && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
-                driveClip -= 0.05;
+                driveClip = 0.3;
                 driveClipDeb.reset();
             }
 
             // Reset arm vars
 
             if (controls.resetArmVars() != 0) {
+                armRightExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                armLeftExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 armRightPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 armLeftPivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             }
@@ -270,10 +274,16 @@ public class CompetitionOpMode extends LinearOpMode {
                 servoClaw.setPosition(0);
             } else if (controls.clawServoOut() != 0) {
                 telemetry.addLine("out");
-                servoClaw.setPosition(1);
+                servoClaw.setPosition(0.3);
             }
 
-            telemetry.addData("Power", servoIntake.getPower());
+            if (controls.clawPivotUp() != 0) {
+                servoClawPivot.setPosition(servoClawPivot.getPosition() + 0.1);
+            } else if (controls.clawPivotDown() != 0) {
+                servoClawPivot.setPosition(servoClawPivot.getPosition() - 0.1);
+            }
+
+            telemetry.addData("Position", servoClaw.getPosition());
             telemetry.addData("Pivot Input", controls.armPivot());
             telemetry.addData("Expected Pivot Velocity", armPivotSpeed * controls.armPivot());
             telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());

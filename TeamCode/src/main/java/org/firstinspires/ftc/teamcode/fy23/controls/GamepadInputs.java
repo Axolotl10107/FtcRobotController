@@ -132,7 +132,7 @@ public class GamepadInputs {
         }
     }
 
-    static double rightBumper(Gamepad gamepad){
+    public static double rightBumper(Gamepad gamepad){
         if (gamepad.right_bumper) {
             return 1;
         } else {
@@ -140,7 +140,7 @@ public class GamepadInputs {
         }
     }
 
-    static double leftBumper(Gamepad gamepad){
+    public static double leftBumper(Gamepad gamepad){
         if (gamepad.left_bumper) {
             return 1;
         } else {
