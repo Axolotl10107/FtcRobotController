@@ -283,7 +283,7 @@ public class CompetitionOpMode extends LinearOpMode {
                 servoClawPivot.setPosition(servoClawPivot.getPosition() - 0.1);
             }
 
-            telemetry.addData("Position", servoClaw.getPosition());
+            telemetry.addData("Position", servoClawPivot.getPosition());
             telemetry.addData("Pivot Input", controls.armPivot());
             telemetry.addData("Expected Pivot Velocity", armPivotSpeed * controls.armPivot());
             telemetry.addData("Actual Pivot Velocity", armRightPivot.getVelocity());
