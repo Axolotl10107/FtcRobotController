@@ -64,6 +64,8 @@ public class GamepadDTS extends GamepadDefault {
 
     public double resetArmVars() {return GamepadInputs.rightBumper(gamepad2) * GamepadInputs.leftBumper(gamepad2);}
 
+    public double rotateCamera() {return GamepadInputs.rightStickXLinear(gamepad1, 1);}
+
     @Override
     public double driveSpeedUp() {return GamepadInputs.buttonDpadRight(gamepad1);}
 

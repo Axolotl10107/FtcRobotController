@@ -35,7 +35,7 @@ public class AprilTagUtils {
 
     // Method to get the distance from the detected AprilTag
     public double getDistance() {
-        double distance = 0;
+        double distance = -1;
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
 
         while (currentDetections == null || currentDetections.isEmpty()) {

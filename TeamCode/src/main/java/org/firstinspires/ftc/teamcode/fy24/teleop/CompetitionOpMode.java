@@ -117,13 +117,14 @@ public class CompetitionOpMode extends LinearOpMode {
         CRServo servoIntake;
         Servo servoClawPivot;
         Servo servoClaw;
+        CRServo servoCamera;
         servoIntake = hardwareMap.get(CRServo.class, "intakeServo");
         servoClawPivot = hardwareMap.get(Servo.class, "clawPivotServo");
         servoClaw = hardwareMap.get(Servo.class, "clawServo");
+        servoCamera = hardwareMap.get(CRServo.class, "cameraServo");
 
         double armExtendSpeed = 1600;
         double armPivotSpeed = 1600;
-        double driveSpeed = 1;
 
         waitForStart();
 
@@ -287,6 +288,10 @@ public class CompetitionOpMode extends LinearOpMode {
                 servoClawPivot.setPosition(servoClawPivot.getPosition() + 0.1);
             } else if (controls.clawPivotDown() != 0) {
                 servoClawPivot.setPosition(servoClawPivot.getPosition() - 0.1);
+            }
+
+            if (controls.rotateCamera() != 0) {
+                servoCamera.setPower(controls.rotateCamera());
             }
 
             telemetry.addData("Position", servoClawPivot.getPosition());
