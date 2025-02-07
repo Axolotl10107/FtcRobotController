@@ -10,7 +10,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
 
 
 @TeleOp(name="In Theory 24-25 Competition TeleOp", group="TeleOp24")
@@ -274,7 +280,7 @@ public class CompetitionOpMode extends LinearOpMode {
                 servoClaw.setPosition(0);
             } else if (controls.clawServoOut() != 0) {
                 telemetry.addLine("out");
-                servoClaw.setPosition(0.3);
+                servoClaw.setPosition(0.5);
             }
 
             if (controls.clawPivotUp() != 0) {

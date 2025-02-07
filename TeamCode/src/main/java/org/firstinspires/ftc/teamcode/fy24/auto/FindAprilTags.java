@@ -13,7 +13,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Autonomous(name="Find April Tags")
-@Disabled
 public class FindAprilTags extends LinearOpMode {
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -82,7 +81,8 @@ public class FindAprilTags extends LinearOpMode {
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+//                .setLensIntrinsics(910.44, 910.44, 400, 200)
+                .setLensIntrinsics(912, 912, 330, 140)
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();
@@ -140,7 +140,7 @@ public class FindAprilTags extends LinearOpMode {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
-        // Step through the list of detections and display info for each one.
+        // Step through the list of detections and display info for each fviosone.
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));

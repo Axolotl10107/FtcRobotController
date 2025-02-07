@@ -200,6 +200,7 @@ public class VisionAutonomous extends LinearOpMode
 //                break;
             }
 
+
             case RIGHT:
             {
                 telemetry.addData("Object Position", "Right");
