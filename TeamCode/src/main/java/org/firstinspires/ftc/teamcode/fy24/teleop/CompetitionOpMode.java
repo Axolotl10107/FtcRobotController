@@ -11,12 +11,14 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+
 
 
 @TeleOp(name="In Theory 24-25 Competition TeleOp", group="TeleOp24")
@@ -247,14 +249,10 @@ public class CompetitionOpMode extends LinearOpMode {
                 armRightExtend.setPower(1);
             }
 
-            if (controls.armPivot() > 0 && (pivotPos < 90)) {
+            if (controls.armPivot() != 0 && (pivotPos < 90)) {
                 pivotToNormalMode();
-                armLeftPivot.setVelocity(armPivotSpeed);
-                armRightPivot.setVelocity(armPivotSpeed);
-            } else if (controls.armPivot() < 0) {
-                pivotToNormalMode();
-                armLeftPivot.setVelocity(-armPivotSpeed);
-                armRightPivot.setVelocity(-armPivotSpeed);
+                armLeftPivot.setVelocity(armPivotSpeed * controls.armPivot());
+                armRightPivot.setVelocity(armPivotSpeed * controls.armPivot());
             } else {
 //                armRightPivot.setPower(0);
 //                armLeftPivot.setPower(0);
@@ -291,9 +289,12 @@ public class CompetitionOpMode extends LinearOpMode {
             }
 
             if (controls.rotateCamera() != 0) {
-                servoCamera.setPower(controls.rotateCamera());
+                servoCamera.setPower(controls.rotateCamera() / 2);
+            } else {
+                servoCamera.setPower(0);
             }
 
+            telemetry.addData("Camera Motion", controls.rotateCamera());
             telemetry.addData("Position", servoClawPivot.getPosition());
             telemetry.addData("Pivot Input", controls.armPivot());
             telemetry.addData("Expected Pivot Velocity", armPivotSpeed * controls.armPivot());
