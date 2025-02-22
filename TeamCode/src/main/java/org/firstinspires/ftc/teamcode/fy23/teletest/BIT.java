@@ -139,7 +139,7 @@ public class BIT extends LinearOpMode {
 
         telemetry.addLine("----------------");
 
-        if (pivotPass.get(1) && pivotPass.get(2)) {
+        if (pivotPass.get(0) && pivotPass.get(1)) {
             telemetry.addLine("Pivot System PASS");
         } else {
             telemetry.addLine("Pivot System FAIL - more information:");
@@ -153,7 +153,7 @@ public class BIT extends LinearOpMode {
 
         telemetry.addLine("----------------");
 
-        if (extendPass.get(1) && extendPass.get(2)) {
+        if (extendPass.get(0) && extendPass.get(1)) {
             telemetry.addLine("Extend System PASS");
         } else {
             telemetry.addLine("Extend System FAIL - more information:");
