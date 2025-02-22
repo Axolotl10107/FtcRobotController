@@ -413,15 +413,16 @@ public class DoubleArmImpl implements org.firstinspires.ftc.teamcode.fy23.robot.
             if (currentPos < elevatorLowerLimit) {
                 System.out.println("[Elevator] Lower soft limit hit");
                 handleElevatorHitLowerLimit(setElevatorVelocity);
-            } else if (!checkArmLimit(pivotPos) && Math.abs(pivotPos) <= 75) {
-                while (!checkArmLimit(pivotPos)) {
-                    armPos = ((double) ((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2) / elevatorTicksPerInch) + 17.5;
-                    pivotPos = Math.abs(((double) (pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2) / pivotTicksPerDegree);
-                    elevatorMotorLeft.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
-                    elevatorMotorRight.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
-                    pivotMotorLeft.setVelocity(0);
-                    pivotMotorRight.setVelocity(0);
-                }
+//            } else if (!checkArmLimit(pivotPos) && Math.abs(pivotPos) <= 75) {
+                // TODO: This causes an infinite loop.
+//                while (!checkArmLimit(pivotPos)) {
+//                    armPos = ((double) ((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2) / elevatorTicksPerInch) + 17.5;
+//                    pivotPos = Math.abs(((double) (pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2) / pivotTicksPerDegree);
+//                    elevatorMotorLeft.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
+//                    elevatorMotorRight.setVelocity(-maxElevatorRecoveryPower * maxElevatorVelocity);
+//                    pivotMotorLeft.setVelocity(0);
+//                    pivotMotorRight.setVelocity(0);
+//                }
             } else {
 
                 // stopping distances

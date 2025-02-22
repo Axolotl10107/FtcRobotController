@@ -38,8 +38,14 @@ public class GenericRobotTeleOp extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("Place", "Loop start");
+        telemetry.update();
+
         double currentHeading = robot.imu.yaw();
         TeleOpState24 controlState = controlScheme.getState();
+
+        telemetry.addData("Place", "Got controls state");
+        telemetry.update();
 
         // MecanumDrive
         DTS correctedDTS = imuCorrector.correctDTS( controlState.getDts() );
@@ -47,27 +53,48 @@ public class GenericRobotTeleOp extends OpMode {
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
         robot.drive.applyDTS( scaledDTS );
 
-        // IMUcorrector - square up
-        if ( controlState.isSquareUp() ) {
-            imuCorrector.squareUp();
-        }
+        telemetry.addData("Place", "Handled DTS");
+        telemetry.update();
+//        telemetry.addData("Square up?", controlState.isSquareUp());
+//        telemetry.update();
+//
+//        // IMUcorrector - square up
+//        if ( controlState.isSquareUp() ) {
+//            imuCorrector.squareUp();
+//        }
+
+        telemetry.addData("Place", "Handled square up");
+        telemetry.update();
 
         // Brake
         if ( controlState.isBrake() ) {
             robot.drive.applyDTS( new DTS( 0, 0, 0 ) );
         }
 
+        telemetry.addData("Place", "Handled brake");
+        telemetry.update();
+
         // Manipulator
         robot.claw.setState( controlState.getClawState() );
+
+        telemetry.addData("Place", "Handled claw");
+        telemetry.update();
 
         // PixelArm
         robot.arm.setPivotPower( controlState.getArmMovement() );
         robot.arm.setElevatorPower( controlState.getElevatorMovement() );
 
+        telemetry.addData("Place", "Handled arm");
+        telemetry.update();
+
         robot.update();
+
+        telemetry.addData("Place", "Ran robot.update()");
+        telemetry.update();
 
         // telemetry
         telemetry.addData( "Max. Drive Power", controlState.getMaxDriveSpeed() );
         telemetry.addData( "Current Heading", currentHeading );
+        telemetry.update();
     }
 }
