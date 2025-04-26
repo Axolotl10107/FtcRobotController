@@ -21,6 +21,19 @@ android {
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
+
+    sourceSets {
+        main {
+            java {
+                // Don't build the fy22 directory
+                // Path relative to 'java' directory, so
+                // `exclude 'org/firstinspires/ftc/teamcode/fy22/**'` also works here
+                exclude '**/fy22/**'
+                exclude '**/fy23/autoexperiment/**'
+                exclude '**/fy23/robot/old/**'
+            }
+        }
+    }
 }
 
 dependencies {

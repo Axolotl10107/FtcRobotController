@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.fy23.robot.old.MecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy23.units.DTS;
@@ -21,10 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** A blank implementation of {@link MecanumDrive} that does nothing. Can also be
- * used for any variant of that interface. Never returns null (returns blank objects
+/** A blank implementation of {@link RRMecanumDrive} (and formerly MecanumDrive) that does nothing.
+ * Can also be used for any variant of that interface. Never returns null (returns blank objects
  * instead where applicable), so hopefully no null pointers. */
-public class MecanumDriveBlank implements MecanumDrive, RRMecanumDrive {
+public class MecanumDriveBlank implements RRMecanumDrive {
 
     @Override
     public DcMotorEx getLeftFrontMotor() {
