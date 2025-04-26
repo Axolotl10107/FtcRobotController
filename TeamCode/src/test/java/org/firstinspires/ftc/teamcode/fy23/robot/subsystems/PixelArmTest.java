@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.PixelArm;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockDcMotorEx;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockDigitalDevice;
 import org.firstinspires.ftc.teamcode.fy23.fakestuff.MockElapsedTime;
-import org.firstinspires.ftc.teamcode.fy23.processors.AccelLimiter;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.PixelArmImpl;
+import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.PixelArmImpl;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PixelArmTest {
 
-    org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters params = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm.Parameters(true);
+    PixelArm.Parameters params = new PixelArm.Parameters(true);
     MockElapsedTime pivotStopwatch = new MockElapsedTime();
     MockElapsedTime elevatorStopwatch = new MockElapsedTime();
     MockDcMotorEx pivotMotor = new MockDcMotorEx(pivotStopwatch);
@@ -41,7 +42,7 @@ public class PixelArmTest {
     @Test
     public void testPivotSoftLimits() {
         initializeParams();
-        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PixelArm pixelArm = new PixelArmImpl(params);
+        PixelArm pixelArm = new PixelArmImpl(params);
 
         // lower limit (assuming we start at the lower limit)
         pixelArm.setPivotPower(-1);

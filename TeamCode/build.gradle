@@ -25,12 +25,21 @@ android {
     sourceSets {
         main {
             java {
-                // Don't build the fy22 directory
+                // Example: Don't build the fy22 directory
                 // Path relative to 'java' directory, so
                 // `exclude 'org/firstinspires/ftc/teamcode/fy22/**'` also works here
                 exclude '**/fy22/**'
-                exclude '**/fy23/autoexperiment/**'
-                exclude '**/fy23/robot/old/**'
+
+                exclude '**/framework/old/**'
+
+                exclude '**/fy23/auto/**'
+
+                // I want to exclude this, but fy24/controls still depends on it. It is marked as Deprecated now.
+//                exclude '**/fy23/controls/**'
+
+                exclude '**/fy23/teleop/**'
+                exclude '**/fy23/units/**'
+                exclude '**/fy23/visionexperiment/**'
             }
         }
     }

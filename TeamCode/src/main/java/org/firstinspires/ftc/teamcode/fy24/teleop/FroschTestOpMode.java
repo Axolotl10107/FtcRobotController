@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.TeleOpScheme23;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.TeleOpState23;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
-import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23.TeleOpScheme23;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23.TeleOpState23;
+import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
+import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
 @TeleOp
 public class FroschTestOpMode extends LinearOpMode {

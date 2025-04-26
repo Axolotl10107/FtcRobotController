@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.fy23.autoSwitch.AutoSequenceSwitcher;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwitcher;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
 
 @Autonomous(name="2 Samples from Near", group="HighBasket")
 public class TwoSampleNear extends LinearOpMode {

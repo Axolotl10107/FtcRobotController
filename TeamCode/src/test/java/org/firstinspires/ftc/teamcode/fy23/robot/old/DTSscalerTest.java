@@ -1,9 +1,10 @@
 // this class can function as a sample of a unit test
 package org.firstinspires.ftc.teamcode.fy23.robot.old;
 
+import org.firstinspires.ftc.teamcode.framework.old.DTSscaler;
 import org.junit.Assert;
 
-import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.junit.Test;
 
 public class DTSscalerTest { // click the play button on the left to run all tests in this class

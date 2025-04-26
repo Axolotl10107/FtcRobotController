@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.fakestuff;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 
 public class MockFriendlyIMU implements FriendlyIMU {
 

@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.units.TelemetrySingleton;
+import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
-import org.firstinspires.ftc.teamcode.fy23.processors.IMUCorrector;
-import org.firstinspires.ftc.teamcode.fy23.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
-import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
+import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy24.controls.IndyTeleOpScheme24;
 
 @TeleOp(name="Generic Robot TeleOp", group="TeleOp24")

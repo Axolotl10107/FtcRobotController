@@ -4,9 +4,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.normalimpl.FriendlyIMUImpl;
-import org.firstinspires.ftc.teamcode.fy23.units.DTS;
-
+import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.framework.units.DTS;
+@Deprecated
 public class FieldyGamepadLS extends NoDriveAxes {
 
     private Gamepad driver;

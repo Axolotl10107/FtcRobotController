@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
+@Deprecated
 public class GamepadInputs {
 // sticks linear
     public static double rightStickYLinear(Gamepad gamepad, double scaling) {

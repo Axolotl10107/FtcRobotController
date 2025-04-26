@@ -2,17 +2,17 @@ package org.firstinspires.ftc.teamcode.fy24.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Axis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.ExponentialAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.LinearAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.MergedAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.axes.TwoButtonsAsAxis;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.MomentaryButton;
-import org.firstinspires.ftc.teamcode.fy23.gamepad2.primitives.buttons.TriggerButton;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.RotaryIntake;
-import org.firstinspires.ftc.teamcode.fy23.units.DTS;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.ExponentialAxis;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.LinearAxis;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.MergedAxis;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.TwoButtonsAsAxis;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.MomentaryButton;
+import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
+import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
  * Matches the "Dual24" diagram. */
