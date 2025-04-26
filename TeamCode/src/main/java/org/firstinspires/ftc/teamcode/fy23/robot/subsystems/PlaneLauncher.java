@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode.fy23.robot.subsystems;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankServo;
 
-/** Represents the plane launcher. */
+/** Represents the plane launcher.
+ * Deprecated because the physical hardware this corresponds to no longer exists. */
+@Deprecated
 public interface PlaneLauncher {
 
+    @Deprecated
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on the robot?

@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.fy23.robot.subsystems.blank.hardwaredevice.BlankCRServo;
 
-/** Represents a claw and its state (open or closed). */
+/** Represents a rotary intake and its state (Running? In which direction?). */
 public interface RotaryIntake {
 
-    /** Represents the state of the claw. */
+    /** Represents the state of the intake. */
     enum State {
         /** Intake is intaking */
         RUNIN,
