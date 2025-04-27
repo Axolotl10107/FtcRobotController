@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
 public class AutoSequenceSwitcher {
-    private HashMap<String, AutoSequence> sequences = new HashMap<String, AutoSequence>();
+    private final HashMap<String, AutoSequence> sequences = new HashMap<>();
     private AutoSequence currentSequence;
 
     public AutoSequenceSwitcher() {}
@@ -51,8 +51,8 @@ public class AutoSequenceSwitcher {
 
     public boolean hasName(String name) {
         String[] names = getNames();
-        for (int i = 0; i < names.length; i++) {
-            if (names[i].equals(name)) {
+        for (String s : names) {
+            if (s.equals(name)) {
                 return true;
             }
         }

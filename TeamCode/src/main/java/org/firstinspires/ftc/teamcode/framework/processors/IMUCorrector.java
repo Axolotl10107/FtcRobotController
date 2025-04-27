@@ -62,10 +62,10 @@ public class IMUCorrector {
 
     // configuration
     // IRW: Would it be simpler to store a `private Parameters params` than to copy the fields?
-    private double maxCorrectionPower;
-    private double hdgErrToleranceDegrees;
-    private double turnPowerThreshold;
-    private double haveHitTargetToleranceDegrees;
+    private final double maxCorrectionPower;
+    private final double hdgErrToleranceDegrees;
+    private final double turnPowerThreshold;
+    private final double haveHitTargetToleranceDegrees;
 
     // state
     private double targetHeading = 0;
@@ -74,8 +74,8 @@ public class IMUCorrector {
     private boolean haveHitTarget = false;
     private boolean wasTurning = false;
 
-    private FriendlyIMU imu;
-    private TunablePID pid;
+    private final FriendlyIMU imu;
+    private final TunablePID pid;
 
 //    private ElapsedTime errorSampleTimer;
 //    private int errorSampleDelay;

@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.digitaldevice.Digital
  * To work around an unknown bug (presumably in AccelLimiter?), when passing an AccelLimiter into
  * this subsystem (or creating one anywhere), multiply the maxAccel and maxDeltaVEachLoop arguments
  * by 10.
- *
+ * <p> <p>
  * The blank version of this subsystem is {@link org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.ArmBlank},
  * which also applies to {@link org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.PixelArm}.
  * */
@@ -66,10 +66,10 @@ public interface DoubleArm {
         public int pivotLowerLimit = 0;
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the pivot arm reaches its maximum position (in encoder ticks!). */
-        public DigitalDevice pivotUpperLimitSwitch = new DigitalDeviceBlank();
+        public final DigitalDevice pivotUpperLimitSwitch = new DigitalDeviceBlank();
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the pivot arm reaches its minimum position (in encoder ticks!). */
-        public DigitalDevice pivotLowerLimitSwitch = new DigitalDeviceBlank();
+        public final DigitalDevice pivotLowerLimitSwitch = new DigitalDeviceBlank();
         /** The maximum power to use while the pivot arm has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
@@ -92,10 +92,10 @@ public interface DoubleArm {
         public int elevatorLowerLimit = 0;
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its maximum position (in encoder ticks!). */
-        public DigitalDevice elevatorUpperLimitSwitch = new DigitalDeviceBlank();
+        public final DigitalDevice elevatorUpperLimitSwitch = new DigitalDeviceBlank();
         /** Pass in a DigitalDevice object (an implementation of your choice) to represent a limit switch that is
          * activated when the elevator reaches its minimum position (in encoder ticks!). */
-        public DigitalDevice elevatorLowerLimitSwitch = new DigitalDeviceBlank();
+        public final DigitalDevice elevatorLowerLimitSwitch = new DigitalDeviceBlank();
         /** The maximum power to use while the elevator has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */

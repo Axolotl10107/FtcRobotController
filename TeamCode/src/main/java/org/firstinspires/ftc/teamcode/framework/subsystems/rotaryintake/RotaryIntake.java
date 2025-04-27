@@ -32,10 +32,10 @@ public interface RotaryIntake {
         public final boolean present;
 
         /** The servo that drives the claw, already instantiated and configured. */
-        public CRServo intakeServo = new BlankCRServo();
+        public final CRServo intakeServo = new BlankCRServo();
 
         /** The power level at which the servo will run. */
-        public double servoPower = 1;
+        public final double servoPower = 1;
     }
 
     /** Set the desired state of the claw, and it will move to reach that state.

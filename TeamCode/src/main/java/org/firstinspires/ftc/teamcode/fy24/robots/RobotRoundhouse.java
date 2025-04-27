@@ -26,12 +26,12 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
  * There are many Parameters, and they are all centralized here. Please get them from here instead
  * of making custom ones inside of OpModes; otherwise we'll have multiple mystery copies of
  * something that has over 100 config. options and can cause physical damage if it is incorrect.
- *
+ * <p>
  * The name of a robot in the Roundhouse matches the name of its control hub.
  * So, RobotA = 10107-A-RC and RobotB = 10107-B-RC.
  * You can get the parameters of a specific robot, or you can have the Roundhouse automatically
  * determine which robot this is and give you the correct Parameters.
- *
+ * <p>
  * NOTE: If you're using virtual_robot, you must (currently) use getVirtualRobotParams().
  * getParamsAuto() only works on real hardware.
  * */

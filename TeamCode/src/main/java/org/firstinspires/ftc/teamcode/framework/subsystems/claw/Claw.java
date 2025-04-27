@@ -38,7 +38,7 @@ public interface Claw {
         public final boolean present;
 
         /** The servo that drives the claw, already instantiated and configured */
-        public Servo clawServo = new BlankServo();
+        public final Servo clawServo = new BlankServo();
 
         /** You already set this in the constructor and cannot set it again. */
         public final double openPosition;

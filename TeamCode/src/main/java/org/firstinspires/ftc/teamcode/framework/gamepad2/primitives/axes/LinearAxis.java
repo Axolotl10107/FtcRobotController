@@ -5,8 +5,8 @@ import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
 /** Represents an axis on a gamepad, including sticks or triggers, and directly reports the value. */
 public class LinearAxis implements Axis {
 
-    private DoubleLambda axis;
-    private double scalingFactor;
+    private final DoubleLambda axis;
+    private final double scalingFactor;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
@@ -21,8 +21,8 @@ public class LinearAxis implements Axis {
         this.scalingFactor = scalingFactor;
     }
 
-    @Override
     /** Reports the value of the axis */
+    @Override
     public double value() {
         return axis.get() * scalingFactor;
     }

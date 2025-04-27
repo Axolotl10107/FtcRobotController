@@ -19,7 +19,7 @@ public class TunablePID {
     private double _lastError = 0;
     private double _lastTime = 0;
 
-    private ElapsedTime _stopwatch;
+    private final ElapsedTime _stopwatch;
 
 
     // Actions

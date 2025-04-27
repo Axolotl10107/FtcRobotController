@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 /** A normal implementation of {@link Claw}. */
 public class ClawImpl implements Claw {
 
-    private Servo servo;
-    private double openPosition;
-    private double closePosition;
+    private final Servo servo;
+    private final double openPosition;
+    private final double closePosition;
     private Claw.State state = Claw.State.NONE;
 
     public ClawImpl(Claw.Parameters parameters) {
@@ -32,8 +32,8 @@ public class ClawImpl implements Claw {
         return state;
     }
 
-    @Override
     /** Called by robot.update(). You do not need to call this method. */
+    @Override
     public void update() {
 
     }

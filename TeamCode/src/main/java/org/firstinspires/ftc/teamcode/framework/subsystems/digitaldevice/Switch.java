@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 /** An implementation of DigitalDevice for simple switches or other simple uses of {@link DigitalChannel}. */
 public class Switch implements DigitalDevice {
 
-    private DigitalChannel device;
-    private boolean invert;
+    private final DigitalChannel device;
+    private final boolean invert;
 
     public Switch(HardwareMap hardwareMap, DigitalDevice.Parameters parameters) {
         device = hardwareMap.get(DigitalChannel.class, parameters.deviceName);

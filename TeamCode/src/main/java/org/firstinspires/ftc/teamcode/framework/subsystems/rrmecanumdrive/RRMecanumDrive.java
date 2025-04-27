@@ -36,7 +36,7 @@ public interface RRMecanumDrive {
         public PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
-        public double WHEEL_RADIUS = 1.88976; // inches (converetd from 48mm)
+        public double WHEEL_RADIUS = 1.88976; // inches (converted from 48mm)
         public double GEAR_RATIO = 1;
         public double TRACK_WIDTH = 16.25; // wheelbase is about 13.125  // TODO: Check against a *stock* Strafer
 
@@ -126,12 +126,15 @@ public interface RRMecanumDrive {
         public VoltageSensor batteryVoltageSensor;
     }
 
+    // TODO: Implement this properly
     TrajectoryVelocityConstraint VEL_CONSTRAINT = new TrajectoryVelocityConstraint() {
         @Override
         public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
             return 0;
         }
     };
+
+    // TODO: Implement this properly
     TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = new TrajectoryAccelerationConstraint() {
         @Override
         public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
@@ -163,14 +166,14 @@ public interface RRMecanumDrive {
     /** Called by robot.update(). You do not need to call this method. */
     void update();
 
-    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at <a href="https://learnroadrunner.com/trajectories.html#building-a-trajectory">learnroadrunner.com</a>. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
-    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at <a href="https://learnroadrunner.com/trajectories.html#building-a-trajectory">learnroadrunner.com</a>. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);
-    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at https://learnroadrunner.com/trajectories.html#building-a-trajectory. */
+    /** We'll usually use TrajectorySequenceBuilder. Learn more about TrajectoryBuilder at <a href="https://learnroadrunner.com/trajectories.html#building-a-trajectory">learnroadrunner.com</a>. */
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading);
 
-    /** Learn more at https://learnroadrunner.com/trajectory-sequence.html.*/
+    /** Learn more at <a href="https://learnroadrunner.com/trajectory-sequence.html">learnroadrunner.com</a>.*/
     TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose);
 
     void turnAsync(double angle);

@@ -16,7 +16,7 @@ public class FriendlyIMUImpl implements FriendlyIMU {
     private double rollVel;
     private double yawVel;
 
-    public IMU imu;
+    public final IMU imu;
 
     YawPitchRollAngles orientation;
 
@@ -115,8 +115,8 @@ public class FriendlyIMUImpl implements FriendlyIMU {
         return angleUnit.fromDegrees(yawVel);
     }
 
-    @Override
     /** Called by robot.update(). You do not need to call this method. */
+    @Override
     public void update() {
 
     }

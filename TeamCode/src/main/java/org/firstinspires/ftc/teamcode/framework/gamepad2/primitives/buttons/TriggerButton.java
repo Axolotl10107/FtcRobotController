@@ -2,18 +2,20 @@ package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons;
 
 import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
 
-/** Only active on the initial press. Can trigger when button goes up or down. */
+/** Only active on new presses. Button must be released and pressed again to
+ * become active again.
+ * Can trigger when button goes up or down. */
 public class TriggerButton implements Button {
 
-    private Button.BoolLambda button;
-    private boolean invert = false;
+    private final Button.BoolLambda button;
+    private final boolean invert;
     private boolean latched = false;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * button field:
      * new TriggerButton( () -{@literal >} gamepad.x ); */
     public TriggerButton(Button.BoolLambda button) {
-        this.button = button;
+        this(button, false);
     }
 
     /** Same as the other constructor, but allows for inverting the active state. If invert is set
@@ -23,16 +25,17 @@ public class TriggerButton implements Button {
         this.invert = invert;
     }
 
+    /** Only active on new presses. Button must be released and pressed again to
+     * become active again. */
     @Override
-    /** Returns whether the button should be considered active. */
     public boolean isActive() {
         boolean active = invert ^ button.get();
         if (active && !latched) {
             latched = true;
-            return active;
+            return true;
         } else if (!active && latched) {
             latched = false;
-            return active;
+            return false;
         } else {
             return false;
         }

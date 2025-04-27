@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.framework.units;
 
+import android.annotation.SuppressLint;
+
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 
 import java.util.Arrays;
@@ -32,22 +34,23 @@ public class PIDConsts {
 
     /** Puts constants in a string. This is useful for writing them to a file. Made with help from
      * <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax">Oracle docs</a>. */
+    @SuppressLint("DefaultLocale")
     public String serialize() {
         //A few ways to do this:
         //return String.valueOf(p) + ";" + String.valueOf(im) + ";" + String.valueOf(dm);
         //return Double.toString(p) + ";" + Double.toString(im) + ";" + Double.toString(dm);
         // *Every* object has a *.toString() method.
-        return String.format("%f;%f;%f", kP, kI, maxI, kD); // see URL in the JavaDoc comment above
+        return String.format("%f;%f;%f,%f", kP, kI, maxI, kD); // see URL in the JavaDoc comment above
     }
 
     /** Takes a string previously created by the serialize() method. This is useful for reading PID constants from a file.
      * Made with help from <a href="https://stackoverflow.com/questions/7021074/string-delimiter-in-string-split-method">Stack Overflow</a>. */
     public PIDConsts(String arg) {
-        Iterator constsIter = Arrays.stream(arg.split(";")).iterator();
-        kP = Double.parseDouble((String) constsIter.next());
-        kI = Double.parseDouble((String) constsIter.next());
-        maxI = Double.parseDouble((String) constsIter.next());
-        kD = Double.parseDouble((String) constsIter.next());
+        Iterator<String> constsIter = Arrays.stream(arg.split(";")).iterator();
+        kP = Double.parseDouble(constsIter.next());
+        kI = Double.parseDouble(constsIter.next());
+        maxI = Double.parseDouble(constsIter.next());
+        kD = Double.parseDouble(constsIter.next());
     }
 
 

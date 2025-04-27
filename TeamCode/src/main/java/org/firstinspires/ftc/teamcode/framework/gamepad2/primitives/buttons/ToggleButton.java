@@ -5,15 +5,15 @@ import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
 /** Toggles state on each press. */
 public class ToggleButton implements Button {
 
-    private Button.BoolLambda button;
-    private boolean state = false;
+    private final Button.BoolLambda button;
+    private boolean state;
     private boolean latched = false;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * button field:
      * new ToggleButton( () -{@literal >} gamepad.x ); */
     public ToggleButton(Button.BoolLambda button) {
-        this.button = button;
+        this(button, false);
     }
 
     /** Same as the other constructor, but allows for setting the initial state. */
@@ -22,8 +22,8 @@ public class ToggleButton implements Button {
         this.state = initialState;
     }
 
+    /** Whether the button is active toggles each time it is pressed. */
     @Override
-    /** Returns whether the button should be considered active. */
     public boolean isActive() {
         if (button.get() && !latched) {
             latched = true;

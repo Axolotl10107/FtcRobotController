@@ -18,43 +18,44 @@ import org.firstinspires.ftc.teamcode.framework.units.DTS;
  * Matches the "Dual24" diagram. */
 public class IndyTeleOpScheme24 implements TeleOpScheme24 {
 
+    // A few config values up here for easy access.
+
     // Config value: the point on an axis after which the arm will move
-    private double armThreshold = 0.05;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final double ARM_THRESHOLD = 0.05;
 
     // Config value: the speed (scale of 0 - 1) at which the arm moves with the medium arm buttons
-    private double armMediumSpeed = 0.2;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final double ARM_MEDIUM_SPEED = 0.2;
 
     // Config value: the speed (scale of 0 - 1) at which the arm moves with the slow arm buttons
-    private double armSlowSpeed = 0.15;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final double ARM_SLOW_SPEED = 0.15;
 
 
 
-    private TeleOpState24 state;
+    private final TeleOpState24 state;
 
-    private Button clawOpenButton;
-    private Button clawCloseButton;
-    private Button intakeInButton;
-    private Button intakeOutButton;
+    private final Button clawOpenButton;
+    private final Button clawCloseButton;
+    private final Button intakeInButton;
+    private final Button intakeOutButton;
 
-    private Button driveSpeedUpButton;
-    private Button driveSpeedDownButton;
-    private Button squareUpButton;
-    private Button brakeButton;
+    private final Button driveSpeedUpButton;
+    private final Button driveSpeedDownButton;
+    private final Button squareUpButton;
+    private final Button brakeButton;
 
-    private Axis armFast;
-    private Axis armMedium;
-    private Axis armSlow;
+    private final Axis armFast;
+    private final Axis armMedium;
+    private final Axis armSlow;
 
-    private Axis elevatorIn;
-    private Axis elevatorOut;
-    private Axis elevator;
+    private final Axis elevator;
 
-    private Axis driveForward;
-    private Axis driveBackward;
-    private Axis drive;
+    private final Axis drive;
 
-    private Axis turn;
-    private Axis strafe;
+    private final Axis turn;
+    private final Axis strafe;
 
     private boolean armMovementSet = false;
 
@@ -73,16 +74,16 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         brakeButton = new TriggerButton( () -> driver.x );
 
         armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
-        armMedium = new TwoButtonsAsAxis( () -> manipulator.dpad_left, () -> manipulator.dpad_right, armMediumSpeed);
-        armSlow = new TwoButtonsAsAxis( () -> manipulator.dpad_down, () -> manipulator.dpad_up, armSlowSpeed );
+        armMedium = new TwoButtonsAsAxis( () -> manipulator.dpad_left, () -> manipulator.dpad_right, ARM_MEDIUM_SPEED);
+        armSlow = new TwoButtonsAsAxis( () -> manipulator.dpad_down, () -> manipulator.dpad_up, ARM_SLOW_SPEED);
 
-        elevatorIn = new LinearAxis( () -> manipulator.left_trigger );
-        elevatorOut = new LinearAxis( () -> manipulator.right_trigger );
-        elevator = new MergedAxis( elevatorIn, elevatorOut );
+        Axis elevatorIn = new LinearAxis(() -> manipulator.left_trigger);
+        Axis elevatorOut = new LinearAxis(() -> manipulator.right_trigger);
+        elevator = new MergedAxis(elevatorIn, elevatorOut);
 
-        driveForward = new LinearAxis( () -> driver.right_trigger );
-        driveBackward = new LinearAxis( () -> driver.left_trigger );
-        drive = new MergedAxis( driveBackward, driveForward );
+        Axis driveForward = new LinearAxis(() -> driver.right_trigger);
+        Axis driveBackward = new LinearAxis(() -> driver.left_trigger);
+        drive = new MergedAxis(driveBackward, driveForward);
         turn = new ExponentialAxis( () -> -driver.left_stick_x, 2); // positive turn is counterclockwise
         strafe = new LinearAxis( () -> driver.right_stick_x);
     }
@@ -92,7 +93,7 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
     }
 
     private void applyArmSetpoint( double setpoint ) {
-        if ( setpoint > armThreshold ) {
+        if ( setpoint > ARM_THRESHOLD) {
             state.setArmMovement( setpoint );
             armMovementSet = true;
         }

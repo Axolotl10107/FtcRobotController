@@ -5,14 +5,14 @@ import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
 /** Active when held down and not active when up. Can be inverted. */
 public class MomentaryButton implements Button {
 
-    private BoolLambda button;
-    private boolean invert = false;
+    private final BoolLambda button;
+    private final boolean invert;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * button field:
      * new MomentaryButton( () -{@literal >} gamepad.x ); */
     public MomentaryButton(BoolLambda button) {
-        this.button = button;
+        this(button, false);
     }
 
     /** Same as the other constructor, but allows for inverting the active state. If invert is set
@@ -22,8 +22,8 @@ public class MomentaryButton implements Button {
         this.invert = invert;
     }
 
+    /** Active when the button is pressed (or released if it's inverted). */
     @Override
-    /** Returns whether the button should be considered active. */
     public boolean isActive() {
         return invert ^ button.get();
         /*

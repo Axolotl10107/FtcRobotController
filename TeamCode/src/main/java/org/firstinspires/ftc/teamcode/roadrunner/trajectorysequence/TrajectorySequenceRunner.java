@@ -32,15 +32,15 @@ import java.util.List;
 
 @Config
 public class TrajectorySequenceRunner {
-    public static String COLOR_INACTIVE_TRAJECTORY = "#4caf507a";
-    public static String COLOR_INACTIVE_TURN = "#7c4dff7a";
-    public static String COLOR_INACTIVE_WAIT = "#dd2c007a";
+    public static final String COLOR_INACTIVE_TRAJECTORY = "#4caf507a";
+    public static final String COLOR_INACTIVE_TURN = "#7c4dff7a";
+    public static final String COLOR_INACTIVE_WAIT = "#dd2c007a";
 
-    public static String COLOR_ACTIVE_TRAJECTORY = "#4CAF50";
-    public static String COLOR_ACTIVE_TURN = "#7c4dff";
-    public static String COLOR_ACTIVE_WAIT = "#dd2c00";
+    public static final String COLOR_ACTIVE_TRAJECTORY = "#4CAF50";
+    public static final String COLOR_ACTIVE_TURN = "#7c4dff";
+    public static final String COLOR_ACTIVE_WAIT = "#dd2c00";
 
-    public static int POSE_HISTORY_LIMIT = 100;
+    public static final int POSE_HISTORY_LIMIT = 100;
 
     private final TrajectoryFollower follower;
 
@@ -55,14 +55,17 @@ public class TrajectorySequenceRunner {
 
     private Pose2d lastPoseError = new Pose2d();
 
-    List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
+    final List<TrajectoryMarker> remainingMarkers = new ArrayList<>();
 
     private final FtcDashboard dashboard;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
-    private VoltageSensor voltageSensor;
+    private final VoltageSensor voltageSensor;
 
-    private List<Integer> lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels;
+    private final List<Integer> lastDriveEncPositions;
+    private final List<Integer> lastDriveEncVels;
+    private final List<Integer> lastTrackingEncPositions;
+    private final List<Integer> lastTrackingEncVels;
 
     public TrajectorySequenceRunner(
             TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients, VoltageSensor voltageSensor,

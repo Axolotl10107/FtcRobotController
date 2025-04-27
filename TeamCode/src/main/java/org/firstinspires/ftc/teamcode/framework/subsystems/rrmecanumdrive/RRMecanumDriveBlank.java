@@ -67,62 +67,22 @@ public class RRMecanumDriveBlank implements RRMecanumDrive {
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
-        return new TrajectoryBuilder(startPose, new TrajectoryVelocityConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        }, new TrajectoryAccelerationConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        });
+        return new TrajectoryBuilder(startPose, (v, pose2d, pose2d1, pose2d2) -> 0, (v, pose2d, pose2d1, pose2d2) -> 0);
     }
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
-        return new TrajectoryBuilder(startPose, reversed, new TrajectoryVelocityConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        }, new TrajectoryAccelerationConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        });
+        return new TrajectoryBuilder(startPose, reversed, (v, pose2d, pose2d1, pose2d2) -> 0, (v, pose2d, pose2d1, pose2d2) -> 0);
     }
 
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
-        return new TrajectoryBuilder(startPose, startHeading, new TrajectoryVelocityConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        }, new TrajectoryAccelerationConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        });
+        return new TrajectoryBuilder(startPose, startHeading, (v, pose2d, pose2d1, pose2d2) -> 0, (v, pose2d, pose2d1, pose2d2) -> 0);
     }
 
     @Override
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
-        return new TrajectorySequenceBuilder(startPose, new TrajectoryVelocityConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        }, new TrajectoryAccelerationConstraint() {
-            @Override
-            public double get(double v, @NotNull Pose2d pose2d, @NotNull Pose2d pose2d1, @NotNull Pose2d pose2d2) {
-                return 0;
-            }
-        }, 0, 0);
+        return new TrajectorySequenceBuilder(startPose, (v, pose2d, pose2d1, pose2d2) -> 0, (v, pose2d, pose2d1, pose2d2) -> 0, 0, 0);
     }
 
     @Override

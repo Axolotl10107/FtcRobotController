@@ -29,16 +29,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Config
 /** A normal implementation of {@link RRMecanumDrive}.
  * Anything lacking a description is from RoadRunner. See learnroadrunner.com to
  * learn more about those things. */
+@Config
 public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
-    public DcMotorEx leftFront;
-    public DcMotorEx rightFront;
-    public DcMotorEx leftBack;
-    public DcMotorEx rightBack;
+    public final DcMotorEx leftFront;
+    public final DcMotorEx rightFront;
+    public final DcMotorEx leftBack;
+    public final DcMotorEx rightBack;
 
     private double lfPowerTarget = 0;
     private double rfPowerTarget = 0;
@@ -48,35 +48,33 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     private final boolean useAccelLimiter;
     private boolean inDTSMode = false;
 
-    private AccelLimiter accelLimiter;
-    private ElapsedTime stopwatch;
-    private FriendlyIMU imu;
+    private final AccelLimiter accelLimiter;
+    private final ElapsedTime stopwatch;
+    private final FriendlyIMU imu;
 
     public static double LATERAL_MULTIPLIER;
 
-    public double VX_WEIGHT;
-    public double VY_WEIGHT;
-    public double OMEGA_WEIGHT;
+    public final double VX_WEIGHT;
+    public final double VY_WEIGHT;
+    public final double OMEGA_WEIGHT;
 
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
 
     public final TrajectoryVelocityConstraint VEL_CONSTRAINT;
     public final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
 
-    private double MAX_ANG_VEL;
-    private double MAX_ANG_ACCEL;
-    private double WHEEL_RADIUS;
-    private double GEAR_RATIO;
-    private double TICKS_PER_REV;
+    private final double MAX_ANG_VEL;
+    private final double MAX_ANG_ACCEL;
+    private final double WHEEL_RADIUS;
+    private final double GEAR_RATIO;
+    private final double TICKS_PER_REV;
 
-    private TrajectoryFollower follower;
+    private final List<DcMotorEx> motors;
 
-    private List<DcMotorEx> motors;
+    private final VoltageSensor batteryVoltageSensor;
 
-    private VoltageSensor batteryVoltageSensor;
-
-    private List<Integer> lastEncPositions = new ArrayList<>();
-    private List<Integer> lastEncVels = new ArrayList<>();
+    private final List<Integer> lastEncPositions = new ArrayList<>();
+    private final List<Integer> lastEncVels = new ArrayList<>();
 
     public RRMecanumDriveImpl(RRMecanumDrive.Parameters parameters) {
         super(parameters.dc.kV, parameters.dc.kA, parameters.dc.kStatic, parameters.dc.TRACK_WIDTH, parameters.dc.TRACK_WIDTH, parameters.LATERAL_MULTIPLIER);
@@ -108,7 +106,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
         batteryVoltageSensor = parameters.batteryVoltageSensor;
 
-        follower = new HolonomicPIDVAFollower(parameters.TRANSLATIONAL_PID, parameters.TRANSLATIONAL_PID, parameters.HEADING_PID,
+        TrajectoryFollower follower = new HolonomicPIDVAFollower(parameters.TRANSLATIONAL_PID, parameters.TRANSLATIONAL_PID, parameters.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         // TODO: SampleMecanumDrive constructs the IMU here

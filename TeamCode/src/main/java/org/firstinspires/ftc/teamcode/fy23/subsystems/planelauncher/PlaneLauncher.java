@@ -26,7 +26,7 @@ public interface PlaneLauncher {
         public final boolean present;
 
         /** The servo that releases the rubberband, already instantiated and configured */
-        public Servo planeServo = new BlankServo();
+        public final Servo planeServo = new BlankServo();
 
         /** You already set this in the constructor and cannot set it again. */
         public final double releasePosition;

@@ -15,17 +15,17 @@ import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArmImpl;
 /**Represents a complete robot consisting of up to 5 subsystems.
  * Basically, constructing this will construct all of the subsystems for you,
  * which in turn do all of the low-level hardware setup work.
- *
+ * <p>
  * Call methods of subsystems to perform actions. For example, to open the claw:
  * <code>robot.claw.setState(Claw.State.OPEN);</code>
  * Or to start driving forward:
  * <code>robot.drive.applyDTS(new DTS(1, 0, 0));</code>
- *
+ * <p>
  * Programmers who are used to working directly with the SDK to write complete
  * TeleOps might appreciate turning about 120 lines of boilerplate code and a
  * different OpMode for each robot into the following line in a single OpMode:
  * <code>Robot24 robot = new Robot24(RobotRoundhouse.getParamsAuto());</code>
- *
+ * <p>
  * See {@link RobotRoundhouse} to find {@link Parameters} to pass in here. */
 public class Robot24 {
 
@@ -93,7 +93,7 @@ public class Robot24 {
                                               // (now that we've already created it - sequence is important!)
         parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
 
-        drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : (RRMecanumDrive) new RRMecanumDriveBlank();
+        drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : new RRMecanumDriveBlank();
         arm = (parameters.doubleArmParameters.present) ? new DoubleArmImpl(parameters.doubleArmParameters) : new ArmBlank();
 
         // Lynx stuff found in RR's SampleMecanumDrive

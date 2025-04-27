@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.digitaldevice.DigitalDevice;
-import org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.PixelArm;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
@@ -24,44 +23,46 @@ import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 @Deprecated
 public class PixelArmImpl implements PixelArm {
 
-    private DcMotorEx pivotMotor;
-    private DcMotorEx elevatorMotor;
+    private final DcMotorEx pivotMotor;
+    private final DcMotorEx elevatorMotor;
 
-    private AccelLimiter pivotAccelLimiter;
-    private AccelLimiter elevatorAccelLimiter;
+    private final AccelLimiter pivotAccelLimiter;
+    private final AccelLimiter elevatorAccelLimiter;
 
-    private int pivotUpperLimit;
-    private int pivotLowerLimit;
-    private DigitalDevice pivotUpperLimitSwitch;
-    private DigitalDevice pivotLowerLimitSwitch;
+    private final int pivotUpperLimit;
+    private final int pivotLowerLimit;
+    private final DigitalDevice pivotUpperLimitSwitch;
+    private final DigitalDevice pivotLowerLimitSwitch;
 
     private int elevatorUpperLimit;
     private int elevatorLowerLimit;
-    private DigitalDevice elevatorUpperLimitSwitch;
-    private DigitalDevice elevatorLowerLimitSwitch;
+    private final DigitalDevice elevatorUpperLimitSwitch;
+    private final DigitalDevice elevatorLowerLimitSwitch;
 
-    private double pivotTicksPerDegree;
-    private double elevatorTicksPerMillimeter;
+    private final double pivotTicksPerDegree;
+    private final double elevatorTicksPerMillimeter;
 
     private double setPivotVelocity;
-    private int maxPivotVelocity;
+    private final int maxPivotVelocity;
 
     private int setElevatorVelocity;
-    private int maxElevatorVelocity;
+    private final int maxElevatorVelocity;
     private double setElevatorPower;
 
-    private ElapsedTime stopwatch;
+    private final ElapsedTime stopwatch;
 
     private boolean killPivotMotorLatch = false;
-    private double maxPivotRecoveryPower;
+    private final double maxPivotRecoveryPower;
     private boolean killElevatorMotorLatch = false;
-    private double maxElevatorRecoveryPower;
+    private final double maxElevatorRecoveryPower;
 
     // TODO: TESTING
-    private PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
+    private final PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
     private double heartbeat = 0.0001;
-    private TunablePID pivotPID = new TunablePID(pivotPIDConsts);
-    private boolean useSdkPid = false;
+    private final TunablePID pivotPID = new TunablePID(pivotPIDConsts);
+
+    @SuppressWarnings("FieldCanBeLocal")
+    private final boolean useSdkPid = false;
 
     public PixelArmImpl(Parameters parameters) {
         pivotMotor = parameters.pivotMotor;
@@ -220,8 +221,8 @@ public class PixelArmImpl implements PixelArm {
         double limitedVelError = velError;
         double deltaPower = pivotPID.correctFor( limitedVelError );
         pivotMotor.setPower( pivotMotor.getPower() + deltaPower );
-        System.out.println(String.format("velError: {%f}  |  limitedVelError: {%f}", velError, limitedVelError));
-        System.out.println(String.format("deltaPower: {%f}  |  currentPower: {%f}", deltaPower, pivotMotor.getPower()));
+        System.out.printf("velError: {%f}  |  limitedVelError: {%f}%n", velError, limitedVelError);
+        System.out.printf("deltaPower: {%f}  |  currentPower: {%f}%n", deltaPower, pivotMotor.getPower());
         System.out.println("-----------------------------------------------");
         TelemetrySingleton.getInstance().addData("Current Integral", pivotPID.currentIntegralValue());
         TelemetrySingleton.getInstance().addData("Velocity Error", velError);
@@ -386,8 +387,8 @@ public class PixelArmImpl implements PixelArm {
         }
     }
 
-    @Override
     /** Called by robot.update(). You do not need to call this method. */
+    @Override
     public void update() {
         updatePivotPower();
         updateElevatorPower();

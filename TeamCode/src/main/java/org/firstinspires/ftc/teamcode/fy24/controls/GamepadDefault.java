@@ -16,8 +16,7 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double forwardMovement() {
-        double net = moveForward() - moveBackward();
-        return net;
+        return moveForward() - moveBackward();
     }
 
     @Override
@@ -48,8 +47,7 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double rotateMovement() {
-        double net = rotateClockwise() - rotateAnticlockwise(); //check to make sure this is actually right
-        return net;
+        return rotateClockwise() - rotateAnticlockwise();
     }
 
     @Override
@@ -74,14 +72,12 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double armMovement() {
-        double net = armForward() - armBackward();
-        return net;
+        return armForward() - armBackward();
     }
 
     @Override
     public double elevatorMovement() {
-        double net = elevatorUp() - elevatorDown();
-        return net;
+        return elevatorUp() - elevatorDown();
     }
 
     @Override
@@ -96,8 +92,7 @@ public class GamepadDefault implements GamepadInterface {
 
     @Override
     public double clawMovement() {
-        double net = clawOpen() - clawClose();
-        return net;
+        return clawOpen() - clawClose();
     }
 
     @Override

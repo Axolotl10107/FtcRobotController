@@ -7,9 +7,9 @@ import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
  * simple response curve - find out what it is by graphing y=x^[power] - y=x^2, for example)*/
 public class ExponentialAxis implements Axis {
 
-    private DoubleLambda axis;
+    private final DoubleLambda axis;
     private int invert = 1;
-    private double power = 1;
+    private final double power;
 
     /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
      * axis field:
@@ -26,6 +26,7 @@ public class ExponentialAxis implements Axis {
         this.invert = invert ? -1 : 1;
     }
 
+    /** Returns the raw axis value to the power set in the constructor. */
     @Override
     public double value() {
         return Math.pow(axis.get(), power) * invert;

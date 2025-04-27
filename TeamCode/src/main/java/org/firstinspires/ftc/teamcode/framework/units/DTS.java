@@ -44,9 +44,6 @@ public class DTS {
         return new DTS(drive * factor, turn * factor, strafe * factor);
     }
 
-    /** Refactor the DTS to be within a normal range, keeping the sum of the axes between -1 and 1 in this case, while
-     * maintaining the proportions between the axes. In other words, scales everything down so that the sum of the axes
-     * is between -1 and 1. */
     /** Scales everything down (if / as much as) necessary to keep the sum of
      * the 3 components between -1 and 1.
      * You'll usually want to give a normalized DTS to {@link org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive},

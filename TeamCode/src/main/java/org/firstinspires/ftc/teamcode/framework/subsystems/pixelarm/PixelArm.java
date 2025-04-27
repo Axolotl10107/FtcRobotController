@@ -21,8 +21,8 @@ import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 @Deprecated
 public interface PixelArm {
 
-    @Deprecated
     /** You must set some of these if this subsystem is present. */
+    @Deprecated
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on this robot?
@@ -56,9 +56,9 @@ public interface PixelArm {
         /** The maximum power to use while the pivot arm has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
-        public double maxPivotRecoveryPower = 0;
+        public final double maxPivotRecoveryPower = 0;
         /** The maximum velocity of the pivot motor in ticks per second. */
-        public int maxPivotVelocity = 0;
+        public final int maxPivotVelocity = 0;
 
 
         /** Pass in an AccelLimiter object that has already been instantiated with the correct parameters for your motor. */
@@ -78,7 +78,7 @@ public interface PixelArm {
         /** The maximum power to use while the elevator has tripped a limit and is returning to a
          * safe position. This is important because acceleration control is not applied at this stage,
          * so a large value here will cause jolts. */
-        public double maxElevatorRecoveryPower = 0;
+        public final double maxElevatorRecoveryPower = 0;
         /** The maximum velocity of the elevator motor in ticks per second. */
         public int maxElevatorVelocity;
         /** UnitTests can pass in a MockElapsedTime. */

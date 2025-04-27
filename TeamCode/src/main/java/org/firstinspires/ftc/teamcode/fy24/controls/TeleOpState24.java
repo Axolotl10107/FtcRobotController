@@ -57,7 +57,7 @@ public class TeleOpState24 {
     }
 
     public void setIntakeState(RotaryIntake.State state) {
-        this.intakeState = intakeState;
+        intakeState = state;
     }
 
     public double getMaxDriveSpeed() {

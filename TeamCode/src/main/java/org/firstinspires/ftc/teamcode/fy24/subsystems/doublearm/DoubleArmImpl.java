@@ -22,51 +22,53 @@ import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
  * */
 public class DoubleArmImpl implements DoubleArm {
 
-    private DcMotorEx pivotMotorLeft;
-    private DcMotorEx pivotMotorRight;
-    private DcMotorEx elevatorMotorLeft;
-    private DcMotorEx elevatorMotorRight;
+    private final DcMotorEx pivotMotorLeft;
+    private final DcMotorEx pivotMotorRight;
+    private final DcMotorEx elevatorMotorLeft;
+    private final DcMotorEx elevatorMotorRight;
 
-    private AccelLimiter pivotAccelLimiter;
-    private AccelLimiter elevatorAccelLimiter;
+    private final AccelLimiter pivotAccelLimiter;
+    private final AccelLimiter elevatorAccelLimiter;
 
-    private int pivotUpperLimit;
-    private int pivotLowerLimit;
-    private DigitalDevice pivotUpperLimitSwitch;
-    private DigitalDevice pivotLowerLimitSwitch;
+    private final int pivotUpperLimit;
+    private final int pivotLowerLimit;
+    private final DigitalDevice pivotUpperLimitSwitch;
+    private final DigitalDevice pivotLowerLimitSwitch;
 
     private int elevatorUpperLimit;
     private int elevatorLowerLimit;
-    private DigitalDevice elevatorUpperLimitSwitch;
-    private DigitalDevice elevatorLowerLimitSwitch;
-    private double elevatorLimitBuffer;
-    private double elevatorOffsetLength;
+    private final DigitalDevice elevatorUpperLimitSwitch;
+    private final DigitalDevice elevatorLowerLimitSwitch;
+    private final double elevatorLimitBuffer;
+    private final double elevatorOffsetLength;
 
-    private double pivotTicksPerDegree;
-    private double elevatorTicksPerInch;
+    private final double pivotTicksPerDegree;
+    private final double elevatorTicksPerInch;
 
     private double setPivotVelocity;
-    private int maxPivotVelocity;
+    private final int maxPivotVelocity;
 
     private int setElevatorVelocity;
-    private int maxElevatorVelocity;
+    private final int maxElevatorVelocity;
     private double setElevatorPower;
 
-    private ElapsedTime stopwatch;
+    private final ElapsedTime stopwatch;
 
     private boolean killPivotMotorLatch = false;
-    private double maxPivotRecoveryPower;
+    private final double maxPivotRecoveryPower;
     private boolean killElevatorMotorLatch = false;
-    private double maxElevatorRecoveryPower;
+    private final double maxElevatorRecoveryPower;
 
     private double armPos;
     private double pivotPos;
 
     // TODO: TESTING
-    private PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
-    private double heartbeat = 0.0001;
-    private TunablePID pivotPID = new TunablePID(pivotPIDConsts);
-    private boolean useSdkPid = true; // This should always be true (for now, at least)
+    private final PIDConsts pivotPIDConsts = new PIDConsts(0.00001, 0.00001, 0.001, 0.000);
+    private final double heartbeat = 0.0001;
+    private final TunablePID pivotPID = new TunablePID(pivotPIDConsts);
+
+    // This is a class variable because it may be used in more places in the future.
+    private final boolean useSdkPid = true; // This should always be true (for now, at least)
 
     public DoubleArmImpl(Parameters parameters) {
 
@@ -382,11 +384,7 @@ public class DoubleArmImpl implements DoubleArm {
     private boolean checkArmLimit(Double angle) {
         double horizontalLimit = elevatorLowerLimit - elevatorLimitBuffer - elevatorOffsetLength;
         // horizontalLimit / Math.cos(Math.toRadians(angle))
-        if (armPos < Math.abs((1 / Math.cos(Math.toRadians(angle))) * horizontalLimit)) {
-            return true;
-        } else {
-            return false;
-        }
+        return armPos < Math.abs((1 / Math.cos(Math.toRadians(angle))) * horizontalLimit);
     }
 
     private void updateElevatorPower() {
@@ -408,8 +406,8 @@ public class DoubleArmImpl implements DoubleArm {
 //                System.out.println("[Elevator] Upper soft limit hit");
 //                handleElevatorHitUpperLimit(setElevatorVelocity);
             int currentPos = getElevatorPosition();
-            armPos = (((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2) / elevatorTicksPerInch) + 17.5;
-            pivotPos = Math.abs(((pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2) / pivotTicksPerDegree);
+            armPos = (((elevatorMotorLeft.getCurrentPosition() + elevatorMotorRight.getCurrentPosition()) / 2.0) / elevatorTicksPerInch) + 17.5;
+            pivotPos = Math.abs(((pivotMotorLeft.getCurrentPosition() + pivotMotorRight.getCurrentPosition()) / 2.0) / pivotTicksPerDegree);
             if (currentPos < elevatorLowerLimit) {
                 System.out.println("[Elevator] Lower soft limit hit");
                 handleElevatorHitLowerLimit(setElevatorVelocity);
@@ -450,8 +448,8 @@ public class DoubleArmImpl implements DoubleArm {
         }
     }
 
-    @Override
     /** Called by robot.update(). You do not need to call this method. */
+    @Override
     public void update() {
         updatePivotPower();
         updateElevatorPower();

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIn
 /** A normal implementation of {@link RotaryIntake}. */
 public class RotaryIntakeImpl implements RotaryIntake {
     private double servoPower;
-    private CRServo servo;
+    private final CRServo servo;
     private RotaryIntake.State state = RotaryIntake.State.NONE;
 
     public RotaryIntakeImpl(RotaryIntake.Parameters parameters) {

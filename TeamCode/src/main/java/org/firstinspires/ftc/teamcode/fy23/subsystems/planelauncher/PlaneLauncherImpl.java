@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Deprecated
 public class PlaneLauncherImpl implements PlaneLauncher {
 
-    private Servo servo;
+    private final Servo servo;
     private boolean launchComplete = false;
 
-    private double releasePosition;
-    private double restPosition;
+    private final double releasePosition;
+    private final double restPosition;
 
     public PlaneLauncherImpl(Parameters parameters) {
         servo = parameters.planeServo;
@@ -24,8 +24,8 @@ public class PlaneLauncherImpl implements PlaneLauncher {
         servo.setPosition(releasePosition);
     }
 
-    @Override
     /** Called by robot.update(). You do not need to call this method. */
+    @Override
     public void update() {
         // handle auto retract (in a way that only calls servo.setPosition() once, mostly as an example of tracking state)
         if (!launchComplete) {

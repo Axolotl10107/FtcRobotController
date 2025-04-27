@@ -4,12 +4,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /** Make telemetry globally accessible.
  * Store a Telemetry into here from anywhere and then retrieve it from anywhere.
- *
+ * <p>
  * One big use case for this is telemetry within a subsystem that you're
  * developing. Your OpMode can store the telemetry instance that the OpMode
  * gives it, and then your subsystem can retrieve it. No shenanigans to get the
  * telemetry passed all the way over there!
- *
+ * <p>
  * This also seemed to be helpful somehow when working with FTC Dashboard's
  * MultipleTelemetry. */
 public class TelemetrySingleton {

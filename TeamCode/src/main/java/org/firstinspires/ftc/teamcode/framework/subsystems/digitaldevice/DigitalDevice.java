@@ -16,7 +16,7 @@ public interface DigitalDevice {
         /** You already set this in the constructor and cannot set it again. */
         public final String deviceName;
         /** If this is true, the reported state of the device is inverted. */
-        public boolean invert = false;
+        public final boolean invert = false;
     }
 
     /** When a device is "active" depends on the implementation. */

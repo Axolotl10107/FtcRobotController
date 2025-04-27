@@ -6,8 +6,8 @@ import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
 /** Makes two physical gamepad buttons act as an axis (one is positive, one is negative). */
 public class TwoButtonsAsAxis implements Axis {
 
-    private Button.BoolLambda button1;
-    private Button.BoolLambda button2;
+    private final Button.BoolLambda button1;
+    private final Button.BoolLambda button2;
     private double scalingFactor = 1;
 
     /** Pass in two lambda expressions that return the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
@@ -26,9 +26,9 @@ public class TwoButtonsAsAxis implements Axis {
         this.scalingFactor = scalingFactor;
     }
 
-    @Override
     /** If the button is pressed, report 1. Otherwise, report 0. If the "axis" is inverted, report
-     * -1 when pressed..*/
+     * -1 when pressed. */
+    @Override
     public double value() {
         double button1value = button1.get() ? scalingFactor : 0;
         double button2value = button2.get() ? scalingFactor : 0;

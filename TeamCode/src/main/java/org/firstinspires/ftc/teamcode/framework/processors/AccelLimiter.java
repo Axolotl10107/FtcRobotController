@@ -39,7 +39,7 @@ import java.util.List;
  * work in the units we need. Anyway, the two things we need to determine are:</p>
  * <ul>
  *     <li>Maximum Acceleration</li>
- *     <li>Maxinum change in velocity each time a request*() method is called<ul>
+ *     <li>Maximum change in velocity each time a request*() method is called<ul>
  *         <li>With this, if one iteration of the program loop takes longer than normal, the speed won't suddenly increase
  *         more than we expect.</li>
  *     </ul></li>
@@ -130,7 +130,7 @@ import java.util.List;
  * <br>
  * <p>Let's consider an example that lets us easily test our example: Our maximum acceleration is 100 t/s², and we're
  * going 100 t/s. The line of our deceleration will cut the square of 100 t/s over 1 second in half, making it a
- * triangle with half the area. In other words, we will tarvel 50 ticks while we're still ramping down, or half the
+ * triangle with half the area. In other words, we will travel 50 ticks while we're still ramping down, or half the
  * distance we would have traveled at full speed. That is our stopping distance. If we built the example above correctly,
  * stoppingDistance should roughly equal 50.</p>
  * <p>Also, our logic with the graph is the same logic behind a faster way to calculate the stopping distance for linear
@@ -149,7 +149,7 @@ import java.util.List;
  * DcMotor.setTargetPosition() method instead.</p>
  * <p>That said, if you have a fun issue like your motor's encoder counting backwards and the SD won't work for you,
  * this might be a stopgap solution until you can fix the motor. What this is really made for, however, is more complex
- * applications such as moving the entire drivetran (4 motors with different encoder positions and rotation directions)
+ * applications such as moving the entire drivetrain (4 motors with different encoder positions and rotation directions)
  * until a target position is reached on one of the dead wheels.</p>
  * <p>There is no blocking version of this (yet?). It must be done asynchronously.</p>
  * <br>

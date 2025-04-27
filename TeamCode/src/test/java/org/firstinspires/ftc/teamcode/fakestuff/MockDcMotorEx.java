@@ -33,7 +33,7 @@ public class MockDcMotorEx implements DcMotorEx {
     private double velocityRadians = 0;
     private double maxVelocityTicks = 150;
     private double ticksPerRotation = 537.7;
-    private double maxVelocityRadians = (maxVelocityTicks / ticksPerRotation) * (2 * Math.PI);
+    private final double maxVelocityRadians = (maxVelocityTicks / ticksPerRotation) * (2 * Math.PI);
 
     private double power = 0;
     private int position = 0;
@@ -43,12 +43,11 @@ public class MockDcMotorEx implements DcMotorEx {
     private Direction direction;
     private RunMode runMode = RunMode.RUN_WITHOUT_ENCODER;
     private MotorConfigurationType motorType;
-    private int portNumber = -1;
     private ZeroPowerBehavior zeroPowerBehavior;
-    private Map<RunMode, PIDCoefficients> pidCoefficientsMap = new HashMap<>();
-    private Map<RunMode, PIDFCoefficients> pidfCoefficientsMap = new HashMap<>();
+    private final Map<RunMode, PIDCoefficients> pidCoefficientsMap = new HashMap<>();
+    private final Map<RunMode, PIDFCoefficients> pidfCoefficientsMap = new HashMap<>();
 
-    private ElapsedTime elapsedTime;
+    private final ElapsedTime elapsedTime;
     private double lastTime = 0;
 
 
@@ -150,26 +149,26 @@ public class MockDcMotorEx implements DcMotorEx {
         return targetPositionTolerance;
     }
 
-    @Override
     /** Unsupported Operation */
+    @Override
     public double getCurrent(CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     /** Unsupported Operation */
+    @Override
     public double getCurrentAlert(CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     /** Unsupported Operation */
+    @Override
     public void setCurrentAlert(double current, CurrentUnit unit) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     /** Unsupported Operation */
+    @Override
     public boolean isOverCurrent() {
         throw new UnsupportedOperationException();
     }
@@ -185,16 +184,16 @@ public class MockDcMotorEx implements DcMotorEx {
         this.motorType = motorType;
     }
 
-    @Override
     /** Unsupported Operation */
+    @Override
     public DcMotorController getController() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     /** Should return -1, which is the SDK's default before it gets set */
+    @Override
     public int getPortNumber() {
-        return portNumber;
+        return -1;
     }
 
     @Override
@@ -207,18 +206,18 @@ public class MockDcMotorEx implements DcMotorEx {
         return zeroPowerBehavior;
     }
 
-    @Override
     /** The name of this method is confusing. It simply sets the power to 0 and sets the {@link com.qualcomm.robotcore.hardware.DcMotorEx.ZeroPowerBehavior}
      * to FLOAT. This completely removes power from the motor. */
+    @Override
     public void setPowerFloat() {
         setZeroPowerBehavior(ZeroPowerBehavior.FLOAT);
         setPower(0.0);
     }
 
-    @Override
     /** Returns if the motor is simply floating, completely unpowered. Specifically, returns if the
      * power is set to 0 and the {@link com.qualcomm.robotcore.hardware.DcMotorEx.ZeroPowerBehavior}
      * is set to FLOAT. */
+    @Override
     public boolean getPowerFloat() {
         return getZeroPowerBehavior() == ZeroPowerBehavior.FLOAT && getPower() == 0.0;
     }
@@ -233,9 +232,9 @@ public class MockDcMotorEx implements DcMotorEx {
         return targetPosition;
     }
 
-    @Override
     /** This implementation, and seemingly the SDK's, returns whether or not the current position is
      * the target position (the target has been reached, we're not still moving towards it). */
+    @Override
     public boolean isBusy() {
         return position != targetPosition;
     }
@@ -279,39 +278,39 @@ public class MockDcMotorEx implements DcMotorEx {
     }
 
     // HardwareDevice
-    @Override
     /** Returns {@link com.qualcomm.robotcore.hardware.HardwareDevice.Manufacturer}.UNKNOWN */
+    @Override
     public Manufacturer getManufacturer() {
         return Manufacturer.Unknown;
     }
 
-    @Override
     /** Returns "Mockery 0 RPM motor" */
+    @Override
     public String getDeviceName() {
         return "Mockery 0 RPM motor";
     }
 
-    @Override
     /** Returns "This motor shares a connection with its friends." */
+    @Override
     public String getConnectionInfo() {
         return "This motor shares a connection with its friends.";
     }
 
-    @Override
     /** Returns 51825 */
+    @Override
     public int getVersion() {
         return 51825;
     }
 
-    @Override
     /** Sets the {@link com.qualcomm.robotcore.hardware.DcMotorEx.Direction} to FORWARD.
      * (matches the original implementation) */
+    @Override
     public void resetDeviceConfigurationForOpMode() {
         setDirection(Direction.FORWARD);
     }
 
-    @Override
     /** Calls setPowerFloat() (matches the original implementation) */
+    @Override
     public void close() {
         setPowerFloat();
     }
