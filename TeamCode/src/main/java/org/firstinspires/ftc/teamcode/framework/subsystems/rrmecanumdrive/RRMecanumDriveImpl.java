@@ -30,6 +30,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Config
+/** A normal implementation of {@link RRMecanumDrive}.
+ * Anything lacking a description is from RoadRunner. See learnroadrunner.com to
+ * learn more about those things. */
 public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
 
     public DcMotorEx leftFront;

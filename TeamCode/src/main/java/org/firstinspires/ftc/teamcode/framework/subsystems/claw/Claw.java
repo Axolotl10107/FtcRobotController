@@ -9,19 +9,20 @@ public interface Claw {
 
     /** Represents the state of the claw. */
     enum State {
-        /** Claw is open */
+        /** Claw is open. */
         OPEN,
-        /** Claw is closed */
+        /** Claw is closed. */
         CLOSED,
         /** Either no state has been set yet, or the claw should rest. */
         NONE
     }
 
+    /** You must set some of these if this subsystem is present. */
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on this robot?
-         * @param openPosition The servo position (between 0 and 1) that the claw is considered open
-         * @param closePosition The servo position (between 0 and 1) that the claw is considered closed
+         * @param openPosition The servo position (between 0 and 1) that the claw is considered open.
+         * @param closePosition The servo position (between 0 and 1) that the claw is considered closed.
          */
         public Parameters(boolean present, double openPosition, double closePosition) {
             this.present = present;

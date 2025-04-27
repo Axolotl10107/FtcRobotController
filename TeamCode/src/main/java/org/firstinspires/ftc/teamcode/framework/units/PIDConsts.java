@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import java.util.Arrays;
 import java.util.Iterator;
 
-/** Container for PID tuning constants. They cannot be changed after the object is created.
+/** An immutable container for PID tuning constants.
  * Accepted by {@link TunablePID}. */
 public class PIDConsts {
 
@@ -21,6 +21,7 @@ public class PIDConsts {
     /** derivative multiplier */
     public final double kD;
 
+    /** Create a new PIDConsts with the specified values set for each component. */
     public PIDConsts(double kP, double kI, double maxI, double kD) {
         this.kP = kP;
         this.kI = kI;
@@ -50,18 +51,26 @@ public class PIDConsts {
     }
 
 
+    /** Replace the <b>kP</b> component but leave the other 3 alone.
+     * {@param newkP} The new value of the <b>kP</b> component. */
     public PIDConsts withkP(double newkP) {
         return new PIDConsts(newkP, kI, maxI, kD);
     }
 
+    /** Replace the <b>kI</b> component but leave the other 3 alone.
+     * {@param newkI} The new value of the <b>kI</b> component. */
     public PIDConsts withkI(double newkI) {
         return new PIDConsts(kP, newkI, maxI, kD);
     }
 
+    /** Replace the <b>maxI</b> component but leave the other 3 alone.
+     * {@param newmaxI} The new value of the <b>maxI</b> component. */
     public PIDConsts withmaxI(double newmaxI) {
         return new PIDConsts(kP, kI, newmaxI, kD);
     }
 
+    /** Replace the <b>kD</b> component but leave the other 3 alone.
+     * {@param newkD} The new value of the <b>kD</b> component. */
     public PIDConsts withkD(double newkD) {
         return new PIDConsts(kP, kI, maxI, newkD);
     }

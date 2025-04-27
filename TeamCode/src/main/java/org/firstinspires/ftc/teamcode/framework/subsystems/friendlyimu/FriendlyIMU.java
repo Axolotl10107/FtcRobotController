@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-/** Represents the IMU built into the control hub. Currently only supports the BNO055, but there is a task on the board
- * (albeit of very low priority) to use the newer IMU interface instead. Wraps the IMU already available in the SDK,
- * making pitch, roll, and yaw easily accessible as methods rather than the SDK's more complicated ways of obtaining
- * them.
+/** Represents the IMU built into the control hub. Wraps the IMU interface already available in the SDK, making pitch,
+ * roll, and yaw easily accessible as methods rather than the SDK's more complicated ways of obtaining them.
+ *
  * AxesOrder is ZYX, because most of our uses for the IMU rely on accurate yaw (Z axis) information.
  * Unless an AngleUnit is specified, returned values will be in degrees. */
 public interface FriendlyIMU {
 
+    /** All parameters here are set in the Constructor; there is nothing optional. */
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on this robot?

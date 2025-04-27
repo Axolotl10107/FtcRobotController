@@ -457,10 +457,14 @@ public class DoubleArmImpl implements DoubleArm {
         updateElevatorPower();
     }
 
+    /** Set a new lower limit for the elevator, in <b>inches</b>.
+     * {@param i} The new lower limit, in <b>inches</b>. */
     public void setElevatorUpperLimit(int i) {
         elevatorUpperLimit = i;
     }
 
+    /** Set a new upper limit for the elevator, in <b>inches</b>.
+     * {@param i} The new upper limit, in <b>inches</b>. */
     public void setElevatorLowerLimit(int i) {
         elevatorLowerLimit = i;
     }

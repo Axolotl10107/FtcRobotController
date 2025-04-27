@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.framework.subsystems.digitaldevice;
  * and annoying ways) */
 public interface DigitalDevice {
 
+    /** Parameters for any DigitalDevice implementation. */
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param deviceName The name of the device in the HardwareMap (robot configuration)

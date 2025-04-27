@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 
+/** A normal implementation of {@link RotaryIntake}. */
 public class RotaryIntakeImpl implements RotaryIntake {
     private double servoPower;
     private CRServo servo;

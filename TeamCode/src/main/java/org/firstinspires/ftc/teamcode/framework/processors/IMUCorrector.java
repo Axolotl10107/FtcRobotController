@@ -18,9 +18,10 @@ public class IMUCorrector {
     // https://en.wikipedia.org/wiki/Right-hand_rule
     // https://www.evl.uic.edu/ralph/508S98/coordinates.html
 
+    /** Please read if you're using IMUCorrector - important information inside. */
     public static class Parameters {
         /** Create a new IMUCorrector.Parameters object and supply non-optional parameters.
-         * @param imu Please pass the Robot's IMU ( robot.imu ) through.
+         * @param imu Pass the Robot's IMU ( robot.imu ) through.
          * @param pid Pass in an object, already instantiated and configured. */
         public Parameters(FriendlyIMU imu, TunablePID pid) {
             this.imu = imu;
@@ -29,18 +30,26 @@ public class IMUCorrector {
 
         /** You already set this in the constructor and cannot set it again. */
         public final FriendlyIMU imu;
+
         /** You already set this in the constructor and cannot set it again. */
         public final TunablePID pid;
 
         /** Maximum correction power that can be applied */
         public double maxCorrectionPower = 0.1;
+
         /** Minimum absolute value of the turn axis that is considered an intentional turn (which will pause correction) */
         public double turnPowerThreshold = 0.05;
 
         /** Minimum actionable heading error (in degrees) */
         public double hdgErrToleranceDegrees = 1.0;
-        // IRW: Improve this comment. Put this value next to hdgErrTolerance and explain the difference better.
-        /** Proximity to the target (in degrees) that counts as hitting the target */
+
+        /** A smaller error tolerance for when we're trying to hit the center of the larger tolerance.
+         * IMUCorrector used to be content and stop correcting once it was within the hdgErrTolerance. Really, it had
+         * only hit the very edge of that tolerance, and it would ride the edge for a while, causing the robot to
+         * vibrate. So now, at first, it makes sure to go to the center of the tolerance, and only once it gets there
+         * will it expand to the wider tolerance to allow a little drift. But we'll never be at *exactly* 90.000000000
+         * degrees, so what counts as the center? That's where this value comes in. Make sure it's much smaller than
+         * hdgErrorToleranceDegrees. */
         public double haveHitTargetToleranceDegrees = 0.1;
 
         /** An ElapsedTime (or MockElapsedTime for testing) */
@@ -226,6 +235,8 @@ public class IMUCorrector {
     }
 
     // [object] hasHitTarget() in the third person, and [I] haveHitTarget in the first person
+    /** Have you gotten to the center of the hdgErrTolerance since last time you turned or squared up?
+     * See the description for haveHitTargetToleranceDegrees in the {@link Parameters}. */
     public boolean hasHitTarget() {
         return haveHitTarget;
     }

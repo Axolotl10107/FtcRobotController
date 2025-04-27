@@ -24,7 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /** A port of RoadRunner Quickstart's SampleMecanumDrive to our new architecture.
- * Learn more at learnroadrunner.com. */
+ * Anything lacking a description is from RoadRunner. See learnroadrunner.com to
+ * learn more about those things. */
 public interface RRMecanumDrive {
 
     /** See the RoadRunner Quickstart's DriveConstants class. The default values model a goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration will be needed. */

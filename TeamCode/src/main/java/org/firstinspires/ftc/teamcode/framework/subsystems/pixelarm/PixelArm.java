@@ -12,13 +12,17 @@ import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 /** Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
  * their powers independently or by specifying a point on the planar region containing all possible points that this
  * mechanism can reach.
- * Deprecated because the physical hardware this corresponds to no longer exists.
+ * Deprecated because the physical hardware this corresponds to no longer exists (real-world testing is impossible at the moment).
  * A newer generation of it does, driven by {@link DoubleArm} (which is a newer
- * generation of PixelArm). */
+ * generation of PixelArm).
+ * However, the plan is to backport fixes from DoubleArm to this class and
+ * instead use a DualMotor adapter (which has yet to be created) to drive the
+ * physical DoubleArm. And then DoubleArm will be deprecated instead. */
 @Deprecated
 public interface PixelArm {
 
     @Deprecated
+    /** You must set some of these if this subsystem is present. */
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on this robot?
