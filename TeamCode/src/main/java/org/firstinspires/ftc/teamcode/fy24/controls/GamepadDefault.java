@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.fy23.controls;
+package org.firstinspires.ftc.teamcode.fy24.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+@Deprecated
 public class GamepadDefault implements GamepadInterface {
     public Gamepad gamepad1;
     public Gamepad gamepad2;

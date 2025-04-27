@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
-@Deprecated
+
 public class FieldyGamepadLS extends NoDriveAxes {
 
     private Gamepad driver;

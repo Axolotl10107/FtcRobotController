@@ -6,7 +6,7 @@
 package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-@Deprecated
+
 public class NoDriveAxes extends GamepadDefault {
     private Gamepad driver;
     private Gamepad manipulator;

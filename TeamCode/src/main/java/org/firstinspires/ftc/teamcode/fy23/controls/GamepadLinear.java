@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-@Deprecated
+
 public class GamepadLinear extends GamepadDefault {
     public GamepadLinear(Gamepad initgamepad1, Gamepad initgamepad2) {
         super(initgamepad1, initgamepad2);

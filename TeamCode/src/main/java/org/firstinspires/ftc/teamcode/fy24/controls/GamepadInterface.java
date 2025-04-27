@@ -1,5 +1,5 @@
-package org.firstinspires.ftc.teamcode.fy23.controls;
-
+package org.firstinspires.ftc.teamcode.fy24.controls;
+@Deprecated
 public interface GamepadInterface {
     public double forwardMovement();
     public double moveForward();

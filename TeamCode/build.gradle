@@ -30,16 +30,15 @@ android {
                 // `exclude 'org/firstinspires/ftc/teamcode/fy22/**'` also works here
                 exclude '**/fy22/**'
 
-                exclude '**/framework/old/**'
-
+                // Not excluding PlaneLauncher, but excluding everything else in fy23
+                // And you can comment out one of these if you want to bring a package back
                 exclude '**/fy23/auto/**'
-
-                // I want to exclude this, but fy24/controls still depends on it. It is marked as Deprecated now.
-//                exclude '**/fy23/controls/**'
-
+                exclude '**/fy23/controls/**'
                 exclude '**/fy23/teleop/**'
                 exclude '**/fy23/units/**'
                 exclude '**/fy23/visionexperiment/**'
+                exclude '**/fy23/ArmMotor'
+                exclude '**/fy23/DcMotorWrapper'
             }
         }
     }

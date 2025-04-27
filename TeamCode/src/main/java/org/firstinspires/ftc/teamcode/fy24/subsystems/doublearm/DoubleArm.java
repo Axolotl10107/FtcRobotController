@@ -30,6 +30,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.digitaldevice.Digital
  * To work around an unknown bug (presumably in AccelLimiter?), when passing an AccelLimiter into
  * this subsystem (or creating one anywhere), multiply the maxAccel and maxDeltaVEachLoop arguments
  * by 10.
+ *
+ * The blank version of this subsystem is {@link org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.ArmBlank},
+ * which also applies to {@link org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.PixelArm}.
  * */
 public interface DoubleArm {
 

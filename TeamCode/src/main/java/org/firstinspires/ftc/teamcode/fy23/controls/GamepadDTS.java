@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy23.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-@Deprecated
+
 public class GamepadDTS extends GamepadDefault {
     private Gamepad gamepad1;
     private Gamepad gamepad2;
