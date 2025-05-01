@@ -28,6 +28,7 @@ android {
                 // Example: Don't build the fy22 directory
                 // Path relative to 'java' directory, so
                 // `exclude 'org/firstinspires/ftc/teamcode/fy22/**'` also works here
+                // This actually excludes any directory named 'fy22' anywhere in TeamCode
                 exclude '**/fy22/**'
 
                 // Not excluding PlaneLauncher, but excluding everything else in fy23

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teletest.independent;
+package org.firstinspires.ftc.teamcode.fy24;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import java.util.ArrayList;
 
 @TeleOp()
-public class BIT extends LinearOpMode {
+public class BIT24 extends LinearOpMode {
 
     DcMotorEx leftFront;
     DcMotorEx rightFront;
