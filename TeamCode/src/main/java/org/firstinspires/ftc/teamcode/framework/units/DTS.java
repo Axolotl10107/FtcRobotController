@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.framework.units;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
-/** An immutable vector represented as <b>D</b>rive, <b>T</b>urn, and <b>S</b>trafe axes.
- * Every method of a DTS returns a new DTS with the specified operation applied. */
+/** An immutable vector represented as <b>D</b>rive, <b>T</b>urn, and
+ * <b>S</b>trafe axes.
+ * Every method of a DTS (except isEquivalentTo) returns a new DTS with the
+ * specified operation applied. */
 public class DTS {
 
     /** Forward / backward movement. */
@@ -75,10 +77,23 @@ public class DTS {
         return new DTS(drive, turn, newStrafe);
     }
 
-    /** Rotate the drive and strafe axes by a value in Radians. Leaves the turn axis unmodified. Perhaps most useful for
-     * field-oriented driving, or perhaps driving with independent axes on an "XDrive" base. */
+    /** Rotate the drive and strafe axes by a value in Radians. Leaves the turn axis unmodified.
+     * Perhaps most useful for field-oriented driving, or perhaps driving with independent axes on
+     * an "XDrive" base. */
     public DTS rotate(double radians) {
         Vector2d rrVector = new Vector2d(drive, strafe).rotated(radians);
         return new DTS(rrVector.component1(), turn, rrVector.component2());
+    }
+
+    /** Determines if all the components of this DTS have the same values as the
+     * components of the given DTS.
+     * Not to be confused with Object.equals(), which does something quite
+     * different.
+     * {@param dts} The DTS to compare this one to
+     * {@return a boolean; true if all values match, false if one or more don't.} */
+    public boolean isEquivalentTo(DTS dts) {
+        return ( dts.drive == this.drive &&
+                dts.turn == this.turn &&
+                dts.strafe == this.strafe );
     }
 }

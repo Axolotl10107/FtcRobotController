@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.framework.units;
 
-import android.annotation.SuppressLint;
+//import android.annotation.SuppressLint; // This makes JavaDoc fail to build (!?)
 
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 
@@ -32,9 +32,9 @@ public class PIDConsts {
     }
 
 
-    /** Puts constants in a string. This is useful for writing them to a file. Made with help from
-     * <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax">Oracle docs</a>. */
-    @SuppressLint("DefaultLocale")
+    /** Puts constants in a string. This is useful for writing them to a file.
+     * Made with help from <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html#syntax">Oracle docs</a>. */
+//    @SuppressLint("DefaultLocale") // This makes JavaDoc fail to build (!?)
     public String serialize() {
         //A few ways to do this:
         //return String.valueOf(p) + ";" + String.valueOf(im) + ";" + String.valueOf(dm);
@@ -43,7 +43,8 @@ public class PIDConsts {
         return String.format("%f;%f;%f,%f", kP, kI, maxI, kD); // see URL in the JavaDoc comment above
     }
 
-    /** Takes a string previously created by the serialize() method. This is useful for reading PID constants from a file.
+    /** Takes a string previously created by the serialize() method. This is
+     * useful for reading PID constants from a file.
      * Made with help from <a href="https://stackoverflow.com/questions/7021074/string-delimiter-in-string-split-method">Stack Overflow</a>. */
     public PIDConsts(String arg) {
         Iterator<String> constsIter = Arrays.stream(arg.split(";")).iterator();
@@ -55,26 +56,43 @@ public class PIDConsts {
 
 
     /** Replace the <b>kP</b> component but leave the other 3 alone.
-     * {@param newkP} The new value of the <b>kP</b> component. */
+     * {@param newkP} The new value of the <b>kP</b> component.
+     * {@return a new PIDConsts.} */
     public PIDConsts withkP(double newkP) {
         return new PIDConsts(newkP, kI, maxI, kD);
     }
 
     /** Replace the <b>kI</b> component but leave the other 3 alone.
-     * {@param newkI} The new value of the <b>kI</b> component. */
+     * {@param newkI} The new value of the <b>kI</b> component.
+     * {@return a new PIDConsts.} */
     public PIDConsts withkI(double newkI) {
         return new PIDConsts(kP, newkI, maxI, kD);
     }
 
     /** Replace the <b>maxI</b> component but leave the other 3 alone.
-     * {@param newmaxI} The new value of the <b>maxI</b> component. */
+     * {@param newmaxI} The new value of the <b>maxI</b> component.
+     * {@return a new PIDConsts.} */
     public PIDConsts withmaxI(double newmaxI) {
         return new PIDConsts(kP, kI, newmaxI, kD);
     }
 
     /** Replace the <b>kD</b> component but leave the other 3 alone.
-     * {@param newkD} The new value of the <b>kD</b> component. */
+     * {@param newkD} The new value of the <b>kD</b> component.
+     * {@return a new PIDConsts.} */
     public PIDConsts withkD(double newkD) {
         return new PIDConsts(kP, kI, maxI, newkD);
+    }
+
+    /** Determines if all the components of this PIDConsts have the same values
+     * as the components of the given PIDConsts.
+     * Not to be confused with Object.equals(), which does something quite
+     * different.
+     * {@param pidConsts} The PIDConsts to compare this one to
+     * {@return a boolean; true if all values match, false if one or more don't.} */
+    public boolean isEquivalentTo(PIDConsts pidConsts) {
+        return ( this.kP == pidConsts.kP &&
+                 this.kI == pidConsts.kI &&
+                 this.maxI == pidConsts.maxI &&
+                 this.kD == pidConsts.kD );
     }
 }

@@ -1,12 +1,15 @@
 //Test program for running a motor to encoder positions
 //Now with safety!
-//This file is from July 24, 2024.
+//Version 2.3-0  ||  April 30, 2025
+//
+//I strongly advise against accepting any suggestions from IDEA in this OpMode.
+//It contains well-tested safety stuff, and some of IDEA's suggestions here are
+//erroneous and could easily break something.
 
 package org.firstinspires.ftc.teamcode.teletest.independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -39,12 +42,12 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addData("SafetyCheckClock", safetyCheckClock.milliseconds());
         telemetry.addData("safetyPatience", safetyPatience);
         motor.setPower(0);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         otherDeb.reset();
         lockedOut = true;
     }
 
-    //Declare variables first because we have to
+    //OpModes really want variables to be class members
     DcMotorEx motor;
     ElapsedTime upDeb;
     ElapsedTime downDeb;
@@ -57,9 +60,9 @@ public class EncoderTeleTest23 extends OpMode {
 
     int targetPosA = 0; //Stage target here - we'll send it to the motor later
     int targetPosB = 0;
-    boolean aActive = true;
+    boolean aActive = true; //The "Active" staged target is the one affected by the edit buttons
     boolean bActive = false;
-    int listIdx = 0;
+    int listIdx = 0; //Which motor we're on right now
     double motorPower = 0.4;
 
     boolean hasPassedSafetyCheck = false;
@@ -105,7 +108,7 @@ public class EncoderTeleTest23 extends OpMode {
             DcMotorEx tempMotor = (DcMotorEx) motorIterator.next();
             tempMotor.setPower(0.0);
             tempMotor.setTargetPosition(tempMotor.getCurrentPosition());
-            tempMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            tempMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             motorList.add(tempMotor);
         }
 
@@ -139,10 +142,11 @@ public class EncoderTeleTest23 extends OpMode {
             }
             telemetry.addData("Active Target", motor.getTargetPosition());
             telemetry.addData("Actual Position", motor.getCurrentPosition());
-            telemetry.addData("Active Motor", hardwareMap.getNamesOf(motor).iterator().next());
+            telemetry.addData("Active Motor", hardwareMap.getNamesOf(motor).iterator().next()); //Comment this out for virtual_robot
             telemetry.addData("Port Number", motor.getPortNumber());
             telemetry.addLine(motor.getDeviceName());
-            telemetry.addData("Motor runmode", motor.getMode());
+            telemetry.addData("Motor RunMode", motor.getMode());
+            telemetry.addData("Motor Direction", motor.getDirection());
             telemetry.addData("Set Motor Power", motorPower);
             telemetry.addData("Actual Motor power", motor.getPower());
             telemetry.addData("Motor Velocity", motor.getVelocity());
@@ -163,11 +167,16 @@ public class EncoderTeleTest23 extends OpMode {
             telemetry.addLine("A sets RUN_WITHOUT_ENCODER");
             telemetry.addLine("B sets RUN_TO_POSITION");
             telemetry.addLine("Triggers do analog control when in RUN_WITHOUT_ENCODER");
+            telemetry.addLine("D-Pad Right sets FORWARD");
+            telemetry.addLine("D-Pad Left sets REVERSE");
 
-            // Safety Check
+            //Safety Check
             if (Math.abs(motor.getPower()) > 0.05) {
                 if (Math.abs(motor.getCurrentPosition()) < Math.abs(motor.getTargetPosition()) - 50) {
                     if (!hasPassedSafetyCheck) {
+                        //BEWARE! IDEA is giving me a warning about hasPassedSafetyCheck here.
+                        //It thinks it's always true or something. It's not. Don't touch that,
+                        //or you'll physically break stuff :)
                         if (safetyCheckClock.milliseconds() > safetyPatience) {
                             velocitySnapshot = motor.getVelocity();
                             safetyLockout("Patience exhausted (motor appears to have never started moving)");
@@ -293,6 +302,13 @@ public class EncoderTeleTest23 extends OpMode {
 
             if (motor.getMode() == DcMotorEx.RunMode.RUN_WITHOUT_ENCODER) {
                 motor.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
+            }
+
+            //Change direction with gamepad2
+            if (gamepad2.dpad_right && otherDeb.milliseconds() > otherDebTime) {
+                motor.setDirection(DcMotorEx.Direction.FORWARD);
+            } else if (gamepad2.dpad_left && otherDeb.milliseconds() > otherDebTime) {
+                motor.setDirection(DcMotorEx.Direction.REVERSE);
             }
 
         }
