@@ -12,7 +12,8 @@ version = "1.0-0"
 # Define command-line arguments
 argparser = ArgumentParser()
 argparser.add_argument("-v", "--ver", help="Print version then exit", action="store_true")
-argparser.add_argument("-if", "--infile", help="Specify input file, otherwise use stdin", action="store")
+argparser.add_argument("-if1", "--infile1", help="Specify input file for gamepad1, otherwise use stdin", action="store")
+argparser.add_argument("-if2", "--infile2", help="Specify input file for gamepad2", action="store")
 argparser.add_argument("-of", "--outfile", help="Specify output file, otherwise use stdout", action="store")
 argparser.add_argument("-f", "--verify", help="Only verify infile, do not generate control scheme", action="store_true")
 args = argparser.parse_args()
@@ -29,18 +30,30 @@ def error(self, msg, exc=False):
         print(msg)
     sys.exit(1)
 
-if args.infile:
+if args.infile1:
     try:
-        infile = open(args.infile, "r")
+        infile1 = open(args.infile1, "r")
     except:
-        error("Could not open input file.", True)
+        error("Could not open input file 1.", True)
 else:
-    infile = sys.stdin
+    infile1 = sys.stdin
 
-converter = CTLConv(infile)
-outdict = converter.getVerifiedDict()
+if args.infile2:
+    try:
+        infile2 = open(args.infile2, "r")
+    except:
+        error("Could not open input file 2.", True)
+else:
+    infile2 = None
+
+converter1 = CTLConv(infile1)
+outdict1 = converter1.getVerifiedDict()
+if infile2:
+    converter2 = CTLConv(infile2)
+    outdict2 = converter2.getVerifiedDict()
+
 print("Output:")
-out = str(outdict)
+out = str(outdict1)
 idl = 0
 for letter in out:
     if letter == "{":

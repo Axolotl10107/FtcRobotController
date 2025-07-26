@@ -54,6 +54,93 @@ class CTLConv:
     def getConvertedDict(self):
         return self.outdict
 
+
+    # --- Methods used by getVerifiedDict() ---
+    def verifyAction(self, buttonName, modifier, action):
+        # Action mapping contains correct keys
+        if not action.keys() == assets.actionTypes.keys():
+            # CTLedit 1.0 known bug: saves its Action library metadata in exported mapping
+            if "Type" in action.keys():
+                del action["Type"]
+            if "Description" in action.keys():
+                del action["Description"]
+            elif "Parameters" not in action.keys():
+                # If Action has no Parameters, field can be set to None or not set at all. Either is fine.
+                action.update({"Parameters" : None})
+            else:
+                self.error("Malformed action mapping for button '" + buttonName + "' modifier '" + modifier + "'.")
+
+        # Values are of correct types
+        for key in action.keys():
+            if not isinstance(action[key], assets.actionTypes[key]):
+                if not (key == "Parameters" and action[key] == None): # Empty Parameters are OK
+                    self.error("Value for key '" + str(key) + "' of action mapping for button '" + buttonName + "' modifier '" + modifier + "' is of the wrong type.")
+
+        # Verify Parameters
+        parameters = action["Parameters"]
+        if parameters:
+            for paramName in parameters.keys():
+                param = parameters[paramName]
+
+                # Parameter is a dictionary
+                if not isinstance(param, dict):
+                    self.error("Parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "' is not a dictionary.")
+
+                # Parameter contains the correct keys
+                if not param.keys() == assets.parametersTypes.keys():
+                    if (list(param.keys()) + ["Range"]) == list(assets.parametersTypes.keys()):
+                        param.update({"Range" : None}) # Empty Range is OK (means unlimited range)
+                    else:
+                        self.error("Malformed parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+
+                # Type is a valid Java data type
+                type = param["Type"]
+                if type not in assets.validDataTypes:
+                    self.error("Invalid data type for parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+
+                # Range is properly formatted
+                range = param["Range"]
+                fail = False
+                if range:
+                    if range.count("/") == 1:
+                        slashidx = range.index("/")
+                        if range[:slashidx].isnumeric() and range[slashidx+1:].isnumeric():
+                            fail = False
+                        else:
+                            fail = True
+                    else:
+                        fail = True
+                if fail:
+                    print("Malformed range for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+
+                # Value is of correct type
+                value = param["Value"]
+                failMsg = "Failed to convert value for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "' to correct type."
+                if type in ["byte", "short", "int", "long"]:
+                    if not isinstance(value, int):
+                        try:
+                            param["Value"] = int(value)
+                        except:
+                            self.error(failMsg)
+                elif type in ["float", "double"]:
+                    if not isinstance(value, float):
+                        try:
+                            param["Value"] = float(value)
+                        except:
+                            self.error(failMsg)
+                elif type == "boolean":
+                    if not isinstance(value, bool):
+                        try:
+                            param["Value"] = bool(value)
+                        except:
+                            self.error(failMsg)
+                elif type in ["char", "String"]:
+                    if not isinstance(value, str):
+                        try:
+                            param["Value"] = str(value)
+                        except:
+                            self.error(failMsg)
+
     # --- Verify / Fix dict ---
     def getVerifiedDict(self):
         # Setup
@@ -63,7 +150,7 @@ class CTLConv:
 
         fields = list(self.outdict.keys())
         toPop = []
-        empty = []
+        emptyFields = []
         print("Fields:")
         for idx, field in enumerate(fields):
 
@@ -75,7 +162,7 @@ class CTLConv:
             # Field is not empty
             elif self.outdict[field] in [None, "", [], {}]:
                 if field in assets.requiredCTLFields:
-                    empty.append(field)
+                    emptyFields.append(field)
                     print("[empty, required, will skip later] ", end="")
                 else:
                     toPop.append(idx)
@@ -137,7 +224,7 @@ class CTLConv:
 
         # Pass 3: Verify Buttons
         print("Pass 3: Verify Buttons")
-        if "Buttons" in fields:
+        if "Buttons" not in emptyFields:
             buttons = self.outdict["Buttons"]
             buttonsToDel = []
             for idx, buttonName in enumerate(buttons.keys()):
@@ -182,9 +269,11 @@ class CTLConv:
                             # Values for keys are of correct types
                             for key in assets.buttonMappingTypes.keys():
                                 if not isinstance(mapping[key], assets.buttonMappingTypes[key]):
+
+                                    # An empty field here should be None, but Snap! exports it as ""
                                     if mapping[key] == "":
-                                        # An empty field here should be None, but Snap! exports it as ""
                                         mapping[key] = None
+
                                     elif mapping[key] != None: # Empty fields are OK, just not malformed ones
                                         # Check for CTLedit 1.0 known bug
                                         if key == "Action" and isinstance(mapping["Action"], list):
@@ -197,91 +286,7 @@ class CTLConv:
 
 
                             # Verify Action mapping
-                            action = mapping["Action"]
-
-                            # Action mapping contains correct keys
-                            if not action.keys() == assets.actionTypes.keys():
-                                # CTLedit 1.0 known bug: saves its Action library metadata in exported mapping
-                                if "Type" in action.keys():
-                                    del action["Type"]
-                                if "Description" in action.keys():
-                                    del action["Description"]
-                                elif "Parameters" not in action.keys():
-                                    # If Action has no Parameters, field can be set to None or not set at all. Either is fine.
-                                    action.update({"Parameters" : None})
-                                else:
-                                    self.error("Malformed action mapping for button '" + buttonName + "' modifier '" + modifier + "'.")
-
-                            # Values are of correct types
-                            for key in action.keys():
-                                if not isinstance(action[key], assets.actionTypes[key]):
-                                    if not (key == "Parameters" and action[key] == None): # Empty Parameters are OK
-                                        self.error("Value for key '" + str(key) + "' of action mapping for button '" + buttonName + "' modifier '" + modifier + "' is of the wrong type.")
-
-                            # Verify Parameters
-                            parameters = action["Parameters"]
-                            if parameters:
-                                for paramName in parameters.keys():
-                                    param = parameters[paramName]
-
-                                    # Parameter is a dictionary
-                                    if not isinstance(param, dict):
-                                        self.error("Parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "' is not a dictionary.")
-
-                                    # Parameter contains the correct keys
-                                    if not param.keys() == assets.parametersTypes.keys():
-                                        if (list(param.keys()) + ["Range"]) == list(assets.parametersTypes.keys()):
-                                            param.update({"Range" : None}) # Empty Range is OK (means unlimited range)
-                                        else:
-                                            self.error("Malformed parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
-
-                                    # Type is a valid Java data type
-                                    type = param["Type"]
-                                    if type not in assets.validDataTypes:
-                                        self.error("Invalid data type for parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
-
-                                    # Range is properly formatted
-                                    range = param["Range"]
-                                    fail = False
-                                    if range:
-                                        if range.count("/") == 1:
-                                            slashidx = range.index("/")
-                                            if range[:slashidx].isnumeric() and range[slashidx+1:].isnumeric():
-                                                fail = False
-                                            else:
-                                                fail = True
-                                        else:
-                                            fail = True
-                                    if fail:
-                                        print("Malformed range for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
-
-                                    # Value is of correct type
-                                    value = param["Value"]
-                                    failMsg = "Failed to convert value for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "' to correct type."
-                                    if type in ["byte", "short", "int", "long"]:
-                                        if not isinstance(value, int):
-                                            try:
-                                                param["Value"] = int(value)
-                                            except:
-                                                self.error(failMsg)
-                                    elif type in ["float", "double"]:
-                                        if not isinstance(value, float):
-                                            try:
-                                                param["Value"] = float(value)
-                                            except:
-                                                self.error(failMsg)
-                                    elif type == "boolean":
-                                        if not isinstance(value, bool):
-                                            try:
-                                                param["Value"] = bool(value)
-                                            except:
-                                                self.error(failMsg)
-                                    elif type in ["char", "String"]:
-                                        if not isinstance(value, str):
-                                            try:
-                                                param["Value"] = str(value)
-                                            except:
-                                                self.error(failMsg)
+                            self.verifyAction(buttonName, modifier, mapping["Action"])
 
                         print("\t" + modifier)
                     for key in modifiersToDel:
@@ -290,7 +295,7 @@ class CTLConv:
             for key in buttonsToDel:
                 del buttons[key]
         else:
-            print("No 'Buttons' field, so skipping Pass 3\n")
+            print("'Buttons' field is empty, so skipping Pass 3\n")
 
         print("File fully converted and verified.")
         return self.outdict
