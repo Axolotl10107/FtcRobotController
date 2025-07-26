@@ -1,0 +1,126 @@
+<#>CTL1<#>
+// This is a comment. But only when it's on its own line!
+// Indentation doesn't matter. One item per line please.
+// CTL is NOT case-sensitive because Snap! is NOT case-sensitive (without additional libraries).
+[Positions
+	[DPad
+		X:-137
+		Y:61
+	]
+]
+[Modifiers
+	X
+]
+[Buttons
+	[DPadUp
+		[Default
+			Type:Trigger
+			[Action
+				Name:MaxPowerUp
+				By:0.1
+			]
+		]
+		[X
+			Type:Toggle
+			[Action
+				Name:MaxPowerUp
+				By:0.2
+			]
+		]
+	]
+	[Pivot
+		Type:Axis
+		Axis:RSY+
+		Threshold:0.3
+		[Action
+			Name:Pivot
+		]
+]
+[Axes
+	[LSX
+		[Default
+			Type:Linear
+			Scaling:1
+			[Action
+				Name:Action3
+			]
+		]
+	]
+	[RSX
+		[Default
+			Type:Exponential
+			Scaling:2
+			[Action
+				Name:Action4
+			]
+		]
+		[X
+			Type:Linear
+			Scaling:0.5
+			[Action
+				Name:Action5
+			]
+		]
+	]
+	[SlowDrive
+		[Default
+			Type:Buttons
+			Positive:R1
+			Negative:L1
+			Scaling:1
+			[Action
+				Name:Action6
+			]
+		]
+	]
+	[R2
+		Type:Linear
+		Scaling:1
+		[Action
+			Name:MergedMember
+		]
+	]
+	[L2
+		Type:Linear
+		Scaling:1
+		[Action
+			Name:MergedMember
+		]
+	]
+	[Drive
+		Type:Merged
+		Positive:R2
+		Negative:L2
+		[Action
+			Name:Drive
+		]
+	]
+]
+[Methods
+    [buildDTS
+        double drive = <!>Drive<!>;
+        double turn = <!>Turn<!>;
+        double strafe = <!>Strafe<!>;
+        controlState.setDts( new Dts( drive, turn, strafe ) );
+    ]
+]
+[Actions
+    [Drive
+        Type:Axis
+        Description:Forward and backward movement
+        Code:<!>AxisDefault<!>
+    ]
+    [Turn
+        Type:Axis
+        Description:Turning
+        Code:<!>AxisDefault<!>
+    ]
+    [Strafe
+        Type:Axis
+        Description:Left and right movement without turning
+        Code:<!>AxisDefault<!>
+    ]
+]
+[Setters
+    setDts
+]

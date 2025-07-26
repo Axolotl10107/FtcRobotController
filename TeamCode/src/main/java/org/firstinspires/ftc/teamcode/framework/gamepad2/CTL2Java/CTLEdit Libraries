@@ -1,0 +1,90 @@
+Action libraries for CTLedit
+
+Strafer base actions:
+-Drive
+--Type:Axis
+--Description:Forward and backwards movement
+-Turn
+--Type:Axis
+--Description:Turning movement
+-Strafe
+--Type:Axis
+--Description:Left and right movement without turning
+
+fy25 base actions:
+-Pivot
+--Type:Axis
+--Range:-1/1
+--Description:Pivot arm up or down
+-Set Pivot Position
+--Type:Button
+--Description:Set the pivot arm to a certain position
+--Parameters:
+---Position:
+----Type:int
+----Range:0/2000
+-Extend
+--Type:Axis
+--Range:-0.5/0.5
+--Description:Extend arm in or out
+-Set Extend Position
+--Type:Button
+--Description:Extend the arm to a certain position
+--Paramters:
+---Position:
+----Type:int
+----Range:0/2000
+
+
+-----------------------------------------------------------
+
+
+Method and Action libraries for CTL2Java
+
+Syntax:
+-Methods:
+--Key is the name of the method.
+--Value is the code inside the method.
+--Methods are always void. They are added to the generated scheme verbatim, except that items inside of <!> tags are Action names. They are replaced with the Code from that Action.
+
+-Actions:
+--Key is the name of the action.
+--Value is a dictionary:
+---Type: type of primitive to use (Button or Axis)
+---Splittable [Axis only]: Can this be assigned to the triggers or 2 buttons?
+---Description: A short human-readable description of what this action does on the robot
+---Code: The code to drive this action that will be inserted into a Method (If nothing in the Methods library refers to this Action and the Action is assigned, a Method will be created just for it.)
+
+
+Strafer Base Methods
+-buildDTS : "double drive = <!>Drive<!>;
+             double turn = <!>Turn<!>;
+             double strafe = <!>Strafe<!>;
+             controlState.setDts( new DTS( drive, turn, strafe ) );"
+
+Strafer Base Actions
+-Drive
+--Type : Axis
+--Splittable : True
+--Description : Forward and backward movement
+--Code : !DTS
+-Turn
+--Type : Axis
+--Splittable : True
+--Description : Turning
+--Code : !DTS
+-Strafe
+--Type: Axis
+--Splittable : True
+--Description : Left and right movement without turning
+--Code : !DTS
+
+
+
+
+-Drive Power Up
+--Type : Button
+--Description : Increase maximum drive power
+-Drive Power Down
+--Type : Button
+--Description : Decrease maximum drive power

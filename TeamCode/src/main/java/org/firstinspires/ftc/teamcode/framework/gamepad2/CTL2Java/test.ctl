@@ -1,0 +1,1 @@
+{"Version":1,"Gamepad":1,"Season":"fy24","Buttons":{"X":{},"Y":{}},"Axes":{},"Extra":{},"Setters":[],"Actions":{}}
