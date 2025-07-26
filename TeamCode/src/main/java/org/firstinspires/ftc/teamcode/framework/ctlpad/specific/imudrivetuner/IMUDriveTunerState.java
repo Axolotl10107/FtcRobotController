@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.specific.imudrivetuner;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.specific.imudrivetuner;
 
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 

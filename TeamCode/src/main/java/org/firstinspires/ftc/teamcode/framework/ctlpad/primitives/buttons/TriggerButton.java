@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
 
 /** Only active on new presses. Button must be released and pressed again to
  * become active again.

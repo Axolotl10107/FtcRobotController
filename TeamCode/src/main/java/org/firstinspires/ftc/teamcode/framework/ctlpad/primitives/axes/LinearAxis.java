@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 
 /** Represents an axis on a gamepad, including sticks or triggers, and directly reports the value. */
 public class LinearAxis implements Axis {

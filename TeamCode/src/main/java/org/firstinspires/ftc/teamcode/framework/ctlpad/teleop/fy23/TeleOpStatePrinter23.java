@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives;
 
 /** Interface that represents an axis on a gamepad. Multiple implementations are available. Choose the one that
  * best suits each use case.*/

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy24.controls;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;

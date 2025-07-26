@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 
 /** Represents an axis on a {@link com.qualcomm.robotcore.hardware.Gamepad}, including sticks and
  * triggers, and reports the value taken to the power specified in the constructor (this creates a

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 
 import java.util.ArrayList;
 import java.util.Iterator;

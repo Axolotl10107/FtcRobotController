@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.specific.imudrivetuner.IMUDriveTunerScheme;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.specific.imudrivetuner.IMUDriveTunerState;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.specific.imudrivetuner.IMUDriveTunerScheme;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.specific.imudrivetuner.IMUDriveTunerState;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;

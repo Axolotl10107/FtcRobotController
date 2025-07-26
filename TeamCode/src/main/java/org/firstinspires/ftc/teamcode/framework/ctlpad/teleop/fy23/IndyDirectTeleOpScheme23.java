@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.ButtonAsAxis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ButtonAsAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;

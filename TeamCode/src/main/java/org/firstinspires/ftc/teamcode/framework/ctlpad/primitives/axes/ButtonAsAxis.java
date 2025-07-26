@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
 
 /** Makes a physical gamepad button act as an axis. */
 public class ButtonAsAxis implements Axis {

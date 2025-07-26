@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.fy24.controls;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.ExponentialAxis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.LinearAxis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.MergedAxis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes.TwoButtonsAsAxis;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.MomentaryButton;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ExponentialAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.LinearAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.MergedAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.TwoButtonsAsAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.MomentaryButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;

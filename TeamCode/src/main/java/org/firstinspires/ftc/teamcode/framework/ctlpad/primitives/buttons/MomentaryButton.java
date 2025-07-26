@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
 
 /** Active when held down and not active when up. Can be inverted. */
 public class MomentaryButton implements Button {

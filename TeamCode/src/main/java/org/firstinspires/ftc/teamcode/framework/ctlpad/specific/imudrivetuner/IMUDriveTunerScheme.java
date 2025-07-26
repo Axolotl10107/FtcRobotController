@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.specific.imudrivetuner;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.specific.imudrivetuner;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Button;
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.buttons.TriggerButton;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes and providing

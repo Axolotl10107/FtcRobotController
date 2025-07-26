@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.teleop.fy23;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23;
 
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;

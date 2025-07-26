@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.axes;
+package org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes;
 
-import org.firstinspires.ftc.teamcode.framework.gamepad2.primitives.Axis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 
 /** Use this to combine two axes that only run from 0 to 1 into one axis that runs from -1 to 1. */
 public class MergedAxis implements Axis {
