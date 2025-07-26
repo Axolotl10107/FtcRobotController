@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23;
+package org.firstinspires.ftc.teamcode.fy23.controls.ctlpad;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 

@@ -74,16 +74,16 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         brakeButton = new TriggerButton( () -> driver.x );
 
         armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
-        armMedium = new TwoButtonsAsAxis( () -> manipulator.dpad_left, () -> manipulator.dpad_right, ARM_MEDIUM_SPEED);
-        armSlow = new TwoButtonsAsAxis( () -> manipulator.dpad_down, () -> manipulator.dpad_up, ARM_SLOW_SPEED);
+        armMedium = new TwoButtonsAsAxis( new MomentaryButton( () -> manipulator.dpad_left ), new MomentaryButton( () -> manipulator.dpad_right ), ARM_MEDIUM_SPEED);
+        armSlow = new TwoButtonsAsAxis( new MomentaryButton( () -> manipulator.dpad_down ), new MomentaryButton( () -> manipulator.dpad_up ), ARM_SLOW_SPEED);
 
-        Axis elevatorIn = new LinearAxis(() -> manipulator.left_trigger);
-        Axis elevatorOut = new LinearAxis(() -> manipulator.right_trigger);
-        elevator = new MergedAxis(elevatorIn, elevatorOut);
+        Axis elevatorIn = new LinearAxis( () -> manipulator.left_trigger );
+        Axis elevatorOut = new LinearAxis( () -> manipulator.right_trigger );
+        elevator = new MergedAxis( elevatorIn, elevatorOut );
 
-        Axis driveForward = new LinearAxis(() -> driver.right_trigger);
-        Axis driveBackward = new LinearAxis(() -> driver.left_trigger);
-        drive = new MergedAxis(driveBackward, driveForward);
+        Axis driveForward = new LinearAxis( () -> driver.right_trigger );
+        Axis driveBackward = new LinearAxis( () -> driver.left_trigger );
+        drive = new MergedAxis( driveBackward, driveForward );
         turn = new ExponentialAxis( () -> -driver.left_stick_x, 2); // positive turn is counterclockwise
         strafe = new LinearAxis( () -> driver.right_stick_x);
     }

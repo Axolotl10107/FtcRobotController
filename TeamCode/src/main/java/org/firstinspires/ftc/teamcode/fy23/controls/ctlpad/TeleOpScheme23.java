@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23;
+package org.firstinspires.ftc.teamcode.fy23.controls.ctlpad;
 
 /** With this interface, you only need to change one thing to change control schemes: the constructor.
  * Also, anything special about a particular scheme (i.e. fieldy schemes needing the current heading) is passed into the

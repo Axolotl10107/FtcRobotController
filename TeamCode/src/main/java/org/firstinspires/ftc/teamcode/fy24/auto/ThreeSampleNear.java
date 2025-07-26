@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwitcher;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.FieldyTeleOpScheme23;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
 

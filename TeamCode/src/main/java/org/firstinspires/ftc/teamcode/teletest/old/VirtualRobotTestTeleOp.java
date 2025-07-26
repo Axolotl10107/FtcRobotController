@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.teletest.old;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23.FieldyTeleOpScheme23;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23.TeleOpScheme23;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.teleop.fy23.TeleOpState23;
+import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.FieldyTeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.TeleOpScheme23;
+import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.TeleOpState23;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
