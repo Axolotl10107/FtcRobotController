@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ButtonAsAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
@@ -50,10 +51,10 @@ public class IndyDirectTeleOpScheme23 {
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
         squareUpButton = new TriggerButton( () -> driver.left_bumper );
-        armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
-        armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
-        armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
-        armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
+        armSlowUp = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_up ) );
+        armSlowDown = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_down ) );
+        armMediumUp = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_right ) );
+        armMediumDown = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_left ) );
     }
 
     private void updateMovementState(Robot24 robot) {

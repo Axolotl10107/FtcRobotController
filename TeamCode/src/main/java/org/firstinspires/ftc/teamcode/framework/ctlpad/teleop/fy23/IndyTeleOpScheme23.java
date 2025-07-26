@@ -44,10 +44,10 @@ public class IndyTeleOpScheme23 implements TeleOpScheme23 {
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
         squareUpButton = new TriggerButton( () -> driver.left_bumper );
-        armSlowUp = new ButtonAsAxis( () -> manipulator.dpad_up );
-        armSlowDown = new ButtonAsAxis( () -> manipulator.dpad_down );
-        armMediumUp = new ButtonAsAxis( () -> manipulator.dpad_right );
-        armMediumDown = new ButtonAsAxis( () -> manipulator.dpad_left );
+        armSlowUp = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_up ) );
+        armSlowDown = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_down ) );
+        armMediumUp = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_right ) );
+        armMediumDown = new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_left ) );
     }
 
     private void updateMovementState() {

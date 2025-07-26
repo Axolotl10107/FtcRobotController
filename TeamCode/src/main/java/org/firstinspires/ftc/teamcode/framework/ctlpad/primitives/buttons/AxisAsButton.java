@@ -6,21 +6,19 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
 /** Makes a physical gamepad axis act as a button. */
 public class AxisAsButton implements Button {
 
-    private final Axis.DoubleLambda axis;
+    private final Axis axis;
     private final boolean invert;
     private final double threshold;
 
-    /** Pass in a lambda expression that returns the value of a {@link com.qualcomm.robotcore.hardware.Gamepad}
-     * axis field:
-     * new LinearAxis( () -{@literal >} gamepad.left_stick_x );
+    /** Pass in an existing {@link Axis}
      * and also pass in an activation threshold along the range of the axis, after which the
      * "button" is considered active */
-    public AxisAsButton(Axis.DoubleLambda axis, double threshold) {
+    public AxisAsButton(Axis axis, double threshold) {
         this(axis, threshold, false);
     }
 
     /** Same as the other constructor, but allows for inverting the reported value */
-    public AxisAsButton(Axis.DoubleLambda axis, double threshold, boolean invert) {
+    public AxisAsButton(Axis axis, double threshold, boolean invert) {
         this.axis = axis;
         this.invert = invert;
         this.threshold = threshold;
@@ -29,7 +27,7 @@ public class AxisAsButton implements Button {
     /** Active when the axis value is past the threshold. */
     @Override
     public boolean isActive() {
-        return invert ^ (axis.get() > threshold);
+        return invert ^ (axis.value() > threshold);
         /*
         XOR ( ^ ) - "exclusive or" - either A or B, but not both
         invert | button.get() | result
