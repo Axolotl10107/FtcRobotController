@@ -4,10 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ExponentialAxis;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.LinearAxis;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.MergedAxis;
-import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.TwoButtonsAsAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.*;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
@@ -74,8 +71,8 @@ public class IndyTeleOpScheme24 implements TeleOpScheme24 {
         brakeButton = new TriggerButton( () -> driver.x );
 
         armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
-        armMedium = new TwoButtonsAsAxis( new MomentaryButton( () -> manipulator.dpad_left ), new MomentaryButton( () -> manipulator.dpad_right ), ARM_MEDIUM_SPEED);
-        armSlow = new TwoButtonsAsAxis( new MomentaryButton( () -> manipulator.dpad_down ), new MomentaryButton( () -> manipulator.dpad_up ), ARM_SLOW_SPEED);
+        armMedium = new MergedAxis( new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_left ), -ARM_MEDIUM_SPEED ), new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_right ), ARM_MEDIUM_SPEED ) );
+        armSlow = new MergedAxis( new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_down ), -ARM_SLOW_SPEED ), new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_up ), ARM_SLOW_SPEED ) );
 
         Axis elevatorIn = new LinearAxis( () -> manipulator.left_trigger );
         Axis elevatorOut = new LinearAxis( () -> manipulator.right_trigger );

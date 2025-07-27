@@ -1,0 +1,91 @@
+{
+  "Version": 1,
+  "Gamepad": 1,
+  "Season": "fy23",
+  "Modifiers": [
+    "X"
+  ],
+  "Buttons": {
+    "A": {
+      "Default": {
+        "Type": "Momentary",
+        "Action": [
+          "Set Pivot Position",
+          {
+            "Type": "Button",
+            "Description": "Pivot to a given position",
+            "Parameters": {
+              "Position": {
+                "Type": "int",
+                "Range": "0/2000",
+                "Value": "967"
+              }
+            }
+          }
+        ]
+      },
+      "X": {
+        "Type": "Trigger",
+        "Action": [
+          "Set Extend Position",
+          {
+            "Type": "Button",
+            "Description": "Extend to a given position",
+            "Parameters": {
+              "Position": {
+                "Type": "int",
+                "Range": "0/2000",
+                "Value": "1200"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "Y": {
+      "Default": {
+        "Type": "Momentary",
+        "Action": {
+          "Name": "Axis",
+          "Parameters": {
+            "Axis": {
+              "Type": "str",
+              "Value": "YFakeAxis"
+            }
+          }
+        }
+      }
+    },
+    "LSFakeButton": {
+      "Default": {
+        "Type": "Momentary",
+        "Action": {
+          "Name": "Example Action"
+        }
+      }
+    }
+  },
+  "Axes": {
+    "LS": {
+      "Default": {
+        "Type": "Linear",
+        "Action": {
+          "Name": "Button",
+          "Parameters": {
+            "Button": {
+              "Type": "str",
+              "Value": "LSFakeButton"
+            }
+          }
+        }
+      }
+    },
+    "YFakeAxis": {
+      "Default": {
+        "Type": "Linear",
+        "Action": "Drive"
+      }
+    }
+  },
+  "Actions": {}
+}
