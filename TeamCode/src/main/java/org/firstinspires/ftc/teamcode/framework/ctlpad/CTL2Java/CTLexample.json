@@ -83,7 +83,96 @@
     "YFakeAxis": {
       "Default": {
         "Type": "Linear",
+        "Scaling": 1,
         "Action": "Drive"
+      }
+    },
+    "L2R2Merge": {
+      "Default": {
+        "Type": "Merged",
+        "Scaling": 1,
+        "Action": "Extend"
+      }
+    },
+    "L2": {
+      "Default": {
+        "Type": "Linear",
+        "Action": {
+          "Name": "MergedMember",
+          "Parameters": {
+            "MergePartner": {
+              "Type": "str",
+              "Value": "R2"
+            },
+            "Positive": {
+              "Type": "boolean",
+              "Value": "false"
+            }
+          }
+        }
+      }
+    },
+    "R2": {
+      "Default": {
+        "Type": "Linear",
+        "Action": {
+          "Name": "MergedMember",
+          "Parameters": {
+            "MergePartner": {
+              "Type": "str",
+              "Value": "R2"
+            },
+            "Positive": {
+              "Type": "boolean",
+              "Value": "true"
+            }
+          }
+        }
+      }
+    },
+    "Triggers": {
+      "Default": {
+        "Type": "Merged",
+        "Scaling": 1,
+        "Action": "Strafe"
+      }
+    },
+    "R2": {
+      "Default": {
+        "Type": "Linear",
+        "Scaling": 1,
+        "Action": {
+          "Name": "Axis",
+          "Parameters": {
+            "Axis": {
+              "Type": "str",
+              "Value": "Triggers"
+            },
+            "isPositive": {
+              "Type": "boolean",
+              "Value": "True"
+            }
+          }
+        }
+      }
+    },
+    "L2": {
+      "Default": {
+        "Type": "Linear",
+        "Scaling": 1,
+        "Action": {
+          "Name": "Axis",
+          "Parameters": {
+            "Axis": {
+              "Type": "str",
+              "Value": "Triggers"
+              },
+            "isPositive": {
+              "Type": "boolean",
+              "Value": "True"
+            }
+          }
+        }
       }
     }
   },

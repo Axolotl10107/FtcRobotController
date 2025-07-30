@@ -1,0 +1,25 @@
+{
+  "Version": 1,
+  "Season": "",
+  "Bases": [
+    "strafer"
+  ],
+  "Extensions": [],
+  "Methods": {
+    "setDts": [
+      "double drive = 0;",
+      "boolean driveSet = false;",
+      "<~all:Drive>",
+      "",
+      "double turn = 0;",
+      "boolean turnSet = false;",
+      "<~all:Turn>",
+      "",
+      "double strafe = 0;",
+      "boolean strafeSet = false;",
+      "<~all:Strafe>",
+      "",
+      "state.setDts( new DTS( drive, turn, strafe ) );"
+    ]
+  }
+}

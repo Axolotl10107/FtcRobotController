@@ -6,6 +6,7 @@ import sys
 from argparse import ArgumentParser
 
 from ctlconv import CTLConv
+import assets
 
 version = "1.0-0"
 
@@ -32,7 +33,7 @@ def error(self, msg, exc=False):
 
 if args.infile1:
     try:
-        infile1 = open(args.infile1, "r")
+        infile1 = open(args.infile1, encoding="utf-8-sig")
     except:
         error("Could not open input file 1.", True)
 else:
@@ -40,19 +41,23 @@ else:
 
 if args.infile2:
     try:
-        infile2 = open(args.infile2, "r")
+        infile2 = open(args.infile2, encoding="utf-8-sig")
     except:
         error("Could not open input file 2.", True)
 else:
     infile2 = None
 
-converter1 = CTLConv(infile1)
+converter1 = CTLConv(infile1, assets.gamepadRequiredFields)
+print("Converting file for gamepad1:")
 outdict1 = converter1.getVerifiedDict()
+print("\n\n")
 if infile2:
-    converter2 = CTLConv(infile2)
+    converter2 = CTLConv(infile2, assets.gamepadRequiredFields)
+    print("Converting file for gamepad2:")
     outdict2 = converter2.getVerifiedDict()
+    print("\n\n")
 
-print("Output:")
+print("gamepad1:")
 out = str(outdict1)
 idl = 0
 for letter in out:
@@ -66,3 +71,19 @@ for letter in out:
         print(letter + "\n" + ("\t" * idl), end="")
     else:
         print(letter, end="")
+print("\n\n")
+print("gamepad2:")
+out = str(outdict2)
+idl = 0
+for letter in out:
+    if letter == "{":
+        idl += 1
+        print(letter + "\n" + ("\t" * idl), end="")
+    elif letter == "}":
+        idl -= 1
+        print(letter + "\n" + ("\t" * idl), end="")
+    elif letter == ",":
+        print(letter + "\n" + ("\t" * idl), end="")
+    else:
+        print(letter, end="")
+print("\n\n")

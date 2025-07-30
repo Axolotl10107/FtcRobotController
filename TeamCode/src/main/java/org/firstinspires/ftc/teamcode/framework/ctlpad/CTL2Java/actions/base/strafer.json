@@ -1,0 +1,15 @@
+{
+  "Version": 1,
+  "Season": "",
+  "Actions": {
+    "Drive": {
+      "Type": "Axis",
+      "SafetyMultiplier": 1.0,
+      "Code": [
+        "if (!driveSet) {",
+        "\tdrive = <~myname>.value();",
+        "}"
+      ]
+    }
+  }
+}

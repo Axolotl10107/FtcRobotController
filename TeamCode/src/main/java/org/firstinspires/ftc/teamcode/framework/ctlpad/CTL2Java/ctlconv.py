@@ -29,9 +29,10 @@ import sys
 import assets
 
 class CTLConv:
-    def __init__(self, infile):
+    def __init__(self, infile, requiredFields):
         self.version = "1.0-0"
         self.infile = infile
+        self.requiredFields = requiredFields
         self.convertedDict = {} # just json.load(), for getConverted()
         try:
             self.convertedDict = json.load(infile)
@@ -54,49 +55,87 @@ class CTLConv:
     def getConvertedDict(self):
         return self.outdict
 
+    def tryConvert(self, value, type, failMsg):
+        if type in ["byte", "short", "int", int, "long"]:
+            if not isinstance(value, int):
+                try:
+                    return int(value)
+                except:
+                    self.error(failMsg)
+        elif type in ["float", float, "double"]:
+            if not isinstance(value, float):
+                try:
+                    return float(value)
+                except:
+                    self.error(failMsg)
+        elif type in ["boolean", bool]:
+            if not isinstance(value, bool):
+                try:
+                    if isinstance(value, str):
+                        return value.lower() == "true"
+                    else:
+                        return bool(value)
+                except:
+                    self.error(failMsg)
+        elif type in ["char", "String" ,str]:
+            if not isinstance(value, str):
+                try:
+                    return str(value)
+                except:
+                    self.error(failMsg)
+        return value # No conversion needed
 
     # --- Methods used by getVerifiedDict() ---
     def verifyAction(self, buttonName, modifier, action):
         # Action mapping contains correct keys
-        if not action.keys() == assets.actionTypes.keys():
-            # CTLedit 1.0 known bug: saves its Action library metadata in exported mapping
-            if "Type" in action.keys():
-                del action["Type"]
-            if "Description" in action.keys():
-                del action["Description"]
-            elif "Parameters" not in action.keys():
-                # If Action has no Parameters, field can be set to None or not set at all. Either is fine.
-                action.update({"Parameters" : None})
-            else:
-                self.error("Malformed action mapping for button '" + buttonName + "' modifier '" + modifier + "'.")
+        for key in assets.actionTypes.keys():
+            try:
+                action[key] = self.tryConvert(action[key], assets.actionTypes[key], "Failed to convert value for key '" + key + " of Action mapping for Button '" + buttonName + "' modifier '" + modifier + "' to the correct type.")
+            except KeyError:
+                if key == "Parameters":
+                    action.update({"Parameters" : None})
+                else:
+                    self.error("Malformed Action mapping for Primitive '" + buttonName + "' modifier '" + modifier + "'.")
+
+        # Remove unnecessary keys
+        keysToDel = []
+        for key in action.keys():
+            if not key in assets.actionTypes.keys():
+                keysToDel.append(key)
+        for key in keysToDel:
+            del action[key]
 
         # Values are of correct types
         for key in action.keys():
             if not isinstance(action[key], assets.actionTypes[key]):
                 if not (key == "Parameters" and action[key] == None): # Empty Parameters are OK
-                    self.error("Value for key '" + str(key) + "' of action mapping for button '" + buttonName + "' modifier '" + modifier + "' is of the wrong type.")
+                    self.error("Value for key '" + str(key) + "' of Action mapping for Primitive '" + buttonName + "' modifier '" + modifier + "' is of the wrong type.")
 
         # Verify Parameters
-        parameters = action["Parameters"]
+        try:
+            parameters = action["Parameters"]
+        except KeyError:
+            parameters = None
         if parameters:
             for paramName in parameters.keys():
                 param = parameters[paramName]
 
                 # Parameter is a dictionary
                 if not isinstance(param, dict):
-                    self.error("Parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "' is not a dictionary.")
+                    self.error("Parameter '" + paramName + "' of Action mapped to Primitive '" + buttonName + "' modifier '" + modifier + "' is not a dictionary.")
 
                 # Parameter contains the correct keys
-                if not param.keys() == assets.parametersTypes.keys():
-                    if (list(param.keys()) + ["Range"]) == list(assets.parametersTypes.keys()):
-                        param.update({"Range" : None}) # Empty Range is OK (means unlimited range)
-                    else:
-                        self.error("Malformed parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+                for key in assets.parametersTypes.keys():
+                    if key not in param.keys():
+                        if key == "Range":
+                            param.update({"Range" : None})
+                        else:
+                            self.error("Malformed Parameter '" + paramName + "' of Action mapped to Primitive '" + buttonName + "' modifier '" + modifier + "'.")
 
                 # Type is a valid Java data type
                 type = param["Type"]
                 if type not in assets.validDataTypes:
-                    self.error("Invalid data type for parameter '" + paramName + "' of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+                    self.error("Invalid data type for Parameter '" + paramName + "' of Action mapped to Primitive '" + buttonName + "' modifier '" + modifier + "'.")
 
                 # Range is properly formatted
                 range = param["Range"]
@@ -111,35 +150,12 @@ class CTLConv:
                     else:
                         fail = True
                 if fail:
-                    print("Malformed range for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "'.")
+                    print("Malformed Range for Parameter '" + paramName + "of Action mapped to Primitive '" + buttonName + "' modifier '" + modifier + "'.")
 
                 # Value is of correct type
-                value = param["Value"]
-                failMsg = "Failed to convert value for parameter '" + paramName + "of action mapped to button '" + buttonName + "' modifier '" + modifier + "' to correct type."
-                if type in ["byte", "short", "int", "long"]:
-                    if not isinstance(value, int):
-                        try:
-                            param["Value"] = int(value)
-                        except:
-                            self.error(failMsg)
-                elif type in ["float", "double"]:
-                    if not isinstance(value, float):
-                        try:
-                            param["Value"] = float(value)
-                        except:
-                            self.error(failMsg)
-                elif type == "boolean":
-                    if not isinstance(value, bool):
-                        try:
-                            param["Value"] = bool(value)
-                        except:
-                            self.error(failMsg)
-                elif type in ["char", "String"]:
-                    if not isinstance(value, str):
-                        try:
-                            param["Value"] = str(value)
-                        except:
-                            self.error(failMsg)
+                failMsg = "Failed to convert Value for Parameter '" + paramName + "of Action mapped to Primitive '" + buttonName + "' modifier '" + modifier + "' to correct type."
+                param["Value"] = self.tryConvert(param["Value"], type, failMsg)
+
 
     # --- Verify / Fix dict ---
     def getVerifiedDict(self):
@@ -161,7 +177,7 @@ class CTLConv:
 
             # Field is not empty
             elif self.outdict[field] in [None, "", [], {}]:
-                if field in assets.requiredCTLFields:
+                if field in self.requiredFields:
                     emptyFields.append(field)
                     print("[empty, required, will skip later] ", end="")
                 else:
@@ -175,7 +191,8 @@ class CTLConv:
             else:
                 # Value is of correct type
                 if not isinstance(self.outdict[field], assets.ctlFieldTypes[field]):
-                    self.error("Value for field '" + str(field) + "' is of wrong type.")
+                    if not field == "Season" and isinstance(self.outdict[field], list): # "Season" may be a list
+                        self.outdict[field] = self.tryConvert(self.outdict[field], assets.ctlFieldTypes[field], "Value for field '" + str(field) + "' is of wrong type.")
 
             print(field)
         toPop.reverse() # pop from end to start, otherwise the first pop will make all later indices invalid
@@ -184,7 +201,7 @@ class CTLConv:
             fields.pop(idx)
 
         # After pruning, we still have all required fields
-        for item in assets.requiredCTLFields:
+        for item in self.requiredFields:
             if not item in fields:
                 self.error("Missing required field '" + item + "'.")
 
@@ -230,9 +247,11 @@ class CTLConv:
             for idx, buttonName in enumerate(buttons.keys()):
 
                 # Button exists
-                if buttonName not in assets.validButtons:
-                    buttonsToDel.append(buttonName)
-                    print("[unrecognized, ignoring] ", end="")
+                # if buttonName not in assets.validButtons:
+                #     buttonsToDel.append(buttonName)
+                #     print("[unrecognized, ignoring] ", end="")
+                if False: # We actually want to allow any Button name, to allow for fake Buttons.
+                    pass
 
                 # Button is not already a modifier
                 elif buttonName in modifiers: # 'modifiers' was set in Pass 2
@@ -285,8 +304,22 @@ class CTLConv:
                                             self.error("Value for key '" + str(key) + "' in modifier mapping '" + modifier + "' in button '" + buttonName + "' is of the wrong type.")
 
 
+                            # Verify Button Type
+                            if not mapping["Type"] in assets.validButtonTypes:
+                                if mapping["Type"] == "":
+                                    modifiersToDel.append(modifier)
+                                    warning = "Button '" + buttonName + "' modifier '" + modifier + "' has no Type set and will be ignored."
+                                    print(warning)
+                                    self.warnings.append(warning)
+                                else:
+                                    self.error("Invalid Type set for button '" + buttonName + "' modifier '" + modifier + "'.")
+
                             # Verify Action mapping
-                            self.verifyAction(buttonName, modifier, mapping["Action"])
+                            if action in list[None, "", [], {}]:
+                                modifiersToDel.append(modifier)
+                                print("Button '" + buttonName + "' modifier '" + modifier + "' has no Action set and will be ignored.")
+                            else:
+                                self.verifyAction(buttonName, modifier, mapping["Action"])
 
                         print("\t" + modifier)
                     for key in modifiersToDel:
@@ -297,5 +330,103 @@ class CTLConv:
         else:
             print("'Buttons' field is empty, so skipping Pass 3\n")
 
-        print("File fully converted and verified.")
+
+        # Pass 4: Verify Axes
+        print("Pass 4: Verify Axes")
+        if "Axes" not in emptyFields:
+            axes = self.outdict["Axes"]
+            axesToDel = []
+            for idx, axisName in enumerate(axes.keys()):
+
+                # Axis exists
+                # if axisName not in assets.validAxes:
+                #     axesToDel.append(axisName)
+                #     print("[unrecognized, ignoring] ", end="")
+                if False: # We actually want to allow any Axis name, to allow for fake / merged Axes.
+                    pass
+
+                else:
+                    axis = axes[axisName]
+
+                    # Axis is a dict
+                    if not isinstance(axis, dict):
+                        self.error("Axis '" + axisName + "' is not valid.")
+
+                    # Check modifier mappings
+                    axisModifiers = list(axis.keys())
+                    modifiersToDel = []
+                    for modifier in axisModifiers:
+                        # Modifier is valid
+                        if modifier not in (modifiers + ["Default"]):
+                            modifiersToDel.append(modifier)
+                            print("\t[unusable; that button isn't a modifier] ", end="")
+                            self.warnings.append("Axis mapping '" + axisName + "'/'" + str(modifier) + "' is unusable; that button is not mapped as a modifier.")
+                        else:
+                            # Action mappings are valid
+                            mapping = axis[modifier]
+
+                            # Mapping is a dict
+                            if not isinstance(mapping, dict):
+                                self.error("Action mapping for Axis '" + axisName + "' modifier '" + modifier + "' is not a dict!")
+
+                            # Keys exist and their values are of correct types
+                            for key in assets.axisMappingTypes.keys():
+                                # Key exists
+                                try:
+                                    temp = mapping[key]
+                                except KeyError:
+                                    self.error("Malformed mapping for Axis '" + axisName + "' modifier '" + modifier + "'.")
+
+                                if not isinstance(mapping[key], assets.axisMappingTypes[key]):
+
+                                    # An empty field here should be None, but Snap! exports it as ""
+                                    if mapping[key] == "":
+                                        mapping[key] = None
+
+                                    elif mapping[key] != None: # Empty fields are OK, just not malformed ones
+                                        # Check for CTLedit 1.0 known bug
+                                        if key == "Action" and isinstance(mapping["Action"], list):
+                                            action = mapping["Action"]
+                                            name = action[0]
+                                            action[1].update({"Name" : name})
+                                            mapping["Action"] = action[1]
+                                        else:
+                                            mapping[key] = self.tryConvert(mapping[key], assets.axisMappingTypes[key], "Failed to convert value for key '" + str(key) + "' in modifier mapping '" + modifier + "' in Axis '" + axisName + "' to the correct type.")
+
+
+                            # Verify Axis Type
+                            if not mapping["Type"] in assets.validAxisTypes:
+                                if mapping["Type"] == "":
+                                    modifiersToDel.append(modifier)
+                                    warning = "Axis '" + axisName + "' modifier '" + modifier + "' has no Type set and will be ignored."
+                                    print(warning)
+                                    self.warnings.append(warning)
+                                else:
+                                    self.error("Invalid Type set for Axis '" + axisName + "' modifier '" + modifier + "'.")
+
+                            # Verify Action mapping
+                            if mapping["Action"] in [None, "", [], {}]:
+                                if modifiersToDel.count(modifier) == 0:
+                                    modifiersToDel.append(modifier)
+                                warning = "Axis '" + axisName + "' modifier '" + modifier + "' has no Action set and will be ignored."
+                                print(warning)
+                                self.warnings.append(warning)
+                            else:
+                                self.verifyAction(axisName, modifier, mapping["Action"])
+
+                        print("\t" + modifier)
+                    for key in modifiersToDel:
+                        del axis[key]
+                print(axisName)
+            for key in axesToDel:
+                del axes[key]
+        else:
+            print("'Axes' field is empty, so skipping Pass 4\n")
+
+        print("\nFile fully converted and verified.")
+        if len(self.warnings) > 0:
+            print("The following warnings were generated and may negatively affect the output:")
+            for warning in self.warnings:
+                print(warning)
+            print("[end of warnings]")
         return self.outdict
