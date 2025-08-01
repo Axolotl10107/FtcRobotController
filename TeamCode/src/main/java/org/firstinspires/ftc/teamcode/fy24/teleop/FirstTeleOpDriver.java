@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.fy24.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.IndyTeleOpScheme23;
-import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.TeleOpScheme23;
-import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.TeleOpState23;
+import org.firstinspires.ftc.teamcode.fy24.controls.IndyTeleOpScheme24;
+import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpScheme24;
+import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
@@ -16,14 +16,14 @@ import org.firstinspires.ftc.teamcode.framework.units.DTS;
 public class FirstTeleOpDriver extends OpMode {
 
     Robot24 robot;
-    TeleOpState23 controlsState;
-    TeleOpScheme23 controlsScheme;
+    TeleOpState24 controlsState;
+    TeleOpScheme24 controlsScheme;
     IMUCorrector imuCorrector;
 
     @Override
     public void init() {
         robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
-        controlsScheme = new IndyTeleOpScheme23(gamepad1, gamepad2);
+        controlsScheme = new IndyTeleOpScheme24(gamepad1, gamepad2);
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         // IMUcorrector has other parameters, but they already have good defaults and don't usually need to be changed.

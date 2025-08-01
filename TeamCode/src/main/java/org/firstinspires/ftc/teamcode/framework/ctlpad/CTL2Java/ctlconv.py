@@ -1,8 +1,10 @@
-# File updated 7-26-25
+# File updated 7-28-25
 
 # Convert CTL file to dictionary, verify integrity and fix known bugs from graphical editors
 # A rather lenient checker that lets graphical editors hide their own data all over the place if they want to.
 # This will just remove anything that CTL2Java doesn't need.
+# Uses an unhealthy mix of stuff from assets.py and hard-coded checks.
+# To modify the checking, you'll probably have to modify both files.
 # TODO: Not quite; there's a few spots that fail when extra keys are present instead of just skipping them. I'd like to change these.
 
 # Big picture outline of what this does:
@@ -165,6 +167,12 @@ class CTLConv:
         print("Pass 1: Verify Fields Overall")
 
         fields = list(self.outdict.keys())
+
+        # Have all required fields
+        for item in self.requiredFields:
+            if not item in fields:
+                self.error("Missing required field '" + item + "'.")
+
         toPop = []
         emptyFields = []
         print("Fields:")
@@ -206,10 +214,11 @@ class CTLConv:
                 self.error("Missing required field '" + item + "'.")
 
         # Further inspect metadata fields
-        if self.outdict["Version"] < 1:
+        version = self.tryConvert(self.outdict["Version"], int, "Failed to convert 'Version' field to int.")
+        if version < 1:
             print("That's an interesting version number. I'm not going to try working with this one. Exiting now.")
             sys.exit(1)
-        if self.outdict["Version"] > 1:
+        if version > 1:
             print("What's up, future people? Do you know what's up? I don't, but I do know it's not my version number (" + self.version + ")! I don't know what to do with a file this new! You want me to try anyway?")
             user = input("[y/n]")
             if user.lower() in ["y", "yes"]:
@@ -218,9 +227,14 @@ class CTLConv:
                 print("Yeah, let's look for a newer version of me instead. Exiting now.")
                 sys.exit(0)
 
-        if self.outdict["Gamepad"] < 1 or self.outdict["Gamepad"] > 2:
-            print("'Gamepad' should be either 1 or 2.")
-            sys.exit(1)
+        if "Gamepad" in fields:
+            gamepad = self.tryConvert(self.outdict["Gamepad"], int, "Failed to convert 'Gamepad' field to int.")
+            if gamepad < 1 or gamepad > 2:
+                print("'Gamepad' should be either 1 or 2.")
+                sys.exit(1)
+        else:
+            if "Buttons" in fields or "Axes" in fields:
+                self.error("Gamepad mappings must specify which Gamepad they apply to with the 'Gamepad' field!")
 
         print("Completed Pass 1\n")
 
@@ -241,7 +255,7 @@ class CTLConv:
 
         # Pass 3: Verify Buttons
         print("Pass 3: Verify Buttons")
-        if "Buttons" not in emptyFields:
+        if "Buttons" in fields and "Buttons" not in emptyFields:
             buttons = self.outdict["Buttons"]
             buttonsToDel = []
             for idx, buttonName in enumerate(buttons.keys()):
@@ -333,7 +347,7 @@ class CTLConv:
 
         # Pass 4: Verify Axes
         print("Pass 4: Verify Axes")
-        if "Axes" not in emptyFields:
+        if "Axes" in fields and "Axes" not in emptyFields:
             axes = self.outdict["Axes"]
             axesToDel = []
             for idx, axisName in enumerate(axes.keys()):
@@ -422,6 +436,134 @@ class CTLConv:
                 del axes[key]
         else:
             print("'Axes' field is empty, so skipping Pass 4\n")
+
+        # Pass 5: Verify Actions
+        if "Actions" in fields and "Actions" not in emptyFields:
+            actions = self.outdict["Actions"]
+            for actionName in actions.keys():
+                action = actions[actionName]
+
+                # Action must be a dict
+                if not isinstance(action, dict):
+                    self.error("Action '" + actionName + "' is not a dict.")
+
+                # Action has all required fields
+                for requiredField in assets.libActionRequiredFields:
+                    if not requiredField in action.keys():
+                        self.error("Action '" + actionName + "' is missing required field '" + requiredField + "'.")
+
+                # Verify Type (required)
+                type = action["Type"]
+                if not isinstance(type, str):
+                    self.error("'Type' field for Action '" + actionName + "' is not a string.")
+                if not type in assets.validLibActionTypes:
+                    self.error("'" + type + "' for Action '" + actionName + "' is not a valid Action type!")
+                print("Type")
+
+                # Verify Code (required)
+                code = action["Code"]
+                if not isinstance(code, list):
+                    self.error("'Code' field for Action '" + actionName + "' is not a list.")
+                for idx, line in enumerate(code):
+                    if not isinstance(line, str):
+                        self.error("Line [" + str(idx) + "] of Code for Action '" + actionName + "' is not a string.")
+                print("Code")
+
+                # Verify Safety Multiplier (optional)
+                if "SafetyMultiplier" in action.keys():
+                    safeMult = action["SafetyMultiplier"]
+                    self.tryConvert(safeMult, float, "'SafetyMultiplier' for Action '" + actionName + "' is not a float.")
+                print("SafetyMultiplier")
+
+                # Verify Parameters (optional)
+                if "Parameters" in action.keys():
+                    parameters = action["Parameters"]
+                    if not isinstance(parameters, dict):
+                        self.error("'Parameters' for Action '" + actionName + "' is not a dict.")
+
+                    # # Check for required keys
+                    # for key in assets.libActionParamFields:
+                    #     if not key in parameters.keys():
+                    #         self.error("'Parameters' for Action '" + actionName + "' is missing required field '" + key + "'.")
+                    #
+                    # # Remove unused keys
+                    # toDel = []
+                    # for key in parameters.keys():
+                    #     if key not in assets.libActionParamFields:
+                    #         toDel.append(key)
+                    #         print("[unrecognized, skipping] ", end="")
+                    #     print(key)
+                    # for key in toDel:
+                    #     del parameters[key]
+
+                    # Verify individual Parameters
+                    for paramName in parameters.keys():
+                        param = parameters[paramName]
+
+                        # Must be a dict
+                        if not isinstance(param, dict):
+                            self.error("Parameter '" + paramName + "' of Action '" + actionName + "' is not a dict.")
+
+                        # Check for required keys
+                        for key in assets.libActionParamFields:
+                            if not key in param.keys():
+                                self.error("Parameter '" + paramName + "' of Action '" + actionName + "' is missing required field '" + key + "'.")
+
+                        # Remove extra fields
+                        toDel = []
+                        for key in param.keys():
+                            if not key in assets.libActionParamFields:
+                                toDel.append(key)
+                                print("[unrecognized, skipping] ", end="")
+                            print(key)
+                        for key in toDel:
+                            del param[key]
+
+                        # Verify fields
+                        type = param["Type"]
+                        if not isinstance(type, str):
+                            self.error("Type of Parameter '" + paramName + "' of Action '" + actionName + "' is not a string.")
+                        if not type in assets.validDataTypes:
+                            self.error("Type of Parameter '" + paramName + "' of Action '" + actionName + "' is not a valid Java data type.")
+
+                        param["Value"] = self.tryConvert(param["Value"], type.lower(), "Failed to convert Value of Parameter '" + paramName + "' of Action '" + actionName + "' to the correct type.")
+
+                        print(paramName)
+
+                    print("Parameters")
+
+                print(actionName)
+        else:
+            print("'Actions' field is empty, so skipping Pass 5\n")
+
+        # Pass 6: Verify Methods
+        if "Methods" in fields and "Methods" not in emptyFields:
+            if not ("Bases" in fields or "Bases" in emptyFields):
+                self.error("Method library is missing 'Bases' field.")
+            if not ("Extensions" in fields or "Extensions" in emptyFields):
+                self.error("Method library is missing 'Extensions' field.")
+
+            methods = self.outdict["Methods"]
+            for methodName in methods.keys():
+                method = methods[methodName]
+
+                if not isinstance(method, list):
+                    self.error("Method '" + methodName + "' is not a list.")
+
+                for idx, line in enumerate(method):
+                    if not isinstance(line, str):
+                        self.error("Line [" + str(idx) + "] of Method '" + methodName + "' is not a string.")
+        else:
+            print("'Methods' field is empty, so skipping Pass 6\n")
+
+        # Pass 7: Verify Setters
+        if "Setters" in fields and "Setters" not in emptyFields:
+            setters = self.outdict["Setters"]
+            for idx, line in enumerate(setters):
+                if not isinstance(line, str):
+                    self.error("Line [" + str(idx) + "] of Setters is not a string.")
+        else:
+            print("'Setters' field is empty, so skipping Pass 7\n")
 
         print("\nFile fully converted and verified.")
         if len(self.warnings) > 0:

@@ -6,9 +6,45 @@
       "Type": "Axis",
       "SafetyMultiplier": 1.0,
       "Code": [
-        "if (!driveSet) {",
+        "double val = <~myname>.value();",
+        "if (!driveSet && !(-0.01 < val && val < 0.01)) {",
         "\tdrive = <~myname>.value();",
+        "driveSet = true;",
         "}"
+      ]
+    },
+    "Turn": {
+      "Type": "Axis",
+      "SafetyMultiplier": 1.0,
+      "Code": [
+        "double val = <~myname>.value();",
+        "if (!turnSet && !(-0.01 < val && val < 0.01)) {",
+        "\tturn = <~myname>.value();",
+        "\tturnSet = true;",
+        "}"
+      ]
+    },
+    "Strafe": {
+      "Type": "Axis",
+      "SafetyMultiplier": 1.0,
+      "Code": [
+        "double val = <~myname>.value();",
+        "if (!strafeSet && !(-0.01 < val && val < 0.01)) {",
+        "\tstrafe = <~myname>.value();",
+        "\tstrafeSet = true;",
+        "}"
+      ]
+    },
+    "Change Max. Drive Power": {
+      "Type": "Button",
+      "Parameters": {
+        "By": {
+          "Type": "double",
+          "Value": 0.1
+        }
+      },
+      "Code": [
+        "setMaxDrivePower( getMaxDrivePower() + <~param:By> )"
       ]
     }
   }

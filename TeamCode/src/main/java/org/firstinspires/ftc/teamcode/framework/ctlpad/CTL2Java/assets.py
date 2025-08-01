@@ -1,14 +1,22 @@
 # Some data for CTL2Java
-# File last updated 7-28-25
+# File last updated 8-1-25
 
 # Update this first item to match your TeamCode layout
-# You may need to add things to support additional Method libraries. See their READMEs for what they need.
-# Don't update anything else in here unless you're familiar with how CTL2Java works!
+# You may need to add things to support additional Method libraries.
+# See their READMEs for what they need.
+# Don't update anything else in here unless you're quite familiar with CTL2Java!
+# Expander tags:
 # <~tc> -> "org.firstinspires.ftc.teamcode"
 importLocations = {"primitives" : "<~tc>.framework.ctlpad.primitives",
                    "subsystems" : "<~tc>.framework.subsystems",
                    "DTS" : "<~tc>.framework.units.DTS",}
 
+
+# This directly affects what Library categories CTL2Java tries to load and where
+# it tries to load them from.
+libDirs = {"BaseActions" : "actions/base",
+           "ExtensionActions" : "actions/extension",
+           "Methods" : "methods"}
 
 # The following expander tags are available to the start template:
 # <~tc> - location of TeamCode package
@@ -18,25 +26,52 @@ importLocations = {"primitives" : "<~tc>.framework.ctlpad.primitives",
 # <~seasonState> - the State class used for the selected season
 # anything specified in importLocations above (e.g. <~primitives>)
 
-# Additional tags are available to the end template:
-# <~getStateInteriorLines> - created by the code generator as it goes
-
-startTemplateLines = ["package <package>;",
+indyStartTemplateLines = ["package <package>;",
                       "",
                       "import com.qualcomm.robotcore.hardware.Gamepad;",
                       "import <~primitives>;",
                       "",
                       "/** This control scheme was generated using CTL2Java. */",
                       "public class <~className> implements <~seasonInterface> {",
-                      "\t\n\t"]
+                      "\t\n",
+                      "\tpublic <~className>(Gamepad gamepad1, Gamepad gamepad2) {",
+                      "\t\tthis.gamepad1 = gamepad1;",
+                      "\t\tthis.gamepad2 = gamepad2;",
+                      "\t}"]
 
-endTemplateLines = ["\n\t",
+fieldyStartTemplateLines = ["package <package>;",
+                            "",
+                            "import com.qualcomm.robotcore.hardware.Gamepad;",
+                            "import <~primitives>;",
+                            "",
+                            "/** This control scheme was generated using CTL2Java. */",
+                            "public class <~className> implements <~seasonInterface> {",
+                            "\t\n",
+                            "\tpublic <~className>(Gamepad gamepad1, Gamepad gamepad2, FriendlyIMU imu) {",
+                            "\t\tthis.gamepad1 = gamepad1;",
+                            "\t\tthis.gamepad2 = gamepad2;",
+                            "\t\tthis.imu = imu;",
+                            "\t}"]
+
+
+# Additional tags are available to the end template:
+# <~getStateInteriorLines> - created by the code generator as it goes
+
+indyEndTemplateLines = ["\n\t",
                     "\t@Override",
                     "\tpublic <~seasonState> getState() {",
                     "\t\t<~getStateInteriorLines>\n\t\t",
                     "\t\treturn state;",
                     "\t}",
                     "}"]
+
+fieldyEndTemplateLines = ["\n\t",
+                        "\t@Override",
+                        "\tpublic <~seasonState> getState() {",
+                        "\t\t<~getStateInteriorLines>\n\t\t",
+                        "\t\treturn state;",
+                        "\t}",
+                        "}"]
 
 
 validButtons = ["A",
@@ -70,6 +105,10 @@ validAxes = ["LSX",
 validCTLFields = ["Version",
                   "Gamepad",
                   "Season",
+                  "Bases",
+                  "Extensions",
+                  "Interface",
+                  "State",
                   "Positions",
                   "Modifiers",
                   "Buttons",
@@ -94,9 +133,19 @@ actionLibRequiredFields = ["Version",
                            "Season",
                            "Actions"]
 
+settersRequiredFields = ["Version",
+                         "Season",
+                         "Interface",
+                         "State",
+                         "Setters"]
+
 usableCTLFields = ["Version",
                    "Gamepad",
                    "Season",
+                   "Bases",
+                   "Extensions",
+                   "Interface",
+                   "State",
                    "Modifiers",
                    "Buttons",
                    "Axes",
@@ -109,6 +158,8 @@ ctlFieldTypes = {"Version" : int,
                  "Season" : str,
                  "Bases" : list,
                  "Extensions" : list,
+                 "Interface" : str,
+                 "State" : str,
                  "Positions" : dict,
                  "Modifiers" : list,
                  "Buttons" : dict,
@@ -152,3 +203,29 @@ validDataTypes = ["byte",
                   "boolean",
                   "char",
                   "String"]
+
+libActionRequiredFields = ["Type",
+                           "Code"]
+
+validLibActionTypes = ["Button",
+                       "Axis"]
+
+# Required fields of a Parameter for an Action in an Action Library
+libActionParamFields = ["Type",
+                        "Value"]
+
+def prettydict(dict):
+    out = str(dict)
+    idl = 0
+    for letter in out:
+        if letter in ["{", "["]:
+            idl += 1
+            print(letter + "\n" + ("\t" * idl), end="")
+        elif letter in ["}", "]"]:
+            idl -= 1
+            print(letter + "\n" + ("\t" * idl), end="")
+        elif letter == ",":
+            print(letter + "\n" + ("\t" * idl), end="")
+        else:
+            print(letter, end="")
+    print("\n\n")

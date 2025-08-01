@@ -6,20 +6,40 @@
   ],
   "Extensions": [],
   "Methods": {
-    "setDts": [
-      "double drive = 0;",
-      "boolean driveSet = false;",
-      "<~all:Drive>",
-      "",
-      "double turn = 0;",
-      "boolean turnSet = false;",
-      "<~all:Turn>",
-      "",
-      "double strafe = 0;",
-      "boolean strafeSet = false;",
-      "<~all:Strafe>",
-      "",
-      "state.setDts( new DTS( drive, turn, strafe ) );"
+    "<indy>setDts": [
+      "void setDts() {",
+      "\tdouble drive = 0;",
+      "\tboolean driveSet = false;",
+      "\t<~all:Drive>",
+      "\t",
+      "\tdouble turn = 0;",
+      "\tboolean turnSet = false;",
+      "\t<~all:Turn>",
+      "\t",
+      "\tdouble strafe = 0;",
+      "\tboolean strafeSet = false;",
+      "\t<~all:Strafe>",
+      "\t",
+      "\tstate.setDts( new DTS( drive, turn, strafe ) );"
+    ],
+    "<fieldy>setDts": [
+      "void setDts(double heading) {",
+      "\tdouble drive = 0;",
+      "\tboolean driveSet = false;",
+      "\t<~all:Drive>",
+      "\t",
+      "\tdouble turn = 0;",
+      "\tboolean turnSet = false;",
+      "\t<~all:Turn>",
+      "\t",
+      "\tdouble strafe = 0;",
+      "\tboolean strafeSet = false;",
+      "\t<~all:Strafe>",
+      "\t",
+      "\tstate.setDts( new DTS( drive, turn, strafe ).rotate(heading) );"
+    ],
+    "setMaxDrivePower": [
+      "<~all:Change Max. Drive Power>"
     ]
   }
 }
