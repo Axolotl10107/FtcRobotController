@@ -1,13 +1,13 @@
-# CTL2Java CLI
+# CTL2Java CLI and linking fabric
 # File last updated 8-1-25
 
-import traceback
 import os
 import sys
 from argparse import ArgumentParser
 
 from ctlconv import CTLConv
 import assets
+from common import Common
 
 version = "1.0-0"
 
@@ -28,15 +28,6 @@ if args.version:
     print(version)
     sys.exit(0)
 
-# Utility methods
-def error(self, msg, exc=False):
-    if exc:
-        print(msg + " More detailed info. below.")
-        print(traceback.format_exc())
-    else:
-        print(msg)
-    sys.exit(1)
-
 # Process arguments
 if args.outpackage:
     outpackage = args.outpackage
@@ -48,7 +39,7 @@ if args.drivetype:
     if low in ["indy", "fieldy"]:
         drivetype = low
     else:
-        error("Invalid drivetype specified. Must be 'Indy' or 'Fieldy'.")
+        Common.error("Invalid drivetype specified. Must be 'Indy' or 'Fieldy'.")
 else:
     drivetype = "indy"
 
@@ -56,7 +47,7 @@ if args.infile1:
     try:
         infile1 = open(args.infile1, encoding="utf-8-sig")
     except:
-        error("Could not open input file 1.", True)
+        Common.error("Could not open input file 1.", True)
 else:
     infile1 = sys.stdin
 
@@ -64,7 +55,7 @@ if args.infile2:
     try:
         infile2 = open(args.infile2, encoding="utf-8-sig")
     except:
-        error("Could not open input file 2.", True)
+        Common.error("Could not open input file 2.", True)
 else:
     infile2 = None
 
@@ -101,7 +92,7 @@ for libType in libNameDict.keys():
         try:
             libFile = open(assets.libDirs[libName] + "/" + libName)
         except:
-            error("Could not open Library file '" + libName + "'.")
+            Common.error("Could not open Library file '" + libName + "'.")
         conv = CTLConv(libFile)
         newName = libName[:-5] # Remove file extension
         newLib = conv.getVerifiedDict()
@@ -110,12 +101,12 @@ for libType in libNameDict.keys():
 # Debug output, if enabled
 if args.debug:
     print("gamepad1:")
-    assets.prettydict(outdict1)
+    Common.prettydict(outdict1)
     print("gamepad2:")
-    assets.prettydict(outdict2)
+    Common.prettydict(outdict2)
 
     for libType in libDict.keys():
         print("Library type: " + libType)
         for libName in libType.keys():
             print(libName)
-            assets.prettydict(libType[libName])
+            Common.prettydict(libType[libName])

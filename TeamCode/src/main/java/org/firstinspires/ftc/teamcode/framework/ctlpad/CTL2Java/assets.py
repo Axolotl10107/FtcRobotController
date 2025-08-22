@@ -16,7 +16,8 @@ importLocations = {"primitives" : "<~tc>.framework.ctlpad.primitives",
 # it tries to load them from.
 libDirs = {"BaseActions" : "actions/base",
            "ExtensionActions" : "actions/extension",
-           "Methods" : "methods"}
+           "Methods" : "methods",
+           "Setters" : "setters"}
 
 # The following expander tags are available to the start template:
 # <~tc> - location of TeamCode package
@@ -214,18 +215,5 @@ validLibActionTypes = ["Button",
 libActionParamFields = ["Type",
                         "Value"]
 
-def prettydict(dict):
-    out = str(dict)
-    idl = 0
-    for letter in out:
-        if letter in ["{", "["]:
-            idl += 1
-            print(letter + "\n" + ("\t" * idl), end="")
-        elif letter in ["}", "]"]:
-            idl -= 1
-            print(letter + "\n" + ("\t" * idl), end="")
-        elif letter == ",":
-            print(letter + "\n" + ("\t" * idl), end="")
-        else:
-            print(letter, end="")
-    print("\n\n")
+validDriveTypes = ["indy",
+                   "fieldy"]
