@@ -4,6 +4,7 @@
 import sys
 import traceback
 
+
 class Common:
     @staticmethod
     def error(msg, exc=False):
@@ -15,9 +16,9 @@ class Common:
         sys.exit(1)
 
     @staticmethod
-    def prettydict(dict):
-        out = str(dict)
-        idl = 0
+    def prettydict(d):
+        out = str(d)
+        idl = 0  # "idl" is short for "indent level"
         for letter in out:
             if letter in ["{", "["]:
                 idl += 1

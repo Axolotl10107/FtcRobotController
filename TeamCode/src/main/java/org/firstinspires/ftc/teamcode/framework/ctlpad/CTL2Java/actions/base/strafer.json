@@ -9,7 +9,7 @@
         "double val = <~myname>.value();",
         "if (!driveSet && !(-0.01 < val && val < 0.01)) {",
         "\tdrive = <~myname>.value();",
-        "driveSet = true;",
+        "\tdriveSet = true;",
         "}"
       ]
     },
@@ -44,7 +44,7 @@
         }
       },
       "Code": [
-        "setMaxDrivePower( getMaxDrivePower() + <~param:By> )"
+        "state.setMaxDrivePower( state.getMaxDrivePower() + <~param:By> );"
       ]
     }
   }

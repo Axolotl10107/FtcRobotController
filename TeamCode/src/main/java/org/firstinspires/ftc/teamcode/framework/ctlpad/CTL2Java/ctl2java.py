@@ -1,5 +1,6 @@
 # CTL2Java CLI and linking fabric
-# File last updated 8-1-25
+# Also all File I/O happens here (I think)
+# File last updated 8-23-25
 
 import os
 import sys
@@ -8,15 +9,18 @@ from argparse import ArgumentParser
 from ctlconv import CTLConv
 import assets
 from common import Common
+from preparer import Preparer
+from expander import Expander
+from generator import Generator
 
 version = "1.0-0"
 
-# Define command-line arguments
+# ----- Command-line arguments -----
 argparser = ArgumentParser()
 argparser.add_argument("-ver", "--version", help="Print version then exit", action="store_true")
 argparser.add_argument("-if1", "--infile1", help="Input file for gamepad1, otherwise use stdin", action="store")
 argparser.add_argument("-if2", "--infile2", help="Input file for gamepad2", action="store")
-argparser.add_argument("-of", "--outfile", help="Output file, otherwise use stdout", action="store")
+argparser.add_argument("-of", "--outfile", help="Output class name (and output file name), otherwise use stdout. Omit the '.java' file extension.", action="store")
 argparser.add_argument("-op", "--outpackage", help="Package that the output file resides in, otherwise assume TeamCode", action="store")
 argparser.add_argument("-dt", "--drivetype", help="'Indy' (traditional) or 'Fieldy' (field-oriented). Assume Indy if this isn't set.", action="store")
 argparser.add_argument("-f", "--verify", help="Only verify infile, do not generate control scheme", action="store_true")
@@ -29,6 +33,11 @@ if args.version:
     sys.exit(0)
 
 # Process arguments
+if args.outfile:
+    outfile = args.outfile
+else:
+    outfile = "<~stdout>"
+
 if args.outpackage:
     outpackage = args.outpackage
 else:
@@ -59,7 +68,8 @@ if args.infile2:
 else:
     infile2 = None
 
-# Convert files
+
+# ----- Convert files -----
 converter1 = CTLConv(infile1, assets.gamepadRequiredFields)
 print("Converting file for gamepad1:")
 outdict1 = converter1.getVerifiedDict()
@@ -69,9 +79,24 @@ if infile2:
     print("Converting file for gamepad2:")
     outdict2 = converter2.getVerifiedDict()
     print("\n\n")
+else:
+    outdict2 = None
 
+# Debug output, if enabled
+if args.debug:
+    print("gamepad1:")
+    Common.prettydict(outdict1)
+    if infile2:
+        print("gamepad2:")
+        Common.prettydict(outdict2)
+
+if args.verify:
+    print("--verify argument is set, so exiting now")
+    sys.exit(0)
+
+# ----- Create libDict -----
 # Create dict with needed categories but empty lists for values
-libNameDict = assets.libDirs
+libNameDict = assets.libDirs.copy()
 for key in libNameDict.keys():
     libNameDict[key] = []
 
@@ -82,31 +107,60 @@ for libType in assets.libDirs.keys():
             libNameDict[libType].append(filename)
 
 # Create dict to sort converted libs into
-libDict = assets.libDirs
+libDict = assets.libDirs.copy()
 for key in libDict.keys():
     libDict[key] = {}
 
 # Convert all libs
 for libType in libNameDict.keys():
-    for libName in libType:
+    for libName in libNameDict[libType]:
         try:
-            libFile = open(assets.libDirs[libName] + "/" + libName)
+            libFile = open(assets.libDirs[libType] + "/" + libName)
         except:
             Common.error("Could not open Library file '" + libName + "'.")
-        conv = CTLConv(libFile)
+        conv = CTLConv(libFile, assets.requiredFieldsByLibType[libType])
         newName = libName[:-5] # Remove file extension
         newLib = conv.getVerifiedDict()
         libDict[libType].update({newName : newLib})
 
 # Debug output, if enabled
 if args.debug:
-    print("gamepad1:")
-    Common.prettydict(outdict1)
-    print("gamepad2:")
-    Common.prettydict(outdict2)
-
     for libType in libDict.keys():
         print("Library type: " + libType)
-        for libName in libType.keys():
+        for libName in libDict[libType].keys():
             print(libName)
-            Common.prettydict(libType[libName])
+            Common.prettydict(libDict[libType][libName])
+
+
+# ----- Preparer -----
+preparer = Preparer(outdict1, outdict2, libDict)
+expandedLibDict = preparer.expandLibDict()
+sortedMappings = preparer.combineMappingsAndAddPrefixes()
+
+
+# ----- Create expander -----
+expander = Expander(expandedLibDict, sortedMappings, outfile, outpackage)
+
+
+# ----- Create generator -----
+generator = Generator(
+    sortedMappings,
+    expander,
+    expandedLibDict["constructorLines"],
+    expandedLibDict["classLines"],
+    expandedLibDict["Setters"],
+    drivetype,
+    args.debug
+)
+generatedLines = generator.getFile()
+
+if args.debug:
+    print("\nWriting these lines:")
+    print(generatedLines)
+
+if outfile == "<~stdout>":
+    sys.stdout.writelines(generatedLines)
+else:
+    print("\nWriting to file '" + outfile + "'")
+    with open(outfile + ".java", "w") as f:
+        f.write( generator.stringify( generatedLines ) )

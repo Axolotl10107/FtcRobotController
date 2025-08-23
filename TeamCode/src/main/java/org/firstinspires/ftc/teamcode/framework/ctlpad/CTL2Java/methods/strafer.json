@@ -6,40 +6,44 @@
   ],
   "Extensions": [],
   "Methods": {
-    "<indy>setDts": [
+    "<~indy>setDts": [
       "void setDts() {",
       "\tdouble drive = 0;",
       "\tboolean driveSet = false;",
-      "\t<~all:Drive>",
+      "<~all:Drive>",
       "\t",
       "\tdouble turn = 0;",
       "\tboolean turnSet = false;",
-      "\t<~all:Turn>",
+      "<~all:Turn>",
       "\t",
       "\tdouble strafe = 0;",
       "\tboolean strafeSet = false;",
-      "\t<~all:Strafe>",
+      "<~all:Strafe>",
       "\t",
-      "\tstate.setDts( new DTS( drive, turn, strafe ) );"
+      "\tstate.setDts( new DTS( drive, turn, strafe ) );",
+      "}"
     ],
-    "<fieldy>setDts": [
-      "void setDts(double heading) {",
+    "<~fieldy>setDts": [
+      "void setDts() {",
       "\tdouble drive = 0;",
       "\tboolean driveSet = false;",
-      "\t<~all:Drive>",
+      "<~all:Drive>",
       "\t",
       "\tdouble turn = 0;",
       "\tboolean turnSet = false;",
-      "\t<~all:Turn>",
+      "<~all:Turn>",
       "\t",
       "\tdouble strafe = 0;",
       "\tboolean strafeSet = false;",
-      "\t<~all:Strafe>",
+      "<~all:Strafe>",
       "\t",
-      "\tstate.setDts( new DTS( drive, turn, strafe ).rotate(heading) );"
+      "\tstate.setDts( new DTS( drive, turn, strafe ).rotate(imu.yaw()) );",
+      "}"
     ],
-    "setMaxDrivePower": [
-      "<~all:Change Max. Drive Power>"
+    "setMaxDriveSpeed": [
+      "void setMaxDriveSpeed() {",
+      "<~all:Change Max. Drive Power>",
+      "}"
     ]
   }
 }

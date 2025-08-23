@@ -1,0 +1,15 @@
+{
+  "Version": 1,
+  "Season": "",
+  "Bases": [
+    "framework"
+  ],
+  "Extensions": [],
+  "Methods": {
+    "setSquareUp": [
+      "void setSquareUp(boolean squareUp) {",
+      "<~all:Square Up>",
+      "}"
+    ]
+  }
+}

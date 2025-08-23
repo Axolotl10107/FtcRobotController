@@ -199,7 +199,7 @@ class CTLConv:
             else:
                 # Value is of correct type
                 if not isinstance(self.outdict[field], assets.ctlFieldTypes[field]):
-                    if not field == "Season" and isinstance(self.outdict[field], list): # "Season" may be a list
+                    if not (field == "Season" and isinstance(self.outdict[field], list)): # "Season" may be a list
                         self.outdict[field] = self.tryConvert(self.outdict[field], assets.ctlFieldTypes[field], "Value for field '" + str(field) + "' is of wrong type.")
 
             print(field)
