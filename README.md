@@ -16,6 +16,7 @@ There's a bit of additional setup involved before IDEA will load Android project
 - Finish the SDK setup wizard
 - Go to the Gradle pane and click the leftmost button in the toolbar - "Reload All Gradle Projects".
 - You should now be able to build TeamCode! If you install the REV Hardware Client (Windows only), you can also launch it on a real Control Hub.
+  - There's also some Python scripts in here. Install the Python plugin to run them right in IDEA.
 
 
 ## I want to test my code at home!

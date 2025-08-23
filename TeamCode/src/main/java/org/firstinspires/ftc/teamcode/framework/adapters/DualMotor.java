@@ -44,10 +44,10 @@ public class DualMotor implements DcMotorEx {
      * false, and motor2 will be left alone.
      * Note: if they don't match, methods that can only really return a single
      * value (like getManufacturer() or isMotorEnabled()) will return the values
-     * for motor1. Numeric values (except for getPortNumber()) will be averaged
-     * between both motors.
+     * for motor1 (including getController()!). Numeric values (except for
+     * getPortNumber()) will be averaged between both motors.
      * {@param motor1} Master; configuration will remain unchanged
-     * {@param motor2} Slafe; will be reconfigured to match motor1 if safe is
+     * {@param motor2} Slave; will be reconfigured to match motor1 if safe is
      * true */
     public DualMotor(DcMotorEx motor1, DcMotorEx motor2, boolean safe) {
         this.motor1 = motor1;
