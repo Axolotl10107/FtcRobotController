@@ -149,6 +149,7 @@ generator = Generator(
     expandedLibDict["constructorLines"],
     expandedLibDict["classLines"],
     expandedLibDict["Setters"],
+    expandedLibDict["settersLib"]["Imports"],
     drivetype,
     args.debug
 )

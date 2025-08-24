@@ -6,8 +6,8 @@
       "Type": "Axis",
       "SafetyMultiplier": 1.0,
       "Code": [
-        "double val = <~myname>.value();",
-        "if (!driveSet && !(-0.01 < val && val < 0.01)) {",
+        "double driveVal = <~myname>.value();",
+        "if (!driveSet && !(-0.01 < driveVal && driveVal < 0.01)) {",
         "\tdrive = <~myname>.value();",
         "\tdriveSet = true;",
         "}"
@@ -17,8 +17,8 @@
       "Type": "Axis",
       "SafetyMultiplier": 1.0,
       "Code": [
-        "double val = <~myname>.value();",
-        "if (!turnSet && !(-0.01 < val && val < 0.01)) {",
+        "double turnVal = <~myname>.value();",
+        "if (!turnSet && !(-0.01 < turnVal && turnVal < 0.01)) {",
         "\tturn = <~myname>.value();",
         "\tturnSet = true;",
         "}"
@@ -28,8 +28,8 @@
       "Type": "Axis",
       "SafetyMultiplier": 1.0,
       "Code": [
-        "double val = <~myname>.value();",
-        "if (!strafeSet && !(-0.01 < val && val < 0.01)) {",
+        "double strafeVal = <~myname>.value();",
+        "if (!strafeSet && !(-0.01 < strafeVal && strafeVal < 0.01)) {",
         "\tstrafe = <~myname>.value();",
         "\tstrafeSet = true;",
         "}"
@@ -44,7 +44,7 @@
         }
       },
       "Code": [
-        "state.setMaxDrivePower( state.getMaxDrivePower() + <~param:By> );"
+        "state.setMaxDriveSpeed( state.getMaxDriveSpeed() + <~param:By> );"
       ]
     }
   }

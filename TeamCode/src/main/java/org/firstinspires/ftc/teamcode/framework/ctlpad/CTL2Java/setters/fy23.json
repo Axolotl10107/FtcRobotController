@@ -3,6 +3,9 @@
     "Season" : "fy23",
     "Interface" : "<~tc>.fy23.controls.ctlpad.TeleOpScheme23",
     "State" : "<~tc>.fy23.controls.ctlpad.TeleOpState23",
+    "Imports": [
+        "<~tc>.framework.subsystems.claw.Claw"
+    ],
     "Setters" : [
         "<~dt>setDts",
         "setArmMovement",

@@ -1,4 +1,4 @@
-# File last updated 8-1-25
+# File last updated 8-23-25
 
 # Convert CTL file to dictionary, verify integrity and fix known bugs from graphical editors
 # A rather lenient checker that lets graphical editors hide their own data all over the place if they want to.
@@ -23,6 +23,9 @@
 #
 # Try it, it really works!
 # If you don't understand references, you might be confused!
+#
+# If you need a copy instead:
+# >>> copiedDict = dictionary.copy()
 
 import json
 import traceback

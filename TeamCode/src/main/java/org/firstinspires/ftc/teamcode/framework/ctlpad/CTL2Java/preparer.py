@@ -1,7 +1,7 @@
 # Prepare all the imported stuff (Action & Method libraries & Mappings) in a way
 # that will be convenient later. Sort stuff and do some higher-level checks than
 # ctlconv did.
-# File last updated 8-22-25
+# File last updated 8-23-25
 
 import assets
 from common import Common
@@ -9,6 +9,7 @@ from common import Common
 
 class Preparer:
     def __init__(self, mappings1, mappings2, libDict):
+        self.version = "1.0-0"
         self.mappings1 = mappings1
         self.mappings2 = mappings2
         self.libDict = libDict

@@ -7,7 +7,7 @@
   "Extensions": [],
   "Methods": {
     "setSquareUp": [
-      "void setSquareUp(boolean squareUp) {",
+      "void setSquareUp() {",
       "<~all:Square Up>",
       "}"
     ]

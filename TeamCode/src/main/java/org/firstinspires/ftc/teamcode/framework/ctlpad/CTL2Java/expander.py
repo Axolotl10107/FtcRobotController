@@ -6,12 +6,14 @@ from common import Common
 
 class Expander:
     def __init__(self, expandedLibDict, sortedMappings, outFile, outPackage):
+        self.version = "1.0-0"
         self.libs = expandedLibDict
         self.sortedMappings = sortedMappings
         self.outPackage = outPackage
         self.className = outFile
         self.stateInteriorLines = None
         self.classLines = None
+        self.importLines = None
 
 
     def expandLine(self, line, type, mapping=None, mappingName=None, modifierName=None):
@@ -67,7 +69,7 @@ class Expander:
         out = ""
         method = self.libs["Methods"][methodName]
         for line in method:
-            out += self.expandLine(line, "Method") + "\n"
+            out += "\t" + self.expandLine(line, "Method") + "\n"
         return out
 
 
@@ -235,6 +237,9 @@ class Expander:
     def setClassLines(self, lines):
         self.classLines = lines
 
+    def setImportLines(self, lines):
+        self.importLines = lines
+
     def processTemplateNormalTag(self, tag):
         if tag == "tc":
             return "org.firstinspires.ftc.teamcode"
@@ -246,13 +251,30 @@ class Expander:
             return self.libs["settersLib"]["Season"]
         elif tag == "seasonInterface":
             return self.expandLine( self.libs["settersLib"]["Interface"], "FilePath" )
+        elif tag == "seasonInterfaceClass":
+            expanded = self.expandLine( self.libs["settersLib"]["Interface"], "FilePath" )
+            split = expanded.split(".")
+            return split[-1]
         elif tag == "seasonState":
             return self.expandLine( self.libs["settersLib"]["State"], "FilePath" )
+        elif tag == "seasonStateClass":
+            expanded = self.expandLine( self.libs["settersLib"]["State"], "FilePath" )
+            split = expanded.split(".")
+            return split[-1]
         elif tag == "getClassLines":
             if self.classLines:
                 return self.classLines
             else:
                 Common.error("(internal error! report to a CTL2Java developer) Found <~getClassLines> before it became valid")
+        elif tag == "getImportLines":
+            if self.importLines:
+                # out = ""
+                # for line in self.importLines:
+                #     out += "import " + self.expandLine( line, "FilePath" ) + ";\n"
+                # return out
+                return self.importLines
+            else:
+                Common.error("(internal error! report to a CTL2Java developer) Found <~getImportLines> before it became valid")
         elif tag == "getStateInteriorLines":
             if self.stateInteriorLines:
                 return self.stateInteriorLines
