@@ -201,7 +201,7 @@ class Expander:
 
     def processBaseActionNormalTag(self, tag, mapping, mappingName, modifierName):
         if tag == "myname":
-            return mappingName
+            return mappingName + modifierName
         else:
             Common.error("Only 'myname' normal tags are currently supported in Actions.")
 

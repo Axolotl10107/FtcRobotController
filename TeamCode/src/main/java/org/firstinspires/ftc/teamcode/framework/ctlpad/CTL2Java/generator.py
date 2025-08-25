@@ -52,7 +52,7 @@ class Generator:
                     type = "Button"
                 elif modifier["Type"] in assets.validAxisTypes:
                     type = "Axis"
-                outLines.append( "private " + type + " " + modifierName + ";" )
+                outLines.append( "private " + type + " " + mappingName + modifierName + ";" )
         return outLines
 
 
@@ -83,22 +83,53 @@ class Generator:
             gamepadNumber = "1"
         else:
             gamepadNumber = "2"
-        primitiveName = modifierName[3:].lower()
+        primitiveName = modifierName[3:]
         if primitiveName in assets.validButtons or primitiveName in assets.validAxes:
-            return "gamepad" + gamepadNumber + "." + primitiveName
+            if primitiveName == "R1":
+                primitiveName = "right_bumper"
+            elif primitiveName == "R2":
+                primitiveName = "right_trigger"
+            elif primitiveName == "L1":
+                primitiveName = "left_bumper"
+            elif primitiveName == "L2":
+                primitiveName = "left_trigger"
+            elif primitiveName == "LSX":
+                primitiveName = "left_stick_x"
+            elif primitiveName == "RSX":
+                primitiveName = "right_stick_x"
+            elif primitiveName == "LSY":
+                primitiveName = "left_stick_y"
+            elif primitiveName == "RSY":
+                primitiveName = "right_stick_y"
+            elif primitiveName == "DPadUp":
+                primitiveName = "dpad_up"
+            elif primitiveName == "DPadDown":
+                primitiveName = "dpad_down"
+            elif primitiveName == "DPadLeft":
+                primitiveName = "dpad_left"
+            elif primitiveName == "DPadRight":
+                primitiveName = "dpad_right"
+            elif primitiveName == "Select":
+                primitiveName = "back"
+            return "gamepad" + gamepadNumber + "." + primitiveName.lower()
 
     def splitMergedAxisName(self, mergedAxisName):
         gamepadNumber = mergedAxisName[:3]
-        for mappingName in self.sortedMappings:
-            if mergedAxisName.count(mappingName) > 0:
-                firstAxis = mappingName
+        mergedAxisName = mergedAxisName[9:]  # Strip Gamepad number and 'Merged'
+        for mappingName in self.sortedMappings.keys():
+            mappingName = self.stripGamepadNumber( mappingName )
+            if mergedAxisName.count( mappingName ) > 0:
+                firstAxis = gamepadNumber + mappingName
                 break
-        secondAxis = gamepadNumber + mergedAxisName[ 3+len(firstAxis) : ]
+        secondAxis = gamepadNumber + mergedAxisName[ len( mappingName ) : ]
         return [firstAxis, secondAxis]
 
-    def createPrimitiveConstructorLine(self, type, name, modifierName, gamepadField):
-        # TODO: adding modifierName here changes basically everything else...
-        return name + modifierName + " = new " + type + "( () -> " + gamepadField + " );"
+    def createPrimitiveConstructorLine(self, type, name, modifierName, gamepadField, scalingFactor = None):
+        out = name + modifierName + " = new " + self.mappingTypeToCTLPadType( type ) + "( () -> " + gamepadField
+        if scalingFactor:
+            out += ", " + str(scalingFactor)
+        out += " );"
+        return out
 
     def getPrimitiveConstructorLines(self):
         outLines = []
@@ -112,22 +143,26 @@ class Generator:
                 modifier = mapping[modifierName]
                 modifierType = self.mappingTypeToCTLPadType( modifier["Type"] )
                 # Split merged Axes
-                if modifierType == "Merged":
+                if modifierType == "MergedAxis":
                     splitNames = self.splitMergedAxisName( mappingName )
                 else:
                     splitNames = [ mappingName ]
                 # Whether it was split or not, we can iterate over it just the same
                 for name in splitNames:
-                    modifier = self.sortedMappings[ name ]
+                    mapping = self.sortedMappings[ name ]
                     # Sort out fakes
-                    if modifierType in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
+                    if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
                         fakeButtons.append( [ modifier, name, mappingName ] )
-                    elif modifierType in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                    elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
                         fakeAxes.append( [ modifier, name, mappingName ] )
                     else:
                         # Process reals
                         gamepadField = self.modifierNameToGamepadField( name )
-                        outLines.append( self.createPrimitiveConstructorLine( modifier["Type"], name, modifierName, gamepadField ) )
+                        if modifierType[:-4] in assets.validAxisTypes:
+                            scalingFactor = modifier["Scaling"]
+                        else:
+                            scalingFactor = None
+                        outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], name, modifierName, gamepadField, scalingFactor ) )
 
 
         # Process fake Buttons
