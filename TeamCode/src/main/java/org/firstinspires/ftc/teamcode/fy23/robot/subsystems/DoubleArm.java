@@ -42,11 +42,13 @@ public interface DoubleArm {
 
         /** You already set this in the constructor and cannot set it again. */
         public final boolean present;
-        /** The pivot motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing) */
+        /** The motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing), for the left-side pivot motor */
         public DcMotorEx pivotMotorLeft = new BlankMotor();
+        /** The motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing), for the right-side pivot motor */
         public DcMotorEx pivotMotorRight = new BlankMotor();
-        /** The elevator motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing) */
+        /** The motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing), for the left-side elevator motor */
         public DcMotorEx elevatorMotorLeft = new BlankMotor();
+        /** The motor object, already grabbed from the HardwareMap (or pass in a MockDcMotorEx for testing), for the right-side elevator motor */
         public DcMotorEx elevatorMotorRight = new BlankMotor();
 
 

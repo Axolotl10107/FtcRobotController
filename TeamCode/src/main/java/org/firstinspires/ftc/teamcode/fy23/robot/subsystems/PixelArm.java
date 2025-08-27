@@ -10,10 +10,14 @@ import org.firstinspires.ftc.teamcode.fy23.units.PowerTpSConverter;
 
 /** Represents the combination pivot and elevator mechanism and allows both to be controlled by setting
  * their powers independently or by specifying a point on the planar region containing all possible points that this
- * mechanism can reach. */
+ * mechanism can reach.
+ * Deprecated because the physical hardware this corresponds to no longer exists.
+ * A newer generation of it does, driven by {@link DoubleArm} (which is a newer
+ * generation of PixelArm). */
 @Deprecated
 public interface PixelArm {
 
+    @Deprecated
     class Parameters {
         /** Create a Parameters object and provide parameters that don't have default values.
          * @param present Is this subsystem installed on this robot?

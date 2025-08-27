@@ -12,19 +12,18 @@ O- Optional
 D- Deprecated (please don't use anymore, and remove old usages when convenient)
 I- Ignore (the Robot handles this for you)
 
+Last updated 13:44 4-26-25
+
 -------------------------------------------------------------------------------
 
 Robot:
-D- double tpr                       | ticks per rotation
-D- double wheelDiameter             | in meters
-D- double maxForwardSpeed           | in meters per second
 
 C- clawParameters                   | subsystems are encapsulated in this class,
                                      so their parameters are too
+C- intakeParameters                 | [same as above]
 C- imuParameters                    | [same as above]
 C- driveParameters                  | [same as above]
-C- pixelArmParameters               | [same as above]
-C- planeLauncherParameters          | [same as above]
+C- doubleArmParameters              | [same as above]
 
 C- ExtendedParameters extendedParameters
     - (This one's a bit special. All of these are R (c), and it contains things
@@ -37,7 +36,7 @@ C- ExtendedParameters extendedParameters
 
 Claw:
 C- boolean present                 | Is this subsystem installed on this robot?
-R (present)- String clawServo      | The Servo object, already grabbed from the
+R (present)- Servo clawServo       | The Servo object, already grabbed from the
                                      HardwareMap
 C- double openPosition             | The position (between 0 and 1) where the
                                      claw is considered "open" - determined
@@ -47,7 +46,8 @@ C- double closedPosition           | [same as above], except "closed"
 -------------------------------------------------------------------------------
 
 FriendlyIMU:
-C- boolean present                         | Is this subsystem installed on this robot?
+C- boolean present                         | Is this subsystem installed on this
+                                             robot?
 C- LogoFacingDirection logoFacingDirection | The direction the REV logo on your
                                              Control Hub faces
 C- UsbFacingDirection usbFacingDirection   | The direction the USB port on your
@@ -76,25 +76,27 @@ R (UnitTest)- ElapsedTime stopwatch = new ElapsedTime() | An ElapsedTime or
                                                           already instantiated
 R (non-default)- DcMotor.RunMode runMode                | The RunMode of all
                                  = RUN_USING_ENCODER      four motors
-R (FLOAT)- DcMotor.ZeroPowerBehavior zeroPowerBehavior  | The ZeroPowerBehavior of all
-                                     = BRAKE              four motors
-R (RR)- PIDCoefficients TRANSLATIONAL_PID               | see learnroadrunner.com
-R (RR)- PIDCoefficients HEADING_PID                     | see learnroadrunner.com
-R (RR)- double LATERAL_MULTIPLIER                       | see learnroadrunner.com
-R (RR)- double VX_WEIGHT                                | see learnroadrunner.com
-R (RR)- double VY_WEIGHT                                | see learnroadrunner.com
-R (RR)- double OMEGA_WEIGHT                             | see learnroadrunner.com
-I- FriendlyIMU imu                                      |
-I- VoltageSensor batteryVoltageSensor                   |
+R (FLOAT)- DcMotor.ZeroPowerBehavior zeroPowerBehavior  | The ZeroPowerBehavior
+                                     = BRAKE              of all four motors
+R (RR)- PIDCoefficients TRANSLATIONAL_PID              | see learnroadrunner.com
+R (RR)- PIDCoefficients HEADING_PID                    | see learnroadrunner.com
+R (RR)- double LATERAL_MULTIPLIER                      | see learnroadrunner.com
+R (RR)- double VX_WEIGHT                               | see learnroadrunner.com
+R (RR)- double VY_WEIGHT                               | see learnroadrunner.com
+R (RR)- double OMEGA_WEIGHT                            | see learnroadrunner.com
+I- FriendlyIMU imu                                     |
+I- VoltageSensor batteryVoltageSensor                  |
 
 -------------------------------------------------------------------------------
 
-PixelArm:
-C- boolean present                                   | Is this subsystem installed
-                                                       on this robot?
-R (have motor)- DcMotorEx pivotMotor                 | The pivot motor object,
-                                                       already grabbed from the
-                                                       HardwareMap
+DoubleArm:
+C- boolean present                                   | Is this subsystem
+                                                       installed on this robot?
+R (have motor)- DcMotorEx pivotMotorLeft             | The motor object, already
+                                                       grabbed from the
+                                                       hardwareMap, for the left
+                                                       -side pivot motor
+R (have motor)- DcMotorEx pivotMotorRight            | Right-side pivot motor
 R (not using AL)- AccelLimiter pivotAccelLimiter     | An AccelLimiter object
                                                        configured for the pivot
                                                        motor
@@ -104,9 +106,9 @@ R (have motor)- int pivotUpperLimit                  | The upper limit of the
                                                        pivot motor's motion,
                                                        in encoder ticks
 R (have motor)- int pivotLowerLimit                  |
-R (have switch)- DigitalDevice pivotUpperLimitSwitch | A DigitalDevice for a
+O- DigitalDevice pivotUpperLimitSwitch               | A DigitalDevice for a
                                                        physical limit switch
-R (have switch)- DigitalDevice pivotLowerLimitSwitch | A DigitalDevice for a
+O- DigitalDevice pivotLowerLimitSwitch               | A DigitalDevice for a
                                                        physical limit switch
 R (have motor)- double maxPivotRecoveryPower         | The maximum power to use
                                                        while returning from a
@@ -115,15 +117,19 @@ R (have motor)- int maxPivotVelocity                 | Maximum velocity of the
                                                        pivot motor in ticks
                                                        per second
 
-R (have motor)- DcMotorEx elevatorMotor                 | The elevator motor
-                                                          object, already grabbed
-                                                          from the HardwareMap
+R (have motor)- DcMotorEx elevatorMotorLeft             | The motor object,
+                                                          already grabbed from
+                                                          the HardwareMap, for
+                                                          the left-side elevator
+R (have motor)- DcMotorEx elevatorMotorRight              motor
+                                                        | Right-side elevator
+                                                          motor
 R (not using AL)- AccelLimiter elevatorAccelLimiter     | An AccelLimiter object
                                                           configured for the
                                                           elevator motor
-R (have motor)- double elevatorTicksPerMillimeter       | Encoder ticks (or
+R (have motor)- double elevatorTicksPerInch             | Encoder ticks (or
                                                           fraction of a tick)
-                                                          traveled per millimeter
+                                                          traveled per inch
                                                           of slide travel
 R (have motor)- int elevatorUpperLimit                  | Upper end of motor's
                                                           safe range in encoder
@@ -131,9 +137,9 @@ R (have motor)- int elevatorUpperLimit                  | Upper end of motor's
 R (have motor)- int elevatorLowerLimit                  | Lower end of motor's
                                                           safe range in encoder
                                                           ticks
-R (have switch)- DigitalDevice elevatorUpperLimitSwitch | A DigitalDevice for a
+O- DigitalDevice elevatorUpperLimitSwitch               | A DigitalDevice for a
                                                           physical limit switch
-R (have switch)- DigitalDevice elevatorLowerLimitSwitch | A DigitalDevice for a
+O- DigitalDevice elevatorLowerLimitSwitch               | A DigitalDevice for a
                                                           physical limit switch
 R (have motor)- double maxElevatorRecoveryPower         | The maximum power to
                                                           use while returning
@@ -143,12 +149,16 @@ R (have motor)- int maxElevatorVelocity                 | Maxiumum velocity of
                                                           the elevator motor in
                                                           ticks per second
 
+R (UnitTest)- ElapsedTime stopwatch                     | Pass in a
+                                                          MockElapsedTime for
+                                                          testing.
+
 -------------------------------------------------------------------------------
 
-PlaneLauncher:
-C- boolean present                    | Is this subsystem installed on this robot?
-C- double releasePosition             | The position the servo moves to to
-                                        release the rubberband
-C- double restPosition                | The position the servo returns to
-R (have real servo)- Servo planeServo | The Servo object, already grabbed
-                   = new BlankServo()   from the HardwareMap
+RotaryIntake:
+C- boolean present                    | Is this subsystem installed on this
+                                        robot?
+R (have servo)- CRServo intakeServo   | The Servo object, already grabbed
+                 = new BlankCRServo()   from the HardwareMap
+O- double servoPower                  | The power to run the servo with
+                 = 1

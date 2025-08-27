@@ -27,9 +27,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @Disabled
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-
 public class ALoTOBasicOpMode_Linear extends LinearOpMode {
-
     //DigitalChannel elevatorLimit;// "ElevatorLimit" is a limit switch on the elevator.
 
     // Declare OpMode members.
