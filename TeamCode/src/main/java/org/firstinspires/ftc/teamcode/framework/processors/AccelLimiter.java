@@ -208,8 +208,8 @@ public class AccelLimiter {
      * @param maxDeltaVEachLoop The maximum change in velocity each loop (prevents a sudden velocity change / jerk if a
      * loop takes too long) */
     public void setParameters(double maxAccel, double maxDeltaVEachLoop) {
-        this.maxAccel = maxAccel;
-        this.maxDeltaVEachLoop = maxDeltaVEachLoop;
+        this.maxAccel = Math.abs(maxAccel);
+        this.maxDeltaVEachLoop = Math.abs(maxDeltaVEachLoop);
     }
 
     /** Get the maximum acceleration. (You set this in the constructor.) */

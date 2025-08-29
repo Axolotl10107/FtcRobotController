@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.fy25.victims;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.fy23.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.fy23.robot.Robot24;
-import org.firstinspires.ftc.teamcode.fy23.robot.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
 
 public class ExampleAUTO_two extends LinearOpMode {
     Robot24 𒁢;
