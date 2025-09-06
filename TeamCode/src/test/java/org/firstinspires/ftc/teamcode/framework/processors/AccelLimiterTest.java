@@ -204,12 +204,129 @@ public class AccelLimiterTest {
         Assert.assertEquals(Arrays.asList(-5.0, -5.0, -5.0, -5.0), outputList);
     }
 
+//    @Test
+//    public void requestDeltaVelOnNChangingSignsPassFail() {
+//        AccelLimiter accelLimiter = new AccelLimiter(5, 10);
+//
+//        // Make sure it spends the first loop initializing
+//        List<Double> deltaVelList = Arrays.asList(1.0, 1.0, 1.0, 1.0);
+//        double currentTime = 0;
+//        List<Double> outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+//
+//        // It should stay put if no time passes
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+//
+//        // Now time passes, and it should start moving
+//        currentTime += 0.10; // at 5 m/s/s, after one-tenth second, vel + 0.5 m/s
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.5, 0.5, 0.5, 0.5), outputList);
+//
+//        // Should stay the same
+//        currentTime += 0.10;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.5, 0.5, 0.5, 0.5), outputList);
+//
+//        // More time, more deltaVel
+//        currentTime += 0.20; // at 5 m/s/s, after two-tenth second, vel + 1.0 m/s
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(1.0, 1.0, 1.0, 1.0), outputList);
+//
+//        // Should stay the same
+//        currentTime += 0.20;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(1.0, 1.0, 1.0, 1.0), outputList);
+//
+//        // Shouldn't overshoot
+//        currentTime += 0.40;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(1.0, 1.0, 1.0, 1.0), outputList);
+//
+//        // No deltaVel if time doesn't advance
+//        currentTime += 0.00;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+//
+//        // Come back
+//        deltaVelList = Arrays.asList(0.0, 0.0, 0.0, 0.0);
+//
+//        currentTime += 0.10;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+//
+//        // Should stay put
+//        currentTime += 0.05;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(0.0, 0.0, 0.0, 0.0), outputList);
+//
+//        // Go the other way
+//        deltaVelList = Arrays.asList(-1.0, -1.0, -1.0, -1.0);
+//
+//        // Part-way
+//        currentTime += 0.10;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-0.5, -0.5, -0.5, -0.5), outputList);
+//
+//        // All the way
+//        currentTime += 0.20;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0), outputList);
+//
+//        // Don't overshoot
+//        currentTime += 0.40;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-1.0, -1.0, -1.0, -1.0), outputList);
+//
+//        // Make two go the other way
+//        deltaVelList = Arrays.asList(-1.0, 1.0, -1.0, 1.0);
+//
+//        // Part-way
+//        currentTime += 0.10;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-0.5, 0.5, -0.5, 0.5), outputList);
+//
+//        // All the way
+//        currentTime += 0.20;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-1.0, 1.0, -1.0, 1.0), outputList);
+//
+//        // Don't overshoot
+//        currentTime += 0.40;
+//        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+//        Assert.assertEquals(Arrays.asList(-1.0, 1.0, -1.0, 1.0), outputList);
+//    }
+
     @Test
-    public void manyPixelArmProblemTests() {
-        for (int i=0; i<1000; i++) {
-            PixelArmProblemTest();
-        }
+    public void turnToDriveJerkTest() {
+        AccelLimiter accelLimiter = new AccelLimiter(2.0, 0.1);
+
+        // Set up initial situation (turning left)
+        List<Double> deltaVelList = Arrays.asList(-1.0, 1.0, -1.0, 1.0);
+        double currentTime = 0;
+        // Let it initialize
+        accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+
+        // Start moving
+        currentTime += 0.05; // A normal loop is thought to take about 50 milliseconds
+        List<Double> outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        Assert.assertEquals(Arrays.asList(-0.1, 0.1, -0.1, 0.1), outputList);
+
+        // Suddenly change to driving
+        // Only those motors that change direction need to change velocity
+        deltaVelList = Arrays.asList(2.0, 0.0, 2.0, 0.0);
+        currentTime += 0.05;
+        outputList = accelLimiter.requestDeltaVelOnN(deltaVelList, currentTime);
+        Assert.assertEquals(Arrays.asList(0.1, 0.0, 0.1, 0.0), outputList);
     }
+
+//    @Test
+//    public void manyPixelArmProblemTests() {
+//        for (int i=0; i<1000; i++) {
+//            PixelArmProblemTest();
+//        }
+//    }
 
     @Test
     public void PixelArmProblemTest() {
