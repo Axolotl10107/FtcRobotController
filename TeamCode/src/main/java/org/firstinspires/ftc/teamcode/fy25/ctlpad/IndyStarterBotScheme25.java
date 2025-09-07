@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIn
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
- * Matches the "Dual24" diagram. */
+ * Matches the "Dual25" diagram. */
 public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 
     // A few config values up here for easy access.
@@ -91,37 +91,37 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         state.setDts( new DTS( drive.value(), turn.value(), strafe.value() ) );
     }
 
-    private void applyArmSetpoint( double setpoint ) {
-        if ( setpoint > ARM_THRESHOLD) {
-            state.setArmMovement( setpoint );
-            armMovementSet = true;
-        }
-    }
+//    private void applyArmSetpoint( double setpoint ) {
+//        if ( setpoint > ARM_THRESHOLD) {
+//            state.setArmMovement( setpoint );
+//            armMovementSet = true;
+//        }
+//    }
 
     // Scaling factor of -1 above will negate the left stick
-    private void updateArmFastMovementState() {
-        armFast.value();
-    }
+//    private void updateArmFastMovementState() {
+//        armFast.value();
+//    }
+//
+//    private void updateArmMediumMovementState() {
+//        applyArmSetpoint( armMedium.value() );
+//    }
+//
+//    private void updateArmSlowMovementState() {
+//        applyArmSetpoint( armSlow.value() );
+//    }
+//
+//    private void updateElevatorMovementState() {
+//        state.setElevatorMovement( elevator.value() );
+//    }
 
-    private void updateArmMediumMovementState() {
-        applyArmSetpoint( armMedium.value() );
-    }
-
-    private void updateArmSlowMovementState() {
-        applyArmSetpoint( armSlow.value() );
-    }
-
-    private void updateElevatorMovementState() {
-        state.setElevatorMovement( elevator.value() );
-    }
-
-    private void updateClawState() {
-        if ( clawOpenButton.isActive() ) {
-            state.setClawState( Claw.State.OPEN );
-        } else if ( clawCloseButton.isActive() ) {
-            state.setClawState( Claw.State.CLOSED );
-        }
-    }
+//    private void updateClawState() {
+//        if ( clawOpenButton.isActive() ) {
+//            state.setClawState( Claw.State.OPEN );
+//        } else if ( clawCloseButton.isActive() ) {
+//            state.setClawState( Claw.State.CLOSED );
+//        }
+//    }
 
     private void updateIntakeState() {
         if ( intakeInButton.isActive() ) {
@@ -157,16 +157,16 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateMovementState();
 
         // if one runs, don't have the next one just immediately reset the arm power to 0
-        updateArmMediumMovementState();
-        if (!armMovementSet) {
-            updateArmSlowMovementState();
-        }
-        if (!armMovementSet) {
-            updateArmFastMovementState();
-        }
-
-        updateElevatorMovementState();
-        updateClawState();
+//        updateArmMediumMovementState();
+//        if (!armMovementSet) {
+//            updateArmSlowMovementState();
+//        }
+//        if (!armMovementSet) {
+//            updateArmFastMovementState();
+//        }
+//
+//        updateElevatorMovementState();
+//        updateClawState();
         updateIntakeState();
         updateDriveSpeedUpState();
         updateDriveSpeedDownState();

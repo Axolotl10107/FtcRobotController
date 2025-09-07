@@ -21,7 +21,7 @@ public interface RotaryIntake {
 
     /** You must set some of these if this subsystem is present. */
     class Parameters {
-        /** Create a Parameters object and provide parameters that don't have default values.
+        /** Create a Parameters object and provide necessary parameters.
          * @param present Is this subsystem installed on this robot?
          */
         public Parameters(boolean present) {
@@ -31,17 +31,17 @@ public interface RotaryIntake {
         /** You already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-        /** The servo that drives the claw, already instantiated and configured. */
-        public final CRServo intakeServo = new BlankCRServo();
+        /** The servo that drives the claw, already instantiated and configured. Defaults to a {@link BlankCRServo}. */
+        public CRServo intakeServo = new BlankCRServo();
 
-        /** The power level at which the servo will run. */
-        public final double servoPower = 1;
+        /** The power level at which the servo will run. Defaults to 1. */
+        public double servoPower = 1;
     }
 
-    /** Set the desired state of the claw, and it will move to reach that state.
+    /** Set the desired state of the intake, and it will move to reach that state.
      * {@param state} The new state to set. */
     void setState(State state);
-    /** Get the currently set state of the claw. */
+    /** Get the currently set state of the intake. */
     State getState();
 
     /** Set the power level at which the servo will run.

@@ -19,31 +19,25 @@ public interface Claw {
 
     /** You must set some of these if this subsystem is present. */
     class Parameters {
-        /** Create a Parameters object and provide parameters that don't have default values.
+        /** Create a Parameters object and provide necessary parameters.
          * @param present Is this subsystem installed on this robot?
-         * @param openPosition The servo position (between 0 and 1) that the claw is considered open.
-         * @param closePosition The servo position (between 0 and 1) that the claw is considered closed.
          */
-        public Parameters(boolean present, double openPosition, double closePosition) {
+        public Parameters(boolean present) {
             this.present = present;
-
-            assert openPosition >= 0 && openPosition <= 1;
-            this.openPosition = openPosition;
-
-            assert closePosition >= 0 && closePosition <= 1;
-            this.closePosition = closePosition;
         }
 
         /** You already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-        /** The servo that drives the claw, already instantiated and configured */
-        public final Servo clawServo = new BlankServo();
+        /** The servo that drives the claw, already instantiated and configured. Defaults to a {@link BlankServo}. */
+        public Servo clawServo = new BlankServo();
 
-        /** You already set this in the constructor and cannot set it again. */
-        public final double openPosition;
-        /** You already set this in the constructor and cannot set it again. */
-        public final double closePosition;
+        /** The servo position (between 0 and 1) that the claw is considered open. Defaults to the servo's position at
+         * the time the constructor runs (so this subsystem should never move the servo if you don't set this). */
+        public double openPosition = clawServo.getPosition();
+        /** The servo position (between 0 and 1) that the claw is considered closed. Defaults to the servo's position at
+         * the time the constructor runs (so this subsystem should never move the servo if you don't set this). */
+        public double closePosition = clawServo.getPosition();
     }
 
     /** Set the desired state of the claw, and it will move to reach that state. */

@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake;
 
-import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
-
+/** A blank implementation of {@link RotaryIntake} that does nothing.
+ * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
 public class RotaryIntakeBlank implements RotaryIntake {
 
     @Override

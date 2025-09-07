@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.fy25.robots;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
@@ -70,7 +67,7 @@ public class RobotRoundhouse25 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(false);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
@@ -149,8 +146,14 @@ public class RobotRoundhouse25 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true);
+        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawParams.openPosition = 0.1;
+        clawParams.closePosition = 0.01;
+
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
+        intakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+        intakeParams.servoPower = 1;
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
@@ -234,7 +237,7 @@ public class RobotRoundhouse25 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(false);
 
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
@@ -319,7 +322,9 @@ public class RobotRoundhouse25 {
         // subsystem to replace it with a BlankServo. This won't cause issues; the functionality of
         // that actuator will just be disabled.
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true);
+        clawParams.openPosition = 0.1;
+        clawParams.closePosition = 0.01;
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "servo");
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);

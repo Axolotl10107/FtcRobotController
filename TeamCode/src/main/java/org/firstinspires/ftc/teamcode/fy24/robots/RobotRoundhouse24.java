@@ -68,7 +68,7 @@ public class RobotRoundhouse24 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot24.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(false);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
 
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
@@ -147,7 +147,9 @@ public class RobotRoundhouse24 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true);
+        clawParams.openPosition = 0.1;
+        clawParams.closePosition = 0.01;
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
@@ -232,7 +234,7 @@ public class RobotRoundhouse24 {
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot24.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(false);
 
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
@@ -317,7 +319,9 @@ public class RobotRoundhouse24 {
         // subsystem to replace it with a BlankServo. This won't cause issues; the functionality of
         // that actuator will just be disabled.
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true);
+        clawParams.openPosition = 0.1;
+        clawParams.closePosition = 0.01;
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "servo");
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);

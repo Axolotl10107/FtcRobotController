@@ -74,14 +74,14 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.update();
 
         // Manipulator
-        robot.claw.setState( controlState.getClawState() );
+//        robot.claw.setState( controlState.getClawState() );
 
         telemetry.addData("Place", "Handled claw");
         telemetry.update();
 
         // PixelArm
-        robot.arm.setPivotPower( controlState.getArmMovement() );
-        robot.arm.setElevatorPower( controlState.getElevatorMovement() );
+//        robot.arm.setPivotPower( controlState.getArmMovement() );
+//        robot.arm.setElevatorPower( controlState.getElevatorMovement() );
 
         telemetry.addData("Place", "Handled arm");
         telemetry.update();
