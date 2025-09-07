@@ -1,0 +1,106 @@
+{
+  "Version": 1,
+  "Gamepad": 1,
+  "Season": "fy23",
+  "Positions": {
+    "DPad": {
+      "X": "-232",
+      "Y": "51"
+    },
+    "A": {
+      "X": "53",
+      "Y": "29"
+    },
+    "B": {
+      "X": "90",
+      "Y": "65"
+    },
+    "X": {
+      "X": "14",
+      "Y": "65"
+    },
+    "Y": {
+      "X": "53",
+      "Y": "101"
+    },
+    "Start": {
+      "X": "-41",
+      "Y": "84"
+    },
+    "Select": {
+      "X": "-140",
+      "Y": "84"
+    },
+    "PS": {
+      "X": "-92",
+      "Y": "84"
+    },
+    "R1": {
+      "X": "52",
+      "Y": "141"
+    },
+    "R2": {
+      "X": "52",
+      "Y": "167"
+    },
+    "L1": {
+      "X": "-229",
+      "Y": "141"
+    },
+    "L2": {
+      "X": "-229",
+      "Y": "167"
+    },
+    "LS": {
+      "X": "",
+      "Y": ""
+    },
+    "RS": {
+      "X": "",
+      "Y": ""
+    }
+  },
+  "Modifiers": [
+    "X"
+  ],
+  "Buttons": {
+    "A": {
+      "Default": {
+        "Type": "Momentary",
+        "Action": [
+          "Set Pivot Position",
+          {
+            "Type": "Button",
+            "Description": "Pivot to a given position",
+            "Parameters": {
+              "Position": {
+                "Type": "int",
+                "Range": "0/2000",
+                "Value": "967"
+              }
+            }
+          }
+        ]
+      },
+      "X": {
+        "Type": "Trigger",
+        "Action": [
+          "Set Extend Position",
+          {
+            "Type": "Button",
+            "Description": "Extend to a given position",
+            "Parameters": {
+              "Position": {
+                "Type": "int",
+                "Range": "0/2000",
+                "Value": "1200"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "Axes": {},
+  "Actions": {}
+}
