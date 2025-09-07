@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
 @TeleOp
@@ -17,7 +17,7 @@ public class FroschTestOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Robot24 robot = new Robot24(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
+        Robot24 robot = new Robot24(RobotRoundhouse24.getParamsAuto(hardwareMap), hardwareMap);
         TeleOpState24 controlsState;
         TeleOpScheme24 controlsScheme = new IndyTeleOpScheme24(gamepad1, gamepad2);
 

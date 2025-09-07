@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @Autonomous()
 public class ParkFromNear extends OpMode {
@@ -17,7 +17,7 @@ public class ParkFromNear extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot24(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getParamsAuto(hardwareMap), hardwareMap);
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         trajSeq = robot.drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))

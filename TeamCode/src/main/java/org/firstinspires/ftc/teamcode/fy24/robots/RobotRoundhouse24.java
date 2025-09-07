@@ -35,7 +35,7 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
  * NOTE: If you're using virtual_robot, you must (currently) use getVirtualRobotParams().
  * getParamsAuto() only works on real hardware.
  * */
-public class RobotRoundhouse {
+public class RobotRoundhouse24 {
 
     /** Returns the correct Parameters for the specified robot.
      * NOTE: Doesn't work on virtual_robot.

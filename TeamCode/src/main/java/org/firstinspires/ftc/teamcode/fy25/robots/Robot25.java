@@ -1,14 +1,23 @@
-package org.firstinspires.ftc.teamcode.fy24.robots;
+package org.firstinspires.ftc.teamcode.fy25.robots;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
-import org.firstinspires.ftc.teamcode.framework.subsystems.claw.*;
-import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.*;
-import org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.*;
-import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.*;
-import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.*;
+import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
+import org.firstinspires.ftc.teamcode.framework.subsystems.claw.ClawBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.claw.ClawImpl;
+import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm.ArmBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntakeBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntakeImpl;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArmImpl;
 
@@ -27,7 +36,7 @@ import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArmImpl;
  * <code>Robot24 robot = new Robot24(RobotRoundhouse.getParamsAuto());</code>
  * <p>
  * See {@link RobotRoundhouse24} to find {@link Parameters} to pass in here. */
-public class Robot24 {
+public class Robot25 {
 
     /** Robot-specific parameters that are not used directly by the Robot but
      * by external things, usually processors. */
@@ -74,7 +83,7 @@ public class Robot24 {
      * blank wherever a subsystem is not present).
      * {@param parameters} Robot24.Parameters
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public Robot24(Parameters parameters, HardwareMap hardwareMap) {
+    public Robot25(Parameters parameters, HardwareMap hardwareMap) {
 
         extendedParameters = parameters.extendedParameters;
 

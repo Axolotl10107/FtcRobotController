@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwitcher;
 //import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.FieldyTeleOpScheme23;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -80,7 +80,7 @@ public class AutonomousSequences extends LinearOpMode {
 
         opModeTelemetry = telemetry;
 
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
 
 //        FieldyTeleOpScheme23 controlScheme = new FieldyTeleOpScheme23(gamepad1, gamepad2, robot.imu);
 

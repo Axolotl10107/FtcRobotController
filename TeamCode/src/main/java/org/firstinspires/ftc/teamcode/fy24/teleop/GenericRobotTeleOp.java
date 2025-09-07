@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy24.controls.IndyTeleOpScheme24;
 
@@ -22,7 +22,7 @@ public class GenericRobotTeleOp extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot24( RobotRoundhouse.getParamsAuto( hardwareMap ), hardwareMap );
+        robot = new Robot24( RobotRoundhouse24.getParamsAuto( hardwareMap ), hardwareMap );
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters( robot.imu, new TunablePID( robot.extendedParameters.hdgCorrectionPIDConsts ) );
         params.haveHitTargetToleranceDegrees = 0.1;

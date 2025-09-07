@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @Autonomous(name = "ToAprilTag")
 public class ToAprilTag extends LinearOpMode {
@@ -17,7 +17,7 @@ public class ToAprilTag extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // Initialize the robot
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
 
         // Initialize AprilTagUtils, which internally initializes the AprilTagProcessor and VisionPortal
         aprilTag = new AprilTagUtils(hardwareMap);

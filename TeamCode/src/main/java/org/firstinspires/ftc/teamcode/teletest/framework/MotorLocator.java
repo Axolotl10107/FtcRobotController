@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @TeleOp()
 public class MotorLocator extends OpMode {
@@ -13,7 +13,7 @@ public class MotorLocator extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override

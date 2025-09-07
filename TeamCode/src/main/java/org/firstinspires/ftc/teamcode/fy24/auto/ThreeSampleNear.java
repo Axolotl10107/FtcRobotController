@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwitcher;
 //import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.FieldyTeleOpScheme23;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @Autonomous(name="BROKEN 3 Samples from Near", group="HighBasket")
 public class ThreeSampleNear extends LinearOpMode {
@@ -159,7 +159,7 @@ public class ThreeSampleNear extends LinearOpMode {
 
         opModeTelemetry = telemetry;
 
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
 
 //        FieldyTeleOpScheme23 controlScheme = new FieldyTeleOpScheme23(gamepad1, gamepad2, robot.imu);
 

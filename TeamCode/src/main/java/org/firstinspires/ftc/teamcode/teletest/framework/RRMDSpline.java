@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @Autonomous(group="TeleTest")
 @Disabled
@@ -19,7 +19,7 @@ public class RRMDSpline extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override

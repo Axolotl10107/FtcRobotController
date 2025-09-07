@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.teletest.framework;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @TeleOp(name="(RobotB) IMU Subsystem Printer", group="TeleTest")
 public class IMUsubsystemPrinter extends OpMode {
@@ -12,7 +12,7 @@ public class IMUsubsystemPrinter extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot24(RobotRoundhouse.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override

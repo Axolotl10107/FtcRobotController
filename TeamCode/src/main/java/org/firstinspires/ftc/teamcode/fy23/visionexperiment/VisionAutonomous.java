@@ -29,7 +29,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.old.RampTwo;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
@@ -101,7 +101,7 @@ public class VisionAutonomous extends LinearOpMode
         pipeline = new AlliedDeterminationExample.SkystoneDeterminationPipeline(telemetry);
         webcam.setPipeline(pipeline);
 
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;

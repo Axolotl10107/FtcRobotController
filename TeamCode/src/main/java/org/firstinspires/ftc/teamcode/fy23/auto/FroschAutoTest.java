@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwit
 import org.firstinspires.ftc.teamcode.fy23.controls.ctlpad.FieldyTeleOpScheme23;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 
 @Autonomous(name="FroschAutoTest", group="")
@@ -28,7 +28,7 @@ public class FroschAutoTest extends LinearOpMode {
         telemetry.update();
 //        robot = new Robot(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
 //        robot = new Robot(RobotRoundhouse.getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap), hardwareMap);
-        robot = new Robot24(RobotRoundhouse.getParamsAuto(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getParamsAuto(hardwareMap), hardwareMap);
         RRMecanumDrive drive = robot.drive;
 
 //        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);

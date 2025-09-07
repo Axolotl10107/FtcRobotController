@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
@@ -58,7 +58,7 @@ public class Far_Side_Auto_Code__RED_IMU extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
         IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
         params.haveHitTargetToleranceDegrees = 0.1;
         params.hdgErrToleranceDegrees = 1.0;

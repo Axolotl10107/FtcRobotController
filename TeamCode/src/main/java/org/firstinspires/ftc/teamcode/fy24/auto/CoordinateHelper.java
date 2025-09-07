@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.autoSwitch.AutoSequenceSwitcher;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
 @Autonomous(name="Coordinate Helper", group="HighBasket")
 public class CoordinateHelper extends LinearOpMode {
@@ -20,7 +20,7 @@ public class CoordinateHelper extends LinearOpMode {
 
         opModeTelemetry = telemetry;
 
-        robot = new Robot24(RobotRoundhouse.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
 
         AutoSequenceSwitcher switcher = new AutoSequenceSwitcher();
 
