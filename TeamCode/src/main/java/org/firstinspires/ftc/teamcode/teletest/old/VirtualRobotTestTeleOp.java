@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teletest.old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 
+//@Disabled
 @TeleOp(group="TeleTest")
 @Deprecated
 public class VirtualRobotTestTeleOp extends OpMode {

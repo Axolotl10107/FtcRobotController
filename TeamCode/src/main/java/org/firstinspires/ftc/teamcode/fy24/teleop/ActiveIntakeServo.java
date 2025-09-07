@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
+@Disabled
 @TeleOp(name="Active Intake Servo", group="")
 public class ActiveIntakeServo extends LinearOpMode {
     @Override

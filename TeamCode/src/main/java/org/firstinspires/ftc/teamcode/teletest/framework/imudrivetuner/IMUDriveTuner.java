@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.util.ReadWriteFile;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
+import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
+import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 
 import java.io.File;
@@ -19,7 +19,7 @@ public class IMUDriveTuner extends OpMode {
     IMUDriveTunerState gamepad;
     IMUDriveTunerScheme controlScheme;
     IMUCorrector imuCorrector;
-    Robot24 robot;
+    Robot25 robot;
     TunablePID pid;
 
     double changeAmount = 0.01;
@@ -28,7 +28,7 @@ public class IMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         // TODO: Detect and/or parameterize which robot to use
-        robot = new Robot24(RobotRoundhouse24.getRobotAParams(hardwareMap), hardwareMap);
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
         // <b>Don't forget to change the filename to save to below!</b>
     }
 

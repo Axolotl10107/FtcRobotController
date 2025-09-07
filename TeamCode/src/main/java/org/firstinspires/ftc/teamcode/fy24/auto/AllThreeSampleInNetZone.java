@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 
-@Autonomous(name="SampleInZone")
 @Disabled
+@Autonomous(name="SampleInZone")
 public class AllThreeSampleInNetZone extends LinearOpMode {
 
     Robot24 robot;

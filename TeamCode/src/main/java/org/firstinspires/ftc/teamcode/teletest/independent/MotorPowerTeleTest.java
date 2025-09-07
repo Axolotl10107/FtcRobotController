@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.Trigge
 import java.util.ArrayList;
 import java.util.Iterator;
 
-@TeleOp()
-public class SimpleMotorTeleTest extends OpMode {
+@TeleOp(name="Motor Power TeleTest", group="TeleTest")
+public class MotorPowerTeleTest extends OpMode {
 
     ArrayList<DcMotorEx> motorList = new ArrayList<>(8); //A robot can have up to 8 motors.
     DcMotorEx motor;

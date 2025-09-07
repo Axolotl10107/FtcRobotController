@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.teletest.impromptu;
+package org.firstinspires.ftc.teamcode.teletest.old;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
+@Disabled
 @TeleOp()
 public class PixelArmTest extends OpMode {
 

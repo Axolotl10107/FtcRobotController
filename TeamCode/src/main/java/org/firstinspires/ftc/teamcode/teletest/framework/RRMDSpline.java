@@ -8,18 +8,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
+import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
+import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 
-@Autonomous(group="TeleTest")
 @Disabled
+@Autonomous(name="RRMecanumDrive Spline Test", group="TeleTest")
 public class RRMDSpline extends OpMode {
 
-    private Robot24 robot;
+    private Robot25 robot;
 
     @Override
     public void init() {
-        robot = new Robot24(RobotRoundhouse24.getRobotBParams(hardwareMap), hardwareMap);
+        robot = new Robot25(RobotRoundhouse25.getRobotBParams(hardwareMap), hardwareMap);
     }
 
     @Override

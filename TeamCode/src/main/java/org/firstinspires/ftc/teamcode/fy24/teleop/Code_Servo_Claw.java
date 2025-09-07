@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.opmode.TelemetryImpl;
 
+@Disabled
 @TeleOp(name="Code for Gripper Claw", group="")
 public class Code_Servo_Claw extends LinearOpMode {
     @Override

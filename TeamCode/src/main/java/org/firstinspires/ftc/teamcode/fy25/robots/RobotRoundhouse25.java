@@ -15,14 +15,13 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIn
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
-import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 /**
- * RobotRoundhouse stores {@link Robot24.Parameters} for every Robot that currently exists.
+ * RobotRoundhouse stores {@link Robot25.Parameters} for every Robot that currently exists.
  * If you need to change a Robot configuration option, change it here.
  * Everything that could potentially differ between any two real-life robots has been split out to
  * a parameter of either a subsystem or the entire Robot.
@@ -46,7 +45,7 @@ public class RobotRoundhouse25 {
      * Control Hub. So RobotA's "serialNumber" is "10107-A-RC". Pass in the name of the robot
      * controller you want parameters for.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
+    public static Robot25.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
         switch (serialNumber) {
             case "10107-A-RC":
                 return getRobotAParams(hardwareMap);
@@ -61,7 +60,7 @@ public class RobotRoundhouse25 {
     /** Automatically determines which robot you're running on and returns the correct Parameters.
      * NOTE: Doesn't work on virtual_robot.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getParamsAuto(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getParamsAuto(HardwareMap hardwareMap) {
         // ControlHubDeviceNameManager doesn't exist in virtual_robot, so if you're using that, comment this out in your
         // virtual_robot project and have this return the virtualRobot or programmingBoard parameters.
         return getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap);
@@ -69,7 +68,7 @@ public class RobotRoundhouse25 {
 
     /** Returns the Parameters for RobotA.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getRobotAParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 //        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
@@ -133,10 +132,10 @@ public class RobotRoundhouse25 {
 
         DoubleArm.Parameters armParams = new DoubleArm.Parameters(false);
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
+        Robot25.Parameters params = new Robot25.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters
 //        params.maxForwardSpeed = 1.50; // in meters per second
@@ -148,7 +147,7 @@ public class RobotRoundhouse25 {
 
     /** Returns the Parameters for RobotB.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
@@ -219,10 +218,10 @@ public class RobotRoundhouse25 {
         armParams.pivotTicksPerDegree = 32.06;
         armParams.elevatorTicksPerInch = 157.86;
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+        Robot25.Parameters params = new Robot25.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
 
         return params;
     }
@@ -233,7 +232,7 @@ public class RobotRoundhouse25 {
      * your real hardware, you'll probably be enabling/disabling subsystems regularly to test
      * different things on one of the provided bots.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
 
         Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
 
@@ -291,11 +290,11 @@ public class RobotRoundhouse25 {
         PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+        Robot25.Parameters params = new Robot25.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
 
         // These were removed some time ago, but if you need these values for something else,
         // here's what they are for virtual_robot's Mecanum Bot.
@@ -312,7 +311,7 @@ public class RobotRoundhouse25 {
      * virtual_robot provides the Programming Board too. This has usually been used to hook one
      * output from one subsystem to one actuator, so these Parameters get messed with all the time.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
         // Only one motor and one servo can be used at a time. Un-comment the hardwareMap.get() line you need at the
         // moment, and comment out any others.
         // For all subsystems, if the Parameter for an actuator is left blank, it defaults to a
@@ -366,10 +365,10 @@ public class RobotRoundhouse25 {
 
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+        Robot25.Parameters params = new Robot25.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters
 //        params.maxForwardSpeed = 1.50; // in meters per second

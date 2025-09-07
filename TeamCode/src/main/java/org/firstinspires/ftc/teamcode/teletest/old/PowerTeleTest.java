@@ -1,11 +1,14 @@
-package org.firstinspires.ftc.teamcode.teletest.impromptu;
+package org.firstinspires.ftc.teamcode.teletest.old;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+@Disabled
 @TeleOp()
+@Deprecated
 public class PowerTeleTest extends OpMode {
 
     DcMotor motor;

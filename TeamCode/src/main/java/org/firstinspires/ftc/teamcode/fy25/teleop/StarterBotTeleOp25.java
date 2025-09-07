@@ -1,28 +1,27 @@
-package org.firstinspires.ftc.teamcode.fy24.teleop;
+package org.firstinspires.ftc.teamcode.fy25.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
-import org.firstinspires.ftc.teamcode.fy24.controls.TeleOpState24;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
-import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
-import org.firstinspires.ftc.teamcode.fy24.controls.IndyTeleOpScheme24;
+import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
+import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
+import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
+import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
+import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 
-@TeleOp(name="fy24 framework-based TeleOp", group="TeleOp24")
-public class GenericRobotTeleOp extends OpMode {
+@TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
+public class StarterBotTeleOp25 extends OpMode {
 
-    Robot24 robot;
+    Robot25 robot;
     IMUCorrector imuCorrector;
-    IndyTeleOpScheme24 controlScheme;
+    IndyStarterBotScheme25 controlScheme;
     double maxDrivePower = 1.0;
 
     @Override
     public void init() {
-        robot = new Robot24( RobotRoundhouse24.getParamsAuto( hardwareMap ), hardwareMap );
+        robot = new Robot25( RobotRoundhouse25.getParamsAuto( hardwareMap ), hardwareMap );
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters( robot.imu, new TunablePID( robot.extendedParameters.hdgCorrectionPIDConsts ) );
         params.haveHitTargetToleranceDegrees = 0.1;
@@ -31,7 +30,7 @@ public class GenericRobotTeleOp extends OpMode {
         params.turnPowerThreshold = 0.05;
         imuCorrector = new IMUCorrector( params );
 
-        controlScheme = new IndyTeleOpScheme24( gamepad1, gamepad2 );
+        controlScheme = new IndyStarterBotScheme25( gamepad1, gamepad2 );
 
         TelemetrySingleton.setInstance(telemetry);
     }
@@ -42,7 +41,7 @@ public class GenericRobotTeleOp extends OpMode {
         telemetry.update();
 
         double currentHeading = robot.imu.yaw();
-        TeleOpState24 controlState = controlScheme.getState();
+        StarterBotState25 controlState = controlScheme.getState();
 
         telemetry.addData("Place", "Got controls state");
         telemetry.update();
