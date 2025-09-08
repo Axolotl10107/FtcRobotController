@@ -7,6 +7,7 @@ from tkinter import Tk, filedialog, Checkbutton, Button, BooleanVar, Entry, Labe
 
 root = Tk()
 root.title("CTL2Java Launcher GUI")
+root.maxsize(800, 600)
 
 infile1 = "Gamepad1 Mapping File"
 infile2 = "Gamepad2 Mapping File"

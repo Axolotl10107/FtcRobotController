@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/FtcRobotController.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/FtcRobotController.FtcRobotController.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/FtcRobotController.TeamCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/FtcRobotController.TeamCode.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/FtcRobotController.TeamCode.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/FtcRobotController.TeamCode.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/IdeaProjects.FtcRobotController.TeamCode.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/IdeaProjects.FtcRobotController.TeamCode.main.iml" />
     </modules>
   </component>
 </project>

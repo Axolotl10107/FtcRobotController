@@ -134,6 +134,8 @@ class Generator:
     def getPrimitiveConstructorLines(self):
         outLines = []
         fakeAxes = []
+        mergedMembers = []
+        mergedAxes = []
         fakeButtons = []
 
         # Process real primitives and sort out fake ones for later
@@ -143,26 +145,32 @@ class Generator:
                 modifier = mapping[modifierName]
                 modifierType = self.mappingTypeToCTLPadType( modifier["Type"] )
                 # Split merged Axes
-                if modifierType == "MergedAxis":
-                    splitNames = self.splitMergedAxisName( mappingName )
+                if modifier["Action"]["Name"] == "MergedMember":
+                    # splitNames = self.splitMergedAxisName( mappingName )
+                    mergedMembers.append( [ modifier, modifierName, mappingName ] )
+                    if self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                        fakeAxes.append( [ modifier, modifierName, mappingName ] )
+                    # splitNames = [ mappingName ]
+                elif modifierType == "MergedAxis":
+                    mergedAxes.append( [ modifier, modifierName, mappingName ] )
                 else:
                     splitNames = [ mappingName ]
-                # Whether it was split or not, we can iterate over it just the same
-                for name in splitNames:
-                    mapping = self.sortedMappings[ name ]
-                    # Sort out fakes
-                    if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
-                        fakeButtons.append( [ modifier, name, mappingName ] )
-                    elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
-                        fakeAxes.append( [ modifier, name, mappingName ] )
-                    else:
-                        # Process reals
-                        gamepadField = self.modifierNameToGamepadField( name )
-                        if modifierType[:-4] in assets.validAxisTypes:
-                            scalingFactor = modifier["Scaling"]
+                    # Whether it was split or not, we can iterate over it just the same
+                    for name in splitNames:
+                        mapping = self.sortedMappings[ name ]
+                        # Sort out fakes
+                        if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
+                            fakeButtons.append( [ modifier, name, mappingName ] )
+                        elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                            fakeAxes.append( [ modifier, name, mappingName ] )
                         else:
-                            scalingFactor = None
-                        outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], name, modifierName, gamepadField, scalingFactor ) )
+                            # Process reals
+                            gamepadField = self.modifierNameToGamepadField( name )
+                            if modifierType[:-4] in assets.validAxisTypes:
+                                scalingFactor = modifier["Scaling"]
+                            else:
+                                scalingFactor = None
+                            outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], name, modifierName, gamepadField, scalingFactor ) )
 
 
         # Process fake Buttons
@@ -176,19 +184,124 @@ class Generator:
             for mappingName in self.sortedMappings.keys():
                 mapping = self.sortedMappings[ mappingName ]
                 for modifierName in mapping.keys():
-                    modifier = self.sortedMappings[ modifierName ]
-                    if modifier["Action"] == "Button":
+                    modifier = self.sortedMappings[ mappingName ][ modifierName ]
+                    if modifier["Action"]["Name"] == "Button":
                         if modifier["Action"]["Parameters"]["Button"]["Value"] == self.stripGamepadNumber( fakeMappingName ):
-                            realModifierName = modifierName
                             realModifier = modifier
+                            realModifierName = modifierName
+                            realMappingName = mappingName
                             success = True
                             break
             if not success:
-                Common.error("Generator found a fake Button that seems to have no matching real Button.")
+                Common.error("Generator found fake Button '" + fakeModifierName + "' that seems to have no matching real Axis.")
 
             # Now we can set up the Primitives, knowing where we're actually pulling from
-            gamepadField = self.modifierNameToGamepadField( realModifierName )
-            outLines.append( self.createPrimitiveConstructorLine( fakeModifier["Type"], fakeModifierName, gamepadField ) )
+            gamepadField = self.modifierNameToGamepadField( realMappingName )
+            fakeType = self.mappingTypeToCTLPadType(fakeModifier["Type"])
+            realType = self.mappingTypeToCTLPadType(realModifier["Type"])
+            # realAxisLine = self.createPrimitiveConstructorLine( fakeModifier["Type"], fakeMappingName, fakeModifierName, gamepadField )
+            outLine = fakeMappingName + fakeModifierName + " = new AxisAsButton( new " + realType + "( () -> " + gamepadField + " ) );"
+            outLines.append(outLine)
+
+
+
+        # Process fake Axes
+        for fake in fakeAxes:
+            fakeModifier = fake[0]
+            fakeModifierName = fake[1]
+            fakeMappingName = fake[2]
+
+            # Find real Modifier and name
+            success = False
+            for mappingName in self.sortedMappings.keys():
+                mapping = self.sortedMappings[ mappingName ]
+                for modifierName in mapping.keys():
+                    modifier = self.sortedMappings[ mappingName ][ modifierName ]
+                    if modifier["Action"]["Name"] == "Axis":
+                        if modifier["Action"]["Parameters"]["Axis"]["Value"] == self.stripGamepadNumber( fakeMappingName ):
+                            realModifier = modifier
+                            realModifierName = modifierName
+                            realMappingName = mappingName
+                            success = True
+                            break
+            if not success:
+                Common.error("Generator found fake Axis '" + fakeModifierName + "' that seems to have no matching real Button.")
+
+            # Now we can set up the Primitives, knowing where we're actually pulling from
+            gamepadField = self.modifierNameToGamepadField( realMappingName )
+            fakeType = self.mappingTypeToCTLPadType(fakeModifier["Type"])
+            realType = self.mappingTypeToCTLPadType(realModifier["Type"])
+            # realAxisLine = self.createPrimitiveConstructorLine( fakeModifier["Type"], fakeMappingName, fakeModifierName, gamepadField )
+            outLine = fakeMappingName + fakeModifierName + " = new ButtonAsAxis( new " + realType + "( () -> " + gamepadField + " ) );"
+            outLines.append(outLine)
+
+
+        # Process MergedAxes and MergedMembers
+        # First, put MergePartners together
+        mergedPairs = []
+        for mergedMember in mergedMembers:
+            mapping = mergedMember[0]
+            modifierName = mergedMember[1]
+            mappingName = mergedMember[2]
+            gamepadNumber = mappingName[:3]
+            partnerName = mapping["Action"]["Parameters"]["MergePartner"]["Value"]
+            success = False
+            for pair in mergedPairs:
+                if len(pair) < 2:
+                    pairPartnerName = pair[0][2]
+                    if pairPartnerName[:3] == gamepadNumber:
+                        if self.stripGamepadNumber( pairPartnerName ) == partnerName:
+                            pair.append( mergedMember )
+                            success = True
+                            break
+            if not success:
+                mergedPairs.append( [ mergedMember ] )
+
+        for pair in mergedPairs:
+            if len(pair) < 2:
+                Common.error("Couldn't find MergePartner for MergedMember '" + pair[0][2] + "' modifier '" + pair[0][1] + "'.")
+
+        # Next, add a Constructor line for each MergedMember.
+        # Except actually don't because we already did that!
+        # for pair in mergedPairs:
+        #     for member in pair:
+        #         mapping = member[0]
+        #         modifierName = member[1]
+        #         mappingName = member[2]
+        #         if modifierName in assets.validAxes:
+        #             gamepadField = self.modifierNameToGamepadField( modifierName )
+        #             outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], mappingName, modifierName, gamepadField, mapping[modifierName]["Scaling"] ) )
+        #         else:
+        #
+
+        # Next, add a Constructor line for each MergedAxis.
+        for axis in mergedAxes:
+            axisModifier = axis[0]
+            axisModifierName = axis[1]
+            axisMappingName = axis[2]
+            gamepadNumber = axisMappingName[:3]
+
+            # Locate the corresponding pair of MergedMembers
+            neededMemberNames = self.stripGamepadNumber( axisMappingName )[6:]
+            memberPair = None
+            for pair in mergedPairs:
+                firstMemberName = pair[0][2]
+                secondMemberName = pair[1][2]
+                if firstMemberName[:3] == gamepadNumber:
+                    firstMemberName = self.stripGamepadNumber( firstMemberName )
+                    secondMemberName = self.stripGamepadNumber( secondMemberName )
+                    if neededMemberNames.count(firstMemberName) > 0 and neededMemberNames.count(secondMemberName) > 0:
+                        memberPair = pair
+                        break
+            if not memberPair:
+                Common.error("Could not locate MergedMembers for MergedAxis '" + axisMappingName + "' modifier '" + axisModifierName + "'.")
+            else:
+                # Build and write the Constructor line
+                firstModifierName = pair[0][1]
+                secondModifierName = pair[1][1]
+                outLine = axisMappingName + axisModifierName + " = new MergedAxis( " + gamepadNumber + firstMemberName + firstModifierName + ", " + gamepadNumber + secondMemberName + secondModifierName + " );"
+                outLines.append(outLine)
+
 
         return outLines
 

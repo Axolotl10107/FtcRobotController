@@ -34,7 +34,8 @@ android {
                 // Not excluding PlaneLauncher, but excluding everything else in fy23
                 // And you can comment out one of these if you want to bring a package back
                 exclude '**/fy23/auto/**'
-                exclude '**/fy23/controls/**'
+                // Testing CTL2Java with CenterStage controls, need that Interface and State available
+//                exclude '**/fy23/controls/**'
                 exclude '**/fy23/teleop/**'
                 exclude '**/fy23/units/**'
                 exclude '**/fy23/visionexperiment/**'
