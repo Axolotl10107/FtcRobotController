@@ -144,33 +144,34 @@ class Generator:
             for modifierName in mapping.keys():
                 modifier = mapping[modifierName]
                 modifierType = self.mappingTypeToCTLPadType( modifier["Type"] )
-                # Split merged Axes
-                if modifier["Action"]["Name"] == "MergedMember":
-                    # splitNames = self.splitMergedAxisName( mappingName )
-                    mergedMembers.append( [ modifier, modifierName, mappingName ] )
-                    if self.stripGamepadNumber( mappingName ) not in assets.validAxes:
-                        fakeAxes.append( [ modifier, modifierName, mappingName ] )
-                    # splitNames = [ mappingName ]
-                elif modifierType == "MergedAxis":
+                if modifierType == "MergedAxis":
                     mergedAxes.append( [ modifier, modifierName, mappingName ] )
                 else:
-                    splitNames = [ mappingName ]
+                    # Split merged Axes
+                    if modifier["Action"]["Name"] == "MergedMember":
+                        # splitNames = self.splitMergedAxisName( mappingName )
+                        mergedMembers.append( [ modifier, modifierName, mappingName ] )
+                        if self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                            fakeAxes.append( [ modifier, modifierName, mappingName ] )
+                        # splitNames = [ mappingName ]
+                    # else:
+                    # splitNames = [ mappingName ]
                     # Whether it was split or not, we can iterate over it just the same
-                    for name in splitNames:
-                        mapping = self.sortedMappings[ name ]
-                        # Sort out fakes
-                        if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
-                            fakeButtons.append( [ modifier, name, mappingName ] )
-                        elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
-                            fakeAxes.append( [ modifier, name, mappingName ] )
+                    # for name in splitNames:
+                    mapping = self.sortedMappings[ mappingName ]
+                    # Sort out fakes
+                    if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
+                        fakeButtons.append( [ modifier, mappingName, mappingName ] )
+                    elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                        fakeAxes.append( [ modifier, mappingName, mappingName ] )
+                    else:
+                        # Process reals
+                        gamepadField = self.modifierNameToGamepadField( mappingName )
+                        if modifierType[:-4] in assets.validAxisTypes:
+                            scalingFactor = modifier["Scaling"]
                         else:
-                            # Process reals
-                            gamepadField = self.modifierNameToGamepadField( name )
-                            if modifierType[:-4] in assets.validAxisTypes:
-                                scalingFactor = modifier["Scaling"]
-                            else:
-                                scalingFactor = None
-                            outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], name, modifierName, gamepadField, scalingFactor ) )
+                            scalingFactor = None
+                        outLines.append( self.createPrimitiveConstructorLine( mapping[modifierName]["Type"], mappingName, modifierName, gamepadField, scalingFactor ) )
 
 
         # Process fake Buttons

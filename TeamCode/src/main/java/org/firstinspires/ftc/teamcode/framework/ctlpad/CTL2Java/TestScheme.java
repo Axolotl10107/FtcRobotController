@@ -64,6 +64,8 @@ public class TestScheme implements TeleOpScheme23 {
 		OneStartDefault = new TriggerButton( () -> gamepad1.start );
 		OneLSXDefault = new ExponentialAxis( () -> gamepad1.left_stick_x, 2.0 );
 		OneRSXDefault = new LinearAxis( () -> gamepad1.right_stick_x, 1.0 );
+		OneR2Default = new LinearAxis( () -> gamepad1.right_trigger, 1.0 );
+		OneL2Default = new LinearAxis( () -> gamepad1.left_trigger, 1.0 );
 		TwoXDefault = new TriggerButton( () -> gamepad2.x );
 		TwoADefault = new TriggerButton( () -> gamepad2.a );
 		TwoDPadUpDefault = new MomentaryButton( () -> gamepad2.dpad_up );
@@ -71,10 +73,16 @@ public class TestScheme implements TeleOpScheme23 {
 		TwoDPadRightDefault = new MomentaryButton( () -> gamepad2.dpad_right );
 		TwoDPadLeftDefault = new MomentaryButton( () -> gamepad2.dpad_left );
 		TwoLSYDefault = new LinearAxis( () -> gamepad2.left_stick_y, 1.0 );
+		TwoR2Default = new LinearAxis( () -> gamepad2.right_trigger, 1.0 );
+		TwoL2Default = new LinearAxis( () -> gamepad2.left_trigger, 1.0 );
 		TwoPivotSlowUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_up ) );
+		TwoPivotSlowUpTwoPivotSlowUp = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_up ) );
 		TwoPivotSlowDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_down ) );
+		TwoPivotSlowDownTwoPivotSlowDown = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_down ) );
 		TwoPivotMediumUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_right ) );
+		TwoPivotMediumUpTwoPivotMediumUp = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_right ) );
 		TwoPivotMediumDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_left ) );
+		TwoPivotMediumDownTwoPivotMediumDown = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_left ) );
 		OneMergedR2L2Default = new MergedAxis( OneR2Default, OneL2Default );
 		TwoMergedR2L2Default = new MergedAxis( TwoR2Default, TwoL2Default );
 		TwoMergedPivotSlowUpPivotSlowDownDefault = new MergedAxis( TwoPivotSlowUpDefault, TwoPivotSlowDownDefault );
