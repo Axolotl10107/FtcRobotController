@@ -151,8 +151,8 @@ class Generator:
                     if modifier["Action"]["Name"] == "MergedMember":
                         # splitNames = self.splitMergedAxisName( mappingName )
                         mergedMembers.append( [ modifier, modifierName, mappingName ] )
-                        if self.stripGamepadNumber( mappingName ) not in assets.validAxes:
-                            fakeAxes.append( [ modifier, modifierName, mappingName ] )
+                        # if self.stripGamepadNumber( mappingName ) not in assets.validAxes:
+                        #     fakeAxes.append( [ modifier, modifierName, mappingName ] )
                         # splitNames = [ mappingName ]
                     # else:
                     # splitNames = [ mappingName ]
@@ -161,9 +161,9 @@ class Generator:
                     mapping = self.sortedMappings[ mappingName ]
                     # Sort out fakes
                     if modifierType[:-6] in assets.validButtonTypes and self.stripGamepadNumber( mappingName ) not in assets.validButtons:
-                        fakeButtons.append( [ modifier, mappingName, mappingName ] )
+                        fakeButtons.append( [ modifier, modifierName, mappingName ] )
                     elif modifierType[:-4] in assets.validAxisTypes and self.stripGamepadNumber( mappingName ) not in assets.validAxes:
-                        fakeAxes.append( [ modifier, mappingName, mappingName ] )
+                        fakeAxes.append( [ modifier, modifierName, mappingName ] )
                     else:
                         # Process reals
                         gamepadField = self.modifierNameToGamepadField( mappingName )
@@ -233,7 +233,7 @@ class Generator:
             fakeType = self.mappingTypeToCTLPadType(fakeModifier["Type"])
             realType = self.mappingTypeToCTLPadType(realModifier["Type"])
             # realAxisLine = self.createPrimitiveConstructorLine( fakeModifier["Type"], fakeMappingName, fakeModifierName, gamepadField )
-            outLine = fakeMappingName + fakeModifierName + " = new ButtonAsAxis( new " + realType + "( () -> " + gamepadField + " ) );"
+            outLine = fakeMappingName + fakeModifierName + " = new ButtonAsAxis( new " + realType + "( () -> " + gamepadField + " ), " + str(fakeModifier["Scaling"]) + " );"
             outLines.append(outLine)
 
 
@@ -286,6 +286,13 @@ class Generator:
             neededMemberNames = self.stripGamepadNumber( axisMappingName )[6:]
             memberPair = None
             for pair in mergedPairs:
+                # Make sure the negative MergedMember is first and the positive one is second
+                firstMember = pair[0]
+                firstMemberMapping = firstMember[0]
+                if firstMemberMapping["Action"]["Parameters"]["Positive"]:
+                    pair.append(firstMember)
+                    pair.pop(0)
+
                 firstMemberName = pair[0][2]
                 secondMemberName = pair[1][2]
                 if firstMemberName[:3] == gamepadNumber:

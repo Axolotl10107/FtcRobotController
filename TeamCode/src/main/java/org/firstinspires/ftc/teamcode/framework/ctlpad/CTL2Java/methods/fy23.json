@@ -10,12 +10,18 @@
       "void setArmMovement() {",
       "\tboolean pivotSet = false;",
       "<~all:Pivot>",
+      "\tif ( !pivotSet ) {",
+      "\t\tstate.setArmMovement( 0.0 );",
+      "\t}",
       "}"
     ],
     "setElevatorMovement": [
       "void setElevatorMovement() {",
       "\tboolean extendSet = false;",
       "<~all:Extend>",
+      "\tif ( !extendSet ) {",
+      "\t\tstate.setElevatorMovement( 0.0 );",
+      "\t}",
       "}"
     ],
     "setClawState": [

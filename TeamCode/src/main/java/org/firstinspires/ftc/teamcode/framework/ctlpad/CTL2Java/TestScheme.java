@@ -75,25 +75,21 @@ public class TestScheme implements TeleOpScheme23 {
 		TwoLSYDefault = new LinearAxis( () -> gamepad2.left_stick_y, 1.0 );
 		TwoR2Default = new LinearAxis( () -> gamepad2.right_trigger, 1.0 );
 		TwoL2Default = new LinearAxis( () -> gamepad2.left_trigger, 1.0 );
-		TwoPivotSlowUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_up ) );
-		TwoPivotSlowUpTwoPivotSlowUp = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_up ) );
-		TwoPivotSlowDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_down ) );
-		TwoPivotSlowDownTwoPivotSlowDown = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_down ) );
-		TwoPivotMediumUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_right ) );
-		TwoPivotMediumUpTwoPivotMediumUp = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_right ) );
-		TwoPivotMediumDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_left ) );
-		TwoPivotMediumDownTwoPivotMediumDown = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_left ) );
-		OneMergedR2L2Default = new MergedAxis( OneR2Default, OneL2Default );
-		TwoMergedR2L2Default = new MergedAxis( TwoR2Default, TwoL2Default );
-		TwoMergedPivotSlowUpPivotSlowDownDefault = new MergedAxis( TwoPivotSlowUpDefault, TwoPivotSlowDownDefault );
-		TwoMergedPivotMediumUpPivotMediumDownDefault = new MergedAxis( TwoPivotMediumUpDefault, TwoPivotMediumDownDefault );
+		TwoPivotSlowUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_up ), 0.15 );
+		TwoPivotSlowDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_down ), 0.15 );
+		TwoPivotMediumUpDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_right ), 0.2 );
+		TwoPivotMediumDownDefault = new ButtonAsAxis( new MomentaryButton( () -> gamepad2.dpad_left ), 0.2 );
+		OneMergedR2L2Default = new MergedAxis( OneL2Default, OneR2Default );
+		TwoMergedR2L2Default = new MergedAxis( TwoL2Default, TwoR2Default );
+		TwoMergedPivotSlowUpPivotSlowDownDefault = new MergedAxis( TwoPivotSlowDownDefault, TwoPivotSlowUpDefault );
+		TwoMergedPivotMediumUpPivotMediumDownDefault = new MergedAxis( TwoPivotMediumDownDefault, TwoPivotMediumUpDefault );
 }
 
 	void setDts() {
 		double drive = 0;
 		boolean driveSet = false;
 		double driveVal = OneMergedR2L2Default.value();
-	if (!driveSet && !(-0.01 < driveVal && driveVal < 0.01)) {
+	if ( !driveSet && !( -0.01 < driveVal && driveVal < 0.01 ) ) {
 		drive = OneMergedR2L2Default.value();
 		driveSet = true;
 	}
@@ -103,7 +99,7 @@ public class TestScheme implements TeleOpScheme23 {
 		double turn = 0;
 		boolean turnSet = false;
 		double turnVal = OneLSXDefault.value();
-	if (!turnSet && !(-0.01 < turnVal && turnVal < 0.01)) {
+	if ( !turnSet && ! ( -0.01 < turnVal && turnVal < 0.01 ) ) {
 		turn = OneLSXDefault.value();
 		turnSet = true;
 	}
@@ -113,7 +109,7 @@ public class TestScheme implements TeleOpScheme23 {
 		double strafe = 0;
 		boolean strafeSet = false;
 		double strafeVal = OneRSXDefault.value();
-	if (!strafeSet && !(-0.01 < strafeVal && strafeVal < 0.01)) {
+	if ( !strafeSet && !( -0.01 < strafeVal && strafeVal < 0.01 ) ) {
 		strafe = OneRSXDefault.value();
 		strafeSet = true;
 	}
@@ -125,38 +121,48 @@ public class TestScheme implements TeleOpScheme23 {
 
 	void setArmMovement() {
 		boolean pivotSet = false;
-		if (!pivotSet) {
+		if ( !pivotSet && Math.abs( TwoLSYDefault.value() ) > 0.05 ) {
 		state.setArmMovement( TwoLSYDefault.value() );
+		pivotSet = true;
 	}
 	
-	if (!pivotSet) {
+	if ( !pivotSet && Math.abs( TwoMergedPivotSlowUpPivotSlowDownDefault.value() ) > 0.05 ) {
 		state.setArmMovement( TwoMergedPivotSlowUpPivotSlowDownDefault.value() );
+		pivotSet = true;
 	}
 	
-	if (!pivotSet) {
+	if ( !pivotSet && Math.abs( TwoMergedPivotMediumUpPivotMediumDownDefault.value() ) > 0.05 ) {
 		state.setArmMovement( TwoMergedPivotMediumUpPivotMediumDownDefault.value() );
+		pivotSet = true;
 	}
 	
 
+		if ( !pivotSet ) {
+			state.setArmMovement( 0.0 );
+		}
 	}
 
 	void setElevatorMovement() {
 		boolean extendSet = false;
-		if (!extendSet) {
+		if ( !extendSet && Math.abs( TwoMergedR2L2Default.value() ) > 0.05 ) {
 		state.setElevatorMovement( TwoMergedR2L2Default.value() );
+		extendSet = true;
 	}
 	
 
+		if ( !extendSet ) {
+			state.setElevatorMovement( 0.0 );
+		}
 	}
 
 	void setClawState() {
 	boolean clawSet = false;
-		if (!clawSet) {
+		if ( !clawSet && TwoXDefault.isActive() ) {
 		state.setClawState( Claw.State.OPEN );
 	}
 	
 
-		if (!clawSet) {
+		if ( !clawSet && TwoADefault.isActive() ) {
 		state.setClawState( Claw.State.CLOSED );
 	}
 	
@@ -170,9 +176,13 @@ public class TestScheme implements TeleOpScheme23 {
 	}
 
 	void setMaxDriveSpeed() {
+		if ( OneSelectDefault.isActive() ) {
 		state.setMaxDriveSpeed( state.getMaxDriveSpeed() + -0.1 );
+	}
 	
-	state.setMaxDriveSpeed( state.getMaxDriveSpeed() + 0.1 );
+	if ( OneStartDefault.isActive() ) {
+		state.setMaxDriveSpeed( state.getMaxDriveSpeed() + 0.1 );
+	}
 	
 
 	}
