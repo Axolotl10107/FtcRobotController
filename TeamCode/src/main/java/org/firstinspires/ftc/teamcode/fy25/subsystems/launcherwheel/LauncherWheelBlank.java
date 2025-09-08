@@ -1,11 +1,16 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.artifactlauncher;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
-/** A blank implementation of {@link ArtifactLauncher} that does nothing.
+/** A blank implementation of {@link LauncherWheel} that does nothing.
  * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
-public class ArtifactLauncherBlank implements ArtifactLauncher {
+public class LauncherWheelBlank implements LauncherWheel {
 
     @Override
-    public void readyLauncher() {
+    public void spinUp() {
+
+    }
+
+    @Override
+    public void spinDown() {
 
     }
 

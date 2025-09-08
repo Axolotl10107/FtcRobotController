@@ -21,7 +21,11 @@ public class StarterBotTeleOp25 extends OpMode {
 
     @Override
     public void init() {
-        robot = new Robot25( RobotRoundhouse25.getParamsAuto( hardwareMap ), hardwareMap );
+        try {
+            robot = new Robot25( RobotRoundhouse25.getParamsAuto( hardwareMap ), hardwareMap );
+        } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
+            throw new RuntimeException(e);
+        }
 
         IMUCorrector.Parameters params = new IMUCorrector.Parameters( robot.imu, new TunablePID( robot.extendedParameters.hdgCorrectionPIDConsts ) );
         params.haveHitTargetToleranceDegrees = 0.1;

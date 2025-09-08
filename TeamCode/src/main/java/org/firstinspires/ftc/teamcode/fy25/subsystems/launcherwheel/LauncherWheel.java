@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.artifactlauncher;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMotor;
 
-/** Represents an Artifact Launcher and its state. */
-public interface ArtifactLauncher {
+/** Represents a launcher wheel and its state. */
+public interface LauncherWheel {
 
     /** Represents the state of the launcher. */
     enum State {
@@ -30,15 +30,17 @@ public interface ArtifactLauncher {
         /** You have already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-        /** The motor that runs the launch wheel, already instantiated and configured. Defaults to a {@link BlankMotor}. */
-        public final DcMotorEx motor = new BlankMotor();
+        /** The {@link DcMotorEx} that runs the launch wheel, already instantiated and configured. Defaults to a {@link BlankMotor}. */
+        public DcMotorEx motor = new BlankMotor();
 
         /** The <b>velocity</b> at which the launch wheel will run, in <b>ticks per second</b>. Defaults to 0. */
-        public final int velocityTPS = 0;
+        public int velocityTPS = 0;
     }
 
-    /** Start making the launcher ready for launch */
-    void readyLauncher();
+    /** Apply power to the launch wheel */
+    void spinUp();
+    /** Remove power from the launch wheel */
+    void spinDown();
 
     /** Get the current state of the launcher.
      * This will be STARTING immediately after calling readyLauncher(),
