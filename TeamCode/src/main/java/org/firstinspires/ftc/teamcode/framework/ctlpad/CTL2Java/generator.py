@@ -1,6 +1,6 @@
 # The code generator itself! Thanks to all the prepwork, this just strings
 # already prepared sections together.
-# File last updated 8-23-25
+# File last updated 9-8-25
 
 import assets
 from common import Common
@@ -8,6 +8,7 @@ from common import Common
 
 class Generator:
     def __init__( self, sortedMappings, expander, constructorLines, classLines, setters, importLines, driveType, debug ):
+        self.version = "1.0-0"
         self.sortedMappings = sortedMappings
         self.expander = expander
         self.constructorLines = constructorLines

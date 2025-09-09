@@ -1,0 +1,43 @@
+{
+  "Version": 1,
+
+  "Season": "test",
+
+  "Actions": {
+
+    "ActionOne": {
+      "Type": "Button",
+      "Code": [
+        "state.setActionOne( <~myname>.isActive() );"
+      ]
+    },
+
+    "ActionTwo": {
+      "Type": "Axis",
+      "Parameters": {
+        "Multiplier": {
+          "Type": "double",
+          "Value": 0.5
+        }
+      },
+      "Code": [
+        "state.setActionTwo( <~myname>.value() * <~param:Multiplier> );"
+      ]
+    },
+
+    "ModifierActionOne": {
+      "Type": "Button",
+      "Code": [
+        "state.setModifierActionOne( <~myname>.isActive() );"
+      ]
+    },
+
+    "ModifierActionTwo": {
+      "Type": "Button",
+      "Code": [
+        "state.setModifierActionTwo( <~myname>.isActive() );"
+      ]
+    }
+
+  }
+}

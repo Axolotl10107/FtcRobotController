@@ -1,7 +1,7 @@
 # Prepare all the imported stuff (Action & Method libraries & Mappings) in a way
 # that will be convenient later. Sort stuff and do some higher-level checks than
 # ctlconv did.
-# File last updated 8-23-25
+# File last updated 9-8-25
 
 import assets
 from common import Common
@@ -34,10 +34,24 @@ class Preparer:
             for libName in self.libDict[category]:
                 libSeason = self.libDict[category][libName]["Season"]
                 if libSeason != self.season and libSeason != "":
+                    if category == "BaseActions":
+                        print("Base Action ", end="")
+                    elif category == "ExtensionActions":
+                        print("Extension Action ", end="")
+                    elif category == "Methods":
+                        print("Method ", end="")
+                    elif category == "Setters":
+                        print("Setters ", end="")
+                    else:
+                        print("UNKNOWN ", end="")
                     print("Library '" + libName + "' is not valid for this Season (mismatched with Setters' Season); ignoring.")
                 else:
                     newLibDict[category].update( { libName : self.libDict[category][libName] } )
         self.libDict = newLibDict
+        self.baseLibs = self.libDict["BaseActions"]
+        self.extensionLibs = self.libDict["ExtensionActions"]
+        self.methodLibs = self.libDict["Methods"]
+        # self.settersLib = self.libDict["Setters"][self.season]
 
         # Gamepads were given as expected
         # try:  # Should be in ctlconv.py
@@ -53,19 +67,19 @@ class Preparer:
 
 
         # Expand libDict and combine all Libraries in each category together
-        self.baseLibs = libDict["BaseActions"]
+        # self.baseLibs = libDict["BaseActions"]
         self.base = {}
         for libName in self.baseLibs.keys():
             for actionName in self.baseLibs[libName]["Actions"].keys():
                 self.base.update( {actionName : self.baseLibs[libName]["Actions"][actionName]} )
 
-        self.extensionLibs = libDict["ExtensionActions"]
+        # self.extensionLibs = libDict["ExtensionActions"]
         self.extension = {}
         for libName in self.extensionLibs.keys():
-            for actionName in self.extensionLibs[libName].keys():
+            for actionName in self.extensionLibs[libName]["Actions"].keys():
                 self.extension.update( {actionName : self.extensionLibs[libName]["Actions"][actionName]} )
 
-        self.methodLibs = libDict["Methods"]
+        # self.methodLibs = libDict["Methods"]
         self.methods = {}
         self.constructorLines = []
         self.classLines = []

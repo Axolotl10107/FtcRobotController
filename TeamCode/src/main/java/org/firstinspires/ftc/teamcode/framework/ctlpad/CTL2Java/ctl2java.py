@@ -15,6 +15,12 @@ from generator import Generator
 
 version = "1.0-0"
 
+# Versions of the other modules are tracked independently
+compatibleCTLConvVersions = ["1.0-0"]
+compatiblePreparerVersions = ["1.0-0"]
+compatibleExpanderVersions = ["1.0-0"]
+compatibleGeneratorVersions = ["1.0-0"]
+
 # ----- Command-line arguments -----
 argparser = ArgumentParser()
 argparser.add_argument("-ver", "--version", help="Print version then exit", action="store_true")

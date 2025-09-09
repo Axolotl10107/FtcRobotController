@@ -1,5 +1,5 @@
 # Expand expander tags
-# File last updated 8-23-25
+# File last updated 9-8-25
 
 import assets
 from common import Common
@@ -207,11 +207,32 @@ class Expander:
 
 
     def processExtensionActionColonTag(self, tag, mapping, mappingName, modifierName):
-        raise NotImplementedError
+        colonIdx = tag.index(":")
+        tagType = tag[ : colonIdx ]
+        tagContent = tag[ colonIdx+1 : ]
+
+        if tagType == "all":
+            Common.error("Found an 'all:' tag in an Extension Action, in mapping '" + mappingName + "' modifier '" + modifierName + "'. You, Library writer, probably meant '<~base:___>'.")
+
+        elif tagType == "base":
+            actionCode = self.libs["BaseActions"][tagContent]["Code"]
+            expandedLines = []
+            for line in actionCode:
+                expandedLines.append(self.expandLine(line, "BaseAction", mapping, mappingName, modifierName))
+            return "\n".join(expandedLines)
+
+        elif tagType == "param":
+            parameters = mapping[modifierName]["Action"]["Parameters"]
+            if not tagContent in parameters.keys():
+                Common.error("Found expander tag for Parameter '" + tagContent + "' in mapping '" + mappingName + "' that doesn't exist in Action '" + mapping["Action"]["Name"] + "'.")
+            return str( parameters[tagContent]["Value"] )
+
+        else:
+            Common.error("Unrecognized colon tag type '" + tagType + "' in Extension Action for mapping '" + mappingName + "' modifier '" + modifierName + "'.")
 
 
     def processExtensionActionNormalTag(self, tag, mapping, mappingName, modifierName):
-        raise NotImplementedError
+        return self.processBaseActionNormalTag(tag, mapping, mappingName, modifierName)
 
 
 

@@ -1,5 +1,7 @@
 # Some data for CTL2Java
-# File last updated 8-23-25
+# File last updated 9-8-25
+
+assetsVersion = "1.0-0"
 
 # Update this first item to match your TeamCode layout
 # You may need to add things to support additional Method libraries.
@@ -167,6 +169,11 @@ actionLibRequiredFields = ["Version",
                            "Season",
                            "Actions"]
 
+exActionLibRequiredFields = ["Version",
+                             "Season",
+                             "Bases",
+                             "Actions"]
+
 settersRequiredFields = ["Version",
                          "Season",
                          "Interface",
@@ -255,6 +262,6 @@ validDriveTypes = ["indy",
                    "fieldy"]
 
 requiredFieldsByLibType = {"BaseActions": actionLibRequiredFields,
-                           "ExtensionActions": actionLibRequiredFields,
+                           "ExtensionActions": exActionLibRequiredFields,
                            "Methods": methodLibRequiredFields,
                            "Setters": settersRequiredFields}
