@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.fy25.robots;
 
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.robotcore.hardware.*;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.ClawBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.ClawImpl;
@@ -16,12 +18,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMeca
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArmImpl;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.*;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelBlank;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
 
 /**Represents a complete robot consisting of up to 5 subsystems.
  * Basically, constructing this will construct all of the subsystems for you,
@@ -35,22 +34,10 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWhee
  * Programmers who are used to working directly with the SDK to write complete
  * TeleOps might appreciate turning about 120 lines of boilerplate code and a
  * different OpMode for each robot into the following line in a single OpMode:
- * <code>Robot25 robot = new Robot25(RobotRoundhouse25.getParamsAuto(), hardwareMap);</code>
- * Or, new this year:
- * <code>Robot25 robot = RobotRoundhouse25.getRobotAuto(hardwareMap);</code>
+ * <code>Robot24 robot = new Robot24(RobotRoundhouse.getParamsAuto());</code>
  * <p>
- * See {@link RobotRoundhouse25} to find {@link Parameters} to pass in here. */
+ * See {@link RobotRoundhouse24} to find {@link Parameters} to pass in here. */
 public class Robot25 {
-
-    /** Used when a subsystem that accepts multiple implementations of HardwareDevice receives one it doesn't expect */
-    public static class InvalidDeviceClassException extends Exception {
-        public InvalidDeviceClassException(String message) {
-            super(message);
-        }
-        public InvalidDeviceClassException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
 
     /** Robot-specific parameters that are not used directly by the Robot but
      * by external things, usually processors. */
@@ -65,90 +52,59 @@ public class Robot25 {
 
     /** Subsystems are encapsulated in this class, so their Parameters are too. */
     public static class Parameters {
-        public Parameters(
-                ExtendedParameters extendedParameters,
-                RRMecanumDrive.Parameters driveParameters,
-                FriendlyIMU.Parameters imuParameters,
-
-                LauncherWheel.Parameters launchWheelParams,
-                LauncherGate.Parameters launchGateParams
-        ) {
-            // Every season
-            this.extendedParameters = extendedParameters;
-            this.driveParameters = driveParameters;
+        public Parameters(Claw.Parameters clawParameters, RotaryIntake.Parameters intakeParameters, FriendlyIMU.Parameters imuParameters, RRMecanumDrive.Parameters driveParameters, DoubleArm.Parameters doubleArmParameters,/*PixelArm.Parameters pixelArmParameters, PlaneLauncher.Parameters planeLauncherParameters,*/ ExtendedParameters extendedParameters) {
+            this.clawParameters = clawParameters;
+            this.intakeParameters = intakeParameters;
             this.imuParameters = imuParameters;
-
-            // This season
-            this.launchWheelParams = launchWheelParams;
-            this.launchGateParams = launchGateParams;
+            this.driveParameters = driveParameters;
+            this.doubleArmParameters = doubleArmParameters;
+            this.extendedParameters = extendedParameters;
         }
 
-        final ExtendedParameters extendedParameters;
-        final RRMecanumDrive.Parameters driveParameters;
+        final Claw.Parameters clawParameters;
+        final RotaryIntake.Parameters intakeParameters;
         final FriendlyIMU.Parameters imuParameters;
-
-        final LauncherWheel.Parameters launchWheelParams;
-        final LauncherGate.Parameters launchGateParams;
+        final RRMecanumDrive.Parameters driveParameters;
+        final DoubleArm.Parameters doubleArmParameters;
+        final ExtendedParameters extendedParameters;
     }
 
     public final ExtendedParameters extendedParameters;
 
-    public final RRMecanumDrive drive;
+    public final Claw claw;
+    public final RotaryIntake intake;
     public final FriendlyIMU imu;
-
-    public final LauncherWheel launchWheel;
-    public final LauncherGate launchGate;
+    public final RRMecanumDrive drive;
+    public final DoubleArm arm;
 
 
     public final VoltageSensor voltageSensor;
 
-    /** Returns a new Robot25 Object containing an instance of each subsystem (or a
+    /** Returns a new Robot24 containing an instance of each subsystem (or a
      * blank wherever a subsystem is not present).
-     * {@param parameters} Get these from {@link RobotRoundhouse25}
+     * {@param parameters} Robot24.Parameters
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public Robot25(Parameters parameters, HardwareMap hardwareMap) throws InvalidDeviceClassException {
+    public Robot25(Parameters parameters, HardwareMap hardwareMap) {
 
         extendedParameters = parameters.extendedParameters;
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        // The order in which the Subsystems get created is important, because some of them depend on others!
-
-        if (parameters.imuParameters.present) {
-            imu = new FriendlyIMUImpl(parameters.imuParameters, hardwareMap);
+        if (parameters.clawParameters.present) {
+            claw = new ClawImpl(parameters.clawParameters);
         } else {
-            imu = new FriendlyIMUBlank();
+            claw = new ClawBlank();
         }
+        // above block and below statements work the same way
+        intake = (parameters.intakeParameters.present) ? new RotaryIntakeImpl(parameters.intakeParameters): new RotaryIntakeBlank();
+        imu = (parameters.imuParameters.present) ? new FriendlyIMUImpl(parameters.imuParameters, hardwareMap) : new FriendlyIMUBlank();
 
-        if (parameters.driveParameters.present) {
-            parameters.driveParameters.imu = imu;
-            parameters.driveParameters.batteryVoltageSensor = voltageSensor;
-            drive = new RRMecanumDriveImpl(parameters.driveParameters);
-        } else {
-            drive = new RRMecanumDriveBlank();
-        }
+        parameters.driveParameters.imu = imu; // RRMecanumDrive needs an IMU, so we pass in the one we want here
+                                              // (now that we've already created it - sequence is important!)
+        parameters.driveParameters.batteryVoltageSensor = voltageSensor; // similar thing here
 
-
-        if (parameters.launchWheelParams.present) {
-            launchWheel = new LauncherWheelImpl(parameters.launchWheelParams);
-        } else {
-            launchWheel = new LauncherWheelBlank();
-        }
-
-        if (parameters.launchGateParams.present) {
-            Class deviceClass = parameters.launchGateParams.deviceClass;
-            if (deviceClass.equals(Servo.class)) {
-                launchGate = new LauncherGateServoImpl(parameters.launchGateParams);
-            } else if (deviceClass.equals(CRServo.class)) {
-                launchGate = new LauncherGateCRServoImpl(parameters.launchGateParams);
-            } else if (deviceClass.equals(DcMotorEx.class)) {
-                launchGate = new LauncherGateMotorImpl(parameters.launchGateParams);
-            } else {
-                throw new InvalidDeviceClassException("launchGateParams.deviceClass must be 'Servo.class', 'CRServo.class', or 'DcMotorEx.class'.");
-            }
-        } else {
-            launchGate = new LauncherGateBlank();
-        }
+        drive = (parameters.driveParameters.present) ? new RRMecanumDriveImpl(parameters.driveParameters) : new RRMecanumDriveBlank();
+        arm = (parameters.doubleArmParameters.present) ? new DoubleArmImpl(parameters.doubleArmParameters) : new ArmBlank();
 
         // Lynx stuff found in RR's SampleMecanumDrive
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -158,13 +114,13 @@ public class Robot25 {
     }
 
     /** Call this method in the loop portion of your OpMode.
-     * <b>Remember this</b>; some subsystems will not function at all if you forget! */
+     * Remember this; some subsystems will not function at all if you forget! */
     public void update() {
-        drive.update();
+        claw.update();
+        intake.update();
         imu.update();
-
-        launchWheel.update();
-        launchGate.update();
+        drive.update();
+        arm.update();
     }
 
 }
