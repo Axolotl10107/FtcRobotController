@@ -1,16 +1,9 @@
 package org.firstinspires.ftc.teamcode.fy25.robots;
 
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
-import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
-
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
@@ -21,63 +14,83 @@ import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
+
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 /**
- * RobotRoundhouse stores {@link Robot24.Parameters} for every Robot that currently exists.
+ * <b>NOTE: At this time, last year's robot is </b>(still)<b> RobotB, and Parameters for a Strafer-based Decode starter
+ * bot are set for RobotA. Fair warning: getRobotBParams() still returns {@link Robot24.Parameters}!</b>
+ * <p>
+ * RobotRoundhouse stores {@link Robot25.Parameters} for every Robot that currently exists.
  * If you need to change a Robot configuration option, change it here.
  * Everything that could potentially differ between any two real-life robots has been split out to
  * a parameter of either a subsystem or the entire Robot.
  * There are many Parameters, and they are all centralized here. Please get them from here instead
  * of making custom ones inside of OpModes; otherwise we'll have multiple mystery copies of
- * something that has over 100 config. options and can cause physical damage if it is incorrect.
+ * something that has over 100 configuration options and can cause physical damage if it is incorrect.
  * <p>
  * The name of a robot in the Roundhouse matches the name of its control hub.
- * So, RobotA = 10107-A-RC and RobotB = 10107-B-RC.
+ * So, RobotA = '10107-A-RC' and RobotB = '10107-B-RC'.
  * You can get the parameters of a specific robot, or you can have the Roundhouse automatically
  * determine which robot this is and give you the correct Parameters.
+ * Or, new this year, use getRobotAuto() to get a Robot object.
  * <p>
  * NOTE: If you're using virtual_robot, you must (currently) use getVirtualRobotParams().
  * getParamsAuto() only works on real hardware.
  * */
 public class RobotRoundhouse25 {
 
+    public static class OldRobotException extends Exception {
+        public OldRobotException(String message) {
+            super(message);
+        }
+        public OldRobotException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
     /** Returns the correct Parameters for the specified robot.
      * NOTE: Doesn't work on virtual_robot.
+     * NOTE: The fy24 bot still returns Robot24.Parameters and won't work with this Robot25.Parameters type method.
+     * You'll need to use getRobotBParams() for that bot.
      * {@param serialNumber} By "serialNumber", the SDK actually means the name you set on the
      * Control Hub. So RobotA's "serialNumber" is "10107-A-RC". Pass in the name of the robot
      * controller you want parameters for.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) {
+    public static Robot25.Parameters getParamsAuto(String serialNumber, HardwareMap hardwareMap) throws OldRobotException {
         switch (serialNumber) {
             case "10107-A-RC":
                 return getRobotAParams(hardwareMap);
             case "10107-B-RC":
-            case "10107-B":
-                return getRobotBParams(hardwareMap);
+//                return getRobotBParams(hardwareMap);
+                throw new OldRobotException("Please use getRobotBParams() for the fy24 bot!");
             default:
                 return getRobotAParams(hardwareMap);
         }
     }
 
-    /** Automatically determines which robot you're running on and returns the correct Parameters.
+    /** Detects which robot you're running on and returns the correct Parameters.
      * NOTE: Doesn't work on virtual_robot.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getParamsAuto(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getParamsAuto(HardwareMap hardwareMap) throws OldRobotException {
         // ControlHubDeviceNameManager doesn't exist in virtual_robot, so if you're using that, comment this out in your
         // virtual_robot project and have this return the virtualRobot or programmingBoard parameters.
         return getParamsAuto(ControlHubDeviceNameManager.getControlHubDeviceNameManager().getDeviceName(), hardwareMap);
     }
 
+    /** Detects which physical robot you're running on and returns the correct Robot Object.
+     * Note: Doesn't work on virtual_robot.
+     * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
+    public static Robot25 getRobotAuto(HardwareMap hardwareMap) throws OldRobotException, Robot25.InvalidDeviceClassException {
+        return new Robot25(RobotRoundhouse25.getParamsAuto(hardwareMap), hardwareMap);
+    }
+
     /** Returns the Parameters for RobotA.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getRobotAParams(HardwareMap hardwareMap) {
-
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
-//        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
-
-        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
-
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+    public static Robot25.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
@@ -132,15 +145,33 @@ public class RobotRoundhouse25 {
 
         driveParams.stopwatch = new ElapsedTime();
 
-        DoubleArm.Parameters armParams = new DoubleArm.Parameters(false);
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+
+
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        // TODO: Tune default launch wheel velocity
+        launchWheelParams.velocityTPS = 537; // about 60 RPM
+
+
+        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
+        launchGateParams.deviceClass = CRServo.class;
+        launchGateParams.device = hardwareMap.get(CRServo.class, "launchGateCRServo");
+
+
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, /*planeLauncherParams,*/ extendedParams);
-//        params.tpr = 537.7; // ticks per rotation
-//        params.wheelDiameter = 0.096; // in meters
-//        params.maxForwardSpeed = 1.50; // in meters per second
+
+        Robot25.Parameters params = new Robot25.Parameters(
+                extendedParams,
+                driveParams,
+                imuParams,
+
+                launchWheelParams,
+                launchGateParams
+        );
 
         return params;
     }
@@ -148,11 +179,18 @@ public class RobotRoundhouse25 {
 // ---------------------------------------------------------------------------------------------------------------------
 
     /** Returns the Parameters for RobotB.
+     * RobotB is the fy24 / Into the Deep robot. <b>That means this still returns {@link Robot24.Parameters}!</b>
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
+        Claw.Parameters clawParams = new Claw.Parameters(true);
+        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
+        clawParams.openPosition = 0.1;
+        clawParams.closePosition = 0.01;
+
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
+        intakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+        intakeParams.servoPower = 1;
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
 
@@ -162,7 +200,6 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
                 dc, // most of the defaults in DriveConstants should work here
                 new AccelLimiter(2.0, 0.1));
-        // TODO: make RRMecanumDrive use velocity instead of power
         driveParams.useAccelLimiter = true;
 
         dc.kV = .017;
@@ -234,9 +271,7 @@ public class RobotRoundhouse25 {
      * your real hardware, you'll probably be enabling/disabling subsystems regularly to test
      * different things on one of the provided bots.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
-
-        Claw.Parameters clawParams = new Claw.Parameters(false, 0.1, 0.01);
+    public static Robot25.Parameters getVirtualRobotParams(HardwareMap hardwareMap) {
 
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
@@ -284,19 +319,24 @@ public class RobotRoundhouse25 {
         driveParams.HEADING_PID = new PIDCoefficients(1, 0, 0);
 
 
-        DoubleArm.Parameters armParams = new DoubleArm.Parameters(false);
-
-        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
-
-
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
-
-
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
+
+
+        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
+
+
+        Robot25.Parameters params = new Robot25.Parameters(
+                extendedParams,
+                driveParams,
+                imuParams,
+
+                launchWheelParams,
+                launchGateParams
+        );
 
         // These were removed some time ago, but if you need these values for something else,
         // here's what they are for virtual_robot's Mecanum Bot.
@@ -313,16 +353,13 @@ public class RobotRoundhouse25 {
      * virtual_robot provides the Programming Board too. This has usually been used to hook one
      * output from one subsystem to one actuator, so these Parameters get messed with all the time.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getProgrammingBoardParams(HardwareMap hardwareMap) {
         // Only one motor and one servo can be used at a time. Un-comment the hardwareMap.get() line you need at the
         // moment, and comment out any others.
         // For all subsystems, if the Parameter for an actuator is left blank, it defaults to a
         // blank actuator. For example, commenting out the clawServo parameter causes the Claw
         // subsystem to replace it with a BlankServo. This won't cause issues; the functionality of
         // that actuator will just be disabled.
-
-        Claw.Parameters clawParams = new Claw.Parameters(true, 0.1, 0.01);
-//        clawParams.clawServo = hardwareMap.get(Servo.class, "servo");
 
         FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
 
@@ -343,34 +380,27 @@ public class RobotRoundhouse25 {
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
 
-        DoubleArm.Parameters armParams = new DoubleArm.Parameters(true);
-//        armParams.pivotMotor = hardwareMap.get(DcMotorEx.class, "motor");
-//        armParams.elevatorMotor = hardwareMap.get(DcMotorEx.class, "motor");
-        armParams.pivotAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-        armParams.pivotTicksPerDegree = 10;
-        armParams.pivotUpperLimit = 2000;
-        armParams.pivotLowerLimit = 0;
-        armParams.maxPivotRecoveryPower = 0.2;
-        armParams.maxPivotVelocity = 800;
-
-        armParams.elevatorAccelLimiter = new AccelLimiter(1.0, 0.1); // TODO: not tuned!!
-//        armParams.elevatorTicksPerMillimeter = 10;
-        armParams.elevatorTicksPerInch = 254; // 1 in. = 25.4 mm
-        armParams.elevatorUpperLimit = 2500;
-        armParams.elevatorLowerLimit = 0;
-        armParams.maxElevatorRecoveryPower = 0.2;
-        armParams.maxElevatorVelocity = 800;
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        launchWheelParams.velocityTPS = 537; // about 60 RPM
+        //        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
 
 
-//        org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters planeLauncherParams = new org.firstinspires.ftc.teamcode.fy23.robot.subsystems.PlaneLauncher.Parameters(true, 1, 0);
-//        planeLauncherParams.planeServo = hardwareMap.get(Servo.class,"servo");
+        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
+        launchGateParams.deviceClass = CRServo.class;
+        launchGateParams.device = hardwareMap.get(CRServo.class, "servo");
 
-        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
 
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+        Robot25.Parameters params = new Robot25.Parameters(
+                extendedParams,
+                driveParams,
+                imuParams,
+
+                launchWheelParams,
+                launchGateParams
+        );
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters
 //        params.maxForwardSpeed = 1.50; // in meters per second

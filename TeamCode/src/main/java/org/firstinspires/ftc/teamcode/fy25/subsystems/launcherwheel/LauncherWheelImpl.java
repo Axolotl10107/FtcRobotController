@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 public class LauncherWheelImpl implements LauncherWheel {
 
-
-
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
 
     }

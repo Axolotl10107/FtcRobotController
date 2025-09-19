@@ -59,7 +59,6 @@ public class CompetitionOpMode extends LinearOpMode {
     final double ticksPerInch = 157.86;
     final double ticksPerDegree = 32.06;
 
-
     double pivotPos;
     double armPos;
     public boolean checkArmLimit(Double angle) {
