@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.fy24.auto;
 
-import static android.os.SystemClock.sleep;
-
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -34,7 +32,7 @@ public class AprilTagUtils {
     }
 
     // Method to get the distance from the detected AprilTag
-    public double getDistance() {
+    public double getDistanceY() {
         double distance = -1;
         List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
 
@@ -44,6 +42,22 @@ public class AprilTagUtils {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 distance = detection.ftcPose.y;  // Return the y-coordinate as the distance
+            }
+        }
+
+        return distance;
+    }
+
+    public double getDistanceX() {
+        double distance = -1;
+        List<AprilTagDetection> currentDetections = aprilTagProcessor.getDetections();
+
+        while (currentDetections == null || currentDetections.isEmpty()) {
+            currentDetections = aprilTagProcessor.getDetections();
+        }
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.metadata != null) {
+                distance = detection.ftcPose.x;  // Return the y-coordinate as the distance
             }
         }
 

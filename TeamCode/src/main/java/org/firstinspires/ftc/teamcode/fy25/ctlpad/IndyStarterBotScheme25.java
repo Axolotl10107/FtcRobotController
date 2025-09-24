@@ -128,6 +128,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
             state.setIntakeState( RotaryIntake.State.RUNIN );
         } else if ( intakeOutButton.isActive() ) {
             state.setIntakeState( RotaryIntake.State.RUNOUT );
+        } else {
+            state.setIntakeState(RotaryIntake.State.NONE);
         }
     }
 

@@ -41,7 +41,8 @@ public interface RotaryIntake {
     /** Set the desired state of the intake, and it will move to reach that state.
      * {@param state} The new state to set. */
     void setState(State state);
-    /** Get the currently set state of the intake. */
+    /** Get the currently set state of the intake.
+     * @return*/
     State getState();
 
     /** Set the power level at which the servo will run.
