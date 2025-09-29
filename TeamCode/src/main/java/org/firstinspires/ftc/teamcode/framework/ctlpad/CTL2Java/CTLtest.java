@@ -31,6 +31,8 @@ public class CTLtest implements TestSchemeInterface {
 	private Button OneAY;
 	private Button OneBDefault;
 	private Axis OneR2Default;
+	private MomentaryButton OneX;
+	private MomentaryButton OneY;
 
 	
 	public CTLtest(Gamepad gamepad1, Gamepad gamepad2) {
@@ -43,36 +45,55 @@ public class CTLtest implements TestSchemeInterface {
 		OneAY = new MomentaryButton( () -> gamepad1.a );
 		OneBDefault = new MomentaryButton( () -> gamepad1.b );
 		OneR2Default = new LinearAxis( () -> gamepad1.right_trigger, 0.5 );
+		OneX = new MomentaryButton( () -> gamepad1.x );
+		OneY = new MomentaryButton( () -> gamepad1.y );
 }
 
 	void setActionOne() {
-		state.setActionOne( OneADefault.isActive() );
+		// START ActionOne
+	state.setActionOne( OneADefault.isActive() );
+	// END ActionOne
 	
 
 		// Indy Drive Type
 	}
 
 	void setActionTwo() {
-		state.setActionTwo( OneR2Default.value() * 0.25 );
+		// START ActionTwo
+	state.setActionTwo( OneR2Default.value() * 0.25 );
+	// END ActionTwo
 	
 
 	}
 
 	void setModifierActionOne() {
-		state.setModifierActionOne( OneAX.isActive() );
+	if (OneX.isActive()) {
+	// START ModifierActionOne
+	state.setModifierActionOne( OneAX.isActive() );
+	// END ModifierActionOne
 	
+	}
 
-		state.setModifierActionOne( OneBDefault.isActive() );
+		// START Extension Action
+	// START ModifierActionOne
+	state.setModifierActionOne( OneBDefault.isActive() );
+	// END ModifierActionOne
+	// START ModifierActionTwo
 	state.setModifierActionTwo( OneBDefault.isActive() );
+	// END ModifierActionTwo
 	state.setActionTwo( state.getActionTwo() + 0.2 );
-	// Extension Action
+	// END Extension Action
 	
 
 	}
 
 	void setModifierActionTwo() {
-		state.setModifierActionTwo( OneAY.isActive() );
+	if (OneY.isActive()) {
+	// START ModifierActionTwo
+	state.setModifierActionTwo( OneAY.isActive() );
+	// END ModifierActionTwo
 	
+	}
 
 	}
 

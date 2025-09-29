@@ -121,14 +121,27 @@ class Expander:
                             "Code" : self.expandActionForModifier(mapping, mappingName, modifierName),
                         } )
 
+                gamepadNumber = mappingName[:3]
                 if len(modifierCodes) == 1:
-                    outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                    if modifierCodes[0]["Name"] == "Default":
+                        outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                    else:
+                        outLines.append("if (" + gamepadNumber + modifierCodes[0]["Name"] + ".isActive()) {")
+                        outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                        outLines.append("\t}")
                     # outLines.append(modifierCodes[0]["Code"])
                 elif len(modifierCodes) > 1:
                     for modifierCode in modifierCodes:
-                        outLines.append("if (" + modifierCode["Name"] + ".isActive()) {")
-                        outLines.extend( [ "\t"+line+"\n" for line in modifierCode["Code"].split("\n") ] )
-                        outLines.append("}")
+                        outLines.append("if (" + gamepadNumber + modifierCode["Name"] + ".isActive()) {")
+                        outLines.extend( [ "\t"+line for line in modifierCode["Code"].split("\n") ] )
+                        outLines.append("\t}")
+
+                # if len(modifierCodes) > 0:
+                #     if not (len(modifierCodes) == 1 and modifierCodes[0]["Name"] == "Default"):
+                #         for modifierCode in modifierCodes:
+                #             outLines.append("if (" + modifierCode["Name"] + ".isActive()) {")
+                #             outLines.extend( [ "\t"+line+"\n" for line in modifierCode["Code"].split("\n") ] )
+                #             outLines.append("}")
 
 
 

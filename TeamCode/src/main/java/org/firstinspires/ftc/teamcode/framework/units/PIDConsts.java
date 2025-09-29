@@ -2,13 +2,11 @@ package org.firstinspires.ftc.teamcode.framework.units;
 
 //import android.annotation.SuppressLint; // This makes JavaDoc fail to build (!?)
 
-import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
-
 import java.util.Arrays;
 import java.util.Iterator;
 
 /** An immutable container for PID tuning constants.
- * Accepted by {@link TunablePID}. */
+ * Accepted by {@link org.firstinspires.ftc.teamcode.framework.processors.TunablePID}. */
 public class PIDConsts {
 
     /** proportional */

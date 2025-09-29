@@ -42,14 +42,15 @@ public interface RotaryIntake {
      * {@param state} The new state to set. */
     void setState(State state);
     /** Get the currently set state of the intake.
-     * @return*/
+     * @return {@link State} of the intake. */
     State getState();
 
     /** Set the power level at which the servo will run.
      * {@param power} The new power level to set. */
     void setPower(double power);
 
-    /** Get the power level at which the servo runs when the intake is in an active state. */
+    /** Get the power level at which the servo runs when the intake is in an active state.
+     * @return a double between 0 and 1. */
     double getPower();
 
     /** Called by robot.update(). You do not need to call this method. */
