@@ -1,5 +1,5 @@
 # Expand expander tags
-# File last updated 9-8-25
+# File last updated 9-29-25
 
 import assets
 from common import Common
@@ -124,17 +124,33 @@ class Expander:
                 gamepadNumber = mappingName[:3]
                 if len(modifierCodes) == 1:
                     if modifierCodes[0]["Name"] == "Default":
-                        outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                        if len(mapping.keys()) > 1:
+                            outLine = "\tif ( "
+                            startLen = len(outLine)
+                            for idx, modName in enumerate(mapping.keys()):
+                                # outLines.append("if !( " + gamepadNumber + modName + ".isActive() ) {")
+                                # outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                                # outLines.append("}")
+                                if modName != "Default":
+                                    if len(outLine) > startLen:
+                                        outLine += " && "
+                                    outLine += "!" + gamepadNumber + modName + ".isActive()"
+                            outLine += " ) {"
+                            outLines.append(outLine)
+                            outLines.extend( [ "\t\t\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                            outLines.append("\t\t}")
+                        else:
+                            outLines.extend( [ "\t\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
                     else:
-                        outLines.append("if (" + gamepadNumber + modifierCodes[0]["Name"] + ".isActive()) {")
-                        outLines.extend( [ "\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
-                        outLines.append("\t}")
+                        outLines.append("\tif (" + gamepadNumber + modifierCodes[0]["Name"] + ".isActive()) {")
+                        outLines.extend( [ "\t\t\t"+line for line in modifierCodes[0]["Code"].split("\n") ] )
+                        outLines.append("\t\t}")
                     # outLines.append(modifierCodes[0]["Code"])
                 elif len(modifierCodes) > 1:
                     for modifierCode in modifierCodes:
-                        outLines.append("if (" + gamepadNumber + modifierCode["Name"] + ".isActive()) {")
-                        outLines.extend( [ "\t"+line for line in modifierCode["Code"].split("\n") ] )
-                        outLines.append("\t}")
+                        outLines.append("\tif (" + gamepadNumber + modifierCode["Name"] + ".isActive()) {")
+                        outLines.extend( [ "\t\t\t"+line for line in modifierCode["Code"].split("\n") ] )
+                        outLines.append("\t\t}")
 
                 # if len(modifierCodes) > 0:
                 #     if not (len(modifierCodes) == 1 and modifierCodes[0]["Name"] == "Default"):

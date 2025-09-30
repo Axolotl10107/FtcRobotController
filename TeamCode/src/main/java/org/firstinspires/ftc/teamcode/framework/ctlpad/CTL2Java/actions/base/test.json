@@ -33,7 +33,12 @@
       "Type": "Button",
       "Code": [
         "// START ModifierActionOne",
-        "state.setModifierActionOne( <~myname>.isActive() );",
+        "if ( !set ) {",
+        "\tstate.setModifierActionOne( <~myname>.isActive() );",
+        "\tif ( <~myname>.isActive() ) {",
+        "\t\tset = true;",
+        "\t}",
+        "}",
         "// END ModifierActionOne"
       ]
     },

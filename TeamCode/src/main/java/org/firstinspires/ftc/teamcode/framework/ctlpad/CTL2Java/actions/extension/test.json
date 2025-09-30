@@ -21,7 +21,10 @@
         "// START Extension Action",
         "<~base:ModifierActionOne>",
         "<~base:ModifierActionTwo>",
-        "state.setActionTwo( state.getActionTwo() + <~param:Offset> );",
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setActionTwo( state.getActionTwo() + <~param:Offset> );",
+        "\tset = true;",
+        "}",
         "// END Extension Action"
       ]
     }

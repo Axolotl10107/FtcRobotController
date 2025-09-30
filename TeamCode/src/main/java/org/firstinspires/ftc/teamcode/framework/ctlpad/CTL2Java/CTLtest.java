@@ -50,50 +50,66 @@ public class CTLtest implements TestSchemeInterface {
 }
 
 	void setActionOne() {
-		// START ActionOne
-	state.setActionOne( OneADefault.isActive() );
-	// END ActionOne
-	
+		if ( !OneX.isActive() && !OneY.isActive() ) {
+			// START ActionOne
+			state.setActionOne( OneADefault.isActive() );
+			// END ActionOne
+			
+		}
 
 		// Indy Drive Type
 	}
 
 	void setActionTwo() {
-		// START ActionTwo
-	state.setActionTwo( OneR2Default.value() * 0.25 );
-	// END ActionTwo
-	
+			// START ActionTwo
+		state.setActionTwo( OneR2Default.value() * 0.25 );
+		// END ActionTwo
+		
 
 	}
 
 	void setModifierActionOne() {
-	if (OneX.isActive()) {
-	// START ModifierActionOne
-	state.setModifierActionOne( OneAX.isActive() );
-	// END ModifierActionOne
-	
-	}
+		boolean set = false;
+		if (OneX.isActive()) {
+			// START ModifierActionOne
+			if ( !set ) {
+				state.setModifierActionOne( OneAX.isActive() );
+				if ( OneAX.isActive() ) {
+					set = true;
+				}
+			}
+			// END ModifierActionOne
+			
+		}
 
-		// START Extension Action
-	// START ModifierActionOne
-	state.setModifierActionOne( OneBDefault.isActive() );
-	// END ModifierActionOne
-	// START ModifierActionTwo
-	state.setModifierActionTwo( OneBDefault.isActive() );
-	// END ModifierActionTwo
-	state.setActionTwo( state.getActionTwo() + 0.2 );
-	// END Extension Action
-	
+			// START Extension Action
+		// START ModifierActionOne
+		if ( !set ) {
+			state.setModifierActionOne( OneBDefault.isActive() );
+			if ( OneBDefault.isActive() ) {
+				set = true;
+			}
+		}
+		// END ModifierActionOne
+		// START ModifierActionTwo
+		state.setModifierActionTwo( OneBDefault.isActive() );
+		// END ModifierActionTwo
+		if ( OneBDefault.isActive() ) {
+			state.setActionTwo( state.getActionTwo() + 0.2 );
+			set = true;
+		}
+		// END Extension Action
+		
 
 	}
 
 	void setModifierActionTwo() {
-	if (OneY.isActive()) {
-	// START ModifierActionTwo
-	state.setModifierActionTwo( OneAY.isActive() );
-	// END ModifierActionTwo
-	
-	}
+		if (OneY.isActive()) {
+			// START ModifierActionTwo
+			state.setModifierActionTwo( OneAY.isActive() );
+			// END ModifierActionTwo
+			
+		}
 
 	}
 
