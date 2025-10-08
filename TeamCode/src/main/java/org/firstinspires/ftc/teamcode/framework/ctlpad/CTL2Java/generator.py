@@ -1,13 +1,13 @@
 # The code generator itself! Thanks to all the prepwork, this just strings
 # already prepared sections together.
-# File last updated 9-8-25
+# File last updated 9-29-25
 
 import assets
 from common import Common
 
 
 class Generator:
-    def __init__( self, sortedMappings, expander, constructorLines, classLines, setters, importLines, driveType, debug ):
+    def __init__( self, sortedMappings, expander, constructorLines, classLines, setters, importLines, modifiers, driveType, debug ):
         self.version = "1.0-0"
         self.sortedMappings = sortedMappings
         self.expander = expander
@@ -15,6 +15,7 @@ class Generator:
         self.classLines = classLines
         self.setters = setters
         self.importLines = importLines
+        self.modifiers = modifiers
         self.driveType = driveType
         self.debug = debug
 
@@ -54,6 +55,8 @@ class Generator:
                 elif modifier["Type"] in assets.validAxisTypes:
                     type = "Axis"
                 outLines.append( "private " + type + " " + mappingName + modifierName + ";" )
+        for modifierButton in self.modifiers:
+            outLines.append( "private MomentaryButton " + modifierButton + ";" )
         return outLines
 
 
@@ -310,6 +313,10 @@ class Generator:
                 secondModifierName = pair[1][1]
                 outLine = axisMappingName + axisModifierName + " = new MergedAxis( " + gamepadNumber + firstMemberName + firstModifierName + ", " + gamepadNumber + secondMemberName + secondModifierName + " );"
                 outLines.append(outLine)
+
+
+        for modifierButton in self.modifiers:
+            outLines.append( modifierButton + " = new MomentaryButton( () -> " + self.modifierNameToGamepadField( modifierButton ) + " );" )
 
 
         return outLines

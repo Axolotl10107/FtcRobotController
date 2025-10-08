@@ -1,6 +1,6 @@
 # CTL2Java CLI and linking fabric
 # Also all File I/O happens here (I think)
-# File last updated 8-23-25
+# File last updated 9-29-25
 
 import os
 import sys
@@ -79,11 +79,13 @@ else:
 converter1 = CTLConv(infile1, assets.gamepadRequiredFields)
 print("Converting file for gamepad1:")
 outdict1 = converter1.getVerifiedDict()
+modifiers = [ "One" + x for x in outdict1["Modifiers"] ]
 print("\n\n")
 if infile2:
     converter2 = CTLConv(infile2, assets.gamepadRequiredFields)
     print("Converting file for gamepad2:")
     outdict2 = converter2.getVerifiedDict()
+    modifiers.extend( [ "Two" + x for x in outdict2["Modifiers"] ] )
     print("\n\n")
 else:
     outdict2 = None
@@ -156,6 +158,7 @@ generator = Generator(
     expandedLibDict["classLines"],
     expandedLibDict["Setters"],
     expandedLibDict["settersLib"]["Imports"],
+    modifiers,
     drivetype,
     args.debug
 )

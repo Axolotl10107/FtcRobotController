@@ -8,7 +8,9 @@
     "ActionOne": {
       "Type": "Button",
       "Code": [
-        "state.setActionOne( <~myname>.isActive() );"
+        "// START ActionOne",
+        "state.setActionOne( <~myname>.isActive() );",
+        "// END ActionOne"
       ]
     },
 
@@ -21,21 +23,32 @@
         }
       },
       "Code": [
-        "state.setActionTwo( <~myname>.value() * <~param:Multiplier> );"
+        "// START ActionTwo",
+        "state.setActionTwo( <~myname>.value() * <~param:Multiplier> );",
+        "// END ActionTwo"
       ]
     },
 
     "ModifierActionOne": {
       "Type": "Button",
       "Code": [
-        "state.setModifierActionOne( <~myname>.isActive() );"
+        "// START ModifierActionOne",
+        "if ( !set ) {",
+        "\tstate.setModifierActionOne( <~myname>.isActive() );",
+        "\tif ( <~myname>.isActive() ) {",
+        "\t\tset = true;",
+        "\t}",
+        "}",
+        "// END ModifierActionOne"
       ]
     },
 
     "ModifierActionTwo": {
       "Type": "Button",
       "Code": [
-        "state.setModifierActionTwo( <~myname>.isActive() );"
+        "// START ModifierActionTwo",
+        "state.setModifierActionTwo( <~myname>.isActive() );",
+        "// END ModifierActionTwo"
       ]
     }
 
