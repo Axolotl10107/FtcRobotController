@@ -89,6 +89,7 @@ public class RobotRoundhouse25 {
     }
 
     /** Returns the Parameters for RobotA.
+     * RobotA is currently the fy25 Starter Bot / small bot.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
@@ -102,7 +103,8 @@ public class RobotRoundhouse25 {
 
         dc.WHEEL_RADIUS = 1.88976;
         dc.GEAR_RATIO = 1;
-        dc.TRACK_WIDTH = 15.9;
+//        dc.TRACK_WIDTH = 15.9;
+        dc.TRACK_WIDTH = 14; // change for small chassis
 
         dc.kV = .017;
         dc.kA = .002;
