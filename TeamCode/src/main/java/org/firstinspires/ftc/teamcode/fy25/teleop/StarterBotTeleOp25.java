@@ -22,7 +22,7 @@ public class StarterBotTeleOp25 extends OpMode {
     @Override
     public void init() {
         try {
-            robot = new Robot25( RobotRoundhouse25.getParamsAuto( hardwareMap ), hardwareMap );
+            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
         } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
             throw new RuntimeException(e);
         }

@@ -20,12 +20,12 @@ public class LauncherWheelBlank implements LauncherWheel {
     }
 
     @Override
-    public void setVelocity(int velocity) {
+    public void setLaunchVelocity(double velocity) {
 
     }
 
     @Override
-    public int getVelocity() {
+    public double getLaunchVelocity() {
         return 0;
     }
 

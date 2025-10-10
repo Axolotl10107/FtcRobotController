@@ -153,6 +153,7 @@ public class RobotRoundhouse25 {
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
         launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityTPS = 537; // about 60 RPM
 

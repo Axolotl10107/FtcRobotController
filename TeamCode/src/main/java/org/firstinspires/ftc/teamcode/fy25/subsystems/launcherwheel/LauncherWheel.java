@@ -12,6 +12,8 @@ public interface LauncherWheel {
         STARTING,
         /** Launch wheel is at speed. Ready for launch! */
         READY,
+        /** Launch wheel is slowing */
+        SLOWING,
         /** Launch wheel is stopped. */
         STOPPED,
         /** Launch wheel is not behaving as it should */
@@ -34,7 +36,7 @@ public interface LauncherWheel {
         public DcMotorEx motor = new BlankMotor();
 
         /** The <b>velocity</b> at which the launch wheel will run, in <b>ticks per second</b>. Defaults to 0. */
-        public int velocityTPS = 0;
+        public double velocityTPS = 0;
     }
 
     /** Apply power to the launch wheel */
@@ -49,10 +51,10 @@ public interface LauncherWheel {
 
     /** Set the velocity at which the launch wheel will run when it is READY.
      * {@param velocity} The new velocity to set, in <b>ticks per second</b>. */
-    void setVelocity(int velocity);
+    void setLaunchVelocity(double velocity);
 
     /** Get the current velocity of the launch wheel. */
-    int getVelocity();
+    double getLaunchVelocity();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();
