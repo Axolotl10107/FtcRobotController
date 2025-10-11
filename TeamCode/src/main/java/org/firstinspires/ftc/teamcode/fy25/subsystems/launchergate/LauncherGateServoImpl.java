@@ -27,7 +27,7 @@ public class LauncherGateServoImpl implements LauncherGate {
     }
 
     @Override
-    public int getPower() {
+    public double getPower() {
         return 0;
     }
 

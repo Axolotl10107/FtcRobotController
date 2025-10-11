@@ -9,9 +9,10 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.LinearAxi
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.MergedAxis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
-import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
  * Matches the "Dual25" diagram. */
@@ -40,6 +41,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button intakeInButton;
     private final Button intakeOutButton;
 
+    private final Axis launcherGateIn;
+    private final Button launcherWheelSpinUp;
+
     private final Button driveSpeedUpButton;
     private final Button driveSpeedDownButton;
     private final Button squareUpButton;
@@ -66,6 +70,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         clawOpenButton = new TriggerButton( () -> manipulator.b );
         intakeInButton = new MomentaryButton( () -> manipulator.a );
         intakeOutButton = new MomentaryButton( () -> manipulator.b );
+
+        launcherGateIn = new LinearAxis( () -> manipulator.left_trigger);
+        launcherWheelSpinUp = new TriggerButton( () -> manipulator.x);
 
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
@@ -133,6 +140,22 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
+    private void updateLauncherWheelState() {
+        if (launcherWheelSpinUp.isActive()) {
+            state.setLauncherWheelState(LauncherWheel.State.STARTING);
+        } else {
+            state.setLauncherWheelState(LauncherWheel.State.SLOWING);
+        }
+    }
+
+    private void updateLauncherGateState() {
+        if (launcherGateIn.value() > 0) {
+            state.setLauncherGateState(LauncherGate.State.OPEN);
+        } else {
+            state.setLauncherGateState(LauncherGate.State.CLOSED);
+        }
+    }
+
     private void updateDriveSpeedUpState() {
         if ( driveSpeedUpButton.isActive() ) {
             state.setMaxDriveSpeed( state.getMaxDriveSpeed() + 0.1 );
@@ -174,6 +197,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateDriveSpeedDownState();
         updateSquareUpState();
         updateBrakeState();
+        updateLauncherGateState();
+        updateLauncherWheelState();
 
         return state;
     }

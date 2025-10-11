@@ -24,7 +24,7 @@ public class LauncherGateBlank implements LauncherGate {
     }
 
     @Override
-    public int getPower() {
+    public double getPower() {
         return 0;
     }
 

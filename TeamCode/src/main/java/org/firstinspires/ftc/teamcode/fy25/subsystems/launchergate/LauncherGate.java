@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.Servo;
 
 /** Represents a launcher gate. */
 public interface LauncherGate {
+
+    enum State {
+        OPEN,
+        CLOSED
+    }
 
     /** You must set some of these if this subsystem is present. */
     class Parameters {
@@ -20,10 +25,13 @@ public interface LauncherGate {
 
         /** The class of the actuator that will run the gate.
          * Example: for a Servo, this would be 'Servo.class'. <b>Has no default.</b> */
-        public Class deviceClass;
+        public Class deviceClass = DcMotorEx.class;
 
         /** The actuator that will run the gate, already instantiated and configured. <b>Has no default.</b> */
         public HardwareDevice device;
+
+        /** Velocity of gate motor in ticks per second */
+        public double power = 0;
     }
 
     /** Open the gate (start running actuator) */
@@ -39,7 +47,7 @@ public interface LauncherGate {
     void setPower(double power);
 
     /** Get the power of the actuator. (whether it's set or current power may depend on actuator type) */
-    int getPower();
+    double getPower();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();

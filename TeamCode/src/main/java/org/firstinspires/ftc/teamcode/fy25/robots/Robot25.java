@@ -18,6 +18,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMeca
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArmImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntakeBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntakeImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.*;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelBlank;
@@ -71,7 +74,8 @@ public class Robot25 {
                 FriendlyIMU.Parameters imuParameters,
 
                 LauncherWheel.Parameters launchWheelParams,
-                LauncherGate.Parameters launchGateParams
+                LauncherGate.Parameters launchGateParams,
+                MotorIntake.Parameters motorIntakeParams
         ) {
             // Every season
             this.extendedParameters = extendedParameters;
@@ -81,6 +85,7 @@ public class Robot25 {
             // This season
             this.launchWheelParams = launchWheelParams;
             this.launchGateParams = launchGateParams;
+            this.motorIntakeParams = motorIntakeParams;
         }
 
         final ExtendedParameters extendedParameters;
@@ -89,6 +94,7 @@ public class Robot25 {
 
         final LauncherWheel.Parameters launchWheelParams;
         final LauncherGate.Parameters launchGateParams;
+        final MotorIntake.Parameters motorIntakeParams;
     }
 
     public final ExtendedParameters extendedParameters;
@@ -98,6 +104,7 @@ public class Robot25 {
 
     public final LauncherWheel launchWheel;
     public final LauncherGate launchGate;
+    public final MotorIntake motorIntake;
 
 
     public final VoltageSensor voltageSensor;
@@ -150,6 +157,12 @@ public class Robot25 {
             launchGate = new LauncherGateBlank();
         }
 
+        if (parameters.motorIntakeParams.present) {
+            motorIntake = new MotorIntakeImpl(parameters.motorIntakeParams);
+        } else {
+            motorIntake = new MotorIntakeBlank();
+        }
+
         // Lynx stuff found in RR's SampleMecanumDrive
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -165,6 +178,7 @@ public class Robot25 {
 
         launchWheel.update();
         launchGate.update();
+        motorIntake.update();
     }
 
 }

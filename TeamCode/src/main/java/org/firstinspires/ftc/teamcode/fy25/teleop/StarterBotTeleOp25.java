@@ -4,12 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 @TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
 public class StarterBotTeleOp25 extends OpMode {
@@ -99,5 +103,25 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData( "Max. Drive Power", controlState.getMaxDriveSpeed() );
         telemetry.addData( "Current Heading", currentHeading );
         telemetry.update();
+
+        if (controlState.getLauncherWheelState() == LauncherWheel.State.STARTING) {
+            robot.motorIntake.spinIn();
+        } else {
+            robot.motorIntake.spinOut();
+        }
+
+        if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {
+            robot.launchGate.open();
+        } else {
+            robot.launchGate.close();
+        }
+
+        if (controlState.getMotorIntakeState() == MotorIntake.State.RUNIN) {
+            robot.motorIntake.spinIn();
+        } else if (controlState.getMotorIntakeState() == MotorIntake.State.RUNOUT) {
+            robot.motorIntake.spinOut();
+        } else {
+            robot.motorIntake.stop();
+        }
     }
 }

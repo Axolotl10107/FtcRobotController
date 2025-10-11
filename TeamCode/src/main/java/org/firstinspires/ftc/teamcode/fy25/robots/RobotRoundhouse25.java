@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
@@ -162,6 +163,10 @@ public class RobotRoundhouse25 {
         launchGateParams.deviceClass = CRServo.class;
         launchGateParams.device = hardwareMap.get(CRServo.class, "launchGateCRServo");
 
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
+//        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+//        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        motorIntakeParams.IntakeTPS = 537;
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
@@ -173,7 +178,8 @@ public class RobotRoundhouse25 {
                 imuParams,
 
                 launchWheelParams,
-                launchGateParams
+                launchGateParams,
+                motorIntakeParams
         );
 
         return params;
@@ -331,6 +337,8 @@ public class RobotRoundhouse25 {
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
+
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
@@ -338,7 +346,8 @@ public class RobotRoundhouse25 {
                 imuParams,
 
                 launchWheelParams,
-                launchGateParams
+                launchGateParams,
+                motorIntakeParams
         );
 
         // These were removed some time ago, but if you need these values for something else,
@@ -385,12 +394,16 @@ public class RobotRoundhouse25 {
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
         launchWheelParams.velocityTPS = 537; // about 60 RPM
-        //        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
         launchGateParams.deviceClass = CRServo.class;
         launchGateParams.device = hardwareMap.get(CRServo.class, "servo");
+
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
+        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        motorIntakeParams.IntakeTPS = 537;
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
@@ -402,7 +415,8 @@ public class RobotRoundhouse25 {
                 imuParams,
 
                 launchWheelParams,
-                launchGateParams
+                launchGateParams,
+                motorIntakeParams
         );
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters
