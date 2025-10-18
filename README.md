@@ -1,6 +1,6 @@
 ## NOTICE
 
-This repository contains team 10107's fork of the public FTC SDK for the INTO THE DEEP (2024-2025) competition season.
+This repository contains team 10107's fork of the public FTC SDK.
 
 ## I installed IDEA instead of Android Studio and it's not working!
 

@@ -1,7 +1,7 @@
-# In Theory 2024-25 TeamCode
+# In Theory TeamCode
 This is the *master* branch.
 
-## Currently Commissioned Stuff
+## Currently Commissioned Stuff (very out-of-date)
 Competition OpModes:
 Type | Name | Purpose | Notes
 Auto | ParkFromFar | Park from far away from the observation zone
