@@ -79,6 +79,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
     public RRMecanumDriveImpl(RRMecanumDrive.Parameters parameters) {
         super(parameters.dc.kV, parameters.dc.kA, parameters.dc.kStatic, parameters.dc.TRACK_WIDTH, parameters.dc.TRACK_WIDTH, parameters.LATERAL_MULTIPLIER);
 
+        // Unpack parameters
         leftFront = parameters.leftFrontMotor;
         rightFront = parameters.rightFrontMotor;
         leftBack = parameters.leftBackMotor;
@@ -109,7 +110,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
         TrajectoryFollower follower = new HolonomicPIDVAFollower(parameters.TRANSLATIONAL_PID, parameters.TRANSLATIONAL_PID, parameters.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
-        // TODO: SampleMecanumDrive constructs the IMU here
+        // SampleMecanumDrive constructs the IMU here, we get it from the Robot instead
 
         motors = Arrays.asList(leftFront, leftBack, rightBack, rightFront);
         for (DcMotorEx motor : motors) {
@@ -122,6 +123,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, parameters.dc.MOTOR_VELO_PID);
         }
 
+        // A friendly reminder that robot-specific properties like these are set in RobotRoundhouse
 //        leftFront.setDirection(DcMotor.Direction.REVERSE);
 //        rightFront.setDirection(DcMotor.Direction.FORWARD);
 //        leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -130,7 +132,7 @@ public class RRMecanumDriveImpl extends MecanumDrive implements RRMecanumDrive {
         List<Integer> lastTrackingEncPositions = new ArrayList<>();
         List<Integer> lastTrackingEncVels = new ArrayList<>();
 
-        // TODO: if desired, use setLocalizer() to change the localization method
+        // If desired, use setLocalizer() to change the localization method:
         // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(

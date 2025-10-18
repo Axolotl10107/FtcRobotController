@@ -21,9 +21,6 @@ import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
 
 /**
- * <b>NOTE: At this time, last year's robot is </b>(still)<b> RobotB, and Parameters for a Strafer-based Decode starter
- * bot are set for RobotA. Fair warning: getRobotBParams() still returns {@link Robot24.Parameters}!</b>
- * <p>
  * RobotRoundhouse stores {@link Robot25.Parameters} for every Robot that currently exists.
  * If you need to change a Robot configuration option, change it here.
  * Everything that could potentially differ between any two real-life robots has been split out to
@@ -54,8 +51,6 @@ public class RobotRoundhouse25 {
 
     /** Returns the correct Parameters for the specified robot.
      * NOTE: Doesn't work on virtual_robot.
-     * NOTE: The fy24 bot still returns Robot24.Parameters and won't work with this Robot25.Parameters type method.
-     * You'll need to use getRobotBParams() for that bot.
      * {@param serialNumber} By "serialNumber", the SDK actually means the name you set on the
      * Control Hub. So RobotA's "serialNumber" is "10107-A-RC". Pass in the name of the robot
      * controller you want parameters for.
@@ -89,7 +84,7 @@ public class RobotRoundhouse25 {
     }
 
     /** Returns the Parameters for RobotA.
-     * RobotA is currently the fy25 Starter Bot / small bot.
+     * RobotA is currently the fy25 small bot.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getRobotAParams(HardwareMap hardwareMap) {
 
@@ -116,9 +111,11 @@ public class RobotRoundhouse25 {
         dc.MAX_VEL = 30;
         dc.MAX_ACCEL = 30;
 
-        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
+                true,
                 dc,
-                new AccelLimiter(2.0, 0.1));
+                new AccelLimiter(2.0, 0.1)
+        );
 
         driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
         driveParams.HEADING_PID = new PIDCoefficients(4, 0, 0);
@@ -148,7 +145,11 @@ public class RobotRoundhouse25 {
         driveParams.stopwatch = new ElapsedTime();
 
 
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT);
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(
+                true,
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+        );
 
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
@@ -156,6 +157,8 @@ public class RobotRoundhouse25 {
         launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityTPS = 537; // about 60 RPM
+        // It won't be about 60 RPM on the high-speed motor; ticks per revolution will be very
+        // different without the gearbox. --Michael
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
         launchGateParams.deviceClass = DcMotorEx.class;
@@ -185,27 +188,24 @@ public class RobotRoundhouse25 {
 // ---------------------------------------------------------------------------------------------------------------------
 
     /** Returns the Parameters for RobotB.
-     * RobotB is the fy24 / Into the Deep robot. <b>That means this still returns {@link Robot24.Parameters}!</b>
+     * RobotB is the Starter Bot from Scrap.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot24.Parameters getRobotBParams(HardwareMap hardwareMap) {
+    public static Robot25.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
-        Claw.Parameters clawParams = new Claw.Parameters(true);
-        clawParams.clawServo = hardwareMap.get(Servo.class, "clawServo");
-        clawParams.openPosition = 0.1;
-        clawParams.closePosition = 0.01;
-
-        RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(true);
-        intakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
-        intakeParams.servoPower = 1;
-
-        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(true, RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.UP);
+        FriendlyIMU.Parameters imuParams = new FriendlyIMU.Parameters(
+                true,
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP
+        );
 
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
         dc.LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         dc.USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
-        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(true,
+        RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
+                true,
                 dc, // most of the defaults in DriveConstants should work here
-                new AccelLimiter(2.0, 0.1));
+                new AccelLimiter(2.0, 0.1)
+        );
         driveParams.useAccelLimiter = true;
 
         dc.kV = .017;
@@ -231,42 +231,39 @@ public class RobotRoundhouse25 {
 
         // the rest of the defaults in RRMecanumDrive.Parameters should work here
 
-        DoubleArm.Parameters armParams = new DoubleArm.Parameters(true);
 
-        armParams.stopwatch = new ElapsedTime();
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        // TODO: Tune default launch wheel velocity
+        launchWheelParams.velocityTPS = 537; // about 60 RPM
 
-        armParams.elevatorMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftExtend");
-        armParams.elevatorMotorRight = hardwareMap.get(DcMotorEx.class, "armRightExtend");
 
-        armParams.elevatorMotorLeft.setDirection(FORWARD);
-        armParams.elevatorMotorRight.setDirection(REVERSE);
+        // TODO: This needs to be a DualCRServo!
+        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
+        launchGateParams.deviceClass = DcMotorEx.class;
+        launchGateParams.device = hardwareMap.get(DcMotorEx.class, "launchGateMotor");
 
-        armParams.pivotMotorLeft = hardwareMap.get(DcMotorEx.class, "armLeftPivot");
-        armParams.pivotMotorRight = hardwareMap.get(DcMotorEx.class, "armRightPivot");
 
-        armParams.pivotMotorLeft.setDirection(REVERSE);
-        armParams.pivotMotorRight.setDirection(FORWARD);
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
+        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorIntakeParams.IntakeTPS = 537;
 
-        // Due to a bug somewhere, these values should be 10 times higher than
-        // what you actually want.
-        armParams.pivotAccelLimiter = new AccelLimiter(4000, 4000);
-        armParams.elevatorAccelLimiter = new AccelLimiter(4000, 4000);
 
-        armParams.pivotUpperLimit = 1000;
-        armParams.elevatorUpperLimit = 42;
-        armParams.elevatorLimitBuffer = 2;
-        armParams.elevatorOffsetLength = 3.5;
-
-        armParams.maxPivotVelocity = 400;
-        armParams.maxElevatorVelocity = 400;
-
-        armParams.pivotTicksPerDegree = 32.06;
-        armParams.elevatorTicksPerInch = 157.86;
-
-        Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
+        Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
-        Robot24.Parameters params = new Robot24.Parameters(clawParams, intakeParams, imuParams, driveParams, armParams, extendedParams);
+
+        Robot25.Parameters params = new Robot25.Parameters(
+                extendedParams,
+                driveParams,
+                imuParams,
+
+                launchWheelParams,
+                launchGateParams,
+                motorIntakeParams
+        );
 
         return params;
     }
@@ -392,15 +389,18 @@ public class RobotRoundhouse25 {
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
         launchWheelParams.velocityTPS = 537; // about 60 RPM
         launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
+//         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
         launchGateParams.deviceClass = CRServo.class;
         launchGateParams.device = hardwareMap.get(CRServo.class, "servo");
+//        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 
-        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
-        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        motorIntakeParams.IntakeTPS = 537;
+//        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
+//        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
+//        motorIntakeParams.IntakeTPS = 537;
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();

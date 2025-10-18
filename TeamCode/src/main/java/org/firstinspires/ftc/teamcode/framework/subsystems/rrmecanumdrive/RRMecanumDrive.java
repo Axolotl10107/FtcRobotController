@@ -28,7 +28,10 @@ import java.util.List;
  * learn more about those things. */
 public interface RRMecanumDrive {
 
-    /** See the RoadRunner Quickstart's DriveConstants class. The default values model a goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration will be needed. */
+    /** See the RoadRunner Quickstart's DriveConstants class. The default values model a
+     * goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration
+     * will be needed.
+     * Again, these are defaults! To calibrate your robot, go to RobotRoundhouse. */
     class DriveConstants {
         public double TICKS_PER_REV = 537.7;
         public double MAX_RPM = 312;
@@ -143,12 +146,16 @@ public interface RRMecanumDrive {
     };
 
     /** Get the leftFront motor, if direct access is needed */
+    @Deprecated
     DcMotorEx getLeftFrontMotor();
     /** Get the rightFront motor, if direct access is needed */
+    @Deprecated
     DcMotorEx getRightFrontMotor();
     /** Get the leftBack motor, if direct access is needed */
+    @Deprecated
     DcMotorEx getLeftBackMotor();
     /** Get the rightBack motor, if direct access is needed */
+    @Deprecated
     DcMotorEx getRightBackMotor();
 
     /** Apply motor powers from a DTS (Drive-Turn-Strafe).

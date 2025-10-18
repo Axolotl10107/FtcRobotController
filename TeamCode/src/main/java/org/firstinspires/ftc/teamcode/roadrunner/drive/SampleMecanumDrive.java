@@ -38,10 +38,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*
+/**
  * Simple mecanum drive hardware implementation for REV hardware.
+ * In the context of 10107 framework, please use
+ * {@link org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive} instead.
+ * It offers all the same features but is also a Robot subsystem and works with DTSs.
  */
 @Config
+@Deprecated
 public class SampleMecanumDrive extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, .1);
