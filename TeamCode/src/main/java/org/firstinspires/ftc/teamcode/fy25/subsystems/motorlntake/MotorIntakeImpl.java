@@ -1,18 +1,23 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGateMotorImpl;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
 public class MotorIntakeImpl implements MotorIntake{
     DcMotorEx motor;
     double intakeVel;
     final double tolerance = 20;
+    State state = State.NONE;
+
+    Telemetry telemetry;
 
     public MotorIntakeImpl(Parameters parameters) {
         motor = parameters.motor;
         intakeVel = parameters.IntakeTPS;
+        telemetry = TelemetrySingleton.getInstance();
     }
 
     @Override
@@ -33,16 +38,8 @@ public class MotorIntakeImpl implements MotorIntake{
     }
 
     @Override
-    public State getState() {
-        if (Math.abs(motor.getVelocity() - intakeVel) <= tolerance) {
-            if (motor.getDirection() == DcMotorSimple.Direction.FORWARD) {
-                return State.RUNIN;
-            } else {
-                return State.RUNOUT;
-            }
-        } else {
-            return State.NONE;
-        }
+    public void setState(State state) {
+        this.state = state;
     }
 
     @Override
@@ -57,6 +54,6 @@ public class MotorIntakeImpl implements MotorIntake{
 
     @Override
     public void update() {
-
+        telemetry.addData("Intake Motor", motor.getVelocity());
     }
 }

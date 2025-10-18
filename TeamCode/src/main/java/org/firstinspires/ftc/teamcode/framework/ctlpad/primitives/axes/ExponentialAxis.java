@@ -29,6 +29,8 @@ public class ExponentialAxis implements Axis {
     /** Returns the raw axis value to the power set in the constructor. */
     @Override
     public double value() {
-        return Math.pow(axis.get(), power) * invert;
+        double request = axis.get();
+        double scaled = Math.pow(request, power) * invert;
+        return scaled * (request / Math.abs(request)); // preserve sign
     }
 }

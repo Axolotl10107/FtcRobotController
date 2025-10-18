@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -30,7 +30,7 @@ public interface MotorIntake {
 
     void stop();
 
-    State getState();
+    void setState(State state);
 
     void setIntakeVelocity(double velocity);
 

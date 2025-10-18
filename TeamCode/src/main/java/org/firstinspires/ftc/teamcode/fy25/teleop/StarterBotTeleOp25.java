@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
-import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
@@ -25,6 +24,8 @@ public class StarterBotTeleOp25 extends OpMode {
 
     @Override
     public void init() {
+        TelemetrySingleton.setInstance(telemetry);
+
         try {
             robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
         } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
@@ -39,29 +40,34 @@ public class StarterBotTeleOp25 extends OpMode {
         imuCorrector = new IMUCorrector( params );
 
         controlScheme = new IndyStarterBotScheme25( gamepad1, gamepad2 );
-
-        TelemetrySingleton.setInstance(telemetry);
     }
 
     @Override
     public void loop() {
-        telemetry.addData("Place", "Loop start");
-        telemetry.update();
+//        telemetry.addData("Place", "Loop start");
+//        telemetry.update();
 
         double currentHeading = robot.imu.yaw();
         StarterBotState25 controlState = controlScheme.getState();
 
-        telemetry.addData("Place", "Got controls state");
-        telemetry.update();
+//        telemetry.addData("Place", "Got controls state");
+//        telemetry.update();
 
         // MecanumDrive
-        DTS correctedDTS = imuCorrector.correctDTS( controlState.getDts() );
+        DTS dts = controlState.getDts();
+        telemetry.addData("Requested Drive", dts.drive);
+        telemetry.addData("Requested Turn", dts.turn);
+        telemetry.addData("Requested Strafe", dts.strafe);
+        DTS correctedDTS = imuCorrector.correctDTS( dts );
         DTS normalizedDTS = correctedDTS.normalize();
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
+        telemetry.addData("Actual Drive", scaledDTS.drive);
+        telemetry.addData("Actual Turn", scaledDTS.turn);
+        telemetry.addData("Actual Strafe", scaledDTS.strafe);
         robot.drive.applyDTS( scaledDTS );
 
-        telemetry.addData("Place", "Handled DTS");
-        telemetry.update();
+//        telemetry.addData("Place", "Handled DTS");
+//        telemetry.update();
 //        telemetry.addData("Square up?", controlState.isSquareUp());
 //        telemetry.update();
 //
@@ -70,38 +76,41 @@ public class StarterBotTeleOp25 extends OpMode {
 //            imuCorrector.squareUp();
 //        }
 
-        telemetry.addData("Place", "Handled square up");
-        telemetry.update();
+//        telemetry.addData("Place", "Handled square up");
+//        telemetry.update();
 
         // Brake
         if ( controlState.isBrake() ) {
             robot.drive.applyDTS( new DTS( 0, 0, 0 ) );
         }
 
-        telemetry.addData("Place", "Handled brake");
-        telemetry.update();
+//        telemetry.addData("Place", "Handled brake");
+//        telemetry.update();
 
         // Manipulator
 //        robot.claw.setState( controlState.getClawState() );
 
-        telemetry.addData("Place", "Handled claw");
-        telemetry.update();
+//        telemetry.addData("Place", "Handled claw");
+//        telemetry.update();
 
         // PixelArm
 //        robot.arm.setPivotPower( controlState.getArmMovement() );
 //        robot.arm.setElevatorPower( controlState.getElevatorMovement() );
 
-        telemetry.addData("Place", "Handled arm");
-        telemetry.update();
+//        telemetry.addData("Place", "Handled arm");
+//        telemetry.update();
 
         robot.update();
 
-        telemetry.addData("Place", "Ran robot.update()");
-        telemetry.update();
+//        telemetry.addData("Place", "Ran robot.update()");
+//        telemetry.update();
 
         // telemetry
         telemetry.addData( "Max. Drive Power", controlState.getMaxDriveSpeed() );
         telemetry.addData( "Current Heading", currentHeading );
+        telemetry.addData("Intake", controlState.getIntakeState());
+        telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
+        telemetry.addData("Launch Wheel", controlState.getLauncherWheelState());
         telemetry.update();
 
         if (controlState.getLauncherWheelState() == LauncherWheel.State.STARTING) {

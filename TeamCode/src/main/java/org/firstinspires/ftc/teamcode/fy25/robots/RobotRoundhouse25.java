@@ -11,10 +11,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyI
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
-import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
@@ -158,19 +157,17 @@ public class RobotRoundhouse25 {
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityTPS = 537; // about 60 RPM
 
-
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-        launchGateParams.deviceClass = CRServo.class;
-        launchGateParams.device = hardwareMap.get(CRServo.class, "launchGateCRServo");
+        launchGateParams.deviceClass = DcMotorEx.class;
+        launchGateParams.device = hardwareMap.get(DcMotorEx.class, "launchGateMotor");
 
-        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
-//        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-//        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//        motorIntakeParams.IntakeTPS = 537;
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
+        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorIntakeParams.IntakeTPS = 537;
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
-
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.MotorIntake;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake;
 
 public class MotorIntakeBlank implements MotorIntake {
     @Override
@@ -17,8 +17,8 @@ public class MotorIntakeBlank implements MotorIntake {
     }
 
     @Override
-    public State getState() {
-        return null;
+    public void setState(State state) {
+
     }
 
     @Override
