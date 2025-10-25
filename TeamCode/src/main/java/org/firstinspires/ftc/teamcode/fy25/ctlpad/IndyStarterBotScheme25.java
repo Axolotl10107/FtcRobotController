@@ -42,7 +42,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button intakeOutButton;
 
     private final Axis launcherGateIn;
-    private final Button launcherWheelSpinUp;
+    private final Axis launcherWheelSpinUp;
 
     private final Button driveSpeedUpButton;
     private final Button driveSpeedDownButton;
@@ -72,7 +72,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         intakeOutButton = new MomentaryButton( () -> manipulator.b );
 
         launcherGateIn = new LinearAxis( () -> manipulator.left_trigger);
-        launcherWheelSpinUp = new TriggerButton( () -> manipulator.x);
+        launcherWheelSpinUp = new LinearAxis( () -> manipulator.right_trigger);
 
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
@@ -141,10 +141,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     }
 
     private void updateLauncherWheelState() {
-        if (launcherWheelSpinUp.isActive()) {
-            state.setLauncherWheelState(LauncherWheel.State.STARTING);
+        if (launcherWheelSpinUp.value() > 0) {
+            state.setLauncherWheelState(LauncherWheel.State.RUNOUT);
         } else {
-            state.setLauncherWheelState(LauncherWheel.State.SLOWING);
+            state.setLauncherWheelState(LauncherWheel.State.STOPPED);
         }
     }
 

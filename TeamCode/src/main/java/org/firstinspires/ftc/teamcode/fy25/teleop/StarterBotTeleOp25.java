@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
@@ -111,12 +112,11 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData("Intake", controlState.getIntakeState());
         telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
         telemetry.addData("Launch Wheel", controlState.getLauncherWheelState());
-        telemetry.update();
 
-        if (controlState.getLauncherWheelState() == LauncherWheel.State.STARTING) {
-            robot.motorIntake.spinIn();
+        if (controlState.getLauncherWheelState() == LauncherWheel.State.RUNOUT) {
+            robot.launchWheel.spinUp();
         } else {
-            robot.motorIntake.spinOut();
+            robot.launchWheel.spinDown();
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {
@@ -125,12 +125,14 @@ public class StarterBotTeleOp25 extends OpMode {
             robot.launchGate.close();
         }
 
-        if (controlState.getMotorIntakeState() == MotorIntake.State.RUNIN) {
+        if (controlState.getIntakeState() == RotaryIntake.State.RUNIN) {
             robot.motorIntake.spinIn();
-        } else if (controlState.getMotorIntakeState() == MotorIntake.State.RUNOUT) {
+        } else if (controlState.getIntakeState() == RotaryIntake.State.RUNOUT) {
             robot.motorIntake.spinOut();
         } else {
             robot.motorIntake.stop();
         }
+
+        telemetry.update();
     }
 }

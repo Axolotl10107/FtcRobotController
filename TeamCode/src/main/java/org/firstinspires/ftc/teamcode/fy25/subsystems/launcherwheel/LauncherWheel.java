@@ -8,16 +8,18 @@ public interface LauncherWheel {
 
     /** Represents the state of the launcher. */
     enum State {
-        /** Launch wheel is coming up to speed */
-        STARTING,
-        /** Launch wheel is at speed. Ready for launch! */
-        READY,
-        /** Launch wheel is slowing */
-        SLOWING,
-        /** Launch wheel is stopped. */
+//        /** Launch wheel is coming up to speed */
+//        STARTING,
+//        /** Launch wheel is at speed. Ready for launch! */
+//        READY,
+//        /** Launch wheel is slowing */
+//        SLOWING,
+//        /** Launch wheel is stopped. */
+//        STOPPED,
+//        /** Launch wheel is not behaving as it should */
+//        ERROR
         STOPPED,
-        /** Launch wheel is not behaving as it should */
-        ERROR
+        RUNOUT
     }
 
     /** You must set some of these if this subsystem is present. */
@@ -33,10 +35,11 @@ public interface LauncherWheel {
         public final boolean present;
 
         /** The {@link DcMotorEx} that runs the launch wheel, already instantiated and configured. Defaults to a {@link BlankMotor}. */
-        public DcMotorEx motor = new BlankMotor();
+        public DcMotorEx motor1 = new BlankMotor();
+        public DcMotorEx motor2 = new BlankMotor();
 
         /** The <b>velocity</b> at which the launch wheel will run, in <b>ticks per second</b>. Defaults to 0. */
-        public double velocityTPS = 0;
+        public double velocityRPM = 0;
     }
 
     /** Apply power to the launch wheel */

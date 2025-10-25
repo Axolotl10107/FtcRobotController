@@ -81,7 +81,7 @@ public class DualMotor implements DcMotorEx {
             }
             motor2.setVelocity(motor1.getVelocity());
 
-            motor2.setPIDFCoefficients(RunMode.RUN_WITHOUT_ENCODER, motor1.getPIDFCoefficients(RunMode.RUN_WITHOUT_ENCODER));
+            motor2.setPIDFCoefficients(RunMode.RUN_USING_ENCODER, motor1.getPIDFCoefficients(RunMode.RUN_USING_ENCODER));
             motor2.setPIDFCoefficients(RunMode.RUN_TO_POSITION, motor1.getPIDFCoefficients(RunMode.RUN_TO_POSITION));
             motor2.setPIDFCoefficients(RunMode.RUN_USING_ENCODER, motor1.getPIDFCoefficients(RunMode.RUN_USING_ENCODER));
 

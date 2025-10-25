@@ -22,14 +22,12 @@ public class MotorIntakeImpl implements MotorIntake{
 
     @Override
     public void spinIn() {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         motor.setVelocity(getIntakeVelocity());
     }
 
     @Override
     public void spinOut() {
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor.setVelocity(getIntakeVelocity());
+        motor.setVelocity(-getIntakeVelocity());
     }
 
     @Override
