@@ -1,6 +1,6 @@
 //Test program for running a motor to encoder positions
 //Now with safety!
-//Version 2.3-0  ||  April 30, 2025
+//Version 2.3-1  ||  October 25, 2025
 //
 //I strongly advise against accepting any suggestions from IDEA in this OpMode.
 //It contains well-tested safety stuff, and some of IDEA's suggestions here are
@@ -26,6 +26,10 @@ public class EncoderTeleTest23 extends OpMode {
     boolean lockedOut = false;
 
     void safetyLockout(String trigger) {
+        motor.setPower(0);
+        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        otherDeb.reset();
+        lockedOut = true;
         telemetry.clearAll();
         telemetry.addLine("Safety Lockout");
         telemetry.addLine("Press X to end the OpMode");
@@ -41,10 +45,6 @@ public class EncoderTeleTest23 extends OpMode {
         telemetry.addData("hasPassedSafetyCheck", hasPassedSafetyCheck);
         telemetry.addData("SafetyCheckClock", safetyCheckClock.milliseconds());
         telemetry.addData("safetyPatience", safetyPatience);
-        motor.setPower(0);
-        motor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        otherDeb.reset();
-        lockedOut = true;
     }
 
     //OpModes really want variables to be class members
@@ -61,7 +61,7 @@ public class EncoderTeleTest23 extends OpMode {
     int targetPosA = 0; //Stage target here - we'll send it to the motor later
     int targetPosB = 0;
     boolean aActive = true; //The "Active" staged target is the one affected by the edit buttons
-    boolean bActive = false;
+//    boolean bActive = false;
     int listIdx = 0; //Which motor we're on right now
     double motorPower = 0.4;
 
@@ -73,7 +73,7 @@ public class EncoderTeleTest23 extends OpMode {
         }
     }
 
-    void changeStagedTarget(int change) {
+    void changeActiveTargetBy(int change) {
         if (aActive) {
             targetPosA += change;
         } else {
@@ -81,7 +81,7 @@ public class EncoderTeleTest23 extends OpMode {
         }
     }
 
-    void setStagedTarget(int value) {
+    void setActiveTargetTo(int value) {
         if (aActive) {
             targetPosA = value;
         } else {
@@ -89,7 +89,7 @@ public class EncoderTeleTest23 extends OpMode {
         }
     }
 
-    int getStagedTarget() {
+    int getActiveTargetValue() {
         if (aActive) {
             return targetPosA;
         } else {
@@ -109,6 +109,7 @@ public class EncoderTeleTest23 extends OpMode {
             tempMotor.setPower(0.0);
             tempMotor.setTargetPosition(tempMotor.getCurrentPosition());
             tempMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            tempMotor.setDirection(DcMotorEx.Direction.FORWARD);
             motorList.add(tempMotor);
         }
 
@@ -135,7 +136,7 @@ public class EncoderTeleTest23 extends OpMode {
             } else {
                 telemetry.addData("----Staged Target A", targetPosA);
             }
-            if (bActive) {
+            if (!aActive) {
                 telemetry.addData("->>>Staged Target B", targetPosB);
             } else {
                 telemetry.addData("----Staged Target B", targetPosB);
@@ -167,8 +168,8 @@ public class EncoderTeleTest23 extends OpMode {
             telemetry.addLine("A sets RUN_WITHOUT_ENCODER");
             telemetry.addLine("B sets RUN_TO_POSITION");
             telemetry.addLine("Triggers do analog control when in RUN_WITHOUT_ENCODER");
-            telemetry.addLine("D-Pad Right sets FORWARD");
-            telemetry.addLine("D-Pad Left sets REVERSE");
+//            telemetry.addLine("D-Pad Right sets FORWARD");
+//            telemetry.addLine("D-Pad Left sets REVERSE");
 
             //Safety Check
             if (Math.abs(motor.getPower()) > 0.05) {
@@ -179,9 +180,12 @@ public class EncoderTeleTest23 extends OpMode {
                         //or you'll physically break stuff :)
                         if (safetyCheckClock.milliseconds() > safetyPatience) {
                             velocitySnapshot = motor.getVelocity();
-                            safetyLockout("Patience exhausted (motor appears to have never started moving)");
+                            safetyLockout("Patience exhausted (motor appears to have never started moving, or is moving in the wrong direction)");
                         } else if (Math.abs(motor.getVelocity()) > 1) {
-                            hasPassedSafetyCheck = true;
+                            //Ensure motor is running in the correct direction (patch 10-25-25)
+                            if ( ( getActiveTargetValue() > 0 && motor.getVelocity() > 0 ) || ( getActiveTargetValue() < 0 && motor.getVelocity() < 0 ) ) {
+                                hasPassedSafetyCheck = true;
+                            }
                         }
                     } else if (hasPassedSafetyCheck) {
                         if (Math.abs(motor.getVelocity()) < 1) {
@@ -197,13 +201,13 @@ public class EncoderTeleTest23 extends OpMode {
             //Change Staged Target
             if (gamepad1.right_trigger > 0.5 && otherDeb.milliseconds() > otherDebTime) {
                 aActive = !aActive;
-                bActive = !bActive;
+//                bActive = !bActive;
                 otherDeb.reset();
             }
 
             //Set Staged Target to Current Position
             else if (gamepad1.left_trigger > 0.5 && otherDeb.milliseconds() > otherDebTime) {
-                setStagedTarget(motor.getCurrentPosition());
+                setActiveTargetTo(motor.getCurrentPosition());
                 otherDeb.reset();
             }
 
@@ -237,26 +241,26 @@ public class EncoderTeleTest23 extends OpMode {
 
             //10-tick adjustment
             else if (gamepad1.dpad_up && upDeb.milliseconds() > upDebTime) {
-                changeStagedTarget(10);
+                changeActiveTargetBy(10);
                 upDeb.reset();
             } else if (gamepad1.dpad_down && downDeb.milliseconds() > downDebTime) {
-                changeStagedTarget(-10);
+                changeActiveTargetBy(-10);
                 downDeb.reset();
 
                 //100-tick adjustment
             } else if (gamepad1.dpad_right && upDeb.milliseconds() > upDebTime) {
-                changeStagedTarget(100);
+                changeActiveTargetBy(100);
                 upDeb.reset();
             } else if (gamepad1.dpad_left && downDeb.milliseconds() > downDebTime) {
-                changeStagedTarget(-100);
+                changeActiveTargetBy(-100);
                 downDeb.reset();
 
                 //1000-tick adjustment
             } else if (gamepad1.right_bumper && upDeb.milliseconds() > upDebTime) {
-                changeStagedTarget(1000);
+                changeActiveTargetBy(1000);
                 upDeb.reset();
             } else if (gamepad1.left_bumper && downDeb.milliseconds() > downDebTime) {
-                changeStagedTarget(-1000);
+                changeActiveTargetBy(-1000);
                 downDeb.reset();
             }
 
@@ -305,11 +309,13 @@ public class EncoderTeleTest23 extends OpMode {
             }
 
             //Change direction with gamepad2
-            if (gamepad2.dpad_right && otherDeb.milliseconds() > otherDebTime) {
-                motor.setDirection(DcMotorEx.Direction.FORWARD);
-            } else if (gamepad2.dpad_left && otherDeb.milliseconds() > otherDebTime) {
-                motor.setDirection(DcMotorEx.Direction.REVERSE);
-            }
+            //Would make it harder to check motor/encoder direction continuity,
+            //so has been disabled (Patch 10-25-25)
+//            if (gamepad2.dpad_right && otherDeb.milliseconds() > otherDebTime) {
+//                motor.setDirection(DcMotorEx.Direction.FORWARD);
+//            } else if (gamepad2.dpad_left && otherDeb.milliseconds() > otherDebTime) {
+//                motor.setDirection(DcMotorEx.Direction.REVERSE);
+//            }
 
         }
     }
