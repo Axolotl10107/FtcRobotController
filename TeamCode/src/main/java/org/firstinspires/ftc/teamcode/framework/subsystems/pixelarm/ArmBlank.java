@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.framework.subsystems.pixelarm;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
+//import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 
-/** A blank implementation of {@link PixelArm} and {@link DoubleArm} that does nothing.
+/** A blank implementation of {@link PixelArm} that does nothing.
  * Never returns null (returns blank objects instead where applicable), so hopefully no null pointers. */
-public class ArmBlank implements PixelArm, DoubleArm {
+public class ArmBlank implements PixelArm {
 
     @Override
     public void setPivotAngle(AngleUnit unit, double angle) {

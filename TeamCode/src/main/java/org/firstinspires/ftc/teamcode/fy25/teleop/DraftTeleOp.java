@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
-import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
+//import org.firstinspires.ftc.teamcode.fy24.controls.GamepadDTS;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -51,7 +51,7 @@ public class DraftTeleOp extends LinearOpMode {
     }
     public void realOpMode() {
 
-        GamepadDTS controlsOld = new GamepadDTS(gamepad1, gamepad2);
+//        GamepadDTS controlsOld = new GamepadDTS(gamepad1, gamepad2);
 
         StarterBotState25 state = new StarterBotState25();
         IndyStarterBotScheme25 controls = new IndyStarterBotScheme25(gamepad1, gamepad2);
@@ -102,18 +102,18 @@ public class DraftTeleOp extends LinearOpMode {
             }
 
             // Change speed
-
-            if (controlsOld.driveSpeedUp() != 0 && driveClip < 1 && driveClipDeb.milliseconds() > 300) {
-                driveClip = 1;
-                driveClipDeb.reset();
-            } else if (controlsOld.driveSpeedDown() != 0 && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
-                driveClip = 0.3;
-                driveClipDeb.reset();
-            }
+            driveClip = state.getMaxDriveSpeed();
+//            if (state.driveSpeedUp() != 0 && driveClip < 1 && driveClipDeb.milliseconds() > 300) {
+//                driveClip = 1;
+//                driveClipDeb.reset();
+//            } else if (controlsOld.driveSpeedDown() != 0 && driveClip > 0.25 && driveClipDeb.milliseconds() > 300) {
+//                driveClip = 0.3;
+//                driveClipDeb.reset();
+//            }
 
             // Brake
 
-            if (controlsOld.brake() != 0) {
+            if (state.isBrake()) {
                 double currentVelocity = leftFront.getVelocity();
                 while (leftFront.getVelocity() > 0 && currentVelocity > 0) {
                     leftFront.setVelocity(-leftFront.getVelocity());
@@ -142,10 +142,13 @@ public class DraftTeleOp extends LinearOpMode {
                 rightFront.setMotorEnable();
                 leftBack.setMotorEnable();
                 rightBack.setMotorEnable();
-                leftFront.setPower((controlsOld.forwardMovement() + controlsOld.strafeMovement() + controlsOld.rotateMovement()) * driveClip);
-                rightFront.setPower((controlsOld.forwardMovement() - controlsOld.strafeMovement() - controlsOld.rotateMovement()) * driveClip);
-                leftBack.setPower((controlsOld.forwardMovement() - controlsOld.strafeMovement() + controlsOld.rotateMovement()) * driveClip);
-                rightBack.setPower((controlsOld.forwardMovement() + controlsOld.strafeMovement() - controlsOld.rotateMovement()) * driveClip);
+                double drive = state.getDts().drive;
+                double turn = state.getDts().turn;
+                double strafe = state.getDts().strafe;
+                leftFront.setPower((drive + turn + strafe) * driveClip);
+                rightFront.setPower((drive - turn - strafe) * driveClip);
+                leftBack.setPower((drive - turn + strafe) * driveClip);
+                rightBack.setPower((drive + turn - strafe) * driveClip);
 
             }
         }

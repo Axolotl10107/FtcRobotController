@@ -31,16 +31,30 @@ android {
                 // This actually excludes any directory named 'fy22' anywhere in TeamCode
                 exclude '**/fy22/**'
 
-                // Not excluding PlaneLauncher, but excluding everything else in fy23
-                // And you can comment out one of these if you want to bring a package back
+                // General
+                exclude '**/teletest/old/excluded/**'
+
+
+                // Past Seasons
+
+                // You can comment out one of these if you want to bring a package back
                 exclude '**/fy23/auto/**'
                 // Testing CTL2Java with CenterStage controls, need that Interface and State available
 //                exclude '**/fy23/controls/**'
+                exclude '**/fy23/controls/ctlpad/IndyDirectTeleOpScheme23.java'
+                exclude '**/fy23/subsystems/**'
                 exclude '**/fy23/teleop/**'
                 exclude '**/fy23/units/**'
                 exclude '**/fy23/visionexperiment/**'
                 exclude '**/fy23/ArmMotor'
                 exclude '**/fy23/DcMotorWrapper'
+
+                exclude '**/fy24/auto/**'
+                exclude '**/fy24/controls/**'
+                exclude '**/fy24/robots/**'
+                exclude '**/fy24/subsystems/**'
+                exclude '**/fy24/teleop/**'
+                exclude '**/fy24/BIT24'
             }
         }
     }

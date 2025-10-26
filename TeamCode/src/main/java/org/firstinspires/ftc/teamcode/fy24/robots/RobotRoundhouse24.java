@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.subsystems.claw.Claw;
 import org.firstinspires.ftc.teamcode.fy24.subsystems.doublearm.DoubleArm;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
-import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
+//import org.firstinspires.ftc.teamcode.fy23.subsystems.planelauncher.PlaneLauncher;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
@@ -287,7 +287,7 @@ public class RobotRoundhouse24 {
         RotaryIntake.Parameters intakeParams = new RotaryIntake.Parameters(false);
 
 
-        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
+//        PlaneLauncher.Parameters planeLauncherParams = new PlaneLauncher.Parameters(false, 1, 0);
 
 
         Robot24.ExtendedParameters extendedParams = new Robot24.ExtendedParameters();
