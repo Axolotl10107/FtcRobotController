@@ -2,23 +2,25 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
 
 public class LauncherWheelImpl implements LauncherWheel {
 
     DcMotorEx motor;
+    double motorTPR;
     double launchVel;
-    final double tolerance = 20;
+    final double tolerance;
 
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
         motor = new DualMotor(parameters.motor1, parameters.motor2);
-        launchVel = parameters.velocityRPM;
+        motorTPR = parameters.motorTPR;
+        launchVel = (parameters.velocityRPM * motorTPR) / 60;
+        tolerance = parameters.velocityTolerance;
     }
 
     @Override
     public void spinUp() {
-        motor.setVelocity(getLaunchVelocity(), AngleUnit.DEGREES);
+        motor.setVelocity(launchVel);
         motor.setMotorEnable();
     }
 
@@ -34,36 +36,37 @@ public class LauncherWheelImpl implements LauncherWheel {
     public State getState() {
         double currentVel = motor.getVelocity();
 //
-//        if (Math.abs(getLaunchVelocity() - currentVel) >= tolerance) {
-//            return State.READY;
-//        } else if (currentVel < getLaunchVelocity()) {
-//            if (motor.isMotorEnabled()) {
-//                return State.STARTING;
-//            } else {
-//                if (currentVel >= tolerance) {
-//                    return State.SLOWING;
-//                } else {
-//                    return State.STOPPED;
-//                }
-//            }
-//        } else {
-//            return State.ERROR;
-//        }
-        if (currentVel <= tolerance) {
-            return State.STOPPED;
+        if (Math.abs(launchVel - currentVel) >= tolerance) {
+            return State.READY;
+        } else if (currentVel < launchVel) {
+            if (motor.isMotorEnabled()) {
+                return State.STARTING;
+            } else {
+                if (currentVel >= tolerance) {
+                    return State.SLOWING;
+                } else {
+                    return State.STOPPED;
+                }
+            }
         } else {
-            return State.RUNOUT;
+            return State.ERROR;
         }
+//        if (currentVel <= tolerance) {
+//            return State.STOPPED;
+//        } else {
+//            return State.RUNOUT;
+//        }
     }
 
     @Override
-    public void setLaunchVelocity(double newVel) {
-        launchVel = newVel;
+    public void setLaunchRPM(double newRPM) {
+        // Divide by 60 to get rev.s per minute instead of rev.s per second
+        launchVel = (newRPM * motorTPR) / 60;
     }
 
     @Override
-    public double getLaunchVelocity() {
-        return launchVel * 60;
+    public double getLaunchRPM() {
+        return launchVel / (motorTPR * 60);
     }
 
     @Override

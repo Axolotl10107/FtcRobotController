@@ -14,7 +14,8 @@ public class StarterBotState25 {
     private DTS dts = new DTS();
     private RotaryIntake.State intakeState = RotaryIntake.State.NONE;
     private MotorIntake.State motorIntakeState = MotorIntake.State.NONE;
-    private LauncherWheel.State launcherWheelState = LauncherWheel.State.STOPPED;
+    //    private LauncherWheel.State launcherWheelState = LauncherWheel.State.STOPPED;
+    private boolean runLaunchWheel;
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
 
     private double maxDriveSpeed = 1;
@@ -42,9 +43,17 @@ public class StarterBotState25 {
 
     public void setMotorIntakeState(MotorIntake.State state) {motorIntakeState = state;}
 
-    public void setLauncherWheelState(LauncherWheel.State state) {launcherWheelState = state;}
+//    public void setLauncherWheelState(LauncherWheel.State state) {launcherWheelState = state;}
+//
+//    public LauncherWheel.State getLauncherWheelState() {return launcherWheelState;}
 
-    public LauncherWheel.State getLauncherWheelState() {return launcherWheelState;}
+    public boolean isRunLaunchWheel() {
+        return runLaunchWheel;
+    }
+
+    public void setRunLaunchWheel(boolean runLaunchWheel) {
+        this.runLaunchWheel = runLaunchWheel;
+    }
 
     public void setLauncherGateState(LauncherGate.State state) {launcherGateState = state;}
 

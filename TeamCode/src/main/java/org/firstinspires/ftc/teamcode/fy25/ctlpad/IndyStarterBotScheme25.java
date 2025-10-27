@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ButtonAsA
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.ExponentialAxis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.LinearAxis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.axes.MergedAxis;
+import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.AxisAsButton;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.MomentaryButton;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
@@ -42,7 +43,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button intakeOutButton;
 
     private final Axis launcherGateIn;
-    private final Axis launcherWheelSpinUp;
+    private final Button launcherWheelSpinUp;
+    private final Button launcherWheelSpinDown;
 
     private final Button driveSpeedUpButton;
     private final Button driveSpeedDownButton;
@@ -72,7 +74,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         intakeOutButton = new MomentaryButton( () -> manipulator.b );
 
         launcherGateIn = new LinearAxis( () -> manipulator.left_trigger);
-        launcherWheelSpinUp = new LinearAxis( () -> manipulator.right_trigger);
+//        launcherWheelSpinUp = new LinearAxis( () -> manipulator.right_trigger);
+        launcherWheelSpinUp = new AxisAsButton( () -> manipulator.right_trigger, 0.3 );
+        launcherWheelSpinDown = new AxisAsButton( () -> manipulator.left_trigger, 0.3 );
 
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
@@ -141,12 +145,19 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     }
 
     private void updateLauncherWheelState() {
-        if (launcherWheelSpinUp.value() > 0) {
-            state.setLauncherWheelState(LauncherWheel.State.RUNOUT);
-        } else {
-            state.setLauncherWheelState(LauncherWheel.State.STOPPED);
+        if (launcherWheelSpinUp.isActive()) {
+            state.setRunLaunchWheel(true);
+        }
+        if (launcherWheelSpinDown.isActive()) {
+            state.setRunLaunchWheel(false);
         }
     }
+//        if (launcherWheelSpinUp.value() > 0) {
+//            state.setLauncherWheelState(LauncherWheel.State.RUNOUT);
+//        } else {
+//            state.setLauncherWheelState(LauncherWheel.State.STOPPED);
+//        }
+//    }
 
     private void updateLauncherGateState() {
         if (launcherGateIn.value() > 0) {

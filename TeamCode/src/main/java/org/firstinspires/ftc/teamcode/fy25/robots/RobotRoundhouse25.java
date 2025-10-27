@@ -155,8 +155,8 @@ public class RobotRoundhouse25 {
         launchWheelParams.motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityRPM = 6000; // Flipped to RPM for easier use
-        // It won't be about 60 RPM on the high-speed motor; ticks per revolution will be very
-        // different without the gearbox. --Michael
+        launchWheelParams.velocityTolerance = 20;
+        launchWheelParams.motorTPR = 28;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
         launchGateParams.deviceClass = DcMotorEx.class;
@@ -235,7 +235,9 @@ public class RobotRoundhouse25 {
         launchWheelParams.motor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
         launchWheelParams.motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         // TODO: Tune default launch wheel velocity
-        launchWheelParams.velocityRPM = 537; // about 60 RPM
+        launchWheelParams.velocityRPM = 6000;
+        launchWheelParams.velocityTolerance = 20;
+        launchWheelParams.motorTPR = 28;
 
 
         // TODO: This needs to be a DualCRServo!

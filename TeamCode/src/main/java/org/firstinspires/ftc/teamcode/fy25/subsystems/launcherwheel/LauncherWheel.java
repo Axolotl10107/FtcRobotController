@@ -8,18 +8,18 @@ public interface LauncherWheel {
 
     /** Represents the state of the launcher. */
     enum State {
-//        /** Launch wheel is coming up to speed */
-//        STARTING,
-//        /** Launch wheel is at speed. Ready for launch! */
-//        READY,
-//        /** Launch wheel is slowing */
-//        SLOWING,
-//        /** Launch wheel is stopped. */
-//        STOPPED,
-//        /** Launch wheel is not behaving as it should */
-//        ERROR
+        /** Launch wheel is coming up to speed */
+        STARTING,
+        /** Launch wheel is at speed. Ready for launch! */
+        READY,
+        /** Launch wheel is slowing */
+        SLOWING,
+        /** Launch wheel is stopped. */
         STOPPED,
-        RUNOUT
+        /** Launch wheel is not behaving as it should */
+        ERROR
+//        STOPPED,
+//        RUNOUT
     }
 
     /** You must set some of these if this subsystem is present. */
@@ -38,8 +38,14 @@ public interface LauncherWheel {
         public DcMotorEx motor1 = new BlankMotor();
         public DcMotorEx motor2 = new BlankMotor();
 
-        /** The <b>velocity</b> at which the launch wheel will run, in <b>ticks per second</b>. Defaults to 0. */
+        /** The <b>velocity</b> at which the launch wheel will run, in <b>revolutions per minute</b>. Defaults to 0. */
         public double velocityRPM = 0;
+
+        /** The tolerance around the launch velocity, within which the wheel can be considered READY, in <b>ticks per second</b>. Defaults to 20. */
+        public double velocityTolerance = 20;
+
+        /** The <b>ticks per revolution</b> of your motor (537.7 for a 312 RPM goBILDA 5203, for example). Defaults to 0. */
+        public double motorTPR = 0;
     }
 
     /** Apply power to the launch wheel */
@@ -54,10 +60,10 @@ public interface LauncherWheel {
 
     /** Set the velocity at which the launch wheel will run when it is READY.
      * {@param velocity} The new velocity to set, in <b>ticks per second</b>. */
-    void setLaunchVelocity(double velocity);
+    void setLaunchRPM(double velocity);
 
     /** Get the current velocity of the launch wheel. */
-    double getLaunchVelocity();
+    double getLaunchRPM();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();
