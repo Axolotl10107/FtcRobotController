@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.ServoController;
 
 public class DualCRServo implements CRServo {
 
-    private CRServo primary;
-    private CRServo secondary;
+    private final CRServo primary;
+    private final CRServo secondary;
 
     /**
      * Create a DualServo to represent 2 physical Servos.
@@ -18,8 +18,8 @@ public class DualCRServo implements CRServo {
         this.secondary = secondary;
     }
 
-    @Override
     /** Returns null! Don't use this! */
+    @Override
     public ServoController getController() {
 //        return new BlankServoController();
         // This is to fail fast if someone ends up using this.
@@ -27,15 +27,15 @@ public class DualCRServo implements CRServo {
         return null;
     }
 
-    @Override
     /** Returns -1 */
+    @Override
     public int getPortNumber() {
         return -1;
     }
 
-    @Override
     /** If the direction to set is different from the primary's current direction, this sets both
      * servos to the opposite of their current directions. */
+    @Override
     public void setDirection(CRServo.Direction direction) {
         if (direction != primary.getDirection()) {
             if (primary.getDirection() == CRServo.Direction.FORWARD) {
@@ -51,8 +51,8 @@ public class DualCRServo implements CRServo {
         }
     }
 
-    @Override
     /** Returns the direction of the primary servo. */
+    @Override
     public CRServo.Direction getDirection() {
         return primary.getDirection();
     }
@@ -63,8 +63,8 @@ public class DualCRServo implements CRServo {
         secondary.setPower(power);
     }
 
-    @Override
     /** Returns the average power between both servos. */
+    @Override
     public double getPower() {
         double primaryPower = primary.getPower();
         double secondaryPower = secondary.getPower();

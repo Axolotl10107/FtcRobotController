@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.ServoController;
 
 public class DualServo implements Servo {
 
-    private Servo primary;
-    private Servo secondary;
+    private final Servo primary;
+    private final Servo secondary;
 
     /**
      * Create a DualServo to represent 2 physical Servos.
@@ -18,8 +18,8 @@ public class DualServo implements Servo {
         this.secondary = secondary;
     }
 
-    @Override
     /** Returns null! Don't use this! */
+    @Override
     public ServoController getController() {
 //        return new BlankServoController();
         // This is to fail fast if someone ends up using this.
@@ -27,15 +27,15 @@ public class DualServo implements Servo {
         return null;
     }
 
-    @Override
     /** Returns -1 */
+    @Override
     public int getPortNumber() {
         return -1;
     }
 
-    @Override
     /** If the direction to set is different from the primary's current direction, this sets both
      * servos to the opposite of their current directions. */
+    @Override
     public void setDirection(Direction direction) {
         if (direction != primary.getDirection()) {
             if (primary.getDirection() == Direction.FORWARD) {
@@ -51,8 +51,8 @@ public class DualServo implements Servo {
         }
     }
 
-    @Override
     /** Returns the direction of the primary servo. */
+    @Override
     public Direction getDirection() {
         return primary.getDirection();
     }
@@ -63,8 +63,8 @@ public class DualServo implements Servo {
         secondary.setPosition(position);
     }
 
-    @Override
     /** Returns the average position between both servos. */
+    @Override
     public double getPosition() {
         double primaryPos = primary.getPosition();
         double secondaryPos = secondary.getPosition();
