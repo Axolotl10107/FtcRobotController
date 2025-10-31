@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate;
 
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /** Represents a launcher gate. */
 public interface LauncherGate {
@@ -23,12 +22,12 @@ public interface LauncherGate {
         /** You have already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-        /** The class of the actuator that will run the gate.
-         * Example: for a Servo, this would be 'Servo.class'. <b>Has no default.</b> */
-        public Class deviceClass = DcMotorEx.class;
+//        /** The class of the actuator that will run the gate.
+//         * Example: for a Servo, this would be 'Servo.class'. <b>Has no default.</b> */
+//        public Class deviceClass = DcMotorEx.class;
 
         /** The actuator that will run the gate, already instantiated and configured. <b>Has no default.</b> */
-        public HardwareDevice device;
+        public DcMotorSimple device;
 
         /** Velocity of gate motor in ticks per second */
         public double power = 0;

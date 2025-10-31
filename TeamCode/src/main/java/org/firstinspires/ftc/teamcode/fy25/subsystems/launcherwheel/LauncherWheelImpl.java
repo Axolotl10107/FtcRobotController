@@ -12,7 +12,7 @@ public class LauncherWheelImpl implements LauncherWheel {
     final double tolerance;
 
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
-        motor = new DualMotor(parameters.motor1, parameters.motor2);
+        motor = parameters.motor;
         motorTPR = parameters.motorTPR;
         launchVel = (parameters.velocityRPM * motorTPR) / 60;
         tolerance = parameters.velocityTolerance;
@@ -26,10 +26,10 @@ public class LauncherWheelImpl implements LauncherWheel {
 
     @Override
     public void spinDown() {
-        motor.setMotorDisable();
-
         // setting motor velocity to 0 𒁢
         motor.setVelocity(0);
+
+        motor.setMotorDisable();
     }
 
     @Override

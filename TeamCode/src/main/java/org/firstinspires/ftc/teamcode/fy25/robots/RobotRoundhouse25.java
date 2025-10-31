@@ -5,6 +5,8 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
+import org.firstinspires.ftc.teamcode.framework.adapters.DualCRServo;
+import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
@@ -149,19 +151,20 @@ public class RobotRoundhouse25 {
 
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
-        launchWheelParams.motor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
-        launchWheelParams.motor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotorEx");
-        launchWheelParams.motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        launchWheelParams.motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        DcMotorEx motor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        DcMotorEx motor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotorEx");
+        motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motor2.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        launchWheelParams.motor = new DualMotor(motor1, motor2);
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityRPM = 6000; // Flipped to RPM for easier use
         launchWheelParams.velocityTolerance = 20;
         launchWheelParams.motorTPR = 28;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-        launchGateParams.deviceClass = DcMotorEx.class;
+//        launchGateParams.deviceClass = DcMotorEx.class;
         launchGateParams.device = hardwareMap.get(DcMotorEx.class, "launchGateMotor");
-        launchGateParams.power = 1;
+        launchGateParams.power = 0.1;
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
         motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
@@ -232,23 +235,25 @@ public class RobotRoundhouse25 {
 
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
-        launchWheelParams.motor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
-        launchWheelParams.motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityRPM = 6000;
         launchWheelParams.velocityTolerance = 20;
         launchWheelParams.motorTPR = 28;
 
 
-        // TODO: This needs to be a DualCRServo!
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-        launchGateParams.deviceClass = DcMotorEx.class;
-        launchGateParams.device = hardwareMap.get(DcMotorEx.class, "launchGateMotor");
+//        launchGateParams.deviceClass = DcMotorEx.class;
+        CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");
+        CRServo servoRight = hardwareMap.get(CRServo.class, "launchGateServoRight");
+        servoLeft.setDirection(REVERSE);
+        launchGateParams.device = new DualCRServo(servoRight, servoLeft);
 
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
         motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        launchWheelParams.motor1.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        launchWheelParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         motorIntakeParams.IntakeTPS = 537;
 
 
@@ -389,12 +394,12 @@ public class RobotRoundhouse25 {
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
         launchWheelParams.velocityRPM = 537; // about 60 RPM
-        launchWheelParams.motor1 = hardwareMap.get(DcMotorEx.class, "motor");
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
 //         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-        launchGateParams.deviceClass = CRServo.class;
+//        launchGateParams.deviceClass = CRServo.class;
         launchGateParams.device = hardwareMap.get(CRServo.class, "servo");
 //        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 

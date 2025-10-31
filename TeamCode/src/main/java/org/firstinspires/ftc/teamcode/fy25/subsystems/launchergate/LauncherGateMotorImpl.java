@@ -1,19 +1,17 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
 public class LauncherGateMotorImpl implements LauncherGate {
-    DcMotorEx motor;
+    DcMotorSimple motor;
     double gatePower;
     Telemetry telemetry;
 
     public LauncherGateMotorImpl(Parameters parameters) {
-        motor = (DcMotorEx) parameters.device;
+        motor = parameters.device;
         gatePower = parameters.power;
         telemetry = TelemetrySingleton.getInstance();
     }
@@ -30,11 +28,7 @@ public class LauncherGateMotorImpl implements LauncherGate {
 
     @Override
     public boolean isOpen() {
-        if (motor.getPower() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (motor.getPower() > 0);
     }
 
     @Override

@@ -35,8 +35,7 @@ public interface LauncherWheel {
         public final boolean present;
 
         /** The {@link DcMotorEx} that runs the launch wheel, already instantiated and configured. Defaults to a {@link BlankMotor}. */
-        public DcMotorEx motor1 = new BlankMotor();
-        public DcMotorEx motor2 = new BlankMotor();
+        public DcMotorEx motor = new BlankMotor();
 
         /** The <b>velocity</b> at which the launch wheel will run, in <b>revolutions per minute</b>. Defaults to 0. */
         public double velocityRPM = 0;

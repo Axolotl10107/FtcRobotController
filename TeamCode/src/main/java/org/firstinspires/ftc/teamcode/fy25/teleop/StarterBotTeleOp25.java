@@ -27,9 +27,15 @@ public class StarterBotTeleOp25 extends OpMode {
     public void init() {
         TelemetrySingleton.setInstance(telemetry);
 
+//        try {
+//            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
+//        } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
+//            throw new RuntimeException(e);
+//        }
+
         try {
-            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
+            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
+        } catch (Robot25.InvalidDeviceClassException e) {
             throw new RuntimeException(e);
         }
 
