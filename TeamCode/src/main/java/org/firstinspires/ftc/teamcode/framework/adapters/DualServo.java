@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.framework.adapters;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 
+/** Turns two Servos into one. */
 public class DualServo implements Servo {
 
     private final Servo primary;
@@ -27,7 +28,7 @@ public class DualServo implements Servo {
         return null;
     }
 
-    /** Returns -1 */
+    /** Returns -1. */
     @Override
     public int getPortNumber() {
         return -1;
@@ -82,6 +83,7 @@ public class DualServo implements Servo {
         return primary.getManufacturer();
     }
 
+    /** Returns "Dual" followed by the primary's device name then the secondary's device name. */
     @Override
     public String getDeviceName() {
         return "Dual " + primary.getDeviceName() + " " + secondary.getDeviceName();

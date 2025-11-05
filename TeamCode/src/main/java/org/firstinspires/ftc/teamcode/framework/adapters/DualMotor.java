@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
-/** Turns two motors into a family, a body that moves as one. */
+/** Turns two motors into a family, a body that moves as one.
+ * Not recommended for new development. {@link DualDcMotorEx} is preferred. */
+@Deprecated
 public class DualMotor implements DcMotorEx {
 
     /*

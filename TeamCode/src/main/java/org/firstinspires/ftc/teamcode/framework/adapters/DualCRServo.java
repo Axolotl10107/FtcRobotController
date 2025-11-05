@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode.framework.adapters;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ServoController;
 
+/** Turns two CRServos into one. */
 public class DualCRServo implements CRServo {
 
     private final CRServo primary;
     private final CRServo secondary;
 
     /**
-     * Create a DualServo to represent 2 physical Servos.
+     * Create a DualCRServo to represent 2 physical Servos.
      * @param primary The primary servo. Values will be reported from this servo's perspective.
      * @param secondary The secondary servo.
      */
@@ -27,7 +28,7 @@ public class DualCRServo implements CRServo {
         return null;
     }
 
-    /** Returns -1 */
+    /** Returns -1. */
     @Override
     public int getPortNumber() {
         return -1;
@@ -76,6 +77,7 @@ public class DualCRServo implements CRServo {
         return primary.getManufacturer();
     }
 
+    /** Returns "Dual" followed by the primary's device name then the secondary's device name. */
     @Override
     public String getDeviceName() {
         return "Dual " + primary.getDeviceName() + " " + secondary.getDeviceName();
