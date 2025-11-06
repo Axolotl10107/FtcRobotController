@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
-
 public class LauncherWheelImpl implements LauncherWheel {
 
     DcMotorEx motor;
     double motorTPR;
-    double launchVel;
+    double launchVelBase;
+    double launchVel = launchVelBase;
 
     double launchVelTarget;
     final boolean isDynamic;
@@ -21,7 +20,7 @@ public class LauncherWheelImpl implements LauncherWheel {
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
         motor = parameters.motor;
         motorTPR = parameters.motorTPR;
-        launchVel = (parameters.velocityRPM * motorTPR) / 60;
+        launchVelBase = (parameters.velocityRPM * motorTPR) / 60;
         isDynamic = parameters.isDynamic;
         tolerance = parameters.velocityTolerance;
     }
@@ -34,7 +33,6 @@ public class LauncherWheelImpl implements LauncherWheel {
 
     @Override
     public void spinDown() {
-        // setting motor velocity to 0 𒁢
         launchVelTarget = 0;
         motor.setMotorDisable();
     }
@@ -68,9 +66,9 @@ public class LauncherWheelImpl implements LauncherWheel {
     @Override
     public void fixLaunchSpin(double distance) {
         if (isDynamic) {
-            double rpm = launchVel;
-            rpm = 6000 / (spinFactor * ((distance / distanceCoef) + 1));
-            setLaunchRPM(rpm);
+            launchVel = launchVelBase / (spinFactor * ((distance / distanceCoef) + 1));
+        } else {
+            launchVel = launchVelBase;
         }
     }
 
