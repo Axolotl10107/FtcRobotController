@@ -63,7 +63,7 @@ public class DualMotor implements DcMotorEx {
         if (safe) {
             // Transfer motor1's config. to motor2
             // DcMotorSimple
-            motor2.setDirection(motor1.getDirection());
+            motor2.setDirection(motor2.getDirection());
             motor2.setPower(motor1.getPower());
 
             // DcMotor

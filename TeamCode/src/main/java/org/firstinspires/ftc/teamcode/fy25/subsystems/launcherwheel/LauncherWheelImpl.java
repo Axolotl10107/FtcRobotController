@@ -85,6 +85,9 @@ public class LauncherWheelImpl implements LauncherWheel {
     }
 
     @Override
+    public double getLaunchVel() {return launchVel;}
+
+    @Override
     public void update() {
 
     }
