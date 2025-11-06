@@ -87,9 +87,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         squareUpButton = new TriggerButton( () -> driver.left_bumper );
         brakeButton = new TriggerButton( () -> driver.x );
 
-        distanceUpButton = new MomentaryButton(() -> manipulator.dpad_right);
-        distanceDownButton = new MomentaryButton(() -> manipulator.dpad_left);
-        distanceZeroButton = new MomentaryButton(() -> manipulator.x);
+        distanceUpButton = new TriggerButton(() -> manipulator.dpad_right);
+        distanceDownButton = new TriggerButton(() -> manipulator.dpad_left);
+        distanceZeroButton = new TriggerButton(() -> manipulator.x);
 
         armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
         armMedium = new MergedAxis( new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_left ), -ARM_MEDIUM_SPEED ), new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_right ), ARM_MEDIUM_SPEED ) );

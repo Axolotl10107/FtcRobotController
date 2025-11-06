@@ -9,6 +9,8 @@ public class LauncherWheelImpl implements LauncherWheel {
     DcMotorEx motor;
     double motorTPR;
     double launchVel;
+
+    double launchVelTarget;
     final boolean isDynamic;
     final double tolerance;
     final double spinFactor = 1.25; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
@@ -26,15 +28,14 @@ public class LauncherWheelImpl implements LauncherWheel {
 
     @Override
     public void spinUp() {
-        motor.setVelocity(launchVel);
+        launchVelTarget = launchVel;
         motor.setMotorEnable();
     }
 
     @Override
     public void spinDown() {
         // setting motor velocity to 0 𒁢
-        motor.setVelocity(0);
-
+        launchVelTarget = 0;
         motor.setMotorDisable();
     }
 
@@ -85,10 +86,10 @@ public class LauncherWheelImpl implements LauncherWheel {
     }
 
     @Override
-    public double getLaunchVel() {return launchVel;}
+    public double getLaunchVelTarget() {return launchVelTarget;}
 
     @Override
     public void update() {
-
+        motor.setVelocity(launchVelTarget);
     }
 }

@@ -68,7 +68,7 @@ public interface LauncherWheel {
     /** Get the current velocity of the launch wheel. */
     double getLaunchRPM();
 
-    double getLaunchVel();
+    double getLaunchVelTarget();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();

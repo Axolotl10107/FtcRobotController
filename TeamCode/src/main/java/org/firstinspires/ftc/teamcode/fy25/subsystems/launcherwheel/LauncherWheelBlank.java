@@ -35,7 +35,7 @@ public class LauncherWheelBlank implements LauncherWheel {
     }
 
     @Override
-    public double getLaunchVel() {return 0;}
+    public double getLaunchVelTarget() {return 0;}
 
     @Override
     public void update() {
