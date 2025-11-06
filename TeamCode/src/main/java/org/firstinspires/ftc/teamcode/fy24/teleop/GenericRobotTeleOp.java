@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy24.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy24.controls.IndyTeleOpScheme24;
 
+@Disabled
 @TeleOp(name="fy24 framework-based TeleOp", group="TeleOp24")
 public class GenericRobotTeleOp extends OpMode {
 

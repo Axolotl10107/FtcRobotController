@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWhee
 
 @TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
 public class StarterBotTeleOp25 extends OpMode {
-
     Robot25 robot;
     IMUCorrector imuCorrector;
     IndyStarterBotScheme25 controlScheme;

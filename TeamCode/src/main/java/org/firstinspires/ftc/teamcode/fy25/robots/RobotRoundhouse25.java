@@ -253,7 +253,8 @@ public class RobotRoundhouse25 {
         launchMotorBack.setDirection(FORWARD);
         launchWheelFrontParams.motor = launchMotorFront;
         launchWheelBackParams.motor = launchMotorBack;
-        // TODO: Tune default launch wheel velocity
+        // TODO: Tune default launch wheel velocity'
+        launchWheelFrontParams.isDynamic = true;
         launchWheelFrontParams.velocityRPM = 6000; // Flipped to RPM for easier use
         launchWheelFrontParams.velocityTolerance = 20;
         launchWheelFrontParams.motorTPR = 28;
