@@ -45,6 +45,8 @@ public interface LauncherWheel {
 
         /** The <b>ticks per revolution</b> of your motor (537.7 for a 312 RPM goBILDA 5203, for example). Defaults to 0. */
         public double motorTPR = 0;
+
+        public boolean isDynamic = false;
     }
 
     /** Apply power to the launch wheel */
@@ -60,6 +62,8 @@ public interface LauncherWheel {
     /** Set the velocity at which the launch wheel will run when it is READY.
      * {@param velocity} The new velocity to set, in <b>ticks per second</b>. */
     void setLaunchRPM(double velocity);
+
+    void fixLaunchSpin(double distance);
 
     /** Get the current velocity of the launch wheel. */
     double getLaunchRPM();

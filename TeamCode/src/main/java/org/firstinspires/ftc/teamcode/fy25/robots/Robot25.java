@@ -65,7 +65,8 @@ public class Robot25 {
                 RRMecanumDrive.Parameters driveParameters,
                 FriendlyIMU.Parameters imuParameters,
 
-                LauncherWheel.Parameters launchWheelParams,
+                LauncherWheel.Parameters launchWheelFrontParams,
+                LauncherWheel.Parameters launchWheelBackParams,
                 LauncherGate.Parameters launchGateParams,
                 MotorIntake.Parameters motorIntakeParams
         ) {
@@ -75,7 +76,8 @@ public class Robot25 {
             this.imuParameters = imuParameters;
 
             // This season
-            this.launchWheelParams = launchWheelParams;
+            this.launchWheelFrontParams = launchWheelFrontParams;
+            this.launchWheelBackParams = launchWheelBackParams;
             this.launchGateParams = launchGateParams;
             this.motorIntakeParams = motorIntakeParams;
         }
@@ -84,7 +86,8 @@ public class Robot25 {
         final RRMecanumDrive.Parameters driveParameters;
         final FriendlyIMU.Parameters imuParameters;
 
-        final LauncherWheel.Parameters launchWheelParams;
+        final LauncherWheel.Parameters launchWheelFrontParams;
+        final LauncherWheel.Parameters launchWheelBackParams;
         final LauncherGate.Parameters launchGateParams;
         final MotorIntake.Parameters motorIntakeParams;
     }
@@ -94,7 +97,8 @@ public class Robot25 {
     public final RRMecanumDrive drive;
     public final FriendlyIMU imu;
 
-    public final LauncherWheel launchWheel;
+    public final LauncherWheel launchWheelFront;
+    public final LauncherWheel launchWheelBack;
     public final LauncherGate launchGate;
     public final MotorIntake motorIntake;
 
@@ -128,10 +132,16 @@ public class Robot25 {
         }
 
 
-        if (parameters.launchWheelParams.present) {
-            launchWheel = new LauncherWheelImpl(parameters.launchWheelParams);
+        if (parameters.launchWheelFrontParams.present) {
+            launchWheelFront = new LauncherWheelImpl(parameters.launchWheelFrontParams);
         } else {
-            launchWheel = new LauncherWheelBlank();
+            launchWheelFront = new LauncherWheelBlank();
+        }
+
+        if (parameters.launchWheelBackParams.present) {
+            launchWheelBack = new LauncherWheelImpl(parameters.launchWheelBackParams);
+        } else {
+            launchWheelBack = new LauncherWheelBlank();
         }
 
         if (parameters.launchGateParams.present) {
@@ -169,7 +179,8 @@ public class Robot25 {
         drive.update();
         imu.update();
 
-        launchWheel.update();
+        launchWheelFront.update();
+        launchWheelBack.update();
         launchGate.update();
         motorIntake.update();
     }

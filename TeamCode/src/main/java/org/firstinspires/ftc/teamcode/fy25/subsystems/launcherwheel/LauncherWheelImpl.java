@@ -9,12 +9,18 @@ public class LauncherWheelImpl implements LauncherWheel {
     DcMotorEx motor;
     double motorTPR;
     double launchVel;
+    final boolean isDynamic;
     final double tolerance;
+    final double spinFactor = 1.25; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
+    final double distanceCoef = 1; // coefficient of distance in spin calculation
+
+    // TODO: calibrate spinFactor and distanceCoef
 
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
         motor = parameters.motor;
         motorTPR = parameters.motorTPR;
         launchVel = (parameters.velocityRPM * motorTPR) / 60;
+        isDynamic = parameters.isDynamic;
         tolerance = parameters.velocityTolerance;
     }
 
@@ -56,6 +62,15 @@ public class LauncherWheelImpl implements LauncherWheel {
 //        } else {
 //            return State.RUNOUT;
 //        }
+    }
+
+    @Override
+    public void fixLaunchSpin(double distance) {
+        if (isDynamic) {
+            double rpm = launchVel;
+            rpm = 6000 / (spinFactor * ((distance / distanceCoef) + 1));
+            setLaunchRPM(rpm);
+        }
     }
 
     @Override

@@ -15,13 +15,16 @@ public class StarterBotState25 {
     private RotaryIntake.State intakeState = RotaryIntake.State.NONE;
     private MotorIntake.State motorIntakeState = MotorIntake.State.NONE;
     //    private LauncherWheel.State launcherWheelState = LauncherWheel.State.STOPPED;
-    private boolean runLaunchWheel;
+    private boolean runLaunchWheelFront;
+    private boolean runLaunchWheelBack;
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
 
     private double maxDriveSpeed = 1;
 
     private boolean squareUp = false;
     private boolean brake = false;
+
+    private double distance = 0;
 
     public DTS getDts() {
         return dts;
@@ -47,12 +50,20 @@ public class StarterBotState25 {
 //
 //    public LauncherWheel.State getLauncherWheelState() {return launcherWheelState;}
 
-    public boolean isRunLaunchWheel() {
-        return runLaunchWheel;
+    public boolean isRunLaunchWheelFront() {
+        return runLaunchWheelFront;
     }
 
-    public void setRunLaunchWheel(boolean runLaunchWheel) {
-        this.runLaunchWheel = runLaunchWheel;
+    public boolean isRunLaunchWheelBack() {
+        return runLaunchWheelBack;
+    }
+
+    public void setRunLaunchWheelFront(boolean runLaunchWheelFront) {
+        this.runLaunchWheelFront = runLaunchWheelFront;
+    }
+
+    public void setRunLaunchWheelBack(boolean runLaunchWheelBack) {
+        this.runLaunchWheelBack = runLaunchWheelBack;
     }
 
     public void setLauncherGateState(LauncherGate.State state) {launcherGateState = state;}
@@ -84,4 +95,16 @@ public class StarterBotState25 {
     public void setBrake(boolean brake) {
         this.brake = brake;
     }
+
+    public void incrementDistance(double value) {
+        if (distance + value >= 0) {
+            distance += value;
+        }
+    }
+
+    public void zeroDistance() {
+        distance = 0;
+    }
+
+    public double getDistance() {return distance;}
 }

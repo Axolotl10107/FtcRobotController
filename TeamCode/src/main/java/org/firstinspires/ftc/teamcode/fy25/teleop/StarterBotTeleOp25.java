@@ -118,12 +118,17 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData("Intake", controlState.getIntakeState());
         telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
 //        telemetry.addData("Launch Wheel", controlState.getLauncherWheelState());
-        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheel());
+        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheelFront());
 
-        if (controlState.isRunLaunchWheel()) {
-            robot.launchWheel.spinUp();
+        robot.launchWheelFront.fixLaunchSpin(controlState.getDistance());
+        robot.launchWheelBack.fixLaunchSpin(controlState.getDistance());
+
+        if (controlState.isRunLaunchWheelFront()) {
+            robot.launchWheelFront.spinUp();
+            robot.launchWheelBack.spinUp();
         } else {
-            robot.launchWheel.spinDown();
+            robot.launchWheelFront.spinDown();
+            robot.launchWheelBack.spinDown();
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {

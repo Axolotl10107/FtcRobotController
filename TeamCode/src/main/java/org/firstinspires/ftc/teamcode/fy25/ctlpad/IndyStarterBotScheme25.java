@@ -51,6 +51,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button squareUpButton;
     private final Button brakeButton;
 
+    private final Button distanceUpButton;
+    private final Button distanceDownButton;
+    private final Button distanceZeroButton;
+
     private final Axis armFast;
     private final Axis armMedium;
     private final Axis armSlow;
@@ -82,6 +86,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
         squareUpButton = new TriggerButton( () -> driver.left_bumper );
         brakeButton = new TriggerButton( () -> driver.x );
+
+        distanceUpButton = new MomentaryButton(() -> manipulator.dpad_right);
+        distanceDownButton = new MomentaryButton(() -> manipulator.dpad_left);
+        distanceZeroButton = new MomentaryButton(() -> manipulator.x);
 
         armFast = new LinearAxis( () -> -manipulator.left_stick_y); // analog stick y-axes need to be negated
         armMedium = new MergedAxis( new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_left ), -ARM_MEDIUM_SPEED ), new ButtonAsAxis( new MomentaryButton( () -> manipulator.dpad_right ), ARM_MEDIUM_SPEED ) );
@@ -144,8 +152,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
-    private void updateLauncherWheelState() {
-        state.setRunLaunchWheel(launcherWheelSpinUp.isActive());
+    private void updateLauncherWheelFrontState() {
+        state.setRunLaunchWheelFront(launcherWheelSpinUp.isActive());
 
 //        if (launcherWheelSpinUp.isActive()) {
 //            state.setRunLaunchWheel(true);
@@ -158,6 +166,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        } else {
 //            state.setLauncherWheelState(LauncherWheel.State.STOPPED);
 //        }
+    }
+
+    private void updateLauncherWheelBackState() {
+        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
     }
 
     private void updateLauncherGateState() {
@@ -188,6 +200,18 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         state.setBrake( brakeButton.isActive() );
     }
 
+    private void updateDistanceState() {
+        if (distanceUpButton.isActive()) {
+            state.incrementDistance(1);
+        } else if (distanceDownButton.isActive()) {
+            state.incrementDistance(-1);
+        }
+
+        if (distanceZeroButton.isActive()) {
+            state.zeroDistance();
+        }
+    }
+
     @Override
     public StarterBotState25 getState() {
         armMovementSet = false;
@@ -210,7 +234,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateSquareUpState();
         updateBrakeState();
         updateLauncherGateState();
-        updateLauncherWheelState();
+        updateLauncherWheelFrontState();
+        updateLauncherWheelBackState();
+        updateDistanceState();
 
         return state;
     }
