@@ -1,0 +1,15 @@
+{
+  "Version": 1,
+  "Season": "",
+  "Bases": [
+    "rotaryintake"
+  ],
+  "Extensions": [],
+  "Methods": {
+    "setClawState": [
+      "void setIntakeState() {",
+      "<~all:Set Intake State>",
+      "}"
+    ]
+  }
+}

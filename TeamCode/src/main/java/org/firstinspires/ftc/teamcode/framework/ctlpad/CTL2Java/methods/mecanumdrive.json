@@ -43,6 +43,7 @@
     "setMaxDriveSpeed": [
       "void setMaxDriveSpeed() {",
       "<~all:Change Max. Drive Power>",
+      "<~all:Set Max. Drive Power>",
       "}"
     ]
   }

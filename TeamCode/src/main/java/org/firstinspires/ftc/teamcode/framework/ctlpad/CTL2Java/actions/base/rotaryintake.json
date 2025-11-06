@@ -1,0 +1,25 @@
+{
+  "Version": 1,
+
+  "Season": "fy24",
+
+  "Actions": {
+
+    "Set Rotary Intake State": {
+      "Type": "Button",
+      "Parameters": {
+        "State": {
+          "Type": "Enum",
+          "Value": "RotaryIntake.State.STOPPED"
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "state.setIntakeState( <~param:State> );",
+        "}"
+      ]
+    }
+
+  }
+
+}

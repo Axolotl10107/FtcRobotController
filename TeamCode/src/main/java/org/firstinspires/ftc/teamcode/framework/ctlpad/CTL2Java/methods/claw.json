@@ -1,0 +1,15 @@
+{
+  "Version": 1,
+  "Season": "",
+  "Bases": [
+    "claw"
+  ],
+  "Extensions": [],
+  "Methods": {
+    "setClawState": [
+      "void setClawState() {",
+      "<~all:Set Claw State>",
+      "}"
+    ]
+  }
+}
