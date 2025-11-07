@@ -52,16 +52,16 @@ Subsystem
         ◦ Value: 1.0
         ◦ Description: The max. drive power to set
 
-LauncherWheel
-    • Name: Spin Up
+[DONE] LauncherWheel
+    • [DONE] Name: Spin Up
     • Type: Button
     • Description: Spin up the launch wheel
 
-    • Name: Spin Down
+    • [DONE] Name: Spin Down
     • Type: Button
     • Description: Spin down the launch wheel
 
-    • Name: Change Launch Velocity
+    • [DONE] Name: Change Launch Velocity
     • Type: Button
     • Description: Change the launch velocity by a certain amount
     • Parameters:
@@ -69,7 +69,7 @@ LauncherWheel
         ◦ Value: 20.0
         ◦ Description: The amount (in ticks per second) to change the launch velocity by
 
-    • Name: Set Launch Velocity
+    • [DONE] Name: Set Launch Velocity
     • Type: Button
     • Description: Set the launch velocity to a certain amount
     • Parameters:
@@ -77,12 +77,12 @@ LauncherWheel
         ◦ Value: 200.0
         ◦ Description: The launch velocity (in ticks per second) to set
 
-LauncherGate
-    • Name: Open Launch Gate
+[DONE] LauncherGate
+    • [DONE] Name: Open Launch Gate
     • Type: Button
     • Description: Open the launch gate, feeding an item to the launch wheel
 
-    • Name: Close Launch Gate
+    • [DONE] Name: Close Launch Gate
     • Type: Button
     • Description: Close the launch gate
 

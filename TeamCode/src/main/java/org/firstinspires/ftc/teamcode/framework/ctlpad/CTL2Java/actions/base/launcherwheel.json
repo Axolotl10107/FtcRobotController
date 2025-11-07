@@ -1,0 +1,50 @@
+{
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Actions": {
+
+    "Spin Up": {
+      "Type": "Button",
+      "Code": [
+        "state.setRunLaunchWheel( true );"
+      ]
+    },
+
+    "Spin Down": {
+      "Type": "Button",
+      "Code": [
+        "state.setRunLaunchWheel( false );"
+      ]
+    },
+
+    "Change Launch Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "By": {
+          "Type": "double",
+          "Value": "20.0"
+        }
+      },
+      "Code": [
+        "state.setLaunchVel( state.getLaunchVel() + <~param:By> );"
+      ]
+    },
+
+    "Set Launch Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "Velocity": {
+          "Type": "double",
+          "Value": "200.0"
+        }
+      },
+      "Code": [
+        "state.setLaunchVel( <~param:Velocity> );"
+      ]
+    }
+
+  }
+
+}

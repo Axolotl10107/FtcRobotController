@@ -1,15 +1,23 @@
 {
+
   "Version": 1,
-  "Season": "",
+
+  "Season": "fy24",
+
   "Bases": [
     "rotaryintake"
   ],
+
   "Extensions": [],
+
   "Methods": {
+
     "setClawState": [
       "void setIntakeState() {",
       "<~all:Set Intake State>",
       "}"
     ]
+
   }
+
 }

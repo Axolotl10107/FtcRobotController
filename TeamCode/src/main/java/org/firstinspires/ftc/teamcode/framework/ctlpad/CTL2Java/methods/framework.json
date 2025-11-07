@@ -1,15 +1,23 @@
 {
+
   "Version": 1,
+
   "Season": "",
+
   "Bases": [
     "framework"
   ],
+
   "Extensions": [],
+
   "Methods": {
+
     "setSquareUp": [
       "void setSquareUp() {",
       "<~all:Square Up>",
       "}"
     ]
+
   }
+
 }

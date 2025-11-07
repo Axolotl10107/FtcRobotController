@@ -1,0 +1,50 @@
+{
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Actions": {
+
+    "Spin Motor Intake In": {
+      "Type": "Button",
+      "Code": [
+        "state.setMotorIntakeState( MotorIntake.State.RUNIN );"
+      ]
+    },
+
+    "Spin Motor Intake Out": {
+      "Type": "Button",
+      "Code": [
+        "state.setMotorIntakeState( MotorIntake.State.RUNOUT );"
+      ]
+    },
+
+    "Change Motor Intake Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "By": {
+          "Type": "double",
+          "Value": "20.0"
+        }
+      },
+      "Code": [
+        "state.setIntakeVel( state.getIntakeVel() + <~param:By> );"
+      ]
+    },
+
+    "Set Motor Intake Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "Velocity": {
+          "Type": "double",
+          "Value": "200.0"
+        }
+      },
+      "Code": [
+        "state.setIntakeVel( <~param:Velocity> );"
+      ]
+    }
+
+  }
+
+}

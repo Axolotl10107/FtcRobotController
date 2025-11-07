@@ -1,11 +1,17 @@
 {
+
   "Version": 1,
+
   "Season": "",
+
   "Bases": [
     "strafer"
   ],
+
   "Extensions": [],
+
   "Methods": {
+
     "<~indy>setDts": [
       "void setDts() {",
       "\tdouble drive = 0;",
@@ -23,6 +29,7 @@
       "\tstate.setDts( new DTS( drive, turn, strafe ) );",
       "}"
     ],
+
     "<~fieldy>setDts": [
       "void setDts() {",
       "\tdouble drive = 0;",
@@ -40,11 +47,14 @@
       "\tstate.setDts( new DTS( drive, turn, strafe ).rotate(imu.yaw()) );",
       "}"
     ],
+
     "setMaxDriveSpeed": [
       "void setMaxDriveSpeed() {",
       "<~all:Change Max. Drive Power>",
       "<~all:Set Max. Drive Power>",
       "}"
     ]
+
   }
+
 }

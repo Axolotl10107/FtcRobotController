@@ -19,6 +19,25 @@ public class StarterBotState25 {
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
 
     private double maxDriveSpeed = 1;
+    private double launchVel = 168000.0;
+
+    public double getIntakeVel() {
+        return intakeVel;
+    }
+
+    public void setIntakeVel(double intakeVel) {
+        this.intakeVel = intakeVel;
+    }
+
+    public double getLaunchVel() {
+        return launchVel;
+    }
+
+    public void setLaunchVel(double launchVel) {
+        this.launchVel = launchVel;
+    }
+
+    private double intakeVel = 2000.0;
 
     private boolean squareUp = false;
     private boolean brake = false;
