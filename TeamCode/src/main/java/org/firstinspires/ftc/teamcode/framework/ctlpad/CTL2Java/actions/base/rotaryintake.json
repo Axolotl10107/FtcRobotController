@@ -15,7 +15,7 @@
       },
       "Code": [
         "if ( <~myname>.isActive() ) {",
-        "state.setIntakeState( <~param:State> );",
+        "\tstate.setIntakeState( <~param:State> );",
         "}"
       ]
     }

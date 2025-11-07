@@ -8,14 +8,18 @@
     "Spin Motor Intake In": {
       "Type": "Button",
       "Code": [
-        "state.setMotorIntakeState( MotorIntake.State.RUNIN );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setMotorIntakeState( MotorIntake.State.RUNIN );",
+        "}"
       ]
     },
 
     "Spin Motor Intake Out": {
       "Type": "Button",
       "Code": [
-        "state.setMotorIntakeState( MotorIntake.State.RUNOUT );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setMotorIntakeState( MotorIntake.State.RUNOUT );",
+        "}"
       ]
     },
 
@@ -28,7 +32,9 @@
         }
       },
       "Code": [
-        "state.setIntakeVel( state.getIntakeVel() + <~param:By> );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setIntakeVel( state.getIntakeVel() + <~param:By> );",
+        "}"
       ]
     },
 
@@ -41,7 +47,9 @@
         }
       },
       "Code": [
-        "state.setIntakeVel( <~param:Velocity> );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setIntakeVel( <~param:Velocity> );",
+        "}"
       ]
     }
 

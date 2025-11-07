@@ -8,14 +8,18 @@
     "Spin Up": {
       "Type": "Button",
       "Code": [
-        "state.setRunLaunchWheel( true );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setRunLaunchWheel( true );",
+        "}"
       ]
     },
 
     "Spin Down": {
       "Type": "Button",
       "Code": [
-        "state.setRunLaunchWheel( false );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setRunLaunchWheel( false );",
+        "}"
       ]
     },
 
@@ -28,7 +32,9 @@
         }
       },
       "Code": [
-        "state.setLaunchVel( state.getLaunchVel() + <~param:By> );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLaunchVel( state.getLaunchVel() + <~param:By> );",
+        "}"
       ]
     },
 
@@ -41,7 +47,9 @@
         }
       },
       "Code": [
-        "state.setLaunchVel( <~param:Velocity> );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLaunchVel( <~param:Velocity> );",
+        "}"
       ]
     }
 

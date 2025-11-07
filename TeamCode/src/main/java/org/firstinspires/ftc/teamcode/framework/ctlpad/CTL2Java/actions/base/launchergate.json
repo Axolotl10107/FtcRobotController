@@ -9,14 +9,18 @@
     "Open Launch Gate": {
       "Type": "Button",
       "Code": [
-        "state.setLauncherGateState( LauncherGate.State.OPEN );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLauncherGateState( LauncherGate.State.OPEN );",
+        "}"
       ]
     },
 
     "Close Launch Gate": {
       "Type": "Button",
       "Code": [
-        "state.setLauncherGateState( LauncherGate.State.CLOSED );"
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLauncherGateState( LauncherGate.State.CLOSED );",
+        "}"
       ]
     }
 

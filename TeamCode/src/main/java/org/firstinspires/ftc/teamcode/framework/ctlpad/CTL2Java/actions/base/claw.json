@@ -15,7 +15,7 @@
       },
       "Code": [
         "if ( <~myname>.isActive() ) {",
-        "state.setClawState( <~param:State> );",
+        "\tstate.setClawState( <~param:State> );",
         "}"
       ]
     }
