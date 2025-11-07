@@ -8,7 +8,7 @@
         "<~tc>.framework.subsystems.rotaryintake.RotaryIntake"
     ],
     "Setters" : [
-        "setDts",
+        "<~dt>setDts",
         "setArmMovement",
         "setElevatorMovement",
         "setClawState",

@@ -5,7 +5,7 @@
 
   "Actions": {
 
-    "Spin Motor Intake In": {
+    "Spin In": {
       "Type": "Button",
       "Code": [
         "if ( <~myname>.isActive() ) {",
@@ -14,7 +14,7 @@
       ]
     },
 
-    "Spin Motor Intake Out": {
+    "Spin Out": {
       "Type": "Button",
       "Code": [
         "if ( <~myname>.isActive() ) {",

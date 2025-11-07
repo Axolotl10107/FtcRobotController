@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode.fy25.ctlpad;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 /** Stores the state of the controls. The control scheme updates this, then the OpMode reads it.
  * This effectively maps buttons to actions. This edition is for 2025-26 Decode. */

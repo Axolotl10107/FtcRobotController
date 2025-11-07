@@ -11,9 +11,7 @@ import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 @TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
 public class StarterBotTeleOp25 extends OpMode {

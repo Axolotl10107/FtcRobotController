@@ -1,0 +1,31 @@
+{
+
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Bases": [
+    "motorintake"
+  ],
+
+  "Extensions": [],
+
+  "Methods": {
+
+    "setIntakeVel": [
+      "void setIntakeVel() {",
+      "<~all:Change Motor Intake Velocity>",
+      "<~all:Set Motor Intake Velocity>",
+      "}"
+    ],
+
+    "setMotorIntakeState": [
+      "void setMotorIntakeState() {",
+      "<~all:Spin In>",
+      "<~all:Spin Out>",
+      "}"
+    ]
+
+  }
+
+}

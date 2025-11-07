@@ -22,7 +22,7 @@
     "setLaunchVel": [
       "void setLaunchVel() {",
       "<~all:Change Launch Velocity>",
-      "<~all:Set Launch Velocity",
+      "<~all:Set Launch Velocity>",
       "}"
     ]
 
