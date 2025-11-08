@@ -127,6 +127,7 @@ public class StarterBotTeleOp25 extends OpMode {
         } else {
             robot.launchWheelFront.spinDown();
             robot.launchWheelBack.spinDown();
+            robot.launchWheelBack.denyEntry();
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {
@@ -137,8 +138,6 @@ public class StarterBotTeleOp25 extends OpMode {
 
         if (controlState.getIntakeState() == RotaryIntake.State.RUNIN) {
             robot.motorIntake.spinIn();
-        } else if (controlState.getIntakeState() == RotaryIntake.State.RUNOUT) {
-            robot.motorIntake.spinOut();
         } else {
             robot.motorIntake.stop();
         }

@@ -65,6 +65,8 @@ public interface LauncherWheel {
 
     void fixLaunchSpin(double distance);
 
+    void denyEntry();
+
     /** Get the current velocity of the launch wheel. */
     double getLaunchRPM();
 

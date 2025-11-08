@@ -12,12 +12,9 @@ public class MotorIntakeImpl implements MotorIntake{
     final double tolerance = 20;
     State state = State.NONE;
 
-    Telemetry telemetry;
-
     public MotorIntakeImpl(Parameters parameters) {
         motor = parameters.motor;
         intakeVel = parameters.IntakeTPS;
-        telemetry = TelemetrySingleton.getInstance();
     }
 
     @Override
@@ -52,6 +49,5 @@ public class MotorIntakeImpl implements MotorIntake{
 
     @Override
     public void update() {
-        telemetry.addData("Intake Motor", motor.getVelocity());
     }
 }

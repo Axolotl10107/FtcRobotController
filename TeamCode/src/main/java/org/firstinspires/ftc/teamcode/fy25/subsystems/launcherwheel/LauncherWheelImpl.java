@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class LauncherWheelImpl implements LauncherWheel {
 
     DcMotorEx motor;
     double motorTPR;
     double launchVelBase;
-    double launchVel = launchVelBase;
+    double launchVel;
 
     double launchVelTarget;
     final boolean isDynamic;
@@ -21,18 +22,21 @@ public class LauncherWheelImpl implements LauncherWheel {
         motor = parameters.motor;
         motorTPR = parameters.motorTPR;
         launchVelBase = (parameters.velocityRPM * motorTPR) / 60;
+        launchVel = launchVelBase;
         isDynamic = parameters.isDynamic;
         tolerance = parameters.velocityTolerance;
     }
 
     @Override
     public void spinUp() {
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = launchVel;
         motor.setMotorEnable();
     }
 
     @Override
     public void spinDown() {
+        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = 0;
         motor.setMotorDisable();
     }
@@ -70,6 +74,13 @@ public class LauncherWheelImpl implements LauncherWheel {
         } else {
             launchVel = launchVelBase;
         }
+    }
+
+    @Override
+    public void denyEntry() {
+        motor.setMotorEnable();
+        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setVelocity(500);
     }
 
     @Override
