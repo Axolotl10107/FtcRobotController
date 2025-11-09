@@ -18,8 +18,6 @@ public interface LauncherWheel {
         STOPPED,
         /** Launch wheel is not behaving as it should */
         ERROR
-//        STOPPED,
-//        RUNOUT
     }
 
     /** You must set some of these if this subsystem is present. */
@@ -39,6 +37,9 @@ public interface LauncherWheel {
 
         /** The <b>velocity</b> at which the launch wheel will run, in <b>revolutions per minute</b>. Defaults to 0. */
         public double velocityRPM = 0;
+
+        /** The velocity to run at when denyEntry() is called. */
+        public double denyVel = 0;
 
         /** The tolerance around the launch velocity, within which the wheel can be considered READY, in <b>ticks per second</b>. Defaults to 20. */
         public double velocityTolerance = 20;

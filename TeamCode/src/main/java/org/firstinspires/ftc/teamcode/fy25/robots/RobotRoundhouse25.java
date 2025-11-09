@@ -171,6 +171,7 @@ public class RobotRoundhouse25 {
         launchWheelBackParams.velocityRPM = 6000;
         launchWheelBackParams.velocityTolerance = 20;
         launchWheelBackParams.motorTPR = 28;
+        launchWheelBackParams.denyVel = -500;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
 //        launchGateParams.deviceClass = DcMotorEx.class;
@@ -264,6 +265,7 @@ public class RobotRoundhouse25 {
         launchWheelBackParams.velocityRPM = 6000;
         launchWheelBackParams.velocityTolerance = 20;
         launchWheelBackParams.motorTPR = 28;
+        launchWheelBackParams.denyVel = -500;
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
