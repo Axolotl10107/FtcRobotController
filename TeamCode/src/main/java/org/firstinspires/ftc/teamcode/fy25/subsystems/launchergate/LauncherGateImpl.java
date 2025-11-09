@@ -2,14 +2,11 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
-
-public class LauncherGateMotorImpl implements LauncherGate {
+public class LauncherGateImpl implements LauncherGate {
     DcMotorSimple motor;
     double gatePower;
 
-    public LauncherGateMotorImpl(Parameters parameters) {
+    public LauncherGateImpl(Parameters parameters) {
         motor = parameters.device;
         gatePower = parameters.power;
     }

@@ -145,17 +145,7 @@ public class Robot25 {
         }
 
         if (parameters.launchGateParams.present) {
-//            Class deviceClass = parameters.launchGateParams.deviceClass;
-//            if (deviceClass.equals(Servo.class)) {
-//                launchGate = new LauncherGateServoImpl(parameters.launchGateParams);
-//            } else if (deviceClass.equals(CRServo.class)) {
-//                launchGate = new LauncherGateCRServoImpl(parameters.launchGateParams);
-//            } else if (deviceClass.equals(DcMotorEx.class)) {
-//                launchGate = new LauncherGateMotorImpl(parameters.launchGateParams);
-//            } else {
-//                throw new InvalidDeviceClassException("launchGateParams.deviceClass must be 'Servo.class', 'CRServo.class', or 'DcMotorEx.class'.");
-//            }
-            launchGate = new LauncherGateMotorImpl(parameters.launchGateParams);
+            launchGate = new LauncherGateImpl(parameters.launchGateParams);
         } else {
             launchGate = new LauncherGateBlank();
         }
