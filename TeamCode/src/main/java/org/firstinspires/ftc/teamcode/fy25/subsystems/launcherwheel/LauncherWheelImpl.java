@@ -29,14 +29,14 @@ public class LauncherWheelImpl implements LauncherWheel {
 
     @Override
     public void spinUp() {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+//        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = launchVel;
         motor.setMotorEnable();
     }
 
     @Override
     public void spinDown() {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
+//        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = 0;
         motor.setMotorDisable();
     }
@@ -79,8 +79,8 @@ public class LauncherWheelImpl implements LauncherWheel {
     @Override
     public void denyEntry() {
         motor.setMotorEnable();
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor.setVelocity(500);
+//        motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        motor.setVelocity(-500);
     }
 
     @Override
