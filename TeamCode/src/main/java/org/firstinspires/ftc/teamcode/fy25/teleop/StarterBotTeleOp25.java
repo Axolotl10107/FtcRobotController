@@ -18,21 +18,14 @@ public class StarterBotTeleOp25 extends OpMode {
     Robot25 robot;
     IMUCorrector imuCorrector;
     IndyStarterBotScheme25 controlScheme;
-    double maxDrivePower = 1.0;
 
     @Override
     public void init() {
         TelemetrySingleton.setInstance(telemetry);
 
-//        try {
-//            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
-//        } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
-//            throw new RuntimeException(e);
-//        }
-
         try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
+            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
+        } catch (RobotRoundhouse25.OldRobotException e) {
             throw new RuntimeException(e);
         }
 
@@ -48,14 +41,9 @@ public class StarterBotTeleOp25 extends OpMode {
 
     @Override
     public void loop() {
-//        telemetry.addData("Place", "Loop start");
-//        telemetry.update();
 
         double currentHeading = robot.imu.yaw();
         StarterBotState25 controlState = controlScheme.getState();
-
-//        telemetry.addData("Place", "Got controls state");
-//        telemetry.update();
 
         // MecanumDrive
         DTS dts = controlState.getDts();
@@ -70,64 +58,28 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData("Actual Strafe", scaledDTS.strafe);
         robot.drive.applyDTS( scaledDTS );
 
-//        telemetry.addData("Place", "Handled DTS");
-//        telemetry.update();
-//        telemetry.addData("Square up?", controlState.isSquareUp());
-//        telemetry.update();
-//
-//        // IMUcorrector - square up
-//        if ( controlState.isSquareUp() ) {
-//            imuCorrector.squareUp();
-//        }
-
-//        telemetry.addData("Place", "Handled square up");
-//        telemetry.update();
-
         // Brake
         if ( controlState.isBrake() ) {
             robot.drive.applyDTS( new DTS( 0, 0, 0 ) );
         }
 
-//        telemetry.addData("Place", "Handled brake");
-//        telemetry.update();
-
-        // Manipulator
-//        robot.claw.setState( controlState.getClawState() );
-
-//        telemetry.addData("Place", "Handled claw");
-//        telemetry.update();
-
-        // PixelArm
-//        robot.arm.setPivotPower( controlState.getArmMovement() );
-//        robot.arm.setElevatorPower( controlState.getElevatorMovement() );
-
-//        telemetry.addData("Place", "Handled arm");
-//        telemetry.update();
-
         robot.update();
-
-//        telemetry.addData("Place", "Ran robot.update()");
-//        telemetry.update();
 
         // telemetry
         telemetry.addData( "Max. Drive Power", controlState.getMaxDriveSpeed() );
         telemetry.addData( "Current Heading", currentHeading );
         telemetry.addData("Intake", controlState.getIntakeState());
         telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
-        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheelFront());
-        telemetry.addData("Launch Motor Front", robot.launchWheelFront.getLaunchVelTarget());
-        telemetry.addData("Launch Motor Back", robot.launchWheelBack.getLaunchVelTarget());
+        telemetry.addData("Run Launch Wheel Requested?", controlState.isRunLaunchWheel());
+        telemetry.addData("Launch Wheel Velocity", robot.launchWheel.getLaunchVelTarget());
         telemetry.addData("Distance", controlState.getDistance());
-        robot.launchWheelFront.fixLaunchSpin(controlState.getDistance());
-        robot.launchWheelBack.fixLaunchSpin(controlState.getDistance());
+        robot.launchWheel.fixLaunchSpin(controlState.getDistance());
 
-        if (controlState.isRunLaunchWheelFront()) {
-            robot.launchWheelFront.spinUp();
-            robot.launchWheelBack.spinUp();
+        if (controlState.isRunLaunchWheel()) {
+            robot.launchWheel.spinUp();
         } else {
-            robot.launchWheelFront.spinDown();
-            robot.launchWheelBack.spinDown();
-            robot.launchWheelBack.denyEntry();
+            robot.launchWheel.spinDown();
+            robot.launchWheel.denyEntry();
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualCRServo;
+import org.firstinspires.ftc.teamcode.framework.adapters.DualDcMotorEx;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
@@ -58,8 +59,7 @@ public class RobotRoundhouse25 {
             case "10107-A-RC":
                 return getRobotAParams(hardwareMap);
             case "10107-B-RC":
-//                return getRobotBParams(hardwareMap);
-                throw new OldRobotException("Please use getRobotBParams() for the fy24 bot!");
+                return getRobotBParams(hardwareMap);
             default:
                 return getRobotAParams(hardwareMap);
         }
@@ -77,7 +77,7 @@ public class RobotRoundhouse25 {
     /** Detects which physical robot you're running on and returns the correct Robot Object.
      * Note: Doesn't work on virtual_robot.
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public static Robot25 getRobotAuto(HardwareMap hardwareMap) throws OldRobotException, Robot25.InvalidDeviceClassException {
+    public static Robot25 getRobotAuto(HardwareMap hardwareMap) throws OldRobotException {
         return new Robot25(RobotRoundhouse25.getParamsAuto(hardwareMap), hardwareMap);
     }
 
@@ -151,31 +151,22 @@ public class RobotRoundhouse25 {
         );
 
 
-        LauncherWheel.Parameters launchWheelFrontParams = new LauncherWheel.Parameters(true);
-        LauncherWheel.Parameters launchWheelBackParams = new LauncherWheel.Parameters(true);
-        DcMotorEx launchMotorFront = hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront");
-        DcMotorEx launchMotorBack = hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack");
-        launchMotorFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        launchMotorBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        launchMotorFront.setDirection(FORWARD);
-        launchMotorBack.setDirection(FORWARD);
-        launchWheelFrontParams.motor = launchMotorFront;
-        launchWheelBackParams.motor = launchMotorBack;
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        DcMotorEx launchWheelMotor = new DualDcMotorEx(
+                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront"),
+                hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack")
+        );
+        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launchWheelParams.motor = launchWheelMotor;
+        launchWheelParams.isDynamic = false;
         // TODO: Tune default launch wheel velocity
-        launchWheelFrontParams.isDynamic = false;
-        launchWheelFrontParams.velocityRPM = 6000; // Flipped to RPM for easier use
-        launchWheelFrontParams.velocityTolerance = 20;
-        launchWheelFrontParams.motorTPR = 28;
-
-        launchWheelBackParams.isDynamic = false;
-        launchWheelBackParams.velocityRPM = 6000;
-        launchWheelBackParams.velocityTolerance = 20;
-        launchWheelBackParams.motorTPR = 28;
-        launchWheelBackParams.denyVel = -500;
+        launchWheelParams.velocityRPM = 6000;
+        launchWheelParams.velocityTolerance = 20;
+        launchWheelParams.motorTPR = 28;
+        launchWheelParams.denyVel = -500;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-//        launchGateParams.deviceClass = DcMotorEx.class;
-        launchGateParams.device = hardwareMap.get(DcMotorEx.class, "launchGateMotor");
+        launchGateParams.device = hardwareMap.get(DcMotorSimple.class, "launchGateMotor");
         launchGateParams.power = 1;
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
@@ -191,8 +182,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
-                launchWheelFrontParams,
-                launchWheelBackParams,
+                launchWheelParams,
                 launchGateParams,
                 motorIntakeParams
         );
@@ -203,7 +193,7 @@ public class RobotRoundhouse25 {
 // ---------------------------------------------------------------------------------------------------------------------
 
     /** Returns the Parameters for RobotB.
-     * RobotB is the Starter Bot from Scrap.
+     * RobotB is the Starter Bot from Scrap (so make these match that testbed, <i>not</i> the competition robot!).
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
     public static Robot25.Parameters getRobotBParams(HardwareMap hardwareMap) {
 
@@ -247,29 +237,17 @@ public class RobotRoundhouse25 {
         // the rest of the defaults in RRMecanumDrive.Parameters should work here
 
 
-        LauncherWheel.Parameters launchWheelFrontParams = new LauncherWheel.Parameters(true);
-        LauncherWheel.Parameters launchWheelBackParams = new LauncherWheel.Parameters(true);
-        DcMotorEx launchMotorFront = hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront");
-        DcMotorEx launchMotorBack = hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack");
-        launchMotorFront.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        launchMotorBack.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        launchMotorFront.setDirection(REVERSE);
-        launchMotorBack.setDirection(FORWARD);
-        launchWheelFrontParams.motor = launchMotorFront;
-        launchWheelBackParams.motor = launchMotorBack;
-        // TODO: Tune default launch wheel velocity'
-        launchWheelFrontParams.velocityRPM = 6000; // Flipped to RPM for easier use
-        launchWheelFrontParams.velocityTolerance = 20;
-        launchWheelFrontParams.motorTPR = 28;
-
-        launchWheelBackParams.velocityRPM = 6000;
-        launchWheelBackParams.velocityTolerance = 20;
-        launchWheelBackParams.motorTPR = 28;
-        launchWheelBackParams.denyVel = -500;
-
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        DcMotorEx launchWheelMotor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        launchWheelParams.motor = launchWheelMotor;
+        launchWheelParams.velocityRPM = 6000;
+        launchWheelParams.velocityTolerance = 20;
+        launchWheelParams.motorTPR = 28;
+        launchWheelParams.isDynamic = false;
+        launchWheelParams.denyVel = -500;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-//        launchGateParams.deviceClass = DcMotorEx.class;
         CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");
         CRServo servoRight = hardwareMap.get(CRServo.class, "launchGateServoRight");
         servoLeft.setDirection(REVERSE);
@@ -291,8 +269,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
-                launchWheelFrontParams,
-                launchWheelBackParams,
+                launchWheelParams,
                 launchGateParams,
                 motorIntakeParams
         );
@@ -358,8 +335,7 @@ public class RobotRoundhouse25 {
         extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
 
 
-        LauncherWheel.Parameters launchWheelFrontParams = new LauncherWheel.Parameters(false);
-        LauncherWheel.Parameters launchWheelBackParams = new LauncherWheel.Parameters(false);
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
@@ -372,8 +348,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
-                launchWheelFrontParams,
-                launchWheelBackParams,
+                launchWheelParams,
                 launchGateParams,
                 motorIntakeParams
         );
@@ -420,15 +395,10 @@ public class RobotRoundhouse25 {
         driveParams.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT;
 
 
-        LauncherWheel.Parameters launchWheelFrontParams = new LauncherWheel.Parameters(true);
-        launchWheelFrontParams.velocityRPM = 537; // about 60 RPM
-        launchWheelFrontParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
-//         LauncherWheel.Parameters launchWheelFrontParams = new LauncherWheel.Parameters(false);
-
-        LauncherWheel.Parameters launchWheelBackParams = new LauncherWheel.Parameters(true);
-        launchWheelBackParams.velocityRPM = 537; // about 60 RPM
-        launchWheelBackParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
-//         LauncherWheel.Parameters launchWheelBackParams = new LauncherWheel.Parameters(false);
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
+        launchWheelParams.velocityRPM = 6000;
+        launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
+//         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
@@ -450,8 +420,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
-                launchWheelFrontParams,
-                launchWheelBackParams,
+                launchWheelParams,
                 launchGateParams,
                 motorIntakeParams
         );

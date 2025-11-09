@@ -7,10 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-
-import java.util.Vector;
 
 @Autonomous(name = "OneLeave")
 public class OneLeave extends LinearOpMode {
@@ -19,17 +16,13 @@ public class OneLeave extends LinearOpMode {
     TrajectorySequence mainTrajSeq;
 
     void spinUp() {
-        robot.launchWheelBack.spinUp();
-        robot.launchWheelFront.spinUp();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinUp();
+        robot.launchWheel.update();
     }
 
     void spinDown() {
-        robot.launchWheelBack.spinDown();
-        robot.launchWheelFront.spinDown();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinDown();
+        robot.launchWheel.update();
     }
 
     void score() {
@@ -54,11 +47,7 @@ public class OneLeave extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
-            throw new RuntimeException(e);
-        }
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
