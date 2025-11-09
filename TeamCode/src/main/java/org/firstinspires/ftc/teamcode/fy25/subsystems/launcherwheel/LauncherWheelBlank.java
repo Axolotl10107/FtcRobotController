@@ -25,9 +25,18 @@ public class LauncherWheelBlank implements LauncherWheel {
     }
 
     @Override
+    public void fixLaunchSpin(double distance) {}
+
+    @Override
+    public void denyEntry() {}
+
+    @Override
     public double getLaunchRPM() {
         return 0;
     }
+
+    @Override
+    public double getLaunchVelTarget() {return 0;}
 
     @Override
     public void update() {

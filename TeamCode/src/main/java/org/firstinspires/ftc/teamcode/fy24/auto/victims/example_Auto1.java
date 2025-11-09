@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.fy24.auto.victims;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.fy24.robots.Robot24;
 import org.firstinspires.ftc.teamcode.fy24.robots.RobotRoundhouse24;
 
+@Disabled
 @Autonomous(name = "example_Auto1")
 public class example_Auto1 extends LinearOpMode {
     Robot24 𒁢;

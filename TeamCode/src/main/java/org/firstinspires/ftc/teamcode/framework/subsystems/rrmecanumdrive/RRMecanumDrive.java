@@ -41,7 +41,7 @@ public interface RRMecanumDrive {
 
         public double WHEEL_RADIUS = 1.88976; // inches (converted from 48mm)
         public double GEAR_RATIO = 1;
-        public double TRACK_WIDTH = 16.25; // wheelbase is about 13.125  // TODO: Check against a *stock* Strafer
+        public double TRACK_WIDTH = 13.75; // wheelbase is about 13.125  // TODO: Check against a *stock* Strafer
 
         public double kV = 1.0 / rpmToVelocity(MAX_RPM);
         public double kA = 0;
@@ -54,9 +54,9 @@ public interface RRMecanumDrive {
         public double MAX_ANG_ACCEL = Math.toRadians(60);
 
         /** The direction the REV logo on your Control Hub faces */
-        public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
         /** The direction the USB port on your Control Hub faces */
-        public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        public RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         public double rpmToVelocity(double rpm) {
             return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;

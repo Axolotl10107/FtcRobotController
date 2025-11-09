@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 
 @TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
 public class StarterBotTeleOp25 extends OpMode {
-
     Robot25 robot;
     IMUCorrector imuCorrector;
     IndyStarterBotScheme25 controlScheme;
@@ -115,13 +114,20 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData( "Current Heading", currentHeading );
         telemetry.addData("Intake", controlState.getIntakeState());
         telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
-//        telemetry.addData("Launch Wheel", controlState.getLauncherWheelState());
-        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheel());
+        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheelFront());
+        telemetry.addData("Launch Motor Front", robot.launchWheelFront.getLaunchVelTarget());
+        telemetry.addData("Launch Motor Back", robot.launchWheelBack.getLaunchVelTarget());
+        telemetry.addData("Distance", controlState.getDistance());
+        robot.launchWheelFront.fixLaunchSpin(controlState.getDistance());
+        robot.launchWheelBack.fixLaunchSpin(controlState.getDistance());
 
-        if (controlState.isRunLaunchWheel()) {
-            robot.launchWheel.spinUp();
+        if (controlState.isRunLaunchWheelFront()) {
+            robot.launchWheelFront.spinUp();
+            robot.launchWheelBack.spinUp();
         } else {
-            robot.launchWheel.spinDown();
+            robot.launchWheelFront.spinDown();
+            robot.launchWheelBack.spinDown();
+            robot.launchWheelBack.denyEntry();
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {
@@ -132,8 +138,6 @@ public class StarterBotTeleOp25 extends OpMode {
 
         if (controlState.getIntakeState() == RotaryIntake.State.RUNIN) {
             robot.motorIntake.spinIn();
-        } else if (controlState.getIntakeState() == RotaryIntake.State.RUNOUT) {
-            robot.motorIntake.spinOut();
         } else {
             robot.motorIntake.stop();
         }

@@ -8,12 +8,10 @@ import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 public class LauncherGateMotorImpl implements LauncherGate {
     DcMotorSimple motor;
     double gatePower;
-    Telemetry telemetry;
 
     public LauncherGateMotorImpl(Parameters parameters) {
         motor = parameters.device;
         gatePower = parameters.power;
-        telemetry = TelemetrySingleton.getInstance();
     }
 
     @Override
