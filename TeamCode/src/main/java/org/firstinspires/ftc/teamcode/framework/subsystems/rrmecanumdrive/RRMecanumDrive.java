@@ -28,11 +28,15 @@ import java.util.List;
  * learn more about those things. */
 public interface RRMecanumDrive {
 
-    /** See the RoadRunner Quickstart's DriveConstants class. The default values model a
+    /** <b>These are defaults! To calibrate your robot, go to RobotRoundhouse.</b>
+     * See the RoadRunner Quickstart's DriveConstants class. The default values model a
      * goBILDA Strafer using drive encoders for velocity control. On real robots, some calibration
-     * will be needed.
-     * Again, these are defaults! To calibrate your robot, go to RobotRoundhouse. */
+     * will be needed. */
     class DriveConstants {
+
+        // !!! THESE ARE DEFAULTS !!!  These do NOT affect your robot.
+        // Calibrate your robot in RobotRoundhouse.
+
         public double TICKS_PER_REV = 537.7;
         public double MAX_RPM = 312;
         public boolean RUN_USING_ENCODER = true;
@@ -41,7 +45,10 @@ public interface RRMecanumDrive {
 
         public double WHEEL_RADIUS = 1.88976; // inches (converted from 48mm)
         public double GEAR_RATIO = 1;
-        public double TRACK_WIDTH = 13.75; // wheelbase is about 13.125  // TODO: Check against a *stock* Strafer
+        public double TRACK_WIDTH = 16.25; // inches
+
+        // !!! THESE ARE DEFAULTS !!!  These do NOT affect your robot.
+        // Calibrate your robot in RobotRoundhouse.
 
         public double kV = 1.0 / rpmToVelocity(MAX_RPM);
         public double kA = 0;
@@ -52,6 +59,9 @@ public interface RRMecanumDrive {
         public double MAX_ACCEL = 50;
         public double MAX_ANG_VEL = Math.toRadians(60);
         public double MAX_ANG_ACCEL = Math.toRadians(60);
+
+        // !!! THESE ARE DEFAULTS !!!  These do NOT affect your robot.
+        // Calibrate your robot in RobotRoundhouse.
 
         /** The direction the REV logo on your Control Hub faces */
         public RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;

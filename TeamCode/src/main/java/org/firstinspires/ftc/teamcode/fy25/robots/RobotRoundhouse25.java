@@ -89,7 +89,7 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
         dc.TICKS_PER_REV = 537.7;
-        dc.MAX_RPM = 117;
+        dc.MAX_RPM = 117; // TODO: Verify this, usually 312 so this is strange
         dc.RUN_USING_ENCODER = true;
         dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
@@ -97,7 +97,8 @@ public class RobotRoundhouse25 {
         dc.WHEEL_RADIUS = 1.88976;
         dc.GEAR_RATIO = 1;
 //        dc.TRACK_WIDTH = 15.9;
-        dc.TRACK_WIDTH = 14; // change for small chassis
+//        dc.TRACK_WIDTH = 14; // change for small chassis
+        dc.TRACK_WIDTH = 13.75; // attempted change relocated from RRMecanumDrive 11-08-25
 
         dc.kV = .017;
         dc.kA = .002;
