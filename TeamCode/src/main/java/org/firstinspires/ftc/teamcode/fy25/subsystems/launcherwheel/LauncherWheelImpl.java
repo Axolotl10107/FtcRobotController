@@ -80,7 +80,7 @@ public class LauncherWheelImpl implements LauncherWheel {
     public void denyEntry() {
         motor.setMotorEnable();
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        motor.setVelocity(500);
+        launchVelTarget = 500;
     }
 
     @Override

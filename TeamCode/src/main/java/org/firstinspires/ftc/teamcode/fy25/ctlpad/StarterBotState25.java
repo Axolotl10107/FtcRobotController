@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIn
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 /** Stores the state of the controls. The control scheme updates this, then the OpMode reads it.
  * This effectively maps buttons to actions. This edition is for 2025-26 Decode. */
@@ -23,6 +22,7 @@ public class StarterBotState25 {
 
     private boolean squareUp = false;
     private boolean brake = false;
+    private boolean isDeny = false;
 
     private double distance = 0;
 
@@ -107,4 +107,8 @@ public class StarterBotState25 {
     }
 
     public double getDistance() {return distance;}
+
+    public void setDenyEntry(boolean b) {isDeny = b;}
+
+    public boolean getDenyEntry() {return isDeny;}
 }
