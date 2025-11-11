@@ -73,7 +73,7 @@ public class LauncherWheelImpl implements LauncherWheel {
     @Override
     public void denyEntry() {
         motor.setMotorEnable();
-        motor.setVelocity(denyVel);
+        launchVelTarget = denyVel;
     }
 
     @Override

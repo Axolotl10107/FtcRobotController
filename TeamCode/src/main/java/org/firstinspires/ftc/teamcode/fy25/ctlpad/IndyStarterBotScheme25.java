@@ -46,6 +46,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button launcherWheelSpinUp;
 //    private final Button launcherWheelSpinDown;
 
+    private final Button denyEntry;
+
     private final Button driveSpeedUpButton;
     private final Button driveSpeedDownButton;
     private final Button squareUpButton;
@@ -81,6 +83,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        launcherWheelSpinUp = new LinearAxis( () -> manipulator.right_trigger);
         launcherWheelSpinUp = new AxisAsButton( () -> manipulator.right_trigger, 0.3 );
 //        launcherWheelSpinDown = new AxisAsButton( () -> manipulator.left_trigger, 0.3 );
+
+        denyEntry = new MomentaryButton( () -> manipulator.x);
 
         driveSpeedUpButton = new TriggerButton( () -> driver.start );
         driveSpeedDownButton = new TriggerButton( () -> driver.back );
@@ -153,7 +157,12 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     }
 
     private void updateLauncherWheelState() {
-        state.setRunLaunchWheel(launcherWheelSpinUp.isActive());
+        if (launcherWheelSpinUp.isActive()) {
+            state.setRunLaunchWheel(launcherWheelSpinUp.isActive());
+        } else {
+            state.setRunLaunchWheel(false);
+            state.setDenyEntry(denyEntry.isActive());
+        }
 
 //        if (launcherWheelSpinUp.isActive()) {
 //            state.setRunLaunchWheel(true);
@@ -170,6 +179,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 
 //    private void updateLauncherWheelBackState() {
 //        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
+//        state.setDenyEntry(denyEntry.isActive());
 //    }
 
     private void updateLauncherGateState() {

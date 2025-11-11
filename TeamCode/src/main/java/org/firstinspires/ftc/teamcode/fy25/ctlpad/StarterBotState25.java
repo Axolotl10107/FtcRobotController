@@ -40,6 +40,7 @@ public class StarterBotState25 {
 
     private boolean squareUp = false;
     private boolean brake = false;
+    private boolean isDeny = false;
 
     private double distance = 0;
 
@@ -112,4 +113,8 @@ public class StarterBotState25 {
     }
 
     public double getDistance() {return distance;}
+
+    public void setDenyEntry(boolean b) {isDeny = b;}
+
+    public boolean getDenyEntry() {return isDeny;}
 }

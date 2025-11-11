@@ -79,7 +79,9 @@ public class StarterBotTeleOp25 extends OpMode {
             robot.launchWheel.spinUp();
         } else {
             robot.launchWheel.spinDown();
-            robot.launchWheel.denyEntry();
+            if (controlState.getDenyEntry()) {
+                robot.launchWheel.denyEntry();
+            }
         }
 
         if (controlState.getLauncherGateState() == LauncherGate.State.OPEN) {
