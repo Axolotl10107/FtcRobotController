@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.fy25.robots;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.*;
 
+import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
@@ -44,8 +44,9 @@ public class Robot25 {
          * We'll use this as our example. The Robot doesn't need this; only
          * IMUCorrector does. But it's Robot-specific, so it has to be a Robot
          * parameter. You can leave this un-set (or, rather, at the default
-         * value of all 0s), but then IMUCorrector won't work with this Robot. */
-        public PIDConsts hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+         * value), but then IMUCorrector won't do anything on this Robot. */
+//        public PIDConsts hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+        public IMUCorrector.Parameters imuCorrectorParams;
     }
 
     /** Subsystems are encapsulated in this class, so their Parameters are too. */

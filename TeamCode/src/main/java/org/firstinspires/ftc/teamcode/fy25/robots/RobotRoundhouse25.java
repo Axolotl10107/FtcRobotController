@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.framework.adapters.DualCRServo;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualDcMotorEx;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
+import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
+import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
@@ -177,7 +179,14 @@ public class RobotRoundhouse25 {
         motorIntakeParams.IntakeTPS = 166865;
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
-        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
+//        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
+        extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
+                new TunablePID(0.023, 0, 0, 0)
+        );
+        extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
+        extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;
+        extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
+        extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
@@ -264,7 +273,14 @@ public class RobotRoundhouse25 {
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
-        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+//        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+        extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
+                new TunablePID(0.023, 0, 0, 0)
+        );
+        extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
+        extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;
+        extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
+        extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
 
         Robot25.Parameters params = new Robot25.Parameters(
@@ -335,7 +351,14 @@ public class RobotRoundhouse25 {
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
-        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+//        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+        extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
+                new TunablePID(0.023, 0, 0, 0)
+        );
+        extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
+        extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;
+        extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
+        extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
@@ -416,7 +439,14 @@ public class RobotRoundhouse25 {
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
-        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+//        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+        extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
+                new TunablePID(0, 0, 0, 0)
+        );
+        extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
+        extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;
+        extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
+        extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
