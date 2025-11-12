@@ -71,7 +71,9 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData("Intake", controlState.getIntakeState());
         telemetry.addData("Lunch Gate", controlState.getLauncherGateState());
         telemetry.addData("Run Launch Wheel Requested?", controlState.isRunLaunchWheel());
-        telemetry.addData("Launch Wheel Velocity", robot.launchWheel.getLaunchVelTarget());
+        telemetry.addData("Launch Wheel Target RPM", robot.launchWheel.getLaunchVelTargetRPM());
+        telemetry.addData("Launch Wheel Actual RPM", robot.launchWheel.getCurrentRPM());
+        telemetry.addData("Launch Wheel State", robot.launchWheel.getState());
         telemetry.addData("Distance", controlState.getDistance());
         robot.launchWheel.fixLaunchSpin(controlState.getDistance());
 
