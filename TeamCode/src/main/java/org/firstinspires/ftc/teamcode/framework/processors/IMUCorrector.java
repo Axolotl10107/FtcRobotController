@@ -21,7 +21,6 @@ public class IMUCorrector {
     /** Please read if you're using IMUCorrector - important information inside. */
     public static class Parameters {
         /** Create a new IMUCorrector.Parameters object and supply non-optional parameters.
-         * @param imu Pass the Robot's IMU ( robot.imu ) through.
          * @param pid Pass in an object, already instantiated and configured. */
         public Parameters(TunablePID pid) {
             this.pid = pid;
@@ -31,8 +30,8 @@ public class IMUCorrector {
 //            this.pid = pid;
 //        }
 
-        /** You already set this in the constructor and cannot set it again. */
-        public final FriendlyIMU imu;
+//        /** You already set this in the constructor and cannot set it again. */
+//        public final FriendlyIMU imu;
 
         /** You already set this in the constructor and cannot set it again. */
         public final TunablePID pid;
