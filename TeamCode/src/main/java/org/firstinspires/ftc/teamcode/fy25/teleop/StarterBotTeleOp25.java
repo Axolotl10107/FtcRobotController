@@ -62,8 +62,9 @@ public class StarterBotTeleOp25 extends OpMode {
         telemetry.addData("Requested Drive", dts.drive);
         telemetry.addData("Requested Turn", dts.turn);
         telemetry.addData("Requested Strafe", dts.strafe);
-        DTS correctedDTS = imuCorrector.correctDTS( dts );
-        DTS normalizedDTS = correctedDTS.normalize();
+//        DTS correctedDTS = imuCorrector.correctDTS( dts );
+//        DTS normalizedDTS = correctedDTS.normalize();
+        DTS normalizedDTS = dts.normalize();
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
         telemetry.addData("Actual Drive", scaledDTS.drive);
         telemetry.addData("Actual Turn", scaledDTS.turn);

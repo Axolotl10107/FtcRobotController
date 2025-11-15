@@ -64,9 +64,11 @@ public class TwoLeaveBlue extends LinearOpMode {
 //                    score();
 //                    scoreSecond();
 //                })
-                .lineTo(new Vector2d(20, -90))
-                .lineTo(new Vector2d(-30, 0))
-                .addTemporalMarker(5, () -> robot.motorIntake.spinIn())
+                .lineToLinearHeading(new Pose2d(50, -15, Math.toRadians(-135)))
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> robot.motorIntake.spinIn())
+                .forward(15)
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> robot.motorIntake.stop())
                 .build();
 
         waitForStart();
