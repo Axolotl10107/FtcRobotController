@@ -91,7 +91,7 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.DriveConstants dc = new RRMecanumDrive.DriveConstants();
 
         dc.TICKS_PER_REV = 537.7;
-        dc.MAX_RPM = 117; // TODO: Verify this, usually 312 so this is strange
+        dc.MAX_RPM = 312;
         dc.RUN_USING_ENCODER = true;
         dc.MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
                 dc.getMotorVelocityF(dc.MAX_RPM / 60 * dc.TICKS_PER_REV));
