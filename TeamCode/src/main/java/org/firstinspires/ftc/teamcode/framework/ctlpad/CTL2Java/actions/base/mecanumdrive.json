@@ -54,7 +54,23 @@
         "\tstate.setMaxDriveSpeed( state.getMaxDriveSpeed() + <~param:By> );",
         "}"
       ]
+    },
+
+    "Set Max. Drive Power": {
+      "Type": "Button",
+      "Parameters": {
+        "Power": {
+          "Type": "double",
+          "Value": 1.0
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setMaxDriveSpeed( <~param:Power> );",
+        "}"
+      ]
     }
 
   }
+
 }

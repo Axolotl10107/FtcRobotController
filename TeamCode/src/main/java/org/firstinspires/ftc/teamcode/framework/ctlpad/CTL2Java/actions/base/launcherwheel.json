@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Actions": {
+
+    "Spin Up": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setRunLaunchWheel( true );",
+        "}"
+      ]
+    },
+
+    "Spin Down": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setRunLaunchWheel( false );",
+        "}"
+      ]
+    },
+
+    "Change Launch Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "By": {
+          "Type": "double",
+          "Value": "20.0"
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLaunchVel( state.getLaunchVel() + <~param:By> );",
+        "}"
+      ]
+    },
+
+    "Set Launch Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "Velocity": {
+          "Type": "double",
+          "Value": "200.0"
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLaunchVel( <~param:Velocity> );",
+        "}"
+      ]
+    }
+
+  }
+
+}

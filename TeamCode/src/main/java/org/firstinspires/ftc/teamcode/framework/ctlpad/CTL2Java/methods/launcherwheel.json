@@ -1,0 +1,31 @@
+{
+
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Bases": [
+    "launcherwheel"
+  ],
+
+  "Extensions": [],
+
+  "Methods": {
+
+    "setRunLaunchWheel": [
+      "void setRunLaunchWheel() {",
+      "<~all:Spin Up>",
+      "<~all:Spin Down>",
+      "}"
+    ],
+
+    "setLaunchVel": [
+      "void setLaunchVel() {",
+      "<~all:Change Launch Velocity>",
+      "<~all:Set Launch Velocity>",
+      "}"
+    ]
+
+  }
+
+}

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 

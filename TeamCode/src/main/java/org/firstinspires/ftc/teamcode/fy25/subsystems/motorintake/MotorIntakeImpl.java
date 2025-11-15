@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;

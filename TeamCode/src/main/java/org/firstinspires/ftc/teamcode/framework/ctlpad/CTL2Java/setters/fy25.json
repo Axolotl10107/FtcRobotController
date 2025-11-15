@@ -1,0 +1,28 @@
+{
+
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Interface" : "<~tc>.fy25.ctlpad.StarterBotScheme25",
+
+  "State" : "<~tc>.fy25.ctlpad.StarterBotState25",
+
+  "Imports": [
+    "<~tc>.fy25.subsystems.launcherwheel.LauncherWheel",
+    "<~tc>.fy25.subsystems.launchergate.LauncherGate",
+    "<~tc>.fy25.subsystems.motorintake.MotorIntake"
+  ],
+
+  "Setters" : [
+    "setIntakeVel",
+    "setLaunchVel",
+    "<~dt>setDts",
+    "setMotorIntakeState",
+    "setRunLaunchWheel",
+    "setLauncherGateState",
+    "setMaxDriveSpeed",
+    "setSquareUp"
+  ]
+
+}

@@ -1,0 +1,24 @@
+{
+
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Bases": [
+    "launchergate"
+  ],
+
+  "Extensions": [],
+
+  "Methods": {
+
+    "setLauncherGateState": [
+      "void setLauncherGateState() {",
+      "<~all:Open Launch Gate>",
+      "<~all:Close Launch Gate>",
+      "}"
+    ]
+
+  }
+
+}

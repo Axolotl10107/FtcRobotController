@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Actions": {
+
+    "Spin In": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setMotorIntakeState( MotorIntake.State.RUNIN );",
+        "}"
+      ]
+    },
+
+    "Spin Out": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setMotorIntakeState( MotorIntake.State.RUNOUT );",
+        "}"
+      ]
+    },
+
+    "Change Motor Intake Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "By": {
+          "Type": "double",
+          "Value": "20.0"
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setIntakeVel( state.getIntakeVel() + <~param:By> );",
+        "}"
+      ]
+    },
+
+    "Set Motor Intake Velocity": {
+      "Type": "Button",
+      "Parameters": {
+        "Velocity": {
+          "Type": "double",
+          "Value": "200.0"
+        }
+      },
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setIntakeVel( <~param:Velocity> );",
+        "}"
+      ]
+    }
+
+  }
+
+}
