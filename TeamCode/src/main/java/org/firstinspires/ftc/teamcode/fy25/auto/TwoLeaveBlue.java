@@ -16,17 +16,13 @@ public class TwoLeaveBlue extends LinearOpMode {
     TrajectorySequence mainTrajSeq;
 
     void spinUp() {
-        robot.launchWheelBack.spinUp();
-        robot.launchWheelFront.spinUp();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinUp();
+        robot.launchWheel.update();
     }
 
     void spinDown() {
-        robot.launchWheelBack.spinDown();
-        robot.launchWheelFront.spinDown();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinDown();
+        robot.launchWheel.update();
     }
 
     void score() {
@@ -52,8 +48,8 @@ public class TwoLeaveBlue extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
+            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
+        } catch (RobotRoundhouse25.OldRobotException e) {
             throw new RuntimeException(e);
         }
 

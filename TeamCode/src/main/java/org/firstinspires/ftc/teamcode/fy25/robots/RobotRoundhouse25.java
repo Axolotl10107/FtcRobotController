@@ -160,9 +160,9 @@ public class RobotRoundhouse25 {
         );
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launchWheelParams.motor = launchWheelMotor;
-        // TODO: calibrate spinFactor and distanceCoef
-        launchWheelParams.spinFactor = 1.25;
-        launchWheelParams.distanceCoef = 1.0;
+        // calibrate spinFactor and distanceCoef
+//        launchWheelParams.spinFactor = 1.25;
+//        launchWheelParams.distanceCoef = 1.0;
         // TODO: Tune default launch wheel velocity
         launchWheelParams.velocityRPM = 6000;
         launchWheelParams.velocityTolerance = 20;
@@ -256,8 +256,8 @@ public class RobotRoundhouse25 {
         launchWheelParams.velocityTolerance = 20;
         launchWheelParams.motorTPR = 28;
         launchWheelParams.denyVel = -500;
-        launchWheelParams.spinFactor = 1.25;
-        launchWheelParams.distanceCoef = 1.0;
+//        launchWheelParams.spinFactor = 1.25;
+//        launchWheelParams.distanceCoef = 1.0;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
         CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");

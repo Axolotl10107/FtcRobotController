@@ -62,7 +62,7 @@ public class StarterBotTeleOp25 extends OpMode {
         }
 
         // LauncherWheel
-        robot.launchWheel.fixLaunchSpin(controlState.getDistance());
+//        robot.launchWheel.fixLaunchSpin(controlState.getDistance());
 
         if (controlState.isRunLaunchWheel()) {
             robot.launchWheel.spinUp();

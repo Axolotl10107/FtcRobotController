@@ -47,11 +47,11 @@ public interface LauncherWheel {
         /** The <b>ticks per revolution</b> of your motor (537.7 for a 312 RPM goBILDA 5203, for example). Defaults to 0. */
         public double motorTPR = 0;
 
-        /** For two LauncherWheels. Ratio between dynamic LauncherWheel and non-dynamic LauncherWheel. */
-        public double spinFactor = 1.25;
-
-        /** Coefficient of distance in spin calculation for fixLaunchSpin(). */
-        public double distanceCoef = 1.0;
+//        /** For two LauncherWheels. Ratio between dynamic LauncherWheel and non-dynamic LauncherWheel. */
+//        public double spinFactor = 1.25;
+//
+//        /** Coefficient of distance in spin calculation for fixLaunchSpin(). */
+//        public double distanceCoef = 1.0;
     }
 
     /** Apply power to the launch wheel. */
@@ -68,11 +68,11 @@ public interface LauncherWheel {
      * {@param velocity} The new velocity to set, in <b>ticks per second</b>. */
     void setLaunchRPM(double velocity);
 
-    /** Adjust the launch velocity to aim for a certain distance from the launcher. */
-    void fixLaunchSpin(double distance);
-
-    /** Return to just the launch RPM you set instead of what was calculated by fixLaunchSpin() */
-    void revertLaunchSpin();
+//    /** Adjust the launch velocity to aim for a certain distance from the launcher. */
+//    void fixLaunchSpin(double distance);
+//
+//    /** Return to just the launch RPM you set instead of what was calculated by fixLaunchSpin() */
+//    void revertLaunchSpin();
 
     /** Use the wheel to prevent an object from entering the launcher.
      * Not needed if you have a normal LauncherGate setup. */

@@ -9,8 +9,8 @@ public class LauncherWheelImpl implements LauncherWheel {
     final double launchVelBase;
     final double denyVel;
     final double tolerance;
-    final double spinFactor; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
-    final double distanceCoef; // coefficient of distance in spin calculation
+//    final double spinFactor; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
+//    final double distanceCoef; // coefficient of distance in spin calculation
 
     double launchVel;
     double launchVelTarget;
@@ -22,8 +22,8 @@ public class LauncherWheelImpl implements LauncherWheel {
         launchVel = launchVelBase;
         denyVel = parameters.denyVel;
         tolerance = parameters.velocityTolerance;
-        this.spinFactor = parameters.spinFactor;
-        this.distanceCoef = parameters.distanceCoef;
+//        this.spinFactor = parameters.spinFactor;
+//        this.distanceCoef = parameters.distanceCoef;
     }
 
     @Override
@@ -59,15 +59,15 @@ public class LauncherWheelImpl implements LauncherWheel {
         }
     }
 
-    @Override
-    public void fixLaunchSpin(double distance) {
-        launchVel = launchVelBase / (spinFactor * ((distance / distanceCoef) + 1));
-    }
-
-    @Override
-    public void revertLaunchSpin() {
-        launchVel = launchVelBase;
-    }
+//    @Override
+//    public void fixLaunchSpin(double distance) {
+//        launchVel = launchVelBase / (spinFactor * ((distance / distanceCoef) + 1));
+//    }
+//
+//    @Override
+//    public void revertLaunchSpin() {
+//        launchVel = launchVelBase;
+//    }
 
     @Override
     public void denyEntry() {
