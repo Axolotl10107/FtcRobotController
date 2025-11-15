@@ -217,7 +217,7 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
                 true,
                 dc, // most of the defaults in DriveConstants should work here
-                new AccelLimiter(4.0, 0.3)
+                new AccelLimiter(4.0, 1)
         );
         driveParams.useAccelLimiter = true;
 
@@ -280,7 +280,7 @@ public class RobotRoundhouse25 {
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
-        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
+        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
 
 
         Robot25.Parameters params = new Robot25.Parameters(

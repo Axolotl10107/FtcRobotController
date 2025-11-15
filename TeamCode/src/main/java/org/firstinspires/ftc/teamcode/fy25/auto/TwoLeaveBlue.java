@@ -7,13 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-import java.util.Vector;
-
-@Autonomous(name = "OneLeave")
-public class OneLeave extends LinearOpMode {
+@Autonomous(name = "TwoLeaveBlue")
+public class TwoLeaveBlue extends LinearOpMode {
 
     Robot25 robot;
     TrajectorySequence mainTrajSeq;
@@ -63,12 +60,13 @@ public class OneLeave extends LinearOpMode {
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
                 .lineTo(new Vector2d(15, -10))
-                .addTemporalMarker(2, () -> {
-                    score();
-                    scoreSecond();
-                })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(20, -30))
+//                .addTemporalMarker(2, () -> {
+//                    score();
+//                    scoreSecond();
+//                })
+                .lineTo(new Vector2d(20, -90))
+                .lineTo(new Vector2d(-30, 0))
+                .addTemporalMarker(5, () -> robot.motorIntake.spinIn())
                 .build();
 
         waitForStart();
