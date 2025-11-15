@@ -28,23 +28,19 @@ public class IMUDriveTuner extends OpMode {
     public void init() {
 //        imuCorrector = new IMUcorrector(hardwareMap, robot.pidConsts);
         // TODO: Detect and/or parameterize which robot to use
-        try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
-            throw new RuntimeException(e);
-        }
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
         // <b>Don't forget to change the filename to save to below!</b>
     }
 
     public void start() {
-        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
-        params.haveHitTargetToleranceDegrees = 0.1;
-        params.hdgErrToleranceDegrees = 1.0;
-        params.maxCorrectionPower = 0.1;
-        params.turnPowerThreshold = 0.05;
-        imuCorrector = new IMUCorrector(params);
+//        IMUCorrector.Parameters params = new IMUCorrector.Parameters(robot.imu, new TunablePID(robot.extendedParameters.hdgCorrectionPIDConsts));
+//        params.haveHitTargetToleranceDegrees = 0.1;
+//        params.hdgErrToleranceDegrees = 1.0;
+//        params.maxCorrectionPower = 0.1;
+//        params.turnPowerThreshold = 0.05;
+        imuCorrector = new IMUCorrector( robot.extendedParameters.imuCorrectorParams );
         // Why is this down here instead of in init()? Because virtual_robot is slow, I guess?
-        pid = params.pid;
+        pid = robot.extendedParameters.imuCorrectorParams.pid;
         controlScheme = new IMUDriveTunerScheme(gamepad1, gamepad2);
         // totally a safety mechanism - try moving during init without a gamepad :)
     }
@@ -53,7 +49,7 @@ public class IMUDriveTuner extends OpMode {
     public void loop() {
         gamepad = controlScheme.getState();
 
-        robot.drive.applyDTS(imuCorrector.correctDTS(gamepad.getDts()).normalize());
+        robot.drive.applyDTS(imuCorrector.correctDTS(gamepad.getDts().normalize(), robot.imu.yaw()));
         // Yup. That's the OpMode. That line lets you drive the robot.
 
         if (gamepad.pUp()) {

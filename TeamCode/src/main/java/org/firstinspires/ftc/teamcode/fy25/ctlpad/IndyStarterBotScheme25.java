@@ -156,8 +156,13 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
-    private void updateLauncherWheelFrontState() {
-        state.setRunLaunchWheelFront(launcherWheelSpinUp.isActive());
+    private void updateLauncherWheelState() {
+        if (launcherWheelSpinUp.isActive()) {
+            state.setRunLaunchWheel(launcherWheelSpinUp.isActive());
+        } else {
+            state.setRunLaunchWheel(false);
+            state.setDenyEntry(denyEntry.isActive());
+        }
 
 //        if (launcherWheelSpinUp.isActive()) {
 //            state.setRunLaunchWheel(true);
@@ -172,10 +177,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        }
     }
 
-    private void updateLauncherWheelBackState() {
-        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
-        state.setDenyEntry(denyEntry.isActive());
-    }
+//    private void updateLauncherWheelBackState() {
+//        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
+//        state.setDenyEntry(denyEntry.isActive());
+//    }
 
     private void updateLauncherGateState() {
         if (launcherGateIn.value() > 0) {
@@ -239,8 +244,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateSquareUpState();
         updateBrakeState();
         updateLauncherGateState();
-        updateLauncherWheelFrontState();
-        updateLauncherWheelBackState();
+//        updateLauncherWheelFrontState();
+//        updateLauncherWheelBackState();
+        updateLauncherWheelState();
         updateDistanceState();
 
         return state;
