@@ -220,7 +220,7 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
                 true,
                 dc, // most of the defaults in DriveConstants should work here
-                new AccelLimiter(4.0, 0.3)
+                new AccelLimiter(4.0, 1)
         );
         driveParams.useAccelLimiter = true;
 

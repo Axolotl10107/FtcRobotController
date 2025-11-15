@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "OneLeave")
-public class OneLeave extends LinearOpMode {
+@Autonomous(name = "TwoLeaveRed")
+public class TwoLeaveRed extends LinearOpMode {
 
     Robot25 robot;
     TrajectorySequence mainTrajSeq;
@@ -51,13 +51,13 @@ public class OneLeave extends LinearOpMode {
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-                .lineTo(new Vector2d(15, -10))
+                .lineTo(new Vector2d(15, 10))
                 .addTemporalMarker(2, () -> {
                     score();
                     scoreSecond();
                 })
                 .waitSeconds(3)
-                .lineTo(new Vector2d(20, -30))
+                .lineTo(new Vector2d(-20, -30))
                 .build();
 
         waitForStart();
