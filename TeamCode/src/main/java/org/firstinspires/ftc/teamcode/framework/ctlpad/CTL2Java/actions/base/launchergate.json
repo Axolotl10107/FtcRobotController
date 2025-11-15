@@ -1,0 +1,29 @@
+{
+
+  "Version": 1,
+
+  "Season": "fy25",
+
+  "Actions": {
+
+    "Open Launch Gate": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLauncherGateState( LauncherGate.State.OPEN );",
+        "}"
+      ]
+    },
+
+    "Close Launch Gate": {
+      "Type": "Button",
+      "Code": [
+        "if ( <~myname>.isActive() ) {",
+        "\tstate.setLauncherGateState( LauncherGate.State.CLOSED );",
+        "}"
+      ]
+    }
+
+  }
+
+}

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake;
 
 public class MotorIntakeBlank implements MotorIntake {
     @Override

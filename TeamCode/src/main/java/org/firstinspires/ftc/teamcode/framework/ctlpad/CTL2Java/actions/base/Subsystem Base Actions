@@ -1,0 +1,112 @@
+Subsystem
+    • Name:
+    • Type:
+    • Description:
+    • Parameters:
+        ◦ Name:
+        ◦ Value:
+        ◦ Description:
+
+[DONE] Claw
+    • [DONE] Name: Set Claw State
+    • Type: Button
+    • Description: Set the Claw to a certain State
+    • Parameters:
+        ◦ State: The State to set the Claw to
+
+[DONE] RotaryIntake
+    • [DONE] Name: Set Rotary Intake State
+    • Type: Button
+    • Description: Set the RotaryIntake to a certain State
+    • Parameters:
+        ◦ Name: State
+        ◦ Value: Claw.State.CLOSED
+        ◦ Description: The State to set the Intake to
+
+[DONE] RRMecanumDrive
+    • [DONE] Name: Drive
+    • Type: Axis
+    • Description: Control the Drive axis of the drivebase
+
+    • [DONE] Name: Turn
+    • Type: Axis
+    • Description: Control the Turn axis of the drivebase
+
+    • [DONE] Name: Strafe
+    • Type: Axis
+    • Description: Control the Strafe axis of the drivebase
+
+    • [DONE] Name: Change Max. Drive Power
+    • Type: Button
+    • Description: Change the max. drive power by a certain amount
+    • Parameters:
+        ◦ Name: By
+        ◦ Value: 0.1
+        ◦ Description: How much to change the max. drive power by
+
+    • [DONE] Name: Set Max. Drive Power
+    • Type: Button
+    • Description: Set the max. drive power to a certain amount
+    • Parameters:
+        ◦ Name: Power
+        ◦ Value: 1.0
+        ◦ Description: The max. drive power to set
+
+[DONE] LauncherWheel
+    • [DONE] Name: Spin Up
+    • Type: Button
+    • Description: Spin up the launch wheel
+
+    • [DONE] Name: Spin Down
+    • Type: Button
+    • Description: Spin down the launch wheel
+
+    • [DONE] Name: Change Launch Velocity
+    • Type: Button
+    • Description: Change the launch velocity by a certain amount
+    • Parameters:
+        ◦ Name: By
+        ◦ Value: 20.0
+        ◦ Description: The amount (in ticks per second) to change the launch velocity by
+
+    • [DONE] Name: Set Launch Velocity
+    • Type: Button
+    • Description: Set the launch velocity to a certain amount
+    • Parameters:
+        ◦ Name: Velocity
+        ◦ Value: 200.0
+        ◦ Description: The launch velocity (in ticks per second) to set
+
+[DONE] LauncherGate
+    • [DONE] Name: Open Launch Gate
+    • Type: Button
+    • Description: Open the launch gate, feeding an item to the launch wheel
+
+    • [DONE] Name: Close Launch Gate
+    • Type: Button
+    • Description: Close the launch gate
+
+MotorIntake
+    • Name: Spin Motor Intake In
+    • Type: Button
+    • Description: Spin Motor Intake Inwards (inhale a piece)
+
+    • Name: Spin Motor Intake Out
+    • Type: Button
+    • Description: Spin Motor Intake Outwards (exhale a piece)
+
+    • Name: Change Motor Intake Velocity
+    • Type: Button
+    • Description: Change the velocity of the motor intake by a certain amount
+    • Parameters:
+        ◦ Name: By
+        ◦ Value: 20.0
+        ◦ Description: The amount (in ticks per second) to change the intake velocity by
+
+    • Name: Set Motor Intake Velocity
+    • Type: Button
+    • Description: Set the velocity of the motor intake to a certain amount
+    • Parameters:
+        ◦ Name: Velocity
+        ◦ Value: 200.0
+        ◦ Description: The velocity (in ticks per second) to set

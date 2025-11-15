@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMeca
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntake;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntakeBlank;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.motorlntake.MotorIntakeImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.*;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelBlank;

@@ -5,16 +5,16 @@
   "Season": "",
 
   "Bases": [
-    "framework"
+    "claw"
   ],
 
   "Extensions": [],
 
   "Methods": {
 
-    "setSquareUp": [
-      "void setSquareUp() {",
-      "<~all:Square Up>",
+    "setClawState": [
+      "void setClawState() {",
+      "<~all:Set Claw State>",
       "}"
     ]
 

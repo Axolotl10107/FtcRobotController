@@ -1,6 +1,6 @@
 # CTL2Java CLI and linking fabric
 # Also all File I/O happens here (I think)
-# File last updated 9-29-25
+# File last updated 11-06-25
 
 import os
 import sys
@@ -13,13 +13,22 @@ from preparer import Preparer
 from expander import Expander
 from generator import Generator
 
-version = "1.0-0"
+version = 2
+prettyVersion = "1.0-2"
 
 # Versions of the other modules are tracked independently
-compatibleCTLConvVersions = ["1.0-0"]
-compatiblePreparerVersions = ["1.0-0"]
-compatibleExpanderVersions = ["1.0-0"]
-compatibleGeneratorVersions = ["1.0-0"]
+commonCompatInterval = (1, 1)
+assetsCompatInterval = (1, 1)
+ctlconvCompatInterval = (1, 3)
+preparerCompatInterval = (1, 1)
+expanderCompatInterval = (1, 1)
+generatorCompatInterval = (1, 2)
+
+if Common.getVersion() < commonCompatInterval[0] or commonCompatInterval[1] > Common.getVersion():
+    print("Incompatible version of common.py")
+    sys.exit(1)
+if assets.assetsVersion < assetsCompatInterval[0] or assetsCompatInterval[1] > assets.assetsVersion:
+    Common.error("Incompatible version of assets.py")
 
 # ----- Command-line arguments -----
 argparser = ArgumentParser()
@@ -77,15 +86,26 @@ else:
 
 # ----- Convert files -----
 converter1 = CTLConv(infile1, assets.gamepadRequiredFields)
+if converter1.version < ctlconvCompatInterval[0] or ctlconvCompatInterval[1] > converter1.version:
+    Common.error("Incompatible version of ctlconv.py")
 print("Converting file for gamepad1:")
 outdict1 = converter1.getVerifiedDict()
-modifiers = [ "One" + x for x in outdict1["Modifiers"] ]
+try:
+    modifiers = [ "One" + x for x in outdict1["Modifiers"] ]
+except:
+    modifiers = []
 print("\n\n")
 if infile2:
     converter2 = CTLConv(infile2, assets.gamepadRequiredFields)
     print("Converting file for gamepad2:")
     outdict2 = converter2.getVerifiedDict()
-    modifiers.extend( [ "Two" + x for x in outdict2["Modifiers"] ] )
+    try:
+        modifiers.extend( [ "Two" + x for x in outdict2["Modifiers"] ] )
+    except:
+        try:
+            modifiers = [ "Two" + x for x in outdict2["Modifiers"] ]
+        except:
+            modifiers = []
     print("\n\n")
 else:
     outdict2 = None
@@ -142,12 +162,16 @@ if args.debug:
 
 # ----- Preparer -----
 preparer = Preparer(outdict1, outdict2, libDict)
+if preparer.version < preparerCompatInterval[0] or preparerCompatInterval[1] > preparer.version:
+    Common.error("Incompatible version of preparer.py")
 expandedLibDict = preparer.expandLibDict()
 sortedMappings = preparer.combineMappingsAndAddPrefixes()
 
 
 # ----- Create expander -----
 expander = Expander(expandedLibDict, sortedMappings, outfile, outpackage)
+if expander.version < expanderCompatInterval[0] or expanderCompatInterval[1] > expander.version:
+    Common.error("Incompatible version of expander.py")
 
 
 # ----- Create generator -----
@@ -162,6 +186,8 @@ generator = Generator(
     drivetype,
     args.debug
 )
+if generator.version < generatorCompatInterval[0] or generatorCompatInterval[1] > generator.version:
+    Common.error("Incompatible version of generator.py")
 generatedLines = generator.getFile()
 
 if args.debug:
