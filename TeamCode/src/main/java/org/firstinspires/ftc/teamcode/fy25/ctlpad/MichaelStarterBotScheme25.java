@@ -92,7 +92,7 @@ public class MichaelStarterBotScheme25 implements StarterBotScheme25 {
             state.setRunLaunchWheel( true );
         } else if ( launcherWheelSpinDown.isActive() ) {
             state.setRunLaunchWheel( false );
-            state.setDenyEntry( denyEntry.isActive() );
+            state.setAllowEntry( denyEntry.isActive() );
         }
     }
 

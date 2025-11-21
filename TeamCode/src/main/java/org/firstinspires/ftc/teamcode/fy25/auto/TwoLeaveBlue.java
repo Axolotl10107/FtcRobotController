@@ -47,22 +47,29 @@ public class TwoLeaveBlue extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        try {
-            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
-        } catch (RobotRoundhouse25.OldRobotException e) {
-            throw new RuntimeException(e);
-        }
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
-        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-                .lineTo(new Vector2d(15, -10))
+//        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
+//                .lineTo(new Vector2d(15, -10))
 //                .addTemporalMarker(2, () -> {
 //                    score();
 //                    scoreSecond();
 //                })
-                .lineTo(new Vector2d(20, -90))
-                .lineTo(new Vector2d(-30, 0))
-                .addTemporalMarker(5, () -> robot.motorIntake.spinIn())
+//                .lineTo(new Vector2d(20, -90))
+//                .lineTo(new Vector2d(-30, 0))
+//                .addTemporalMarker(5, () -> robot.motorIntake.spinIn())
+//                .build();
+
+        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
+                .lineTo(new Vector2d(10, -10))
+                .addTemporalMarker(2, () -> {
+                    score();
+                    scoreSecond();
+                })
+                .waitSeconds(3)
+                .lineTo(new Vector2d(25, -20))
+                .turn(Math.toRadians(225))
                 .build();
 
         waitForStart();

@@ -76,7 +76,7 @@ public interface LauncherWheel {
 
     /** Use the wheel to prevent an object from entering the launcher.
      * Not needed if you have a normal LauncherGate setup. */
-    void denyEntry();
+    void allowEntry();
 
     /** Get the current velocity of the launch wheel in <b>RPM</b>. */
     double getCurrentRPM();

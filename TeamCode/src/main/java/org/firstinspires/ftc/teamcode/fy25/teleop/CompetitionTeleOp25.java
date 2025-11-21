@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 
-@TeleOp(name="Starter Bot TeleOp (2025)", group="TeleOp25")
-public class StarterBotTeleOp25 extends OpMode {
+@TeleOp(name="Competition TeleOp (2025)")
+public class CompetitionTeleOp25 extends OpMode {
     Robot25 robot;
     IMUCorrector imuCorrector;
     IndyStarterBotScheme25 controlScheme;
@@ -22,11 +22,7 @@ public class StarterBotTeleOp25 extends OpMode {
     public void init() {
         TelemetrySingleton.setInstance(telemetry);
 
-        try {
-            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
-        } catch (RobotRoundhouse25.OldRobotException e) {
-            throw new RuntimeException(e);
-        }
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
 
         imuCorrector = new IMUCorrector( robot.extendedParameters.imuCorrectorParams );
 
@@ -69,7 +65,7 @@ public class StarterBotTeleOp25 extends OpMode {
         } else {
             robot.launchWheel.spinDown();
             if (controlState.getDenyEntry()) {
-                robot.launchWheel.denyEntry();
+                robot.launchWheel.allowEntry();
             }
         }
 

@@ -115,7 +115,7 @@ public class RobotRoundhouse25 {
         RRMecanumDrive.Parameters driveParams = new RRMecanumDrive.Parameters(
                 true,
                 dc,
-                new AccelLimiter(2.0, 0.1)
+                new AccelLimiter(4.0, 1)
         );
 
         driveParams.TRANSLATIONAL_PID = new PIDCoefficients(4, 0, 1);
@@ -181,7 +181,7 @@ public class RobotRoundhouse25 {
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
 //        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
         extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
-                new TunablePID(0.023, 0, 0, 0)
+                new TunablePID(0, 0, 0, 0)
         );
         extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
         extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;

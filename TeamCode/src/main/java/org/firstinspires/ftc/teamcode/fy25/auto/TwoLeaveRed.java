@@ -51,13 +51,13 @@ public class TwoLeaveRed extends LinearOpMode {
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-                .lineTo(new Vector2d(15, 10))
+                .lineTo(new Vector2d(10, 10))
                 .addTemporalMarker(2, () -> {
                     score();
                     scoreSecond();
                 })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(-20, -30))
+//                .waitSeconds(3)
+//                .lineTo(new Vector2d(20, -20))
                 .build();
 
         waitForStart();

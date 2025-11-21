@@ -33,7 +33,7 @@ public class LauncherWheelBlank implements LauncherWheel {
 //    }
 
     @Override
-    public void denyEntry() {}
+    public void allowEntry() {}
 
     @Override
     public double getCurrentRPM() {
