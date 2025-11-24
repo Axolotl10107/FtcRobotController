@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy25.ctlpad;
 
+import static java.lang.Math.round;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Axis;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.Button;
@@ -112,7 +114,28 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     }
 
     private void updateMovementState() {
-        state.setDts( new DTS( drive.value(), turn.value(), strafe.value() ) );
+        double driveVal, turnVal, strafeVal;
+        driveVal = drive.value();
+        turnVal = turn.value();
+        strafeVal = strafe.value();
+
+        // Checks if any DTS values are NaN and sets to 0
+
+        if (Math.abs(driveVal) >= 0) {}
+        else {
+            driveVal = 0;
+        }
+
+        if (Math.abs(turnVal) >= 0) {}
+        else {
+            turnVal = 0;
+        }
+
+        if (Math.abs(strafeVal) >= 0) {}
+        else {
+            strafeVal = 0;
+        }
+        state.setDts( new DTS( driveVal, turnVal, strafeVal) );
     }
 
 //    private void applyArmSetpoint( double setpoint ) {

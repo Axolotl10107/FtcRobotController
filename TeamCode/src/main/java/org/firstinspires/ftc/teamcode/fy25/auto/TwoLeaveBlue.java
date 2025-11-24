@@ -50,26 +50,17 @@ public class TwoLeaveBlue extends LinearOpMode {
         robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
-//        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-//                .lineTo(new Vector2d(15, -10))
+        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
+                .lineTo(new Vector2d(15, -10))
 //                .addTemporalMarker(2, () -> {
 //                    score();
 //                    scoreSecond();
 //                })
-//                .lineTo(new Vector2d(20, -90))
-//                .lineTo(new Vector2d(-30, 0))
-//                .addTemporalMarker(5, () -> robot.motorIntake.spinIn())
-//                .build();
-
-        mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-                .lineTo(new Vector2d(10, -10))
-                .addTemporalMarker(2, () -> {
-                    score();
-                    scoreSecond();
-                })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(25, -20))
-                .turn(Math.toRadians(225))
+                .lineToLinearHeading(new Pose2d(50, -15, Math.toRadians(-135)))
+                .waitSeconds(1)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> robot.motorIntake.spinIn())
+                .forward(15)
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> robot.motorIntake.stop())
                 .build();
 
         waitForStart();
