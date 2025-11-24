@@ -51,8 +51,12 @@ public class CompetitionTeleOp25 extends OpMode {
         telemetry.addData("Actual Turn", scaledDTS.turn);
         telemetry.addData("Actual Strafe", scaledDTS.strafe);
 
+        if (controlState.isSquareUp()) {
+            imuCorrector.squareUp();
+        }
 
-        // Brake
+
+        // Brake (Note: since we're going through RRMecanumDrive, this is accel-limited! So it will stop gracefully.)
         if ( controlState.isBrake() ) {
             robot.drive.applyDTS( new DTS( 0, 0, 0 ) );
         }
@@ -64,7 +68,7 @@ public class CompetitionTeleOp25 extends OpMode {
             robot.launchWheel.spinUp();
         } else {
             robot.launchWheel.spinDown();
-            if (controlState.getDenyEntry()) {
+            if (controlState.getAllowEntry()) {
                 robot.launchWheel.allowEntry();
             }
         }

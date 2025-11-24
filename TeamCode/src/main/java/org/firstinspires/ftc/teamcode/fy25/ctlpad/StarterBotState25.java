@@ -116,5 +116,5 @@ public class StarterBotState25 {
 
     public void setAllowEntry(boolean b) {isAllow = b;}
 
-    public boolean getDenyEntry() {return isAllow;}
+    public boolean getAllowEntry() {return isAllow;}
 }
