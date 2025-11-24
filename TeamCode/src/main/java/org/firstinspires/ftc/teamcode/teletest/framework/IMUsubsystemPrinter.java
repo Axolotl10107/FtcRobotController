@@ -14,7 +14,7 @@ public class IMUsubsystemPrinter extends OpMode {
     public void init() {
         try {
             robot = new Robot25(RobotRoundhouse25.getParamsAuto(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException | RobotRoundhouse25.OldRobotException e) {
+        } catch (RobotRoundhouse25.OldRobotException e) {
             throw new RuntimeException(e);
         }
     }

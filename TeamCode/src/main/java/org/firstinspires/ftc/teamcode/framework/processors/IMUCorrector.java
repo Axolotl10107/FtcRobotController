@@ -21,15 +21,17 @@ public class IMUCorrector {
     /** Please read if you're using IMUCorrector - important information inside. */
     public static class Parameters {
         /** Create a new IMUCorrector.Parameters object and supply non-optional parameters.
-         * @param imu Pass the Robot's IMU ( robot.imu ) through.
          * @param pid Pass in an object, already instantiated and configured. */
-        public Parameters(FriendlyIMU imu, TunablePID pid) {
-            this.imu = imu;
+        public Parameters(TunablePID pid) {
             this.pid = pid;
         }
+//        public Parameters(FriendlyIMU imu, TunablePID pid) {
+//            this.imu = imu;
+//            this.pid = pid;
+//        }
 
-        /** You already set this in the constructor and cannot set it again. */
-        public final FriendlyIMU imu;
+//        /** You already set this in the constructor and cannot set it again. */
+//        public final FriendlyIMU imu;
 
         /** You already set this in the constructor and cannot set it again. */
         public final TunablePID pid;
@@ -52,11 +54,11 @@ public class IMUCorrector {
          * hdgErrorToleranceDegrees. */
         public double haveHitTargetToleranceDegrees = 0.1;
 
-        /** An ElapsedTime (or MockElapsedTime for testing) */
+//        /** An ElapsedTime (or MockElapsedTime for testing) */
 //        public ElapsedTime errorSampleTimer = new ElapsedTime();
-        /** How long to wait between updates of lastHdgError (milliseconds) (default 1150)
-         * Changing the default is not recommended, as smaller numbers cause issues. The reason why is unknown. If you
-         * find out why this value is necessary, please update this comment with your findings. */
+//        /** How long to wait between updates of lastHdgError (milliseconds) (default 1150)
+//         * Changing the default is not recommended, as smaller numbers cause issues. The reason why is unknown. If you
+//         * find out why this value is necessary, please update this comment with your findings. */
 //        public int errorSampleDelay = 1150;
     }
 
@@ -74,7 +76,7 @@ public class IMUCorrector {
     private boolean haveHitTarget = false;
     private boolean wasTurning = false;
 
-    private final FriendlyIMU imu;
+//    private final FriendlyIMU imu;
     private final TunablePID pid;
 
 //    private ElapsedTime errorSampleTimer;
@@ -85,7 +87,7 @@ public class IMUCorrector {
         hdgErrToleranceDegrees = parameters.hdgErrToleranceDegrees;
         turnPowerThreshold = parameters.turnPowerThreshold;
         haveHitTargetToleranceDegrees = parameters.haveHitTargetToleranceDegrees;
-        imu = parameters.imu;
+//        imu = parameters.imu;
         pid = parameters.pid;
 //        errorSampleTimer = parameters.errorSampleTimer;
 //        errorSampleDelay = parameters.errorSampleDelay;
@@ -104,11 +106,13 @@ public class IMUCorrector {
         return heading;
     }
 
+
+
     /** The drive and strafe values will remain unmodified, but the turn power will be replaced by the correction power
      * given by the {@link TunablePID} instance given in the Parameters.
      * @param driver The DTS that represents what the driver wants to do (i.e. the requested turn power). */
-    public DTS correctDTS(DTS driver) {
-        final double currentHeading = imu.yaw();
+    public DTS correctDTS(DTS driver, double currentHeading) {
+//        final double currentHeading = imu.yaw();
         final DTS returnDTS; // unassigned final value must be set exactly once along every path
 
         if (Math.abs(driver.turn) > turnPowerThreshold) { // the driver is currently turning
@@ -160,50 +164,6 @@ public class IMUCorrector {
 
 
 
-    // For when the comments just make it feel too big and intimidating
-    private DTS miniaturizedCorrectDTS(DTS driver) {
-        final double currentHeading = imu.yaw();
-        final DTS returnDTS;
-
-        if (Math.abs(driver.turn) > turnPowerThreshold) { // currently turning
-            if (!wasTurning) {
-                wasTurning = true;
-            }
-            returnDTS = driver;
-
-        } else { // not currently turning
-            if (wasTurning) { // clean up from previous turn
-                targetHeading = currentHeading;
-                haveHitTarget = true;
-                wasTurning = false;
-                pid.clearIntegral();
-                lastHeadingError = 0;
-            }
-
-            headingError = currentHeading - targetHeading;
-
-            double errorTolerance; // choose a tolerance
-            if (haveHitTarget) {
-                errorTolerance = hdgErrToleranceDegrees;
-            } else {
-                errorTolerance = haveHitTargetToleranceDegrees;
-            }
-
-            if (headingError < errorTolerance) { // apply correction if needed
-                returnDTS = driver.withTurn(0);
-            } else {
-                double correctionPower = pid.correctFor(headingError);
-                double safeCorrectionPower = Range.clip(correctionPower, -maxCorrectionPower, maxCorrectionPower);
-                returnDTS = driver.withTurn(safeCorrectionPower);
-            }
-        }
-
-        lastHeadingError = headingError; // clean up and return
-        return returnDTS;
-    }
-
-
-
     /** Sets the target heading to the nearest cardinal direction. */
     public void squareUp() {
         targetHeading = 90 * Math.round(targetHeading / 90);
@@ -221,7 +181,7 @@ public class IMUCorrector {
     /** Sets the target heading (in degrees). */
     public void setTargetHeading(double targetHeading) {
         this.targetHeading = targetHeading;
-        // IRW: Set `haveHitTarget = false`?
+        haveHitTarget = false;
     }
 
     /** Returns how far away the heading is from the target (in degrees). */

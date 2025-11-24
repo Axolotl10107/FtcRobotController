@@ -1,42 +1,39 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class LauncherWheelImpl implements LauncherWheel {
 
-    DcMotorEx motor;
-    double motorTPR;
-    double launchVelBase;
-    double launchVel;
-
-    double launchVelTarget;
-    final boolean isDynamic;
+    final DcMotorEx motor;
+    final double motorTPR;
+    final double launchVelBase;
+    final double denyVel;
     final double tolerance;
-    final double spinFactor = 1.25; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
-    final double distanceCoef = 1; // coefficient of distance in spin calculation
+//    final double spinFactor; // ratio between dynamic launchWheel and non-dynamic launchWheel at 0 distance
+//    final double distanceCoef; // coefficient of distance in spin calculation
 
-    // TODO: calibrate spinFactor and distanceCoef
+    double launchVel;
+    double launchVelTarget;
 
     public LauncherWheelImpl(LauncherWheel.Parameters parameters) {
         motor = parameters.motor;
         motorTPR = parameters.motorTPR;
         launchVelBase = (parameters.velocityRPM * motorTPR) / 60;
         launchVel = launchVelBase;
-        isDynamic = parameters.isDynamic;
+        denyVel = parameters.denyVel;
         tolerance = parameters.velocityTolerance;
+//        this.spinFactor = parameters.spinFactor;
+//        this.distanceCoef = parameters.distanceCoef;
     }
 
     @Override
     public void spinUp() {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = launchVel;
         motor.setMotorEnable();
     }
 
     @Override
     public void spinDown() {
-        motor.setDirection(DcMotorSimple.Direction.FORWARD);
         launchVelTarget = 0;
         motor.setMotorDisable();
     }
@@ -60,27 +57,22 @@ public class LauncherWheelImpl implements LauncherWheel {
         } else {
             return State.ERROR;
         }
-//        if (currentVel <= tolerance) {
-//            return State.STOPPED;
-//        } else {
-//            return State.RUNOUT;
-//        }
     }
 
-    @Override
-    public void fixLaunchSpin(double distance) {
-        if (isDynamic) {
-            launchVel = launchVelBase / (spinFactor * ((distance / distanceCoef) + 1));
-        } else {
-            launchVel = launchVelBase;
-        }
-    }
+//    @Override
+//    public void fixLaunchSpin(double distance) {
+//        launchVel = launchVelBase / (spinFactor * ((distance / distanceCoef) + 1));
+//    }
+//
+//    @Override
+//    public void revertLaunchSpin() {
+//        launchVel = launchVelBase;
+//    }
 
     @Override
-    public void denyEntry() {
+    public void allowEntry() {
         motor.setMotorEnable();
-        motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        launchVelTarget = 500;
+        motor.setTargetPosition(motor.getCurrentPosition() + 10);
     }
 
     @Override
@@ -90,12 +82,14 @@ public class LauncherWheelImpl implements LauncherWheel {
     }
 
     @Override
-    public double getLaunchRPM() {
-        return launchVel / (motorTPR * 60);
+    public double getCurrentRPM() {
+        return motor.getVelocity() / (motorTPR * 60);
     }
 
     @Override
-    public double getLaunchVelTarget() {return launchVelTarget;}
+    public double getLaunchVelTargetRPM() {
+        return launchVelTarget / (motorTPR * 60);
+    }
 
     @Override
     public void update() {

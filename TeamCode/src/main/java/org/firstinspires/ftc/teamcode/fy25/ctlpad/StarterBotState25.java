@@ -14,8 +14,7 @@ public class StarterBotState25 {
     private RotaryIntake.State intakeState = RotaryIntake.State.NONE;
     private MotorIntake.State motorIntakeState = MotorIntake.State.NONE;
     //    private LauncherWheel.State launcherWheelState = LauncherWheel.State.STOPPED;
-    private boolean runLaunchWheelFront;
-    private boolean runLaunchWheelBack;
+    private boolean runLaunchWheel;
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
 
     private double maxDriveSpeed = 1;
@@ -41,7 +40,7 @@ public class StarterBotState25 {
 
     private boolean squareUp = false;
     private boolean brake = false;
-    private boolean isDeny = false;
+    private boolean isAllow = false;
 
     private double distance = 0;
 
@@ -65,24 +64,12 @@ public class StarterBotState25 {
 
     public void setMotorIntakeState(MotorIntake.State state) {motorIntakeState = state;}
 
-//    public void setLauncherWheelState(LauncherWheel.State state) {launcherWheelState = state;}
-//
-//    public LauncherWheel.State getLauncherWheelState() {return launcherWheelState;}
-
-    public boolean isRunLaunchWheelFront() {
-        return runLaunchWheelFront;
+    public void setRunLaunchWheel(boolean runLaunchWheel) {
+        this.runLaunchWheel = runLaunchWheel;
     }
 
-    public boolean isRunLaunchWheelBack() {
-        return runLaunchWheelBack;
-    }
-
-    public void setRunLaunchWheelFront(boolean runLaunchWheelFront) {
-        this.runLaunchWheelFront = runLaunchWheelFront;
-    }
-
-    public void setRunLaunchWheelBack(boolean runLaunchWheelBack) {
-        this.runLaunchWheelBack = runLaunchWheelBack;
+    public boolean isRunLaunchWheel() {
+        return runLaunchWheel;
     }
 
     public void setLauncherGateState(LauncherGate.State state) {launcherGateState = state;}
@@ -127,7 +114,7 @@ public class StarterBotState25 {
 
     public double getDistance() {return distance;}
 
-    public void setDenyEntry(boolean b) {isDeny = b;}
+    public void setAllowEntry(boolean b) {isAllow = b;}
 
-    public boolean getDenyEntry() {return isDeny;}
+    public boolean getAllowEntry() {return isAllow;}
 }

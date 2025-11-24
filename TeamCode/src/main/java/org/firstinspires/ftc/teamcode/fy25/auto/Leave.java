@@ -18,8 +18,8 @@ public class Leave extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
+            robot = RobotRoundhouse25.getRobotAuto(hardwareMap);
+        } catch (RobotRoundhouse25.OldRobotException e) {
             throw new RuntimeException(e);
         }
 

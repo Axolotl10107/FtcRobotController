@@ -16,17 +16,13 @@ public class TwoLeaveRed extends LinearOpMode {
     TrajectorySequence mainTrajSeq;
 
     void spinUp() {
-        robot.launchWheelBack.spinUp();
-        robot.launchWheelFront.spinUp();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinUp();
+        robot.launchWheel.update();
     }
 
     void spinDown() {
-        robot.launchWheelBack.spinDown();
-        robot.launchWheelFront.spinDown();
-        robot.launchWheelBack.update();
-        robot.launchWheelFront.update();
+        robot.launchWheel.spinDown();
+        robot.launchWheel.update();
     }
 
     void score() {
@@ -51,21 +47,17 @@ public class TwoLeaveRed extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        try {
-            robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
-        } catch (Robot25.InvalidDeviceClassException e) {
-            throw new RuntimeException(e);
-        }
+        robot = new Robot25(RobotRoundhouse25.getRobotAParams(hardwareMap), hardwareMap);
 
         robot.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         mainTrajSeq = robot.drive.trajectorySequenceBuilder(robot.drive.getPoseEstimate())
-                .lineTo(new Vector2d(15, 10))
+                .lineTo(new Vector2d(10, 10))
                 .addTemporalMarker(2, () -> {
                     score();
                     scoreSecond();
                 })
-                .waitSeconds(3)
-                .lineTo(new Vector2d(-20, -30))
+//                .waitSeconds(3)
+//                .lineTo(new Vector2d(20, -20))
                 .build();
 
         waitForStart();

@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.Trigge
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
  * Matches the "Dual25" diagram. */
@@ -43,6 +42,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button clawCloseButton;
     private final Button intakeInButton;
     private final Button intakeOutButton;
+    private final Button allowEntry;
 
     private final Axis launcherGateIn;
     private final Button launcherWheelSpinUp;
@@ -80,6 +80,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         clawOpenButton = new TriggerButton( () -> manipulator.b );
         intakeInButton = new MomentaryButton( () -> manipulator.a );
         intakeOutButton = new MomentaryButton( () -> manipulator.b );
+        allowEntry = new TriggerButton ( () -> manipulator.b);
 
         launcherGateIn = new LinearAxis( () -> manipulator.left_trigger);
 //        launcherWheelSpinUp = new LinearAxis( () -> manipulator.right_trigger);
@@ -179,8 +180,13 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
-    private void updateLauncherWheelFrontState() {
-        state.setRunLaunchWheelFront(launcherWheelSpinUp.isActive());
+    private void updateLauncherWheelState() {
+        if (launcherWheelSpinUp.isActive()) {
+            state.setRunLaunchWheel(launcherWheelSpinUp.isActive());
+        } else {
+            state.setRunLaunchWheel(false);
+            state.setAllowEntry(allowEntry.isActive());
+        }
 
 //        if (launcherWheelSpinUp.isActive()) {
 //            state.setRunLaunchWheel(true);
@@ -195,10 +201,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        }
     }
 
-    private void updateLauncherWheelBackState() {
-        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
-        state.setDenyEntry(denyEntry.isActive());
-    }
+//    private void updateLauncherWheelBackState() {
+//        state.setRunLaunchWheelBack(launcherWheelSpinUp.isActive());
+//        state.setDenyEntry(denyEntry.isActive());
+//    }
 
     private void updateLauncherGateState() {
         if (launcherGateIn.value() > 0) {
@@ -262,8 +268,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateSquareUpState();
         updateBrakeState();
         updateLauncherGateState();
-        updateLauncherWheelFrontState();
-        updateLauncherWheelBackState();
+//        updateLauncherWheelFrontState();
+//        updateLauncherWheelBackState();
+        updateLauncherWheelState();
         updateDistanceState();
 
         return state;

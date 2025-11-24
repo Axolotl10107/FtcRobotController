@@ -18,8 +18,6 @@ public interface LauncherWheel {
         STOPPED,
         /** Launch wheel is not behaving as it should */
         ERROR
-//        STOPPED,
-//        RUNOUT
     }
 
     /** You must set some of these if this subsystem is present. */
@@ -40,18 +38,25 @@ public interface LauncherWheel {
         /** The <b>velocity</b> at which the launch wheel will run, in <b>revolutions per minute</b>. Defaults to 0. */
         public double velocityRPM = 0;
 
+        /** The velocity to run at when denyEntry() is called. */
+        public double denyVel = 0;
+
         /** The tolerance around the launch velocity, within which the wheel can be considered READY, in <b>ticks per second</b>. Defaults to 20. */
         public double velocityTolerance = 20;
 
         /** The <b>ticks per revolution</b> of your motor (537.7 for a 312 RPM goBILDA 5203, for example). Defaults to 0. */
         public double motorTPR = 0;
 
-        public boolean isDynamic = false;
+//        /** For two LauncherWheels. Ratio between dynamic LauncherWheel and non-dynamic LauncherWheel. */
+//        public double spinFactor = 1.25;
+//
+//        /** Coefficient of distance in spin calculation for fixLaunchSpin(). */
+//        public double distanceCoef = 1.0;
     }
 
-    /** Apply power to the launch wheel */
+    /** Apply power to the launch wheel. */
     void spinUp();
-    /** Remove power from the launch wheel */
+    /** Remove power from the launch wheel. */
     void spinDown();
 
     /** Get the current state of the launcher.
@@ -63,14 +68,21 @@ public interface LauncherWheel {
      * {@param velocity} The new velocity to set, in <b>ticks per second</b>. */
     void setLaunchRPM(double velocity);
 
-    void fixLaunchSpin(double distance);
+//    /** Adjust the launch velocity to aim for a certain distance from the launcher. */
+//    void fixLaunchSpin(double distance);
+//
+//    /** Return to just the launch RPM you set instead of what was calculated by fixLaunchSpin() */
+//    void revertLaunchSpin();
 
-    void denyEntry();
+    /** Use the wheel to prevent an object from entering the launcher.
+     * Not needed if you have a normal LauncherGate setup. */
+    void allowEntry();
 
-    /** Get the current velocity of the launch wheel. */
-    double getLaunchRPM();
+    /** Get the current velocity of the launch wheel in <b>RPM</b>. */
+    double getCurrentRPM();
 
-    double getLaunchVelTarget();
+    /** Get the launch velocity that the wheel is aiming for in <b>RPM</b>. */
+    double getLaunchVelTargetRPM();
 
     /** Called by robot.update(). You do not need to call this method. */
     void update();

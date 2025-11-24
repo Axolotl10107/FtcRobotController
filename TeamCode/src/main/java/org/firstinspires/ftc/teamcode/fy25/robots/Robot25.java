@@ -3,20 +3,20 @@ package org.firstinspires.ftc.teamcode.fy25.robots;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.*;
 
+import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
-import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.*;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelBlank;
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
 
 /**Represents a complete robot consisting of up to 5 subsystems.
  * Basically, constructing this will construct all of the subsystems for you,
@@ -37,16 +37,6 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWhee
  * See {@link RobotRoundhouse25} to find {@link Parameters} to pass in here. */
 public class Robot25 {
 
-    /** Used when a subsystem that accepts multiple implementations of HardwareDevice receives one it doesn't expect */
-    public static class InvalidDeviceClassException extends Exception {
-        public InvalidDeviceClassException(String message) {
-            super(message);
-        }
-        public InvalidDeviceClassException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
-
     /** Robot-specific parameters that are not used directly by the Robot but
      * by external things, usually processors. */
     public static class ExtendedParameters {
@@ -54,8 +44,9 @@ public class Robot25 {
          * We'll use this as our example. The Robot doesn't need this; only
          * IMUCorrector does. But it's Robot-specific, so it has to be a Robot
          * parameter. You can leave this un-set (or, rather, at the default
-         * value of all 0s), but then IMUCorrector won't work with this Robot. */
-        public PIDConsts hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+         * value), but then IMUCorrector won't do anything on this Robot. */
+//        public PIDConsts hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
+        public IMUCorrector.Parameters imuCorrectorParams;
     }
 
     /** Subsystems are encapsulated in this class, so their Parameters are too. */
@@ -65,8 +56,7 @@ public class Robot25 {
                 RRMecanumDrive.Parameters driveParameters,
                 FriendlyIMU.Parameters imuParameters,
 
-                LauncherWheel.Parameters launchWheelFrontParams,
-                LauncherWheel.Parameters launchWheelBackParams,
+                LauncherWheel.Parameters launchWheelParams,
                 LauncherGate.Parameters launchGateParams,
                 MotorIntake.Parameters motorIntakeParams
         ) {
@@ -76,8 +66,7 @@ public class Robot25 {
             this.imuParameters = imuParameters;
 
             // This season
-            this.launchWheelFrontParams = launchWheelFrontParams;
-            this.launchWheelBackParams = launchWheelBackParams;
+            this.launchWheelParams = launchWheelParams;
             this.launchGateParams = launchGateParams;
             this.motorIntakeParams = motorIntakeParams;
         }
@@ -86,8 +75,7 @@ public class Robot25 {
         final RRMecanumDrive.Parameters driveParameters;
         final FriendlyIMU.Parameters imuParameters;
 
-        final LauncherWheel.Parameters launchWheelFrontParams;
-        final LauncherWheel.Parameters launchWheelBackParams;
+        final LauncherWheel.Parameters launchWheelParams;
         final LauncherGate.Parameters launchGateParams;
         final MotorIntake.Parameters motorIntakeParams;
     }
@@ -97,8 +85,7 @@ public class Robot25 {
     public final RRMecanumDrive drive;
     public final FriendlyIMU imu;
 
-    public final LauncherWheel launchWheelFront;
-    public final LauncherWheel launchWheelBack;
+    public final LauncherWheel launchWheel;
     public final LauncherGate launchGate;
     public final MotorIntake motorIntake;
 
@@ -109,7 +96,7 @@ public class Robot25 {
      * blank wherever a subsystem is not present).
      * {@param parameters} Get these from {@link RobotRoundhouse25}
      * {@param hardwareMap} Pass in the hardwareMap provided by your OpMode. */
-    public Robot25(Parameters parameters, HardwareMap hardwareMap) throws InvalidDeviceClassException {
+    public Robot25(Parameters parameters, HardwareMap hardwareMap) {
 
         extendedParameters = parameters.extendedParameters;
 
@@ -132,30 +119,14 @@ public class Robot25 {
         }
 
 
-        if (parameters.launchWheelFrontParams.present) {
-            launchWheelFront = new LauncherWheelImpl(parameters.launchWheelFrontParams);
+        if (parameters.launchWheelParams.present) {
+            launchWheel = new LauncherWheelImpl(parameters.launchWheelParams);
         } else {
-            launchWheelFront = new LauncherWheelBlank();
-        }
-
-        if (parameters.launchWheelBackParams.present) {
-            launchWheelBack = new LauncherWheelImpl(parameters.launchWheelBackParams);
-        } else {
-            launchWheelBack = new LauncherWheelBlank();
+            launchWheel = new LauncherWheelBlank();
         }
 
         if (parameters.launchGateParams.present) {
-//            Class deviceClass = parameters.launchGateParams.deviceClass;
-//            if (deviceClass.equals(Servo.class)) {
-//                launchGate = new LauncherGateServoImpl(parameters.launchGateParams);
-//            } else if (deviceClass.equals(CRServo.class)) {
-//                launchGate = new LauncherGateCRServoImpl(parameters.launchGateParams);
-//            } else if (deviceClass.equals(DcMotorEx.class)) {
-//                launchGate = new LauncherGateMotorImpl(parameters.launchGateParams);
-//            } else {
-//                throw new InvalidDeviceClassException("launchGateParams.deviceClass must be 'Servo.class', 'CRServo.class', or 'DcMotorEx.class'.");
-//            }
-            launchGate = new LauncherGateMotorImpl(parameters.launchGateParams);
+            launchGate = new LauncherGateImpl(parameters.launchGateParams);
         } else {
             launchGate = new LauncherGateBlank();
         }
@@ -179,8 +150,7 @@ public class Robot25 {
         drive.update();
         imu.update();
 
-        launchWheelFront.update();
-        launchWheelBack.update();
+        launchWheel.update();
         launchGate.update();
         motorIntake.update();
     }

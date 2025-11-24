@@ -22,10 +22,6 @@ public interface LauncherGate {
         /** You have already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-//        /** The class of the actuator that will run the gate.
-//         * Example: for a Servo, this would be 'Servo.class'. <b>Has no default.</b> */
-//        public Class deviceClass = DcMotorEx.class;
-
         /** The actuator that will run the gate, already instantiated and configured. <b>Has no default.</b> */
         public DcMotorSimple device;
 
