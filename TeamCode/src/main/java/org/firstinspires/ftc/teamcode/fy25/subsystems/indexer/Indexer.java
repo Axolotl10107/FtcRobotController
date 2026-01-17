@@ -5,6 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public interface Indexer {
 
+    enum State {
+        PREP,
+        READY,
+        TO,
+        NEXT
+    }
     enum Index {
         A,
         B,

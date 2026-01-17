@@ -14,7 +14,9 @@ import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
@@ -190,6 +192,9 @@ public class RobotRoundhouse25 {
         motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
         motorIntakeParams.IntakeTPS = 166865;
 
+        Indexer.Parameters indexerParams = new Indexer.Parameters(false);
+        Loader.Parameters loaderParams = new Loader.Parameters(false);
+
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
 //        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0,0 );
         extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
@@ -208,7 +213,9 @@ public class RobotRoundhouse25 {
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,
-                motorIntakeParams
+                motorIntakeParams,
+                indexerParams,
+                loaderParams
         );
 
         return params;
@@ -272,25 +279,33 @@ public class RobotRoundhouse25 {
 //        launchWheelParams.spinFactor = 1.25;
 //        launchWheelParams.distanceCoef = 1.0;
 
-        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
-        CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");
-        CRServo servoRight = hardwareMap.get(CRServo.class, "launchGateServoRight");
-        servoLeft.setDirection(REVERSE);
-        launchGateParams.device = new DualCRServo(servoRight, servoLeft);
+        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
+//        CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");
+//        CRServo servoRight = hardwareMap.get(CRServo.class, "launchGateServoRight");
+//        servoLeft.setDirection(REVERSE);
+//        launchGateParams.device = new DualCRServo(servoRight, servoLeft);
 
         LauncherGateServo.Parameters launchGateServoParams = new LauncherGateServo.Parameters(true);
         launchGateServoParams.device = hardwareMap.get(Servo.class, "launchGateServo");
 
 
-        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
-        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
-        motorIntakeParams.IntakeTPS = 537;
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
+//        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
+//        motorIntakeParams.IntakeTPS = 537;
+
+        Indexer.Parameters indexerParams = new Indexer.Parameters(true);
+        indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
+        indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor"); /* This is the same object as the flywheel, but is only used as an encoder */
+        indexerParams.ticksPerRevolution = 8192;
+
+        Loader.Parameters loaderParams = new Loader.Parameters(true);
+        loaderParams.device = hardwareMap.get(Servo.class, "loaderServo");
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
 //        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0.023, 0, 0, 0);
         extendedParams.imuCorrectorParams = new IMUCorrector.Parameters(
-                new TunablePID(0.023, 0, 0, 0)
+                new TunablePID(0, 0, 0, 0)
         );
         extendedParams.imuCorrectorParams.haveHitTargetToleranceDegrees = 0.1;
         extendedParams.imuCorrectorParams.hdgErrToleranceDegrees = 1.0;
@@ -306,7 +321,9 @@ public class RobotRoundhouse25 {
                 launchWheelParams,
                 launchGateParams,
                 launchGateServoParams,
-                motorIntakeParams
+                motorIntakeParams,
+                indexerParams,
+                loaderParams
         );
 
         return params;
@@ -385,6 +402,10 @@ public class RobotRoundhouse25 {
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
+        Indexer.Parameters indexerParams = new Indexer.Parameters(false);
+
+        Loader.Parameters loaderParams = new Loader.Parameters(false);
+
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
@@ -394,7 +415,9 @@ public class RobotRoundhouse25 {
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,
-                motorIntakeParams
+                motorIntakeParams,
+                indexerParams,
+                loaderParams
         );
 
         // These were removed some time ago, but if you need these values for something else,
@@ -457,6 +480,10 @@ public class RobotRoundhouse25 {
 //        motorIntakeParams.IntakeTPS = 537;
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
+        Indexer.Parameters indexerParams = new Indexer.Parameters(false);
+
+        Loader.Parameters loaderParams = new Loader.Parameters(false);
+
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
 //        extendedParams.hdgCorrectionPIDConsts = new PIDConsts(0, 0, 0, 0);
@@ -476,7 +503,9 @@ public class RobotRoundhouse25 {
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,
-                motorIntakeParams
+                motorIntakeParams,
+                indexerParams,
+                loaderParams
         );
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters

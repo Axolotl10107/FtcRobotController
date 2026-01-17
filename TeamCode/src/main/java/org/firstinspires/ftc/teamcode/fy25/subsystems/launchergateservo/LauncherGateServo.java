@@ -15,7 +15,6 @@ public interface LauncherGateServo {
         }
         public final boolean present;
         public Servo device;
-        public double power = 0;
     }
     void open();
     void close();

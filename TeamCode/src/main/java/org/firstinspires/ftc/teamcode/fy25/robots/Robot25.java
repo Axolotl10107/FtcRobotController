@@ -10,10 +10,16 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyI
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeImpl;
@@ -62,7 +68,11 @@ public class Robot25 {
                 LauncherWheel.Parameters launchWheelParams,
                 LauncherGate.Parameters launchGateParams,
                 LauncherGateServo.Parameters launchGateServoParams,
-                MotorIntake.Parameters motorIntakeParams
+                MotorIntake.Parameters motorIntakeParams,
+
+                Indexer.Parameters indexerParameters,
+                Loader.Parameters loaderParameters
+
         ) {
             // Every season
             this.extendedParameters = extendedParameters;
@@ -74,6 +84,9 @@ public class Robot25 {
             this.launchGateParams = launchGateParams;
             this.launcherGateServoParams = launchGateServoParams;
             this.motorIntakeParams = motorIntakeParams;
+
+            this.indexerParameters = indexerParameters;
+            this.loaderParameters = loaderParameters;
         }
 
         final ExtendedParameters extendedParameters;
@@ -85,6 +98,9 @@ public class Robot25 {
 
         final LauncherGateServo.Parameters launcherGateServoParams;
         final MotorIntake.Parameters motorIntakeParams;
+        final Indexer.Parameters indexerParameters;
+        final Loader.Parameters loaderParameters;
+
     }
 
     public final ExtendedParameters extendedParameters;
@@ -96,6 +112,8 @@ public class Robot25 {
     public final LauncherGate launchGate;
     public final LauncherGateServo launchGateServo;
     public final MotorIntake motorIntake;
+    public final Indexer indexer;
+    public final Loader loader;
 
 
     public final VoltageSensor voltageSensor;
@@ -151,6 +169,19 @@ public class Robot25 {
             motorIntake = new MotorIntakeBlank();
         }
 
+        if (parameters.indexerParameters.present) {
+            indexer = new IndexerImpl(parameters.indexerParameters);
+        } else {
+            indexer = new IndexerBlank();
+        }
+
+        if (parameters.loaderParameters.present) {
+            loader = new LoaderImpl(parameters.loaderParameters);
+        } else {
+            loader = new LoaderBlank();
+        }
+
+
         // Lynx stuff found in RR's SampleMecanumDrive
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
@@ -167,6 +198,8 @@ public class Robot25 {
         launchWheel.update();
         launchGate.update();
         motorIntake.update();
+        indexer.update();
+        loader.update();
     }
 
 }
