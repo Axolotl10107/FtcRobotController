@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
@@ -154,9 +155,16 @@ public class RobotRoundhouse25 {
 
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
-        DcMotorEx launchWheelMotor = new DualDcMotorEx(
+        DcMotorEx launchWheelFirstMotor = new DualDcMotorEx(
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront"),
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack")
+        );
+        DcMotorEx launchWheelMotor = new DualDcMotorEx(
+                launchWheelFirstMotor,
+                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFrontEx")
+
+                // TODO: reverse launch wheel front ex...chloe did this in DuelMotorEx...it works
+                //problem...the intake thingy that moves with the outtake wheel doesnt work now
         );
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launchWheelParams.motor = launchWheelMotor;
@@ -173,9 +181,13 @@ public class RobotRoundhouse25 {
         launchGateParams.device = hardwareMap.get(DcMotorSimple.class, "launchGateMotor");
         launchGateParams.power = 1;
 
+//        LauncherGateServo.Parameters launchGateServoParams = new LauncherGateServo.Parameters(true);
+//        launchGateServoParams.device = hardwareMap.get(Servo.class, "launchGateServo");
+        LauncherGateServo.Parameters launcherGateServoParams = new LauncherGateServo.Parameters(false);
+
+
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
-        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        motorIntakeParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
         motorIntakeParams.IntakeTPS = 166865;
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
@@ -195,6 +207,7 @@ public class RobotRoundhouse25 {
 
                 launchWheelParams,
                 launchGateParams,
+                launcherGateServoParams,
                 motorIntakeParams
         );
 
@@ -265,10 +278,12 @@ public class RobotRoundhouse25 {
         servoLeft.setDirection(REVERSE);
         launchGateParams.device = new DualCRServo(servoRight, servoLeft);
 
+        LauncherGateServo.Parameters launchGateServoParams = new LauncherGateServo.Parameters(true);
+        launchGateServoParams.device = hardwareMap.get(Servo.class, "launchGateServo");
+
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
-        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
-        motorIntakeParams.motor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
         motorIntakeParams.IntakeTPS = 537;
 
 
@@ -290,6 +305,7 @@ public class RobotRoundhouse25 {
 
                 launchWheelParams,
                 launchGateParams,
+                launchGateServoParams,
                 motorIntakeParams
         );
 
@@ -363,8 +379,9 @@ public class RobotRoundhouse25 {
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
-
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
+
+        LauncherGateServo.Parameters launcherGateServoParams = new LauncherGateServo.Parameters(false);
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
@@ -376,6 +393,7 @@ public class RobotRoundhouse25 {
 
                 launchWheelParams,
                 launchGateParams,
+                launcherGateServoParams,
                 motorIntakeParams
         );
 
@@ -430,6 +448,8 @@ public class RobotRoundhouse25 {
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
 //        launchGateParams.deviceClass = CRServo.class;
         launchGateParams.device = hardwareMap.get(CRServo.class, "servo");
+
+        LauncherGateServo.Parameters launcherGateServoParams = new LauncherGateServo.Parameters(false);
 //        LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 
 //        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
@@ -455,6 +475,7 @@ public class RobotRoundhouse25 {
 
                 launchWheelParams,
                 launchGateParams,
+                launcherGateServoParams,
                 motorIntakeParams
         );
 //        params.tpr = 537.7; // ticks per rotation

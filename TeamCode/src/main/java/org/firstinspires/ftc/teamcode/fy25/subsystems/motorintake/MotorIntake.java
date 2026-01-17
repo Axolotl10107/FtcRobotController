@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankCRServo;
 import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMotor;
 
 public interface MotorIntake {
@@ -19,7 +21,7 @@ public interface MotorIntake {
 
         public final boolean present;
 
-        public DcMotorEx motor = new BlankMotor();
+        public CRServo motor = new BlankCRServo();
 
         public double IntakeTPS = 0;
     }

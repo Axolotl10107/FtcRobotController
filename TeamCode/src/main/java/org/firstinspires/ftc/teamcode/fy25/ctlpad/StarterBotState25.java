@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.fy25.ctlpad;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 
@@ -16,6 +17,8 @@ public class StarterBotState25 {
     //    private LauncherWheel.State launcherWheelState = LauncherWheel.State.STOPPED;
     private boolean runLaunchWheel;
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
+
+    private LauncherGateServo.State launcherGateServoState = LauncherGateServo.State.CLOSED;
 
     private double maxDriveSpeed = 1;
     private double launchVel = 168000.0;
@@ -73,6 +76,8 @@ public class StarterBotState25 {
     }
 
     public void setLauncherGateState(LauncherGate.State state) {launcherGateState = state;}
+
+    public void setLauncherGateServoState(LauncherGateServo.State state) {launcherGateServoState = state;}
 
     public LauncherGate.State getLauncherGateState() {return launcherGateState;}
 

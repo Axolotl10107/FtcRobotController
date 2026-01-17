@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
 public class MotorIntakeImpl implements MotorIntake{
-    DcMotorEx motor;
+    CRServo motor;
     double intakeVel;
     final double tolerance = 20;
     State state = State.NONE;
@@ -18,17 +19,17 @@ public class MotorIntakeImpl implements MotorIntake{
 
     @Override
     public void spinIn() {
-        motor.setVelocity(getIntakeVelocity());
+        motor.setPower(1);
     }
 
     @Override
     public void spinOut() {
-        motor.setVelocity(-getIntakeVelocity());
+        motor.setPower(-1);
     }
 
     @Override
     public void stop() {
-        motor.setVelocity(0);
+        motor.setPower(0);
     }
 
     @Override

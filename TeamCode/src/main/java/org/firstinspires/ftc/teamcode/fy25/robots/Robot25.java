@@ -10,6 +10,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyI
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
@@ -58,6 +61,7 @@ public class Robot25 {
 
                 LauncherWheel.Parameters launchWheelParams,
                 LauncherGate.Parameters launchGateParams,
+                LauncherGateServo.Parameters launchGateServoParams,
                 MotorIntake.Parameters motorIntakeParams
         ) {
             // Every season
@@ -68,6 +72,7 @@ public class Robot25 {
             // This season
             this.launchWheelParams = launchWheelParams;
             this.launchGateParams = launchGateParams;
+            this.launcherGateServoParams = launchGateServoParams;
             this.motorIntakeParams = motorIntakeParams;
         }
 
@@ -77,6 +82,8 @@ public class Robot25 {
 
         final LauncherWheel.Parameters launchWheelParams;
         final LauncherGate.Parameters launchGateParams;
+
+        final LauncherGateServo.Parameters launcherGateServoParams;
         final MotorIntake.Parameters motorIntakeParams;
     }
 
@@ -87,6 +94,7 @@ public class Robot25 {
 
     public final LauncherWheel launchWheel;
     public final LauncherGate launchGate;
+    public final LauncherGateServo launchGateServo;
     public final MotorIntake motorIntake;
 
 
@@ -129,6 +137,12 @@ public class Robot25 {
             launchGate = new LauncherGateImpl(parameters.launchGateParams);
         } else {
             launchGate = new LauncherGateBlank();
+        }
+
+        if (parameters.launcherGateServoParams.present) {
+            launchGateServo = new LauncherGateServoImpl(parameters.launcherGateServoParams);
+        } else {
+            launchGateServo = new LauncherGateServoBlank();
         }
 
         if (parameters.motorIntakeParams.present) {
