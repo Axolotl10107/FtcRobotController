@@ -1,81 +1,102 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class IndexerImpl implements Indexer {
 
-    CRServo servo;
-    DcMotorEx encoder;
-    double ticksPerRevolution;
+    private final CRServo servo;
+    private final DcMotorEx encoder;
+
+    private final double ticksPerRevolution = 8192;
+    private final double ticksPerIndex = 2730;
+
+    private static final double kP = 0.0002;
+    private static final double MAX_POWER = 0.7;
+    private static final double DEADBAND = 20;
+
+    private double targetPos = 0;
+    private Index selected = Index.A;
 
     public IndexerImpl(Parameters parameters) {
         servo = parameters.indexerServo;
         encoder = parameters.encoderMotor;
-        ticksPerRevolution = parameters.ticksPerRevolution;
+
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    Index selected = Index.A;
-    double ticksPerIndex = ticksPerRevolution / 3;
-
-    double targetPos = 0;
-
-    boolean prepped = false;
+    @Override
+    public void testServo() {
+        servo.setPower(-1);
+    }
 
     @Override
     public void goTo(Index index) {
-        if (prepped) {return;}
-        int difference = selected.ordinal() - index.ordinal();
+        int numIndexes = Index.values().length;
 
-        if (difference > 0) {
-            targetPos += ticksPerIndex * difference;
-        } else if (difference < 0) {
-            targetPos += ticksPerIndex * (difference + 3);
+        int currentIndex =
+                Math.floorMod(
+                        (int) Math.round(encoder.getCurrentPosition() / ticksPerIndex),
+                        numIndexes
+                );
+
+        int targetIndex = index.ordinal();
+
+        int forwardSteps = targetIndex - currentIndex;
+        if (forwardSteps < 0) {
+            forwardSteps += numIndexes;
         }
+
+        targetPos = encoder.getCurrentPosition() + (forwardSteps * ticksPerIndex);
+        selected = index;
     }
 
     @Override
     public void next() {
-        if (prepped) {return;}
-        targetPos += ticksPerIndex;
-        targetPos %= ticksPerRevolution;
+        targetPos = encoder.getCurrentPosition() + ticksPerIndex;
+
+        selected = Index.values()[
+                (selected.ordinal() + 1) % Index.values().length
+                ];
     }
 
     @Override
     public void prepIntake(Index index) {
-        if (!prepped) {
-            goTo(index);
-            targetPos -= ticksPerIndex / 4;
-            prepped = true;
-        }
+        goTo(index);
+        targetPos -= ticksPerIndex / 4.0;
     }
 
     @Override
     public void intake() {
-        if (prepped) {
-            prepped = false;
-            targetPos += ticksPerIndex / 4;
-        }
+        targetPos += ticksPerIndex / 4.0;
+    }
+
+    @Override
+    public double getEncoder() {
+        return encoder.getCurrentPosition();
+    }
+
+    @Override
+    public double getTarget() {
+        return targetPos;
     }
 
     @Override
     public void update() {
-        double ticks = Math.floorMod(encoder.getCurrentPosition(), (int) ticksPerRevolution);
+        double current = encoder.getCurrentPosition();
+        double error = targetPos - current;
 
-
-        double error = targetPos - (Math.floorMod(encoder.getCurrentPosition(), (int) ticksPerRevolution));
-
-        if (error < 0) {
-            error += ticksPerRevolution;
-        }
-
-        if (error > 100) {
-            servo.setPower(1);
-        } else {
+        if (Math.abs(error) < DEADBAND) {
             servo.setPower(0);
+            return;
         }
 
-        int indexNum = (int) Math.round(ticks / ticksPerIndex) % 3;
-        selected = Index.values()[indexNum];
+        double power = error * kP;
+
+        power = Math.max(-MAX_POWER, Math.min(MAX_POWER, power));
+
+        servo.setPower(-power);
     }
 }

@@ -12,6 +12,11 @@ public class LauncherGateServoBlank implements LauncherGateServo {
     }
 
     @Override
+    public double getPos() {
+        return 0;
+    }
+
+    @Override
     public boolean isOpen() {
         return false;
     }

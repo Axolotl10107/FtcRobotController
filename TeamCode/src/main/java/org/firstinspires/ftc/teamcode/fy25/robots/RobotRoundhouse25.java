@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMeca
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimple;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
@@ -170,6 +171,8 @@ public class RobotRoundhouse25 {
         );
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launchWheelParams.motor = launchWheelMotor;
+
+        LauncherWheelSimple.Parameters launchWheelSimpleParams = new LauncherWheelSimple.Parameters(false);
         // calibrate spinFactor and distanceCoef
 //        launchWheelParams.spinFactor = 1.25;
 //        launchWheelParams.distanceCoef = 1.0;
@@ -210,6 +213,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
+                launchWheelSimpleParams,
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,
@@ -267,17 +271,14 @@ public class RobotRoundhouse25 {
 
         // the rest of the defaults in RRMecanumDrive.Parameters should work here
 
-
-        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(true);
-        DcMotorEx launchWheelMotor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        LauncherWheelSimple.Parameters launchWheelSimpleParams = new LauncherWheelSimple.Parameters(true);
+        LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
+        DcMotor launchWheelMotor = hardwareMap.get(DcMotor.class, "launchWheelMotor");
+//        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
+//        launchWheelMotor2.setDirection(REVERSE);
+//        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launchWheelParams.motor = launchWheelMotor;
-        launchWheelParams.velocityRPM = 6000;
-        launchWheelParams.velocityTolerance = 20;
-        launchWheelParams.motorTPR = 28;
-        launchWheelParams.denyVel = -500;
-//        launchWheelParams.spinFactor = 1.25;
-//        launchWheelParams.distanceCoef = 1.0;
+        launchWheelSimpleParams.motor = launchWheelMotor;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 //        CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");
@@ -295,11 +296,13 @@ public class RobotRoundhouse25 {
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(true);
         indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
-        indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "launchWheelMotor"); /* This is the same object as the flywheel, but is only used as an encoder */
+        indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "encoder");
         indexerParams.ticksPerRevolution = 8192;
 
         Loader.Parameters loaderParams = new Loader.Parameters(true);
-        loaderParams.device = hardwareMap.get(Servo.class, "loaderServo");
+        Servo loaderServo = hardwareMap.get(Servo.class, "loaderServo");
+        loaderServo.setDirection(Servo.Direction.REVERSE);
+        loaderParams.device = loaderServo;
 
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
@@ -318,6 +321,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
+                launchWheelSimpleParams,
                 launchWheelParams,
                 launchGateParams,
                 launchGateServoParams,
@@ -396,6 +400,8 @@ public class RobotRoundhouse25 {
 
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
+        LauncherWheelSimple.Parameters launchWheelSimpleParams = new LauncherWheelSimple.Parameters(false);
+
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 
         LauncherGateServo.Parameters launcherGateServoParams = new LauncherGateServo.Parameters(false);
@@ -412,6 +418,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
+                launchWheelSimpleParams,
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,
@@ -467,6 +474,8 @@ public class RobotRoundhouse25 {
         launchWheelParams.motor = hardwareMap.get(DcMotorEx.class, "motor");
 //         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
 
+        LauncherWheelSimple.Parameters launchWheelSimpleParams = new LauncherWheelSimple.Parameters(false);
+
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(true);
 //        launchGateParams.deviceClass = CRServo.class;
@@ -500,6 +509,7 @@ public class RobotRoundhouse25 {
                 driveParams,
                 imuParams,
 
+                launchWheelSimpleParams,
                 launchWheelParams,
                 launchGateParams,
                 launcherGateServoParams,

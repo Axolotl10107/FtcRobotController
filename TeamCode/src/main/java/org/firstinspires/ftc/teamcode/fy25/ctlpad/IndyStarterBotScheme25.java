@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
  * Matches the "Dual25" diagram. */
@@ -65,8 +66,9 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button prepIndexerIntake;
     private final Button indexerIntake;
 
-    //TODO add loader handling
-
+    private final Button loader;
+    private final Button incrementMotif;
+    private final Button resetMotif;
     private final Axis armFast;
     private final Axis armMedium;
     private final Axis armSlow;
@@ -123,6 +125,11 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         incrementIndexer = new TriggerButton(() -> manipulator.dpad_right);
         prepIndexerIntake = new TriggerButton(() -> manipulator.a);
         indexerIntake = new TriggerButton(() -> manipulator.x);
+
+        loader = new MomentaryButton(() -> manipulator.y);
+
+        incrementMotif = new TriggerButton(() -> manipulator.right_bumper);
+        resetMotif = new TriggerButton(() -> manipulator.left_bumper);
     }
 
     private void updateMovementState() {
@@ -238,6 +245,27 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
+    private void updateLoaderState() {
+        if (loader.isActive()) {
+            state.setLoaderState(Loader.State.LOAD);
+        } else {
+            state.setLoaderState(Loader.State.PASS);
+        }
+    }
+
+    private void updateMotif() {
+        if (incrementMotif.isActive()) {
+            if (state.getMotif() < 2) {
+                state.setMotif(state.getMotif() + 1);
+            } else {
+                state.setMotif(0);
+            }
+        }
+        if (resetMotif.isActive()) {
+            state.setMotif(0);
+        }
+    }
+
     private void updateDriveSpeedUpState() {
         if ( driveSpeedUpButton.isActive() ) {
             state.setMaxDriveSpeed( state.getMaxDriveSpeed() + 0.1 );
@@ -297,6 +325,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateLauncherWheelState();
         updateDistanceState();
         updateIndexer();
+        updateLoaderState();
+        updateMotif();
 
         return state;
     }

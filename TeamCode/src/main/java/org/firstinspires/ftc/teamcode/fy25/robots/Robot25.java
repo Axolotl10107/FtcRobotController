@@ -17,6 +17,9 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.Launcher
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheelImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimple;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimpleBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimpleImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderImpl;
@@ -65,6 +68,7 @@ public class Robot25 {
                 RRMecanumDrive.Parameters driveParameters,
                 FriendlyIMU.Parameters imuParameters,
 
+                LauncherWheelSimple.Parameters launchWheelSimpleParams,
                 LauncherWheel.Parameters launchWheelParams,
                 LauncherGate.Parameters launchGateParams,
                 LauncherGateServo.Parameters launchGateServoParams,
@@ -80,6 +84,7 @@ public class Robot25 {
             this.imuParameters = imuParameters;
 
             // This season
+            this.launchWheelSimpleParams = launchWheelSimpleParams;
             this.launchWheelParams = launchWheelParams;
             this.launchGateParams = launchGateParams;
             this.launcherGateServoParams = launchGateServoParams;
@@ -92,7 +97,7 @@ public class Robot25 {
         final ExtendedParameters extendedParameters;
         final RRMecanumDrive.Parameters driveParameters;
         final FriendlyIMU.Parameters imuParameters;
-
+        final LauncherWheelSimple.Parameters launchWheelSimpleParams;
         final LauncherWheel.Parameters launchWheelParams;
         final LauncherGate.Parameters launchGateParams;
 
@@ -107,7 +112,7 @@ public class Robot25 {
 
     public final RRMecanumDrive drive;
     public final FriendlyIMU imu;
-
+    public final LauncherWheelSimple launchWheelSimple;
     public final LauncherWheel launchWheel;
     public final LauncherGate launchGate;
     public final LauncherGateServo launchGateServo;
@@ -149,6 +154,12 @@ public class Robot25 {
             launchWheel = new LauncherWheelImpl(parameters.launchWheelParams);
         } else {
             launchWheel = new LauncherWheelBlank();
+        }
+
+        if (parameters.launchWheelSimpleParams.present) {
+            launchWheelSimple = new LauncherWheelSimpleImpl(parameters.launchWheelSimpleParams);
+        } else {
+            launchWheelSimple = new LauncherWheelSimpleBlank();
         }
 
         if (parameters.launchGateParams.present) {
@@ -195,6 +206,7 @@ public class Robot25 {
         drive.update();
         imu.update();
 
+        launchWheelSimple.update();
         launchWheel.update();
         launchGate.update();
         motorIntake.update();

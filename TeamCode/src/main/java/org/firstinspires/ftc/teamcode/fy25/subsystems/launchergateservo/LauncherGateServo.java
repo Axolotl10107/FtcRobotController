@@ -18,6 +18,8 @@ public interface LauncherGateServo {
     }
     void open();
     void close();
+
+    double getPos();
     boolean isOpen();
     void update();
 

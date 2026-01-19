@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.Trigge
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
@@ -24,6 +25,8 @@ public class StarterBotState25 {
     private Indexer.Index index = Indexer.Index.A;
 
     private Indexer.Index indexGoal = Indexer.Index.A;
+
+    private Loader.State loaderState = Loader.State.PASS;
     private double maxDriveSpeed = 1;
     private double launchVel = 168000.0;
 
@@ -48,6 +51,8 @@ public class StarterBotState25 {
     private boolean squareUp = false;
     private boolean brake = false;
     private boolean isAllow = false;
+
+    private int motif = 0;
 
     private double distance = 0;
 
@@ -83,8 +88,6 @@ public class StarterBotState25 {
 
     public void setMotorIntakeState(MotorIntake.State state) {motorIntakeState = state;}
 
-    //TODO add loader handling
-
     public void setRunLaunchWheel(boolean runLaunchWheel) {
         this.runLaunchWheel = runLaunchWheel;
     }
@@ -98,7 +101,16 @@ public class StarterBotState25 {
     public void setLauncherGateServoState(LauncherGateServo.State state) {launcherGateServoState = state;}
 
     public LauncherGate.State getLauncherGateState() {return launcherGateState;}
+
     public LauncherGateServo.State getLauncherGateServoState() {return launcherGateServoState;}
+
+    public void setLoaderState(Loader.State state) {loaderState = state;}
+
+    public Loader.State getLoaderState() {return loaderState;}
+
+    public void setMotif(int green) {motif = green;}
+
+    public int getMotif() {return motif;}
 
     public double getMaxDriveSpeed() {
         return maxDriveSpeed;
