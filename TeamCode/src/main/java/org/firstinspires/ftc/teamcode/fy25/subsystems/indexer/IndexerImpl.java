@@ -4,6 +4,13 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+// TODO: ↓↓↓
+/** michael help
+ * this one scares me
+ * it doesn't work and i can't figure out why
+ * thanks
+ * - sincerely, a very tired man
+ */
 public class IndexerImpl implements Indexer {
 
     private final CRServo servo;
@@ -12,12 +19,16 @@ public class IndexerImpl implements Indexer {
     private final double ticksPerRevolution = 8192;
     private final double ticksPerIndex = 2730;
 
-    private static final double kP = 0.0002;
-    private static final double MAX_POWER = 0.7;
-    private static final double DEADBAND = 20;
+    private final double intakeTicks = 1500;
 
-    private double targetPos = 0;
+    private static final double kP = 0.00015;
+    private static final double MAX_POWER = 0.7;
+    private static final double DEADBAND = 50;
+
     private Index selected = Index.A;
+    private double remainingDelta = 0;
+    private double lastEncoderPos;
+    private boolean prepping = false;
 
     public IndexerImpl(Parameters parameters) {
         servo = parameters.indexerServo;
@@ -25,23 +36,19 @@ public class IndexerImpl implements Indexer {
 
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        lastEncoderPos = encoder.getCurrentPosition();
     }
 
     @Override
-    public void testServo() {
-        servo.setPower(-1);
+    public double getRd() {
+        return remainingDelta;
     }
 
     @Override
     public void goTo(Index index) {
         int numIndexes = Index.values().length;
-
-        int currentIndex =
-                Math.floorMod(
-                        (int) Math.round(encoder.getCurrentPosition() / ticksPerIndex),
-                        numIndexes
-                );
-
+        int currentIndex = selected.ordinal();
         int targetIndex = index.ordinal();
 
         int forwardSteps = targetIndex - currentIndex;
@@ -49,52 +56,71 @@ public class IndexerImpl implements Indexer {
             forwardSteps += numIndexes;
         }
 
-        targetPos = encoder.getCurrentPosition() + (forwardSteps * ticksPerIndex);
+        remainingDelta += forwardSteps * ticksPerIndex;
         selected = index;
     }
+    // Schrodinger's method
+    // it hasn't been tested, therefore it is both functional and not functional
+    // shut up i know it doesn't work but let me live in my delusions
 
     @Override
     public void next() {
-        targetPos = encoder.getCurrentPosition() + ticksPerIndex;
-
+        remainingDelta += ticksPerIndex;
         selected = Index.values()[
                 (selected.ordinal() + 1) % Index.values().length
                 ];
     }
 
     @Override
-    public void prepIntake(Index index) {
-        goTo(index);
-        targetPos -= ticksPerIndex / 4.0;
+    public void prepIntake() {
+        if (prepping) {return;}
+        remainingDelta -= intakeTicks;
+        prepping = true;
     }
 
     @Override
     public void intake() {
-        targetPos += ticksPerIndex / 4.0;
+        if (!prepping) {return;}
+        remainingDelta += intakeTicks;
+        prepping = false;
     }
 
     @Override
     public double getEncoder() {
         return encoder.getCurrentPosition();
     }
+    // hey at least this one works
 
     @Override
-    public double getTarget() {
-        return targetPos;
+    public Indexer.Index getIndex() {
+        double relative = getEncoder() % ticksPerRevolution;
+
+        if (relative <= ticksPerIndex) {
+            return Indexer.Index.A;
+        }
+
+        if (relative <= 2 * ticksPerIndex) {
+            return Indexer.Index.B;
+        }
+
+        return Indexer.Index.C;
     }
 
     @Override
     public void update() {
-        double current = encoder.getCurrentPosition();
-        double error = targetPos - current;
+        double currentPos = encoder.getCurrentPosition();
+        double deltaMoved = currentPos - lastEncoderPos;
+        lastEncoderPos = currentPos;
 
-        if (Math.abs(error) < DEADBAND) {
+        remainingDelta -= deltaMoved;
+
+        if (Math.abs(remainingDelta) < DEADBAND) {
             servo.setPower(0);
+            remainingDelta = 0;
             return;
         }
 
-        double power = error * kP;
-
+        double power = remainingDelta * kP;
         power = Math.max(-MAX_POWER, Math.min(MAX_POWER, power));
 
         servo.setPower(-power);

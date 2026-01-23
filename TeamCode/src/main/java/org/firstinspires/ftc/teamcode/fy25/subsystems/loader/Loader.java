@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.loader;
 import com.fasterxml.jackson.databind.deser.impl.CreatorCandidate;
 import com.qualcomm.robotcore.hardware.Servo;
 
+/// shut up it's very different from LauncherGateServo
+/// this subsystem had to exist
 public interface Loader {
     enum State {
         LOAD,

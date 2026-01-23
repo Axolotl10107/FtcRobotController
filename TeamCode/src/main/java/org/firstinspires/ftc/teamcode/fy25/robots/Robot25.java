@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy25.robots;
 
+import android.util.Log;
+
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.*;
 
@@ -7,6 +9,9 @@ import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMUImpl;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntakeBlank;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntakeImpl;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
@@ -73,6 +78,7 @@ public class Robot25 {
                 LauncherGate.Parameters launchGateParams,
                 LauncherGateServo.Parameters launchGateServoParams,
                 MotorIntake.Parameters motorIntakeParams,
+                RotaryIntake.Parameters rotaryIntakeParams,
 
                 Indexer.Parameters indexerParameters,
                 Loader.Parameters loaderParameters
@@ -89,6 +95,7 @@ public class Robot25 {
             this.launchGateParams = launchGateParams;
             this.launcherGateServoParams = launchGateServoParams;
             this.motorIntakeParams = motorIntakeParams;
+            this.rotaryIntakeParams = rotaryIntakeParams;
 
             this.indexerParameters = indexerParameters;
             this.loaderParameters = loaderParameters;
@@ -103,6 +110,7 @@ public class Robot25 {
 
         final LauncherGateServo.Parameters launcherGateServoParams;
         final MotorIntake.Parameters motorIntakeParams;
+        final RotaryIntake.Parameters rotaryIntakeParams;
         final Indexer.Parameters indexerParameters;
         final Loader.Parameters loaderParameters;
 
@@ -117,6 +125,7 @@ public class Robot25 {
     public final LauncherGate launchGate;
     public final LauncherGateServo launchGateServo;
     public final MotorIntake motorIntake;
+    public final RotaryIntake rotaryIntake;
     public final Indexer indexer;
     public final Loader loader;
 
@@ -180,6 +189,12 @@ public class Robot25 {
             motorIntake = new MotorIntakeBlank();
         }
 
+        if (parameters.rotaryIntakeParams.present) {
+            rotaryIntake = new RotaryIntakeImpl(parameters.rotaryIntakeParams);
+        } else {
+            rotaryIntake = new RotaryIntakeBlank();
+        }
+
         if (parameters.indexerParameters.present) {
             indexer = new IndexerImpl(parameters.indexerParameters);
         } else {
@@ -210,6 +225,7 @@ public class Robot25 {
         launchWheel.update();
         launchGate.update();
         motorIntake.update();
+        rotaryIntake.update();
         indexer.update();
         loader.update();
     }

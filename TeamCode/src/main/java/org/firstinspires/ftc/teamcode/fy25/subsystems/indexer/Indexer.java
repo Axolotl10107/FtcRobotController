@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 public interface Indexer {
 
@@ -34,19 +33,19 @@ public interface Indexer {
         public double ticksPerRevolution; // 8192
     }
 
-    void testServo();
+    double getRd();
 
     void goTo(Index index);
 
     void next();
 
-    void prepIntake(Index index);
+    void prepIntake();
 
     void intake();
 
     double getEncoder();
 
-    double getTarget();
+    Index getIndex();
 
     void update();
 

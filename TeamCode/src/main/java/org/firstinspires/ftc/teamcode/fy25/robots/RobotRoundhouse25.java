@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
+import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
@@ -195,6 +196,8 @@ public class RobotRoundhouse25 {
         motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
         motorIntakeParams.IntakeTPS = 166865;
 
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
+
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
         Loader.Parameters loaderParams = new Loader.Parameters(false);
 
@@ -218,6 +221,7 @@ public class RobotRoundhouse25 {
                 launchGateParams,
                 launcherGateServoParams,
                 motorIntakeParams,
+                rotaryIntakeParams,
                 indexerParams,
                 loaderParams
         );
@@ -251,6 +255,8 @@ public class RobotRoundhouse25 {
         dc.kV = .017;
         dc.kA = .002;
         dc.kStatic = 0.0001;
+        /// definitely tuned
+        /// totally
 
         driveParams.leftFrontMotor = hardwareMap.get(DcMotorEx.class, "leftFront");
         driveParams.leftFrontMotor.setDirection(REVERSE);
@@ -291,8 +297,10 @@ public class RobotRoundhouse25 {
 
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
-//        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
-//        motorIntakeParams.IntakeTPS = 537;
+
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(true);
+        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+        rotaryIntakeParams.servoPower = 1;
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(true);
         indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
@@ -326,6 +334,7 @@ public class RobotRoundhouse25 {
                 launchGateParams,
                 launchGateServoParams,
                 motorIntakeParams,
+                rotaryIntakeParams,
                 indexerParams,
                 loaderParams
         );
@@ -408,6 +417,8 @@ public class RobotRoundhouse25 {
 
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
+
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
 
         Loader.Parameters loaderParams = new Loader.Parameters(false);
@@ -423,6 +434,7 @@ public class RobotRoundhouse25 {
                 launchGateParams,
                 launcherGateServoParams,
                 motorIntakeParams,
+                rotaryIntakeParams,
                 indexerParams,
                 loaderParams
         );
@@ -489,6 +501,8 @@ public class RobotRoundhouse25 {
 //        motorIntakeParams.IntakeTPS = 537;
         MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
 
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
+
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
 
         Loader.Parameters loaderParams = new Loader.Parameters(false);
@@ -514,6 +528,7 @@ public class RobotRoundhouse25 {
                 launchGateParams,
                 launcherGateServoParams,
                 motorIntakeParams,
+                rotaryIntakeParams,
                 indexerParams,
                 loaderParams
         );

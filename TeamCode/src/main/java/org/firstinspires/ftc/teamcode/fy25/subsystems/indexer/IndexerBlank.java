@@ -3,8 +3,9 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
 public class IndexerBlank implements Indexer {
 
     @Override
-    public void testServo() {
+    public double getRd() {
 
+        return 0;
     }
     @Override
     public void goTo(Index index) {
@@ -17,7 +18,7 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
-    public void prepIntake(Index index) {
+    public void prepIntake() {
 
     }
 
@@ -32,8 +33,8 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
-    public double getTarget() {
-        return 0;
+    public Index getIndex() {
+        return null;
     }
 
     @Override

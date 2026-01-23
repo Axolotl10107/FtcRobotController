@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
-
 public class LauncherGateServoImpl implements  LauncherGateServo {
     Servo servo;
     public LauncherGateServoImpl(Parameters parameters) {
@@ -18,11 +16,6 @@ public class LauncherGateServoImpl implements  LauncherGateServo {
     @Override
     public void close() {
         servo.setPosition(0);
-    }
-
-    @Override
-    public double getPos() {
-        return servo.getPosition();
     }
 
     @Override

@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMoto
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
 import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMotor;
 
+/// there was probably a better way to pass a normal DcMotor as a LauncherWheel but this felt mildly easier
 public interface LauncherWheelSimple {
     /** Represents the state of the launcher. */
     enum State {
