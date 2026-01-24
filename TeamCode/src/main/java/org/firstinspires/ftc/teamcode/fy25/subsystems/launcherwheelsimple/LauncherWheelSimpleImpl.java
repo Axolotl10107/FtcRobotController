@@ -12,8 +12,8 @@ public class LauncherWheelSimpleImpl implements LauncherWheelSimple{
 
     }
     @Override
-    public void spinUp() {
-        power = 1;
+    public void spinUp(double power) {
+        this.power = power;
     }
 
     @Override

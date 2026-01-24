@@ -27,6 +27,8 @@ public class StarterBotState25 {
     private Indexer.Index indexGoal = Indexer.Index.A;
 
     private Loader.State loaderState = Loader.State.PASS;
+
+    private int manualOverrideState = 0;
     private double maxDriveSpeed = 1;
     private double launchVel = 168000.0;
 
@@ -153,4 +155,8 @@ public class StarterBotState25 {
     public void setAllowEntry(boolean b) {isAllow = b;}
 
     public boolean getAllowEntry() {return isAllow;}
+
+    public void setManualOverrideState(int v) {manualOverrideState = v;}
+
+    public double getManualOverrideState() {return manualOverrideState;}
 }

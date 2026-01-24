@@ -10,12 +10,12 @@ public class LauncherGateServoImpl implements  LauncherGateServo {
 
     @Override
     public void open() {
-        servo.setPosition(0.4);
+        servo.setPosition(0);
     }
 
     @Override
     public void close() {
-        servo.setPosition(0);
+        servo.setPosition(0.8);
     }
 
     @Override

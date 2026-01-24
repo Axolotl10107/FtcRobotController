@@ -30,7 +30,8 @@ public interface LauncherWheelSimple {
     }
 
     /** Apply power to the launch wheel. */
-    void spinUp();
+    void spinUp(double power);
+
     /** Remove power from the launch wheel. */
     void spinDown();
 

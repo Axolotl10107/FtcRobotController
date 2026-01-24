@@ -69,6 +69,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button loader;
     private final Button incrementMotif;
     private final Button resetMotif;
+    private final Button manualIndexerOverrideLeft;
+    private final Button manualIndexerOverrideRight;
     private final Axis armFast;
     private final Axis armMedium;
     private final Axis armSlow;
@@ -125,6 +127,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         incrementIndexer = new TriggerButton(() -> manipulator.dpad_right);
         prepIndexerIntake = new TriggerButton(() -> manipulator.a);
         indexerIntake = new TriggerButton(() -> manipulator.x);
+        manualIndexerOverrideLeft = new MomentaryButton(() -> manipulator.left_bumper);
+        manualIndexerOverrideRight = new MomentaryButton(() -> manipulator.right_bumper);
 
         loader = new MomentaryButton(() -> manipulator.y);
 
@@ -235,6 +239,17 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
+    private void updateManualOverride() {
+        int v = 0;
+        if (manualIndexerOverrideLeft.isActive()) {
+            v--;
+        }
+        if (manualIndexerOverrideRight.isActive()) {
+            v++;
+        }
+        state.setManualOverrideState(v);
+    }
+
     private void updateLauncherGateState() {
         if (launcherGateIn.value() > 0) {
             state.setLauncherGateState(LauncherGate.State.OPEN);
@@ -327,6 +342,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateIndexer();
         updateLoaderState();
         updateMotif();
+        updateManualOverride();
 
         return state;
     }

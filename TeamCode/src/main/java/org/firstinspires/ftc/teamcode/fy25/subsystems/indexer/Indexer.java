@@ -35,6 +35,10 @@ public interface Indexer {
 
     double getRd();
 
+    void manualOverride(int direction);
+
+    void resetEncoder();
+
     void goTo(Index index);
 
     void next();

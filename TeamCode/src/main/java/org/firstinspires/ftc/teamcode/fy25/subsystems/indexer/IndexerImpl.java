@@ -19,9 +19,9 @@ public class IndexerImpl implements Indexer {
     private final double ticksPerRevolution = 8192;
     private final double ticksPerIndex = 2730;
 
-    private final double intakeTicks = 1500;
+    private final double intakeTicks = 1200;
 
-    private static final double kP = 0.00015;
+    private static final double kP = 0.00022;
     private static final double MAX_POWER = 0.7;
     private static final double DEADBAND = 50;
 
@@ -37,12 +37,22 @@ public class IndexerImpl implements Indexer {
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         encoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        lastEncoderPos = encoder.getCurrentPosition();
+        lastEncoderPos = getEncoder();
     }
 
     @Override
     public double getRd() {
         return remainingDelta;
+    }
+
+    @Override
+    public void manualOverride(int direction) {
+        remainingDelta = direction * 1200;
+    }
+
+    @Override
+    public void resetEncoder() {
+        encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -108,7 +118,7 @@ public class IndexerImpl implements Indexer {
 
     @Override
     public void update() {
-        double currentPos = encoder.getCurrentPosition();
+        double currentPos = getEncoder();
         double deltaMoved = currentPos - lastEncoderPos;
         lastEncoderPos = currentPos;
 

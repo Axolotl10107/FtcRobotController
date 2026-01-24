@@ -279,12 +279,15 @@ public class RobotRoundhouse25 {
 
         LauncherWheelSimple.Parameters launchWheelSimpleParams = new LauncherWheelSimple.Parameters(true);
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
-        DcMotor launchWheelMotor = hardwareMap.get(DcMotor.class, "launchWheelMotor");
-//        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
-//        launchWheelMotor2.setDirection(REVERSE);
-//        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
-        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
+        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
+        launchWheelMotor.setDirection(REVERSE);
         launchWheelSimpleParams.motor = launchWheelMotor;
+//        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        launchWheelParams.motor = launchWheelMotor;
+//        launchWheelParams.motorTPR = 28;
+//        launchWheelParams.velocityRPM = 5000;
 
         LauncherGate.Parameters launchGateParams = new LauncherGate.Parameters(false);
 //        CRServo servoLeft = hardwareMap.get(CRServo.class, "launchGateServoLeft");

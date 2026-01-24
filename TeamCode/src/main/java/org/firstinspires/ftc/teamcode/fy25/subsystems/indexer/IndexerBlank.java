@@ -4,9 +4,19 @@ public class IndexerBlank implements Indexer {
 
     @Override
     public double getRd() {
-
         return 0;
     }
+
+    @Override
+    public void manualOverride(int direction) {
+
+    }
+
+    @Override
+    public void resetEncoder() {
+
+    }
+
     @Override
     public void goTo(Index index) {
 

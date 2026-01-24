@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 
 public class LauncherWheelSimpleBlank implements LauncherWheelSimple {
     @Override
-    public void spinUp() {
+    public void spinUp(double power) {
 
     }
 

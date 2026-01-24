@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 
 @TeleOp(name="NewBotTesting")
@@ -33,6 +34,8 @@ public class NewBotTesting extends OpMode {
         imuCorrector = new IMUCorrector( robot.extendedParameters.imuCorrectorParams );
 
         controlScheme = new IndyStarterBotScheme25( gamepad1, gamepad2 );
+
+        robot.launchWheel.setLaunchRPM(100);
     }
 
     @Override
@@ -43,10 +46,10 @@ public class NewBotTesting extends OpMode {
         DTS correctedDTS = imuCorrector.correctDTS( dts, robot.imu.yaw() );
         DTS normalizedDTS = correctedDTS.normalize();
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
-        DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
-        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
-        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
-        launchWheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//        DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
+//        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
+//        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
+//        launchWheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         // it doesn't want to work when i do it in robot roundhouse, i give up
 
         robot.drive.applyDTS( scaledDTS );
@@ -55,12 +58,11 @@ public class NewBotTesting extends OpMode {
             robot.drive.applyDTS( new DTS( 0, 0, 0 ) );
         }
 
-//        if (controlState.getLauncherGateServoState() == LauncherGateServo.State.OPEN) {
-//            robot.launchGateServo.open();
-//        } else if (controlState.getLauncherGateServoState() == LauncherGateServo.State.CLOSED) {
-//            robot.launchGateServo.close();
-//        }
-        ///  this has been replaced by an intake
+        if (controlState.getLauncherGateServoState() == LauncherGateServo.State.OPEN) {
+            robot.launchGateServo.open();
+        } else if (controlState.getLauncherGateServoState() == LauncherGateServo.State.CLOSED) {
+            robot.launchGateServo.close();
+        }
 
         if (controlState.getLoaderState() == Loader.State.LOAD) {
             robot.loader.load();
@@ -68,21 +70,22 @@ public class NewBotTesting extends OpMode {
             robot.loader.pass();
         }
 
-        if (controlState.getIndexState() == Indexer.State.NEXT) {
+        if (controlState.getManualOverrideState() != 0) {
+            robot.indexer.manualOverride((int) controlState.getManualOverrideState());
+            robot.indexer.resetEncoder();
+        } else if (controlState.getIndexState() == Indexer.State.NEXT) {
             robot.indexer.next();
             controlState.setIndexState(Indexer.State.READY);
-        }
-
-        if (controlState.isRunLaunchWheel()) {
-            launchWheelMotor.setPower(1);
-        } else {
-            launchWheelMotor.setPower(0);
-        }
-
-        if (controlState.getIndexState() == Indexer.State.PREP) {
+        } else if (controlState.getIndexState() == Indexer.State.PREP) {
             robot.indexer.prepIntake();
         } else if (controlState.getIndexState() == Indexer.State.TO) {
             robot.indexer.goTo(robot.indexer.getIndex());
+        }
+
+        if (controlState.isRunLaunchWheel()) {
+            robot.launchWheelSimple.spinUp(0.8);
+        } else {
+            robot.launchWheelSimple.spinDown();
         }
 
         switch (controlState.getIntakeState()) {
@@ -120,7 +123,7 @@ public class NewBotTesting extends OpMode {
         telemetry.addData("Intake State", robot.rotaryIntake.getState());
         telemetry.addData("Loader State", controlState.getLoaderState());
         telemetry.addData("Gate State", controlState.getLauncherGateServoState());
-        telemetry.addData("Launch Wheel", controlState.isRunLaunchWheel());
+        telemetry.addData("Launch Wheel", robot.launchWheel.getCurrentRPM());
         /// legend has it you can tell which subsystem was the most annoying to implement by looking at how many telemetry lines it has
 
         ///  I forgot to add these lines
