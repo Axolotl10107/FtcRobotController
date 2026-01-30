@@ -46,11 +46,6 @@ public class NewBotTesting extends OpMode {
         DTS correctedDTS = imuCorrector.correctDTS( dts, robot.imu.yaw() );
         DTS normalizedDTS = correctedDTS.normalize();
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
-//        DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
-//        DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
-//        DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
-//        launchWheelMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        // it doesn't want to work when i do it in robot roundhouse, i give up
 
         robot.drive.applyDTS( scaledDTS );
 
@@ -83,7 +78,7 @@ public class NewBotTesting extends OpMode {
         }
 
         if (controlState.isRunLaunchWheel()) {
-            robot.launchWheelSimple.spinUp(0.8);
+            robot.launchWheelSimple.spinUp(0.95);
         } else {
             robot.launchWheelSimple.spinDown();
         }

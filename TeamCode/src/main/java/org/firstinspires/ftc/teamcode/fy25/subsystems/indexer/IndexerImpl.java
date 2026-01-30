@@ -51,6 +51,11 @@ public class IndexerImpl implements Indexer {
     }
 
     @Override
+    public void unload() {
+        servo.setPower(1);
+    }
+
+    @Override
     public void resetEncoder() {
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }

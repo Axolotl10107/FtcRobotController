@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="TeamCode">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-01-24T04:35:39.226151300Z">
+        <DropdownSelection timestamp="2026-01-30T01:57:13.046027200Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="Default" identifier="serial=192.168.43.1:5555;connection=c1a926d5" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\lmrobotics\.android\avd\Pixel_3a_API_33_x86_64.avd" />
             </handle>
           </Target>
         </DropdownSelection>

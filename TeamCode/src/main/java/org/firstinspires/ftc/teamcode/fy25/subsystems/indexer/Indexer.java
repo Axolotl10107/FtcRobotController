@@ -37,6 +37,8 @@ public interface Indexer {
 
     void manualOverride(int direction);
 
+    void unload();
+
     void resetEncoder();
 
     void goTo(Index index);

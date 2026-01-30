@@ -13,6 +13,11 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
+    public void unload() {
+
+    }
+
+    @Override
     public void resetEncoder() {
 
     }
