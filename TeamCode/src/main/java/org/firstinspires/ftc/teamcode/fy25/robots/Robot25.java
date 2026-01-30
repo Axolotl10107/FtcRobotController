@@ -15,6 +15,9 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIn
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveBlank;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDriveImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensor;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensorBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensorImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl;
@@ -81,8 +84,9 @@ public class Robot25 {
                 RotaryIntake.Parameters rotaryIntakeParams,
 
                 Indexer.Parameters indexerParameters,
-                Loader.Parameters loaderParameters
+                Loader.Parameters loaderParameters,
 
+                ArtifactSensor.Parameters artifactSensorParameters
         ) {
             // Every season
             this.extendedParameters = extendedParameters;
@@ -99,6 +103,8 @@ public class Robot25 {
 
             this.indexerParameters = indexerParameters;
             this.loaderParameters = loaderParameters;
+
+            this.artifactSensorParameters = artifactSensorParameters;
         }
 
         final ExtendedParameters extendedParameters;
@@ -113,6 +119,7 @@ public class Robot25 {
         final RotaryIntake.Parameters rotaryIntakeParams;
         final Indexer.Parameters indexerParameters;
         final Loader.Parameters loaderParameters;
+        final ArtifactSensor.Parameters artifactSensorParameters;
 
     }
 
@@ -128,6 +135,7 @@ public class Robot25 {
     public final RotaryIntake rotaryIntake;
     public final Indexer indexer;
     public final Loader loader;
+    public final ArtifactSensor artifactSensor;
 
 
     public final VoltageSensor voltageSensor;
@@ -205,6 +213,12 @@ public class Robot25 {
             loader = new LoaderImpl(parameters.loaderParameters);
         } else {
             loader = new LoaderBlank();
+        }
+
+        if (parameters.artifactSensorParameters.present) {
+            artifactSensor = new ArtifactSensorImpl(parameters.artifactSensorParameters);
+        } else {
+            artifactSensor = new ArtifactSensorBlank();
         }
 
 

@@ -119,6 +119,7 @@ public class NewBotTesting extends OpMode {
         telemetry.addData("Loader State", controlState.getLoaderState());
         telemetry.addData("Gate State", controlState.getLauncherGateServoState());
         telemetry.addData("Launch Wheel", robot.launchWheel.getCurrentRPM());
+        telemetry.addData("Artifact Color", robot.artifactSensor.readArtifact());
         /// legend has it you can tell which subsystem was the most annoying to implement by looking at how many telemetry lines it has
 
         ///  I forgot to add these lines

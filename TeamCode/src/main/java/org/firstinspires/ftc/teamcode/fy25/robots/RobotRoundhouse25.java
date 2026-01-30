@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyI
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
 import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimple;
@@ -211,6 +212,8 @@ public class RobotRoundhouse25 {
         extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
         extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
+        ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
+
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
                 driveParams,
@@ -223,7 +226,8 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
-                loaderParams
+                loaderParams,
+                artifactSensorParams
         );
 
         return params;
@@ -326,6 +330,12 @@ public class RobotRoundhouse25 {
         extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
         extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
+        ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(true);
+        artifactSensorParams.colorSensor = hardwareMap .get(ColorSensor.class, "colorSensor");
+        artifactSensorParams.greenHueMin = 85f;
+        artifactSensorParams.greenHueMax = 155f;
+        artifactSensorParams.purpleHueMin = 250f;
+        artifactSensorParams.purpleHueMax = 325f;
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
@@ -339,7 +349,8 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
-                loaderParams
+                loaderParams,
+                artifactSensorParams
         );
 
         return params;
@@ -426,6 +437,8 @@ public class RobotRoundhouse25 {
 
         Loader.Parameters loaderParams = new Loader.Parameters(false);
 
+        ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
+
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
@@ -439,7 +452,8 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
-                loaderParams
+                loaderParams,
+                artifactSensorParams
         );
 
         // These were removed some time ago, but if you need these values for something else,
@@ -521,6 +535,8 @@ public class RobotRoundhouse25 {
         extendedParams.imuCorrectorParams.maxCorrectionPower = 0.1;
         extendedParams.imuCorrectorParams.turnPowerThreshold = 0.05;
 
+        ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
+
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
                 driveParams,
@@ -533,7 +549,8 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
-                loaderParams
+                loaderParams,
+                artifactSensorParams
         );
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters
