@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public interface Indexer {
 
@@ -30,6 +31,7 @@ public interface Indexer {
 
         public DcMotorEx encoderMotor;
         public CRServo indexerServo;
+        public TouchSensor limitSwitch;
         public double ticksPerRevolution; // 8192
     }
 

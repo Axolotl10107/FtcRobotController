@@ -312,6 +312,7 @@ public class RobotRoundhouse25 {
         Indexer.Parameters indexerParams = new Indexer.Parameters(true);
         indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
         indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "encoder");
+        indexerParams.limitSwitch = hardwareMap.get(TouchSensor.class, "indexerSwitch");
         indexerParams.ticksPerRevolution = 8192;
 
         Loader.Parameters loaderParams = new Loader.Parameters(true);
