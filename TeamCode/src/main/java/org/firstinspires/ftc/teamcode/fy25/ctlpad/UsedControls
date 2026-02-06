@@ -1,0 +1,32 @@
+- DTS
+- intakeInButton
+  - Sets Intake State "RUNIN"
+- intakeOutButton
+  - Sets Intake State "RUNOUT"
+- launcherWheelSpinUp
+- prepIndexerIntake
+  - Sets Index State "READY"
+- indexerIntake
+  - Sets Index state "PREP"
+- incrementIndexer
+  - Sets Index state "READY"
+- allowEntry
+- manualIndexerOverrideLeft
+- manualIndexerOverrideRight
+- launcherGateIn
+  - Active sets LauncherGate State "OPEN"
+  - Active sets LauncherGateServo State "OPEN"
+  - Inactive sets LauncherGate State "CLOSED"
+  - Inactive sets LauncherGateServo State "CLOSED"
+- loader
+  - Active sets Loader State "LOAD"
+  - Inactive sets Loader State "PASS"
+- incrementMotif
+- resetMotif
+- driveSpeedUpButton
+- driveSpeedDownButton
+- squareUpButton
+- brakeButton
+- distanceUpButton
+- distanceDownButton
+- distanceZeroButton

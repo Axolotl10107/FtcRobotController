@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
 public class IndexerImpl implements Indexer {
 
     private final CRServo servo;
@@ -32,14 +31,10 @@ public class IndexerImpl implements Indexer {
     private double lastEncoderPos;
     private boolean prepping = false;
 
-    CRServo servo;
-    DcMotorEx encoder;
-    double ticksPerRevolution;
 
     public IndexerImpl(Parameters parameters) {
         servo = parameters.indexerServo;
         encoder = parameters.encoderMotor;
-        ticksPerRevolution = parameters.ticksPerRevolution;
         limitSwitch = parameters.limitSwitch;
 
         encoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -48,21 +43,17 @@ public class IndexerImpl implements Indexer {
         lastEncoderPos = getEncoder();
     }
 
-    Index selected = Index.A;
-    double ticksPerIndex = ticksPerRevolution / 3;
     @Override
     public double getRd() {
         return remainingDelta;
     }
 
-    double targetPos = 0;
     @Override
     public void manualOverride(int direction) {
         remainingDelta = direction * 1200;
         integral = 0;
     }
 
-    boolean prepped = false;
     @Override
     public void unload() {
         servo.setPower(1);
@@ -75,16 +66,10 @@ public class IndexerImpl implements Indexer {
 
     @Override
     public void goTo(Index index) {
-        if (prepped) {return;}
-        int difference = selected.ordinal() - index.ordinal();
         int numIndexes = Index.values().length;
         int currentIndex = selected.ordinal();
         int targetIndex = index.ordinal();
 
-        if (difference > 0) {
-            targetPos += ticksPerIndex * difference;
-        } else if (difference < 0) {
-            targetPos += ticksPerIndex * (difference + 3);
         int forwardSteps = targetIndex - currentIndex;
         if (forwardSteps < 0) {
             forwardSteps += numIndexes;
@@ -101,18 +86,9 @@ public class IndexerImpl implements Indexer {
                 (selected.ordinal() + 1) % Index.values().length
                 ];
         integral = 0;
-        if (prepped) {return;}
-        targetPos += ticksPerIndex;
-        targetPos %= ticksPerRevolution;
     }
 
     @Override
-    public void prepIntake(Index index) {
-        if (!prepped) {
-            goTo(index);
-            targetPos -= ticksPerIndex / 4;
-            prepped = true;
-        }
     public void prepIntake() {
         if (prepping) {return;}
         remainingDelta -= intakeTicks;
@@ -146,30 +122,16 @@ public class IndexerImpl implements Indexer {
         }
 
         return Indexer.Index.C;
-        if (prepped) {
-            prepped = false;
-            targetPos += ticksPerIndex / 4;
-        }
     }
 
     @Override
     public void update() {
-        double ticks = Math.floorMod(encoder.getCurrentPosition(), (int) ticksPerRevolution);
-
         double currentPos = getEncoder();
         double deltaMoved = currentPos - lastEncoderPos;
         lastEncoderPos = currentPos;
 
-        double error = targetPos - (Math.floorMod(encoder.getCurrentPosition(), (int) ticksPerRevolution));
         remainingDelta -= deltaMoved;
 
-        if (error < 0) {
-            error += ticksPerRevolution;
-        }
-
-        if (error > 100) {
-            servo.setPower(1);
-        } else {
         if (limitSwitch.isPressed() && Math.abs(remainingDelta) < 10) {
             servo.setPower(0);
             remainingDelta = 0;
@@ -204,8 +166,6 @@ public class IndexerImpl implements Indexer {
             power = Math.signum(power) * Math.max(minPower, Math.abs(power) * scale);
         }
 
-        int indexNum = (int) Math.round(ticks / ticksPerIndex) % 3;
-        selected = Index.values()[indexNum];
         servo.setPower(-power);
     }
 

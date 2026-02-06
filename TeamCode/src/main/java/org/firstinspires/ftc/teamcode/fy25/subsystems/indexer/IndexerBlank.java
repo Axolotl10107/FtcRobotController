@@ -33,7 +33,6 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
-    public void prepIntake(Index index) {
     public void prepIntake() {
 
     }

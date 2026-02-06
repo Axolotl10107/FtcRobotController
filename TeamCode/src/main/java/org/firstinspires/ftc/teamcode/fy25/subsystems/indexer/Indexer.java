@@ -47,7 +47,6 @@ public interface Indexer {
 
     void next();
 
-    void prepIntake(Index index);
     void prepIntake();
 
     void intake();
