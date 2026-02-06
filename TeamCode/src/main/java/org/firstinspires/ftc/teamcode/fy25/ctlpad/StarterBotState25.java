@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.fy25.ctlpad;
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 
 /** Stores the state of the controls. The control scheme updates this, then the OpMode reads it.
  * This effectively maps buttons to actions. This edition is for 2025-26 Decode. */
@@ -17,6 +20,15 @@ public class StarterBotState25 {
     private boolean runLaunchWheel;
     private LauncherGate.State launcherGateState = LauncherGate.State.CLOSED;
 
+    private LauncherGateServo.State launcherGateServoState = LauncherGateServo.State.CLOSED;
+    private Indexer.State indexerState = Indexer.State.READY;
+    private Indexer.Index index = Indexer.Index.A;
+
+    private Indexer.Index indexGoal = Indexer.Index.A;
+
+    private Loader.State loaderState = Loader.State.PASS;
+
+    private int manualOverrideState = 0;
     private double maxDriveSpeed = 1;
     private double launchVel = 168000.0;
 
@@ -42,6 +54,8 @@ public class StarterBotState25 {
     private boolean brake = false;
     private boolean isAllow = false;
 
+    private int motif = 0;
+
     private double distance = 0;
 
     public DTS getDts() {
@@ -60,6 +74,18 @@ public class StarterBotState25 {
         intakeState = state;
     }
 
+    public void setIndexState(Indexer.State state) {indexerState = state;}
+
+    public Indexer.State getIndexState() {return indexerState;}
+
+    public void setIndex(Indexer.Index index) {this.index = index;}
+
+    public Indexer.Index getIndex() {return index;}
+
+    public void setIndexGoal(Indexer.Index index) {indexGoal = index;}
+
+    public Indexer.Index getIndexGoal() {return indexGoal;}
+
     public MotorIntake.State getMotorIntakeState() {return motorIntakeState;}
 
     public void setMotorIntakeState(MotorIntake.State state) {motorIntakeState = state;}
@@ -74,7 +100,19 @@ public class StarterBotState25 {
 
     public void setLauncherGateState(LauncherGate.State state) {launcherGateState = state;}
 
+    public void setLauncherGateServoState(LauncherGateServo.State state) {launcherGateServoState = state;}
+
     public LauncherGate.State getLauncherGateState() {return launcherGateState;}
+
+    public LauncherGateServo.State getLauncherGateServoState() {return launcherGateServoState;}
+
+    public void setLoaderState(Loader.State state) {loaderState = state;}
+
+    public Loader.State getLoaderState() {return loaderState;}
+
+    public void setMotif(int green) {motif = green;}
+
+    public int getMotif() {return motif;}
 
     public double getMaxDriveSpeed() {
         return maxDriveSpeed;
@@ -117,4 +155,8 @@ public class StarterBotState25 {
     public void setAllowEntry(boolean b) {isAllow = b;}
 
     public boolean getAllowEntry() {return isAllow;}
+
+    public void setManualOverrideState(int v) {manualOverrideState = v;}
+
+    public double getManualOverrideState() {return manualOverrideState;}
 }

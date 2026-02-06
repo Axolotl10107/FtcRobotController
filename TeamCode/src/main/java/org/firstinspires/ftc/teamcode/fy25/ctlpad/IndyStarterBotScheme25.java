@@ -14,7 +14,10 @@ import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.Moment
 import org.firstinspires.ftc.teamcode.framework.ctlpad.primitives.buttons.TriggerButton;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 
 /** A controller scheme for driving with independent drive, turn, and strafe axes.
  * Matches the "Dual25" diagram. */
@@ -59,6 +62,15 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button distanceDownButton;
     private final Button distanceZeroButton;
 
+    private final Button incrementIndexer;
+    private final Button prepIndexerIntake;
+    private final Button indexerIntake;
+
+    private final Button loader;
+    private final Button incrementMotif;
+    private final Button resetMotif;
+    private final Button manualIndexerOverrideLeft;
+    private final Button manualIndexerOverrideRight;
     private final Axis armFast;
     private final Axis armMedium;
     private final Axis armSlow;
@@ -111,6 +123,17 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         drive = new MergedAxis( driveBackward, driveForward );
         turn = new ExponentialAxis( () -> -driver.left_stick_x, 2); // positive turn is counterclockwise
         strafe = new LinearAxis( () -> driver.right_stick_x);
+
+        incrementIndexer = new TriggerButton(() -> manipulator.dpad_right);
+        prepIndexerIntake = new TriggerButton(() -> manipulator.a);
+        indexerIntake = new TriggerButton(() -> manipulator.x);
+        manualIndexerOverrideLeft = new MomentaryButton(() -> manipulator.left_bumper);
+        manualIndexerOverrideRight = new MomentaryButton(() -> manipulator.right_bumper);
+
+        loader = new MomentaryButton(() -> manipulator.y);
+
+        incrementMotif = new TriggerButton(() -> manipulator.right_bumper);
+        resetMotif = new TriggerButton(() -> manipulator.left_bumper);
     }
 
     private void updateMovementState() {
@@ -206,11 +229,55 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        state.setDenyEntry(denyEntry.isActive());
 //    }
 
+    private void updateIndexer() {
+        if (prepIndexerIntake.isActive() && state.getIndexState() == Indexer.State.READY) {
+            state.setIndexState(Indexer.State.PREP);
+        } else if (indexerIntake.isActive() && state.getIndexState() == Indexer.State.PREP) {
+            state.setIndexState(Indexer.State.TO);
+        } else if (incrementIndexer.isActive() && state.getIndexState() == Indexer.State.READY) {
+            state.setIndexState(Indexer.State.NEXT);
+        }
+    }
+
+    private void updateManualOverride() {
+        int v = 0;
+        if (manualIndexerOverrideLeft.isActive()) {
+            v--;
+        }
+        if (manualIndexerOverrideRight.isActive()) {
+            v++;
+        }
+        state.setManualOverrideState(v);
+    }
+
     private void updateLauncherGateState() {
         if (launcherGateIn.value() > 0) {
             state.setLauncherGateState(LauncherGate.State.OPEN);
+            state.setLauncherGateServoState(LauncherGateServo.State.OPEN);
         } else {
             state.setLauncherGateState(LauncherGate.State.CLOSED);
+            state.setLauncherGateServoState(LauncherGateServo.State.CLOSED);
+        }
+    }
+
+    private void updateLoaderState() {
+        if (loader.isActive()) {
+            state.setLoaderState(Loader.State.LOAD);
+        } else {
+            state.setLoaderState(Loader.State.PASS);
+        }
+    }
+
+    private void updateMotif() {
+        if (incrementMotif.isActive()) {
+            if (state.getMotif() < 2) {
+                state.setMotif(state.getMotif() + 1);
+            } else {
+                state.setMotif(0);
+            }
+        }
+        if (resetMotif.isActive()) {
+            state.setMotif(0);
         }
     }
 
@@ -272,6 +339,10 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
 //        updateLauncherWheelBackState();
         updateLauncherWheelState();
         updateDistanceState();
+        updateIndexer();
+        updateLoaderState();
+        updateMotif();
+        updateManualOverride();
 
         return state;
     }

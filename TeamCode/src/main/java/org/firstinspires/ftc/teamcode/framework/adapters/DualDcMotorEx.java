@@ -46,6 +46,8 @@ public class DualDcMotorEx implements DcMotorEx {
     public void setVelocity(double angularRate) {
         primary.setVelocity(angularRate);
         secondary.setVelocity(angularRate);
+        //added the negative, delete if it breaks smth...it worked to rverse the wheel intake thing
+        //now i cant push this again kuz it wants to update the emulator
     }
 
     @Override
