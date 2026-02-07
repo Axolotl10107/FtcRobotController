@@ -1,10 +1,20 @@
 package org.firstinspires.ftc.teamcode.fy25.teleop;
 
+import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
+
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathBuilder;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualDcMotorEx;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
@@ -37,6 +47,10 @@ public class NewBotTesting extends OpMode {
         controlScheme = new IndyStarterBotScheme25( gamepad1, gamepad2 );
 
         robot.launchWheel.setLaunchRPM(100);
+
+        PathChain toGoal = follower.pathBuilder()
+                .addPath(new BezierLine(follower.getPose(), new Pose(15, 72, Math.PI/6)))
+                .build();
     }
 
     @Override

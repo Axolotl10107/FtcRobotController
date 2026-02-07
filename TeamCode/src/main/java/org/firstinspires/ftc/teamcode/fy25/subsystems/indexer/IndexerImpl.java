@@ -16,10 +16,10 @@ public class IndexerImpl implements Indexer {
 
     private final double intakeTicks = 1200;
 
-    private static final double kP = 0.00022; // raise until oscillation
+    private static final double kP = 0.00018; // raise until oscillation
     private static final double MAX_POWER = 0.7;
-    private double kI = 0.00005;   // raise until oscillation/overshooting
-    private double kD = 0.00005;    // increase until no overshooting
+    private double kI = 0.000017;   // raise until oscillation/overshooting
+    private double kD = 0.00025;    // increase until no overshooting
     private double integral = 0;
     private double lastError = 0;
     private double minPower = 0.05;       // minimum indexer power
@@ -132,14 +132,14 @@ public class IndexerImpl implements Indexer {
 
         remainingDelta -= deltaMoved;
 
-        if (limitSwitch.isPressed() && Math.abs(remainingDelta) < 10) {
-            servo.setPower(0);
-            remainingDelta = 0;
-            lastEncoderPos = getEncoder();
-            integral = 0;
-            lastError = 0;
-            return;
-        }
+//        if (limitSwitch.isPressed() && Math.abs(remainingDelta) < 10) {
+//            servo.setPower(0);
+//            remainingDelta = 0;
+//            lastEncoderPos = getEncoder();
+//            integral = 0;
+//            lastError = 0;
+//            return;
+//        }
 
         double error = remainingDelta;
 
