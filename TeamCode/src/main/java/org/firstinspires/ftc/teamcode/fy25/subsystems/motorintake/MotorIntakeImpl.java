@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 
 public class MotorIntakeImpl implements MotorIntake{
-    CRServo motor;
+    DcMotorEx motor;
     double intakeVel;
     final double tolerance = 20;
     State state = State.NONE;

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
@@ -65,14 +66,24 @@ public class NewBotTesting extends OpMode {
             robot.loader.pass();
         }
 
+        if (controlState.getIntakeState() == RotaryIntake.State.RUNIN) {
+            robot.motorIntake.spinIn();
+        } else {
+            robot.motorIntake.stop();
+        }
+
         if (controlState.getManualOverrideState() != 0) {
             robot.indexer.manualOverride((int) controlState.getManualOverrideState());
             robot.indexer.resetEncoder();
         } else if (controlState.getIndexState() == Indexer.State.NEXT) {
             robot.indexer.next();
             controlState.setIndexState(Indexer.State.READY);
-        } else if (controlState.getIndexState() == Indexer.State.PREP) {
+        } else if (controlState.getIndexState() == Indexer.State.PREP && robot.artifactSensor.readArtifact() == ArtifactSensor.Artifact.NONE) {
             robot.indexer.prepIntake();
+        } else if (controlState.getIndexState() == Indexer.State.PREP && robot.artifactSensor.readArtifact() != ArtifactSensor.Artifact.NONE) {
+            robot.indexer.intake();
+            controlState.setIndexState(Indexer.State.READY);
+            robot.indexer.next();
         } else if (controlState.getIndexState() == Indexer.State.TO) {
             robot.indexer.goTo(robot.indexer.getIndex());
         }
@@ -120,6 +131,10 @@ public class NewBotTesting extends OpMode {
         telemetry.addData("Gate State", controlState.getLauncherGateServoState());
         telemetry.addData("Launch Wheel", robot.launchWheel.getCurrentRPM());
         telemetry.addData("Artifact Color", robot.artifactSensor.readArtifact());
+        float[] hsv = robot.artifactSensor.getHsv();
+        telemetry.addData("hue", hsv[0]);
+        telemetry.addData("saturation", hsv[1]);
+        telemetry.addData("value", hsv[2]);
         /// legend has it you can tell which subsystem was the most annoying to implement by looking at how many telemetry lines it has
 
         ///  I forgot to add these lines

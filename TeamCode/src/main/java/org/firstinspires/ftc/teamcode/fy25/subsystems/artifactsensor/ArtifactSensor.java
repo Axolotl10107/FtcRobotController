@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor;
 
-import android.util.Pair;
-
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 public interface ArtifactSensor {
+    float[] getHsv();
+
     enum Artifact {
         NONE,
         GREEN,

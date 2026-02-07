@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor;
 
 import android.graphics.Color;
-import android.util.Pair;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -33,19 +32,35 @@ public class ArtifactSensorImpl implements ArtifactSensor {
         float sat = hsv[1];
         float val = hsv[2];
 
-        if (sat < 0.20f) {
+        boolean isGreen =
+                hue >= 85 && hue <= 180;
+
+        boolean isPurple =
+                hue >= 210 && hue <= 400;
+
+        if (val <= 0.1 || val >= 1 || (sat <= 0.5 && !isPurple)) {
             return Artifact.NONE;
         }
 
-        boolean isGreen =
-                hue >= greenHueMin && hue <= greenHueMax;
-
-        boolean isPurple =
-                hue >= purpleHueMin && hue <= purpleHueMax;
-
-        if (isGreen && !isPurple) return Artifact.GREEN;
-        if (isPurple && !isGreen) return Artifact.PURPLE;
+        if (isGreen) {
+            return Artifact.GREEN;
+        }
+        if (isPurple) {
+            return Artifact.PURPLE;
+        }
 
         return Artifact.NONE;
+    }
+
+    @Override
+    public float[] getHsv() {
+        int r = colorSensor.red();
+        int g = colorSensor.green();
+        int b = colorSensor.blue();
+
+        float[] hsv = new float[3];
+        Color.RGBToHSV(r, g, b, hsv);
+
+        return hsv;
     }
 }

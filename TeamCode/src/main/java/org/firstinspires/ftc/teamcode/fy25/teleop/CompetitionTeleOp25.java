@@ -82,9 +82,9 @@ public class CompetitionTeleOp25 extends OpMode {
 
         // RotaryIntake
         if (controlState.getIntakeState() == RotaryIntake.State.RUNIN) {
-            robot.motorIntake.spinIn();
+            robot.rotaryIntake.setState(RotaryIntake.State.RUNIN);
         } else {
-            robot.motorIntake.stop();
+            robot.rotaryIntake.setState(RotaryIntake.State.STOPPED);
         }
 
         // Telemetry

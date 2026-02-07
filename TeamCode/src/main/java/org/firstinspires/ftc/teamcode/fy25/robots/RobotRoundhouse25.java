@@ -193,11 +193,12 @@ public class RobotRoundhouse25 {
         LauncherGateServo.Parameters launcherGateServoParams = new LauncherGateServo.Parameters(false);
 
 
-        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
-        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
-        motorIntakeParams.IntakeTPS = 166865;
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
+//        motorIntakeParams.motor = hardwareMap.get(CRServo.class, "intakeServo");
+//        motorIntakeParams.IntakeTPS = 166865;
 
-        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(true);
+        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
         Loader.Parameters loaderParams = new Loader.Parameters(false);
@@ -299,15 +300,16 @@ public class RobotRoundhouse25 {
 //        servoLeft.setDirection(REVERSE);
 //        launchGateParams.device = new DualCRServo(servoRight, servoLeft);
 
-        LauncherGateServo.Parameters launchGateServoParams = new LauncherGateServo.Parameters(true);
-        launchGateServoParams.device = hardwareMap.get(Servo.class, "launchGateServo");
+        LauncherGateServo.Parameters launchGateServoParams = new LauncherGateServo.Parameters(false);
+//        launchGateServoParams.device = hardwareMap.get(Servo.class, "launchGateServo");
 
 
-        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(false);
+        MotorIntake.Parameters motorIntakeParams = new MotorIntake.Parameters(true);
+        motorIntakeParams.motor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
-        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(true);
-        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
-        rotaryIntakeParams.servoPower = 1;
+        RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
+//        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+//        rotaryIntakeParams.servoPower = 1;
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(true);
         indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
@@ -333,10 +335,10 @@ public class RobotRoundhouse25 {
 
         ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(true);
         artifactSensorParams.colorSensor = hardwareMap .get(ColorSensor.class, "colorSensor");
-        artifactSensorParams.greenHueMin = 85f;
-        artifactSensorParams.greenHueMax = 155f;
-        artifactSensorParams.purpleHueMin = 250f;
-        artifactSensorParams.purpleHueMax = 325f;
+        artifactSensorParams.greenHueMin = 100;
+        artifactSensorParams.greenHueMax = 180;
+        artifactSensorParams.purpleHueMin = 210;
+        artifactSensorParams.purpleHueMax = 400;
 
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,

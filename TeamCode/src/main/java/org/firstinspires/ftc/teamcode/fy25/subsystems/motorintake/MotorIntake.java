@@ -21,7 +21,7 @@ public interface MotorIntake {
 
         public final boolean present;
 
-        public CRServo motor = new BlankCRServo();
+        public DcMotorEx motor = new BlankMotor();
 
         public double IntakeTPS = 0;
     }
