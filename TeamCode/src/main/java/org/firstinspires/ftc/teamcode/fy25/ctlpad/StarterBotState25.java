@@ -58,6 +58,8 @@ public class StarterBotState25 {
 
     private double distance = 0;
 
+    private boolean sort = false;
+
     public DTS getDts() {
         return dts;
     }
@@ -145,6 +147,10 @@ public class StarterBotState25 {
             distance += value;
         }
     }
+
+    public void setSortState(boolean b) {sort = b;}
+
+    public boolean getSort() {return sort;}
 
     public void zeroDistance() {
         distance = 0;

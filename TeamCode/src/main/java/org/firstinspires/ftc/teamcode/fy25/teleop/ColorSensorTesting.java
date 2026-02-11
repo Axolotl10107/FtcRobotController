@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
 import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 
-@TeleOp(name="color sensor")
+@TeleOp(name="color sensor", group = "test")
 public class ColorSensorTesting extends OpMode {
     Robot25 robot;
 

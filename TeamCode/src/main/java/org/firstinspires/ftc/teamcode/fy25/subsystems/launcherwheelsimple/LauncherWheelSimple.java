@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.framework.subsystems.blankdevice.BlankMotor;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
@@ -26,7 +27,7 @@ public interface LauncherWheelSimple {
         /** You have already set this in the constructor and cannot set it again. */
         public final boolean present;
 
-        public DcMotor motor = new BlankMotor();
+        public DcMotorEx motor = new BlankMotor();
     }
 
     /** Apply power to the launch wheel. */

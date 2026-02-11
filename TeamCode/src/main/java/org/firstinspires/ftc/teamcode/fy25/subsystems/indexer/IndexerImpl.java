@@ -1,9 +1,22 @@
 package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.MAX_POWER;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.kD;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.kI;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.kP;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.kS;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.kSCutoff;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.maxIntegral;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.maxRampDistance;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl.IndexerTuning.minPower;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+
 public class IndexerImpl implements Indexer {
 
     private final CRServo servo;
@@ -16,20 +29,31 @@ public class IndexerImpl implements Indexer {
 
     private final double intakeTicks = 1200;
 
-    private static final double kP = 0.00018; // raise until oscillation
-    private static final double MAX_POWER = 0.7;
-    private double kI = 0.000017;   // raise until oscillation/overshooting
-    private double kD = 0.00025;    // increase until no overshooting
     private double integral = 0;
     private double lastError = 0;
-    private double minPower = 0.05;       // minimum indexer power
-    private double maxIntegral = 5000;    // increase until indexer moves smoothly (test under load as well)
-    private double maxRampDistance = 200; // adjust until slowly reaches target
-
     private Index selected = Index.A;
     private double remainingDelta = 0;
     private double lastEncoderPos;
     private boolean prepping = false;
+
+    private double positionError = 0;
+    private double outputPower = 0;
+    private double velocity = 0;
+    private boolean kSActive = false;
+
+    @Config
+    public static class IndexerTuning {
+        public static double MAX_POWER = 1;
+        public static double kD = 0.00005;
+        public static double kI = 0.000035;
+        public static double kP = 0.000079;
+        public static double kS = 0.0006;
+        public static double kSCutoff = 1600;
+        public static double maxIntegral = 950;
+        public static double maxRampDistance = 0;
+        public static double minPower = 0;
+
+    }
 
 
     public IndexerImpl(Parameters parameters) {
@@ -111,63 +135,104 @@ public class IndexerImpl implements Indexer {
 
     @Override
     public Indexer.Index getIndex() {
-        double relative = ((getEncoder() % ticksPerRevolution) + ticksPerRevolution) % ticksPerRevolution;
+//        double pos = getEncoder();
+//        if (pos > 0) {
+//            pos -= Math.floor(pos / ticksPerRevolution) * ticksPerRevolution;
+//        }
+//
+//        if (pos < 0) {
+//            pos -= Math.ceil(pos / ticksPerRevolution) * ticksPerRevolution;
+//        }
+//
+//        if (pos < 300 && pos > -300 ||
+//            pos < ticksPerRevolution + 300 && pos > ticksPerRevolution - 300) {
+//            return Index.A;
+//        } else if (pos < ticksPerIndex + 300 && pos > ticksPerIndex - 300) {
+//            return Index.B;
+//        } else {
+//            return Index.C;
+//        }
+        return selected;
+    }
 
-        if (relative <= ticksPerIndex) {
-            return Indexer.Index.A;
+    @Override
+    public double getRelative() {
+        double pos = getEncoder();
+        if (pos > 0) {
+            pos -= Math.floor(pos / ticksPerRevolution) * ticksPerRevolution;
         }
 
-        if (relative <= 2 * ticksPerIndex) {
-            return Indexer.Index.B;
+        if (pos < 0) {
+            pos -= Math.ceil(pos / ticksPerRevolution) * ticksPerRevolution;
         }
-
-        return Indexer.Index.C;
+        return pos;
     }
 
     @Override
     public void update() {
-        double currentPos = getEncoder();
-        double deltaMoved = currentPos - lastEncoderPos;
-        lastEncoderPos = currentPos;
+            double currentPos = getEncoder();
 
-        remainingDelta -= deltaMoved;
+            // Velocity (ticks per loop)
+            double deltaMoved = currentPos - lastEncoderPos;
+            velocity = deltaMoved;
+            lastEncoderPos = currentPos;
 
-//        if (limitSwitch.isPressed() && Math.abs(remainingDelta) < 10) {
-//            servo.setPower(0);
-//            remainingDelta = 0;
-//            lastEncoderPos = getEncoder();
-//            integral = 0;
-//            lastError = 0;
-//            return;
-//        }
+            remainingDelta -= deltaMoved;
 
-        double error = remainingDelta;
+            // Position error
+            positionError = remainingDelta;
 
-        if (Math.abs(error) <= 5) {
-            servo.setPower(Math.signum(error) * minPower);
-            remainingDelta = 0;
-            integral = 0;
-            lastError = 0;
-            return;
-        }
+            double error = remainingDelta;
 
-        integral += error;
-        integral = Math.max(-maxIntegral, Math.min(maxIntegral, integral));
+            if (Math.abs(error) <= 5) {
+                outputPower = Math.signum(error) * minPower;
+                servo.setPower(outputPower);
 
-        double derivative = error - lastError;
-        lastError = error;
+                remainingDelta = 0;
+                integral = 0;
+                lastError = 0;
+                kSActive = false;
+                return;
+            }
 
-        double power = kP * error + kI * integral + kD * derivative;
-        power = Math.max(-MAX_POWER, Math.min(MAX_POWER, power));
+            integral += error;
+            integral = Math.max(-maxIntegral, Math.min(maxIntegral, integral));
 
-        double absError = Math.abs(error);
-        if (absError < maxRampDistance) {
-            double scale = absError / maxRampDistance;
-            power = Math.signum(power) * Math.max(minPower, Math.abs(power) * scale);
-        }
+            double derivative = error - lastError;
+            lastError = error;
 
-        servo.setPower(-power);
+            double power = kP * error + kI * integral + kD * derivative;
+
+            // kS flag + application
+            kSActive = Math.abs(error) > kSCutoff;
+            if (kSActive) {
+                power += Math.signum(error) * kS;
+            }
+
+            power = Math.max(-MAX_POWER, Math.min(MAX_POWER, power));
+
+            double absError = Math.abs(error);
+            if (absError < maxRampDistance) {
+                double scale = absError / maxRampDistance;
+                power = Math.signum(power) *
+                        Math.max(minPower, Math.abs(power) * scale);
+            }
+
+            // Final output power (store what actually gets sent)
+            outputPower = -power;
+            servo.setPower(outputPower);
     }
+
+    @Override
+    public double getPositionError() {return positionError;}
+    @Override
+    public double getOutputPower() {return outputPower;}
+    @Override
+    public double getVelocity() {return velocity;}
+    @Override
+    public int getKSFlag() {return kSActive ? 1 : 0;}
+
+
 
 
 }

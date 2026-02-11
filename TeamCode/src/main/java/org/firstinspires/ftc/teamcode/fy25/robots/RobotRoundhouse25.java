@@ -4,25 +4,28 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubDeviceNameManager;
-import org.firstinspires.ftc.teamcode.framework.adapters.DualCRServo;
 import org.firstinspires.ftc.teamcode.framework.adapters.DualDcMotorEx;
-import org.firstinspires.ftc.teamcode.framework.adapters.DualMotor;
 import org.firstinspires.ftc.teamcode.framework.processors.AccelLimiter;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.processors.TunablePID;
 import org.firstinspires.ftc.teamcode.framework.subsystems.friendlyimu.FriendlyIMU;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rrmecanumdrive.RRMecanumDrive;
-import org.firstinspires.ftc.teamcode.framework.units.PIDConsts;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSensor;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.LauncherWheelSimple;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motifreader.MotifReader;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer.MotorIndexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheel.LauncherWheel;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.FORWARD;
 import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
@@ -201,6 +204,7 @@ public class RobotRoundhouse25 {
         rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
+        MotorIndexer.Parameters motorIndexerParams = new MotorIndexer.Parameters(false);
         Loader.Parameters loaderParams = new Loader.Parameters(false);
 
         Robot25.ExtendedParameters extendedParams = new Robot25.ExtendedParameters();
@@ -215,6 +219,8 @@ public class RobotRoundhouse25 {
 
         ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
 
+        MotifReader.Parameters motifReaderParams = new MotifReader.Parameters(false);
+
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
                 driveParams,
@@ -227,8 +233,10 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
+                motorIndexerParams,
                 loaderParams,
-                artifactSensorParams
+                artifactSensorParams,
+                motifReaderParams
         );
 
         return params;
@@ -287,7 +295,6 @@ public class RobotRoundhouse25 {
         DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
         DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
         DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
-        launchWheelMotor.setDirection(REVERSE);
         launchWheelSimpleParams.motor = launchWheelMotor;
 //        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 //        launchWheelParams.motor = launchWheelMotor;
@@ -311,11 +318,18 @@ public class RobotRoundhouse25 {
 //        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
 //        rotaryIntakeParams.servoPower = 1;
 
-        Indexer.Parameters indexerParams = new Indexer.Parameters(true);
-        indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
-        indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "encoder");
-        indexerParams.limitSwitch = hardwareMap.get(TouchSensor.class, "indexerSwitch");
-        indexerParams.ticksPerRevolution = 8192;
+        Indexer.Parameters indexerParams = new Indexer.Parameters(false);
+//        Indexer.Parameters indexerParams = new Indexer.Parameters(true);
+//        indexerParams.indexerServo = hardwareMap.get(CRServo.class, "indexerServo");
+//        indexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "encoder");
+//        indexerParams.limitSwitch = hardwareMap.get(TouchSensor.class, "indexerSwitch");
+//        indexerParams.ticksPerRevolution = 8192;
+
+        MotorIndexer.Parameters motorIndexerParams = new MotorIndexer.Parameters(true);
+        motorIndexerParams.indexerMotor = hardwareMap.get(DcMotor.class, "indexerMotor");
+        motorIndexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        motorIndexerParams.limitSwitch = hardwareMap.get(TouchSensor.class, "indexerSwitch");
+        motorIndexerParams.ticksPerRevolution = 8192;
 
         Loader.Parameters loaderParams = new Loader.Parameters(true);
         Servo loaderServo = hardwareMap.get(Servo.class, "loaderServo");
@@ -340,6 +354,12 @@ public class RobotRoundhouse25 {
         artifactSensorParams.purpleHueMin = 210;
         artifactSensorParams.purpleHueMax = 400;
 
+        AprilTagProcessor aprilTag = AprilTagProcessor.easyCreateWithDefaults();
+        MotifReader.Parameters motifReaderParams = new MotifReader.Parameters(true);
+        motifReaderParams.aprilTag = aprilTag;
+        motifReaderParams.visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
+
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
                 driveParams,
@@ -352,8 +372,10 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
+                motorIndexerParams,
                 loaderParams,
-                artifactSensorParams
+                artifactSensorParams,
+                motifReaderParams
         );
 
         return params;
@@ -438,9 +460,13 @@ public class RobotRoundhouse25 {
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
 
+        MotorIndexer.Parameters motorIndexerParams = new MotorIndexer.Parameters(false);
+
         Loader.Parameters loaderParams = new Loader.Parameters(false);
 
         ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
+
+        MotifReader.Parameters motifReaderParams = new MotifReader.Parameters(false);
 
 
         Robot25.Parameters params = new Robot25.Parameters(
@@ -455,8 +481,10 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
+                motorIndexerParams,
                 loaderParams,
-                artifactSensorParams
+                artifactSensorParams,
+                motifReaderParams
         );
 
         // These were removed some time ago, but if you need these values for something else,
@@ -525,6 +553,8 @@ public class RobotRoundhouse25 {
 
         Indexer.Parameters indexerParams = new Indexer.Parameters(false);
 
+        MotorIndexer.Parameters motorIndexerParams = new MotorIndexer.Parameters(false);
+
         Loader.Parameters loaderParams = new Loader.Parameters(false);
 
 
@@ -540,6 +570,8 @@ public class RobotRoundhouse25 {
 
         ArtifactSensor.Parameters artifactSensorParams = new ArtifactSensor.Parameters(false);
 
+        MotifReader.Parameters motifReaderParams = new MotifReader.Parameters(false);
+
         Robot25.Parameters params = new Robot25.Parameters(
                 extendedParams,
                 driveParams,
@@ -552,8 +584,10 @@ public class RobotRoundhouse25 {
                 motorIntakeParams,
                 rotaryIntakeParams,
                 indexerParams,
+                motorIndexerParams,
                 loaderParams,
-                artifactSensorParams
+                artifactSensorParams,
+                motifReaderParams
         );
 //        params.tpr = 537.7; // ticks per rotation
 //        params.wheelDiameter = 0.096; // in meters

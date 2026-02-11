@@ -1,25 +1,14 @@
 package org.firstinspires.ftc.teamcode.fy25.teleop;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.pedropathing.ftc.InvertedFTCCoordinates;
-import com.pedropathing.ftc.PoseConverter;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathBuilder;
-import com.pedropathing.paths.PathChain;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.framework.adapters.DualDcMotorEx;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.framework.processors.IMUCorrector;
 import org.firstinspires.ftc.teamcode.framework.subsystems.rotaryintake.RotaryIntake;
 import org.firstinspires.ftc.teamcode.framework.units.DTS;
-import org.firstinspires.ftc.teamcode.framework.util.TelemetrySingleton;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.IndyStarterBotScheme25;
 import org.firstinspires.ftc.teamcode.fy25.ctlpad.StarterBotState25;
 import org.firstinspires.ftc.teamcode.fy25.robots.Robot25;
@@ -29,16 +18,20 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 
-@TeleOp(name="NewBotTesting")
-public class NewBotTesting extends OpMode {
+@TeleOp(name="CompetitionTeleOp")
+public class CompetitionTeleOp extends OpMode {
     Robot25 robot;
 
     IMUCorrector imuCorrector;
 
     IndyStarterBotScheme25 controlScheme;
+
+    boolean read;
+
+    int motif;
     @Override
     public void init() {
-        TelemetrySingleton.setInstance(telemetry);
+//        TelemetrySingleton.setInstance(telemetry);
 
         robot = new Robot25(RobotRoundhouse25.getRobotBParams(hardwareMap), hardwareMap);
 
@@ -46,15 +39,18 @@ public class NewBotTesting extends OpMode {
 
         controlScheme = new IndyStarterBotScheme25( gamepad1, gamepad2 );
 
-        robot.launchWheel.setLaunchRPM(100);
+        read = false;
 
-        PathChain toGoal = follower.pathBuilder()
-                .addPath(new BezierLine(follower.getPose(), new Pose(15, 72, Math.PI/6)))
-                .build();
+        motif = -1;
+
+//        PathChain toGoal = follower.pathBuilder()
+//                .addPath(new BezierLine(follower.getPose(), new Pose(15, 72, Math.PI/6)))
+//                .build();
     }
 
     @Override
     public void loop() {
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         StarterBotState25 controlState = controlScheme.getState();
 
         DTS dts = controlState.getDts();
@@ -76,6 +72,9 @@ public class NewBotTesting extends OpMode {
 
         if (controlState.getLoaderState() == Loader.State.LOAD) {
             robot.loader.load();
+            if (controlState.isRunLaunchWheel()) {
+                robot.artifactSensor.setHolding(robot.motorIndexer.getIndex().ordinal(), ArtifactSensor.Artifact.NONE);
+            }
         } else {
             robot.loader.pass();
         }
@@ -86,24 +85,81 @@ public class NewBotTesting extends OpMode {
             robot.motorIntake.stop();
         }
 
+        ArtifactSensor.Artifact color = robot.artifactSensor.readArtifact();
         if (controlState.getManualOverrideState() != 0) {
             robot.indexer.manualOverride((int) controlState.getManualOverrideState());
             robot.indexer.resetEncoder();
+            robot.motorIndexer.manualOverride((int) controlState.getManualOverrideState());
+            robot.motorIndexer.resetEncoder();
         } else if (controlState.getIndexState() == Indexer.State.NEXT) {
             robot.indexer.next();
+            robot.motorIndexer.next();
             controlState.setIndexState(Indexer.State.READY);
-        } else if (controlState.getIndexState() == Indexer.State.PREP && robot.artifactSensor.readArtifact() == ArtifactSensor.Artifact.NONE) {
+        } else if (controlState.getIndexState() == Indexer.State.PREP && color == ArtifactSensor.Artifact.NONE) {
             robot.indexer.prepIntake();
-        } else if (controlState.getIndexState() == Indexer.State.PREP && robot.artifactSensor.readArtifact() != ArtifactSensor.Artifact.NONE) {
+            robot.motorIndexer.prepIntake();
+        } else if (controlState.getIndexState() == Indexer.State.PREP && color != ArtifactSensor.Artifact.NONE) {
             robot.indexer.intake();
+            robot.motorIndexer.intake();
             controlState.setIndexState(Indexer.State.READY);
             robot.indexer.next();
+            robot.motorIndexer.next();
+            robot.artifactSensor.setHolding(robot.motorIndexer.getIndex().ordinal(), color);
         } else if (controlState.getIndexState() == Indexer.State.TO) {
             robot.indexer.goTo(robot.indexer.getIndex());
+            robot.motorIndexer.goTo(robot.motorIndexer.getIndex());
+        }
+
+        if (motif == -1) {
+            motif = robot.motifReader.getMotif();
+        }
+
+        if (controlState.getSort()) {
+            switch (motif) {
+                case 21:
+                    if (robot.artifactSensor.getHolding().get(0) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.A);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(1) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.B);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(2) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.C);
+                        break;
+                    }
+                case 22:
+                    if (robot.artifactSensor.getHolding().get(0) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.C);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(1) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.A);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(2) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.B);
+                        break;
+                    }
+                case 23:
+                    if (robot.artifactSensor.getHolding().get(0) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.B);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(1) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.C);
+                        break;
+                    }
+                    if (robot.artifactSensor.getHolding().get(2) == ArtifactSensor.Artifact.GREEN) {
+                        robot.indexer.goTo(Indexer.Index.A);
+                        break;
+                    }
+            }
         }
 
         if (controlState.isRunLaunchWheel()) {
-            robot.launchWheelSimple.spinUp(0.95);
+            robot.launchWheelSimple.spinUp(2800);
         } else {
             robot.launchWheelSimple.spinDown();
         }
@@ -111,12 +167,20 @@ public class NewBotTesting extends OpMode {
         switch (controlState.getIntakeState()) {
             case RUNIN:
                 robot.rotaryIntake.setState(RotaryIntake.State.RUNIN);
+                read = false;
                 break;
             case RUNOUT:
                 robot.rotaryIntake.setState(RotaryIntake.State.RUNOUT);
+                read = false;
                 break;
             case STOPPED:
             default:
+//                ArtifactSensor.Artifact color = robot.artifactSensor.readArtifact();
+//                if (!read && color != ArtifactSensor.Artifact.NONE) {
+//                    read = true;
+//                } else if (!read) {
+//                    robot.artifactSensor.setHolding(robot.indexer.getIndex().ordinal(), color);
+//                }
                 robot.rotaryIntake.setState(RotaryIntake.State.STOPPED);
                 robot.indexer.intake();
                 controlState.setIndexState(Indexer.State.READY);
@@ -135,20 +199,29 @@ public class NewBotTesting extends OpMode {
         /// now that sounds like i was questioning whether the ellipsis came off right
         /// im going to bed ill commit this in the morning
 
-        telemetry.addData("Indexer State", controlState.getIndexState());
+        telemetry.addData("Indexer Holding 0", robot.artifactSensor.getHolding().get(0));
+        telemetry.addData("Indexer Holding 1", robot.artifactSensor.getHolding().get(1));
+        telemetry.addData("Indexer Holding 2", robot.artifactSensor.getHolding().get(2));
         telemetry.addData("Indexer Goal", controlState.getIndexGoal());
-        telemetry.addData("Index", controlState.getIndex());
-        telemetry.addData("Index Pos", robot.indexer.getEncoder());
-        telemetry.addData("Remaining Delta", robot.indexer.getRd());
+        telemetry.addData("Index", robot.motorIndexer.getIndex().ordinal());
+        telemetry.addData("Index Pos", robot.motorIndexer.getRelative());
+        telemetry.addData("Remaining Delta", robot.motorIndexer.getRd());
+        telemetry.addData("Motif", motif);
+        telemetry.addData("Reading", robot.motifReader.getMotif());
         telemetry.addData("Intake State", robot.rotaryIntake.getState());
         telemetry.addData("Loader State", controlState.getLoaderState());
         telemetry.addData("Gate State", controlState.getLauncherGateServoState());
         telemetry.addData("Launch Wheel", robot.launchWheel.getCurrentRPM());
-        telemetry.addData("Artifact Color", robot.artifactSensor.readArtifact());
+        telemetry.addData("Artifact Color", color);
         float[] hsv = robot.artifactSensor.getHsv();
         telemetry.addData("hue", hsv[0]);
         telemetry.addData("saturation", hsv[1]);
         telemetry.addData("value", hsv[2]);
+
+        telemetry.addData("error", robot.motorIndexer.getPositionError());
+        telemetry.addData("power", robot.motorIndexer.getOutputPower());
+        telemetry.addData("velocity", robot.motorIndexer.getVelocity());
+        telemetry.addData("ksflag", robot.motorIndexer.getKSFlag() * 50);
         /// legend has it you can tell which subsystem was the most annoying to implement by looking at how many telemetry lines it has
 
         ///  I forgot to add these lines

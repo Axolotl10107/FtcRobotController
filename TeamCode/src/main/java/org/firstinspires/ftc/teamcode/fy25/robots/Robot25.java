@@ -31,6 +31,12 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherwheelsimple.Launch
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.LoaderImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motifreader.MotifReader;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motifreader.MotifReaderBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motifreader.MotifReaderImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer.MotorIndexer;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer.MotorIndexerBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer.MotorIndexerImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntake;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.motorintake.MotorIntakeImpl;
@@ -84,9 +90,12 @@ public class Robot25 {
                 RotaryIntake.Parameters rotaryIntakeParams,
 
                 Indexer.Parameters indexerParameters,
+                MotorIndexer.Parameters motorIndexerParameters,
                 Loader.Parameters loaderParameters,
 
-                ArtifactSensor.Parameters artifactSensorParameters
+                ArtifactSensor.Parameters artifactSensorParameters,
+
+                MotifReader.Parameters motifReaderParameters
         ) {
             // Every season
             this.extendedParameters = extendedParameters;
@@ -101,10 +110,13 @@ public class Robot25 {
             this.motorIntakeParams = motorIntakeParams;
             this.rotaryIntakeParams = rotaryIntakeParams;
 
+            this.motorIndexerParameters = motorIndexerParameters;
             this.indexerParameters = indexerParameters;
             this.loaderParameters = loaderParameters;
 
             this.artifactSensorParameters = artifactSensorParameters;
+
+            this.motifReaderParameters = motifReaderParameters;
         }
 
         final ExtendedParameters extendedParameters;
@@ -118,9 +130,12 @@ public class Robot25 {
         final LauncherGateServo.Parameters launcherGateServoParams;
         final MotorIntake.Parameters motorIntakeParams;
         final RotaryIntake.Parameters rotaryIntakeParams;
+        final MotorIndexer.Parameters motorIndexerParameters;
         final Indexer.Parameters indexerParameters;
         final Loader.Parameters loaderParameters;
         final ArtifactSensor.Parameters artifactSensorParameters;
+
+        final MotifReader.Parameters motifReaderParameters;
 
     }
 
@@ -134,9 +149,11 @@ public class Robot25 {
     public final LauncherGateServo launchGateServo;
     public final MotorIntake motorIntake;
     public final RotaryIntake rotaryIntake;
+    public final MotorIndexer motorIndexer;
     public final Indexer indexer;
     public final Loader loader;
     public final ArtifactSensor artifactSensor;
+    public final MotifReader motifReader;
 
 
     public final VoltageSensor voltageSensor;
@@ -210,6 +227,12 @@ public class Robot25 {
             indexer = new IndexerBlank();
         }
 
+        if (parameters.motorIndexerParameters.present) {
+            motorIndexer = new MotorIndexerImpl(parameters.motorIndexerParameters);
+        } else {
+            motorIndexer = new MotorIndexerBlank();
+        }
+
         if (parameters.loaderParameters.present) {
             loader = new LoaderImpl(parameters.loaderParameters);
         } else {
@@ -220,6 +243,12 @@ public class Robot25 {
             artifactSensor = new ArtifactSensorImpl(parameters.artifactSensorParameters);
         } else {
             artifactSensor = new ArtifactSensorBlank();
+        }
+
+        if (parameters.motifReaderParameters.present) {
+            motifReader = new MotifReaderImpl(parameters.motifReaderParameters);
+        } else {
+            motifReader = new MotifReaderBlank();
         }
 
 
@@ -241,6 +270,7 @@ public class Robot25 {
         launchGate.update();
         motorIntake.update();
         rotaryIntake.update();
+        motorIndexer.update();
         indexer.update();
         loader.update();
     }

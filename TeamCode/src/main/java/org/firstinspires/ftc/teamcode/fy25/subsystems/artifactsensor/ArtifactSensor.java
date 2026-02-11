@@ -2,8 +2,14 @@ package org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
+import java.util.List;
+
 public interface ArtifactSensor {
     float[] getHsv();
+
+    void setHolding(int index, Artifact color);
+
+    List<Artifact> getHolding();
 
     enum Artifact {
         NONE,

@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.fy25.robots.RobotRoundhouse25;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergate.LauncherGate;
 
 @TeleOp(name="Competition TeleOp (2025)")
-public class CompetitionTeleOp25 extends OpMode {
+public class OldCompetitionTeleOp25 extends OpMode {
     Robot25 robot;
     IMUCorrector imuCorrector;
     IndyStarterBotScheme25 controlScheme;

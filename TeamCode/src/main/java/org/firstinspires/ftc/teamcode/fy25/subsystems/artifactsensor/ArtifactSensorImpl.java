@@ -4,6 +4,9 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ArtifactSensorImpl implements ArtifactSensor {
     ColorSensor colorSensor;
     float greenHueMin;
@@ -11,12 +14,18 @@ public class ArtifactSensorImpl implements ArtifactSensor {
     float purpleHueMin;
     float purpleHueMax;
 
+    List<Artifact> holding = new ArrayList<>();
+
     public ArtifactSensorImpl(Parameters parameters) {
         colorSensor = parameters.colorSensor;
         float greenHueMin = parameters.greenHueMin;
         float greenHueMax = parameters.greenHueMax;
         float purpleHueMin  = parameters.purpleHueMin;
         float purpleHueMax = parameters.purpleHueMax;
+
+        holding.add(Artifact.NONE);
+        holding.add(Artifact.NONE);
+        holding.add(Artifact.NONE);
     }
 
     @Override
@@ -62,5 +71,15 @@ public class ArtifactSensorImpl implements ArtifactSensor {
         Color.RGBToHSV(r, g, b, hsv);
 
         return hsv;
+    }
+
+    @Override
+    public void setHolding(int index, Artifact color) {
+        holding.set(index, color);
+    }
+
+    @Override
+    public List<Artifact> getHolding() {
+        return holding;
     }
 }

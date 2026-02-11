@@ -1,10 +1,13 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-public interface Indexer {
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
+
+public interface MotorIndexer {
 
     double getPositionError();
 
@@ -13,18 +16,6 @@ public interface Indexer {
     double getVelocity();
 
     int getKSFlag();
-
-    enum State {
-        PREP,
-        READY,
-        TO,
-        NEXT
-    }
-    enum Index {
-        A,
-        B,
-        C
-    }
 
     class Parameters {
         /** Create a Parameters object and provide necessary parameters.
@@ -38,7 +29,7 @@ public interface Indexer {
         public final boolean present;
 
         public DcMotorEx encoderMotor;
-        public CRServo indexerServo;
+        public DcMotor indexerMotor;
         public TouchSensor limitSwitch;
         public double ticksPerRevolution; // 8192
     }
@@ -51,7 +42,7 @@ public interface Indexer {
 
     void resetEncoder();
 
-    void goTo(Index index);
+    void goTo(Indexer.Index index);
 
     void next();
 
@@ -61,10 +52,9 @@ public interface Indexer {
 
     double getEncoder();
 
-    Index getIndex();
+    Indexer.Index getIndex();
 
     double getRelative();
 
     void update();
-
 }

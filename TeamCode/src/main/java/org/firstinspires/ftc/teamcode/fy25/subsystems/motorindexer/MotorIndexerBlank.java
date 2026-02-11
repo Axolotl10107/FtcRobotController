@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.fy25.subsystems.indexer;
+package org.firstinspires.ftc.teamcode.fy25.subsystems.motorindexer;
 
-public class IndexerBlank implements Indexer {
+import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 
+public class MotorIndexerBlank implements MotorIndexer {
     @Override
     public double getPositionError() {
         return 0;
@@ -43,7 +44,7 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
-    public void goTo(Index index) {
+    public void goTo(Indexer.Index index) {
 
     }
 
@@ -68,7 +69,7 @@ public class IndexerBlank implements Indexer {
     }
 
     @Override
-    public Index getIndex() {
+    public Indexer.Index getIndex() {
         return null;
     }
 

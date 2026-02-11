@@ -65,6 +65,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button incrementIndexer;
     private final Button prepIndexerIntake;
     private final Button indexerIntake;
+    private final Button sort;
 
     private final Button loader;
     private final Button incrementMotif;
@@ -129,6 +130,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         indexerIntake = new TriggerButton(() -> manipulator.x);
         manualIndexerOverrideLeft = new MomentaryButton(() -> manipulator.left_bumper);
         manualIndexerOverrideRight = new MomentaryButton(() -> manipulator.right_bumper);
+        sort = new TriggerButton(() -> manipulator.x);
 
         loader = new MomentaryButton(() -> manipulator.y);
 
@@ -236,6 +238,12 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
             state.setIndexState(Indexer.State.TO);
         } else if (incrementIndexer.isActive() && state.getIndexState() == Indexer.State.READY) {
             state.setIndexState(Indexer.State.NEXT);
+        }
+
+        if (sort.isActive()) {
+            state.setSortState(true);
+        } else {
+            state.setSortState(false);
         }
     }
 
