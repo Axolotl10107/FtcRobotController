@@ -21,6 +21,9 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.artifactsensor.ArtifactSen
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.Indexer;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.indexer.IndexerImpl;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngle;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleBlank;
+import org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleImpl;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServo;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoBlank;
 import org.firstinspires.ftc.teamcode.fy25.subsystems.launchergateservo.LauncherGateServoImpl;
@@ -86,6 +89,7 @@ public class Robot25 {
                 LauncherWheel.Parameters launchWheelParams,
                 LauncherGate.Parameters launchGateParams,
                 LauncherGateServo.Parameters launchGateServoParams,
+                LauncherAngle.Parameters launcherAngleParams,
                 MotorIntake.Parameters motorIntakeParams,
                 RotaryIntake.Parameters rotaryIntakeParams,
 
@@ -107,6 +111,7 @@ public class Robot25 {
             this.launchWheelParams = launchWheelParams;
             this.launchGateParams = launchGateParams;
             this.launcherGateServoParams = launchGateServoParams;
+            this.launcherAngleParams = launcherAngleParams;
             this.motorIntakeParams = motorIntakeParams;
             this.rotaryIntakeParams = rotaryIntakeParams;
 
@@ -126,8 +131,8 @@ public class Robot25 {
         final LauncherWheelSimple.Parameters launchWheelSimpleParams;
         final LauncherWheel.Parameters launchWheelParams;
         final LauncherGate.Parameters launchGateParams;
-
         final LauncherGateServo.Parameters launcherGateServoParams;
+        final LauncherAngle.Parameters launcherAngleParams;
         final MotorIntake.Parameters motorIntakeParams;
         final RotaryIntake.Parameters rotaryIntakeParams;
         final MotorIndexer.Parameters motorIndexerParameters;
@@ -147,6 +152,7 @@ public class Robot25 {
     public final LauncherWheel launchWheel;
     public final LauncherGate launchGate;
     public final LauncherGateServo launchGateServo;
+    public final LauncherAngle launcherAngle;
     public final MotorIntake motorIntake;
     public final RotaryIntake rotaryIntake;
     public final MotorIndexer motorIndexer;
@@ -207,6 +213,12 @@ public class Robot25 {
             launchGateServo = new LauncherGateServoImpl(parameters.launcherGateServoParams);
         } else {
             launchGateServo = new LauncherGateServoBlank();
+        }
+
+        if (parameters.launcherAngleParams.present) {
+            launcherAngle = new LauncherAngleImpl(parameters.launcherAngleParams);
+        } else {
+            launcherAngle = new LauncherAngleBlank();
         }
 
         if (parameters.motorIntakeParams.present) {

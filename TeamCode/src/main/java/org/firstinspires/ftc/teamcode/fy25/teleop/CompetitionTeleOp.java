@@ -55,7 +55,7 @@ public class CompetitionTeleOp extends OpMode {
 
         DTS dts = controlState.getDts();
         DTS correctedDTS = imuCorrector.correctDTS( dts, robot.imu.yaw() );
-        DTS normalizedDTS = correctedDTS.normalize();
+        DTS normalizedDTS = dts.normalize();
         DTS scaledDTS = normalizedDTS.scale( controlState.getMaxDriveSpeed() );
 
         robot.drive.applyDTS( scaledDTS );
@@ -159,7 +159,7 @@ public class CompetitionTeleOp extends OpMode {
         }
 
         if (controlState.isRunLaunchWheel()) {
-            robot.launchWheelSimple.spinUp(2800);
+            robot.launchWheelSimple.spinUp(28000);
         } else {
             robot.launchWheelSimple.spinDown();
         }

@@ -45,11 +45,11 @@ public class Constants {
 //            .robotWidth(13);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(6.5)
+            .forwardPodY(7.5)
             .strafePodX(-8.5)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .customEncoderResolution(8192)
+//            .customEncoderResolution(8192)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
 
