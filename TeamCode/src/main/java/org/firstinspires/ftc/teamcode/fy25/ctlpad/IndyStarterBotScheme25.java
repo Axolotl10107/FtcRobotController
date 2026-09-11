@@ -72,6 +72,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Button resetMotif;
     private final Button manualIndexerOverrideLeft;
     private final Button manualIndexerOverrideRight;
+    private final Button rampIn;
+    private final Button rampOut;
     private final Axis armFast;
     private final Axis armMedium;
     private final Axis armSlow;
@@ -79,9 +81,14 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
     private final Axis elevator;
 
     private final Axis drive;
-
     private final Axis turn;
     private final Axis strafe;
+
+    private final Axis mDrive;
+    private final Axis mTurn;
+    private final Axis mStrafe;
+
+    private final TriggerButton unload;
 
     private boolean armMovementSet = false;
 
@@ -125,17 +132,25 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         turn = new ExponentialAxis( () -> -driver.left_stick_x, 2); // positive turn is counterclockwise
         strafe = new LinearAxis( () -> driver.right_stick_x);
 
+        mDrive = new LinearAxis(() -> -manipulator.left_stick_y);
+        mTurn = new ExponentialAxis( () -> -manipulator.right_stick_x, 2); // positive turn is counterclockwise
+        mStrafe = new LinearAxis( () -> manipulator.left_stick_x);
+
         incrementIndexer = new TriggerButton(() -> manipulator.dpad_right);
         prepIndexerIntake = new TriggerButton(() -> manipulator.a);
         indexerIntake = new TriggerButton(() -> manipulator.x);
         manualIndexerOverrideLeft = new MomentaryButton(() -> manipulator.left_bumper);
         manualIndexerOverrideRight = new MomentaryButton(() -> manipulator.right_bumper);
+        rampOut = new MomentaryButton(() -> manipulator.right_bumper);
+        rampIn = new MomentaryButton(() -> manipulator.left_bumper);
         sort = new TriggerButton(() -> manipulator.x);
 
         loader = new MomentaryButton(() -> manipulator.y);
 
         incrementMotif = new TriggerButton(() -> manipulator.right_bumper);
         resetMotif = new TriggerButton(() -> manipulator.left_bumper);
+
+        unload = new TriggerButton(() -> manipulator.right_bumper);
     }
 
     private void updateMovementState() {
@@ -143,6 +158,11 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         driveVal = drive.value();
         turnVal = turn.value();
         strafeVal = strafe.value();
+
+        double mDriveVal, mTurnVal, mStrafeVal;
+        mDriveVal = drive.value();
+        mTurnVal = turn.value();
+        mStrafeVal = strafe.value();
 
         // Checks if any DTS values are NaN and sets to 0
 
@@ -160,7 +180,21 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         else {
             strafeVal = 0;
         }
-        state.setDts( new DTS( driveVal, turnVal, strafeVal) );
+        if (Math.abs(mDriveVal) >= 0) {}
+        else {
+            mDriveVal = 0;
+        }
+
+        if (Math.abs(mTurnVal) >= 0) {}
+        else {
+            mTurnVal = 0;
+        }
+
+        if (Math.abs(mStrafeVal) >= 0) {}
+        else {
+            mStrafeVal = 0;
+        }
+        state.setDts( new DTS( driveVal + mDriveVal, turnVal + mTurnVal, strafeVal + mStrafeVal) );
     }
 
 //    private void applyArmSetpoint( double setpoint ) {
@@ -238,6 +272,8 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
             state.setIndexState(Indexer.State.TO);
         } else if (incrementIndexer.isActive() && state.getIndexState() == Indexer.State.READY) {
             state.setIndexState(Indexer.State.NEXT);
+        } else if (unload.isActive() && state.getIndexState() == Indexer.State.READY) {
+            state.setIndexState(Indexer.State.UNLOAD);
         }
 
         if (sort.isActive()) {
@@ -321,6 +357,14 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         }
     }
 
+    private void updateRampState() {
+        if (rampOut.isActive()) {
+            state.setRampState(true);
+        } if (rampIn.isActive()) {
+            state.setRampState(false);
+        }
+    }
+
     @Override
     public StarterBotState25 getState() {
         armMovementSet = false;
@@ -351,6 +395,7 @@ public class IndyStarterBotScheme25 implements StarterBotScheme25 {
         updateLoaderState();
         updateMotif();
         updateManualOverride();
+        updateRampState();
 
         return state;
     }

@@ -44,11 +44,11 @@ public class MotorIndexerImpl implements MotorIndexer {
     @Config
     public static class MotorIndexerTuning {
         public static double MAX_POWER = 1;
-        public static double kD = 0.00007;
-        public static double kI = 0.00005;
-        public static double kP = 0.00006;
-        public static double kS = 0.0006;
-        public static double kSCutoff = 1600;
+        public static double kD = 0.0000015;
+        public static double kI = 0;
+        public static double kP = 0.00013;
+        public static double kS = 0;
+        public static double kSCutoff = 500;
         public static double maxIntegral = 850;
         public static double maxRampDistance = 0;
         public static double minPower = 0;
@@ -83,7 +83,8 @@ public class MotorIndexerImpl implements MotorIndexer {
 
     @Override
     public void unload() {
-        motor.setPower(1);
+        remainingDelta -= ticksPerIndex;
+        integral = 0;
     }
 
     @Override

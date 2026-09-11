@@ -169,13 +169,13 @@ public class RobotRoundhouse25 {
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront"),
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack")
         );
-        DcMotorEx launchWheelMotor = new DualDcMotorEx(
-                launchWheelFirstMotor,
-                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFrontEx")
-
-                // TODO: reverse launch wheel front ex...chloe did this in DuelMotorEx...it works
-                //problem...the intake thingy that moves with the outtake wheel doesnt work now
-        );
+//        DcMotorEx launchWheelMotor = new DualDcMotorEx(
+//                launchWheelFirstMotor,
+//                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFrontEx")
+//
+//                // TODO: reverse launch wheel front ex...chloe did this in DuelMotorEx...it works
+//                //problem...the intake thingy that moves with the outtake wheel doesnt work now
+//        );
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launchWheelParams.motor = launchWheelMotor;
 
@@ -303,6 +303,8 @@ public class RobotRoundhouse25 {
         LauncherWheel.Parameters launchWheelParams = new LauncherWheel.Parameters(false);
         DcMotorEx launchWheelMotor1 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor");
         DcMotorEx launchWheelMotor2 = hardwareMap.get(DcMotorEx.class, "launchWheelMotor2");
+        launchWheelMotor1.setDirection(REVERSE);
+        launchWheelMotor2.setDirection(REVERSE);
         DualDcMotorEx launchWheelMotor = new DualDcMotorEx(launchWheelMotor1, launchWheelMotor2);
         launchWheelSimpleParams.motor = launchWheelMotor;
 //        launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -329,7 +331,7 @@ public class RobotRoundhouse25 {
         LauncherAngle.Parameters launcherAngleParams = new LauncherAngle.Parameters(true);
         launcherAngleParams.servoRight = hardwareMap.get(Servo.class, "rampServoRight");
         launcherAngleParams.servoLeft = hardwareMap.get(Servo.class, "rampServoLeft");
-        launcherAngleParams.servoLeft.setDirection(Servo.Direction.REVERSE);
+//        launcherAngleParams.servoLeft.setDirection(Servo.Direction.REVERSE);
 
         RotaryIntake.Parameters rotaryIntakeParams = new RotaryIntake.Parameters(false);
 //        rotaryIntakeParams.intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
@@ -344,6 +346,8 @@ public class RobotRoundhouse25 {
         MotorIndexer.Parameters motorIndexerParams = new MotorIndexer.Parameters(true);
         motorIndexerParams.indexerMotor = hardwareMap.get(DcMotor.class, "indexerMotor");
         motorIndexerParams.encoderMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        motorIndexerParams.indexerMotor.setDirection(REVERSE);
+        motorIndexerParams.encoderMotor.setDirection(REVERSE);
         motorIndexerParams.limitSwitch = hardwareMap.get(TouchSensor.class, "indexerSwitch");
         motorIndexerParams.ticksPerRevolution = 8192;
 

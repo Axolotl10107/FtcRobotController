@@ -18,7 +18,8 @@ public interface Indexer {
         PREP,
         READY,
         TO,
-        NEXT
+        NEXT,
+        UNLOAD
     }
     enum Index {
         A,

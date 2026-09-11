@@ -60,6 +60,8 @@ public class StarterBotState25 {
 
     private boolean sort = false;
 
+    private boolean rampState = false;
+
     public DTS getDts() {
         return dts;
     }
@@ -165,4 +167,8 @@ public class StarterBotState25 {
     public void setManualOverrideState(int v) {manualOverrideState = v;}
 
     public double getManualOverrideState() {return manualOverrideState;}
+
+    public boolean getRampState() {return rampState;}
+
+    public void setRampState(boolean b) {rampState = b;}
 }

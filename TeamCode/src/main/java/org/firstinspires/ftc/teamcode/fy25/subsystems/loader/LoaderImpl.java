@@ -14,7 +14,7 @@ public class LoaderImpl implements Loader{
 
     @Override
     public void load() {
-        servo.setPosition(0.35);
+        servo.setPosition(0.25);
     }
 
     @Override

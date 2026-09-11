@@ -16,10 +16,10 @@ public class LauncherWheelSimpleImpl implements LauncherWheelSimple{
 
     @Config
     public static class LaunchWheelPIDF {
-        public static double p = 6;
+        public static double p = 7;
         public static double i = 0;
-        public static double d = 1;
-        public static double f = 0.03;
+        public static double d = 0;
+        public static double f = 0;
     }
 
 

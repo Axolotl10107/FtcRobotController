@@ -16,11 +16,19 @@ public class LauncherAngleImpl implements LauncherAngle {
 
     @Config
     public static class AngleTuning {
-        public static final double upperBound = .21;
-        public static final double offsetLeft = 0;
-        public static final double offsetRight = 0;
-        public static final double scalar = 360;
-        public static final double angleTest = 0;
+        public static double upperBound = 1;
+        public static double offsetLeft = 0;
+        public static double offsetRight = 0;
+        public static double scalar = 360;
+        public static double angleTest = 0;
+    }
+
+    @Config
+    public static class OpModeAngleTuning {
+        public static double leftUp = .4;
+        public static double rightUp = .4;
+        public static double leftDown = .8;
+        public static double rightDown = 0;
     }
 
     public LauncherAngleImpl(Parameters parameters) {
@@ -56,8 +64,8 @@ public class LauncherAngleImpl implements LauncherAngle {
 
     @Override
     public void setPosition(double position) {
-        servoRight.setPosition(constrainPos(position + offsetRight));
-        servoLeft.setPosition(constrainPos(position + offsetLeft));
+        servoRight.setPosition(position);
+        servoLeft.setPosition(position);
     }
 
     @Override
@@ -67,5 +75,8 @@ public class LauncherAngleImpl implements LauncherAngle {
     public void setAngle(double angle) {setPosition(angleToPos(angle));}
 
     @Override
-    public void testAngle() {setAngle(angleTest);}
+    public void testAngle() {
+        servoRight.setPosition(angleTest);
+        servoLeft.setPosition(angleTest);
+    }
 }

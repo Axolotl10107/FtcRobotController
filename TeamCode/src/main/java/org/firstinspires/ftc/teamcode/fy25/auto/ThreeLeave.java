@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.fy25.auto;
 
+import static com.qualcomm.robotcore.hardware.DcMotorSimple.Direction.REVERSE;
+
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,49 +20,54 @@ public class ThreeLeave extends LinearOpMode {
     TrajectorySequence mainTrajectory;
 
     void unload() {
-        robot.launchWheelSimple.spinUp(0.92);
-        robot.update();
-        sleep(1500);
+        robot.launchWheelSimple.spinUp(5400);
+        robot.launchWheelSimple.update();
+        sleep(4500);
         robot.loader.load();
-        robot.update();
-        sleep(2000);
+        robot.loader.update();
+        sleep(3500);
 //        robot.indexer.unload();
 //        robot.update();
 //        sleep(4000);
         robot.loader.pass();
-        robot.update();
+        robot.loader.update();
+        sleep(800);
+        robot.loader.load();
+        robot.loader.update();
+        sleep(2000);
+        robot.loader.pass();
+        robot.loader.update();
         sleep(900);
-//        robot.indexer.next();
-//        int i = 0;
-//        while (i < 100) {
-//            i++;
-//            robot.update();
-//            sleep(5);
-//        }
-//        robot.update();
-//        sleep(800);
-//        robot.loader.load();
-//        robot.update();
-//        sleep(2000);
-//        robot.loader.pass();
-//        robot.update();
-//        sleep(900);
-//        robot.indexer.next();
-//        i = 0;
-//        while (i < 100) {
-//            i++;
-//            robot.update();
-//            sleep(5);
-//        }
-//        robot.update();
-//        sleep(800);
-//        robot.loader.load();
-//        robot.update();
-//        sleep(2000);
-//        robot.loader.pass();
-//        robot.launchWheelSimple.spinDown();
-//        robot.update();
-//        sleep(2000);
+        robot.motorIndexer.next();
+        int i = 0;
+        while (i < 100) {
+            i++;
+            robot.motorIndexer.update();
+            sleep(5);
+        }
+        sleep(800);
+        robot.loader.load();
+        robot.loader.update();
+        sleep(2000);
+        robot.loader.pass();
+        robot.loader.update();
+        sleep(900);
+        robot.motorIndexer.next();
+        i = 0;
+        while (i < 100) {
+            i++;
+            robot.motorIndexer.update();
+            sleep(5);
+        }
+        sleep(800);
+        robot.loader.load();
+        robot.loader.update();
+        sleep(2000);
+        robot.loader.pass();
+        robot.loader.update();
+        robot.launchWheelSimple.spinDown();
+        robot.launchWheelSimple.update();
+        sleep(2000);
     }
 
     @Override

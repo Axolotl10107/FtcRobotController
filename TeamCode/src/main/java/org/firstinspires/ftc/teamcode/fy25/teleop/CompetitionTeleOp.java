@@ -1,6 +1,12 @@
 package org.firstinspires.ftc.teamcode.fy25.teleop;
 
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleImpl.OpModeAngleTuning.leftDown;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleImpl.OpModeAngleTuning.leftUp;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleImpl.OpModeAngleTuning.rightDown;
+import static org.firstinspires.ftc.teamcode.fy25.subsystems.launcherangle.LauncherAngleImpl.OpModeAngleTuning.rightUp;
+
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -20,6 +26,12 @@ import org.firstinspires.ftc.teamcode.fy25.subsystems.loader.Loader;
 
 @TeleOp(name="CompetitionTeleOp")
 public class CompetitionTeleOp extends OpMode {
+    @Config
+    public static class LaunchSpeed {
+        public static double launchTPS = 6000; // 3150 close, 3700 far
+    }
+
+
     Robot25 robot;
 
     IMUCorrector imuCorrector;
@@ -85,17 +97,33 @@ public class CompetitionTeleOp extends OpMode {
             robot.motorIntake.stop();
         }
 
+//        if (controlState.getRampState()) {
+//            robot.launcherAngle.setPosition(leftUp);
+//            robot.launcherAngle.setPosition(rightUp);
+//        } else {
+//            robot.launcherAngle.setPosition(leftDown);
+//            robot.launcherAngle.setPosition(rightDown);
+//        }
+
         ArtifactSensor.Artifact color = robot.artifactSensor.readArtifact();
-        if (controlState.getManualOverrideState() != 0) {
-            robot.indexer.manualOverride((int) controlState.getManualOverrideState());
-            robot.indexer.resetEncoder();
-            robot.motorIndexer.manualOverride((int) controlState.getManualOverrideState());
-            robot.motorIndexer.resetEncoder();
-        } else if (controlState.getIndexState() == Indexer.State.NEXT) {
+//        if (controlState.getManualOverrideState() != 0) {
+//            robot.indexer.manualOverride((int) controlState.getManualOverrideState());
+//            robot.indexer.resetEncoder();
+//            robot.motorIndexer.manualOverride((int) controlState.getManualOverrideState());
+//            robot.motorIndexer.resetEncoder();
+//        } else
+        if (controlState.getIndexState() == Indexer.State.NEXT) {
             robot.indexer.next();
             robot.motorIndexer.next();
             controlState.setIndexState(Indexer.State.READY);
-        } else if (controlState.getIndexState() == Indexer.State.PREP && color == ArtifactSensor.Artifact.NONE) {
+        } else if (controlState.getIndexState() == Indexer.State.UNLOAD) {
+            robot.indexer.unload();
+            robot.motorIndexer.unload();
+            robot.motorIntake.spinIn();
+            robot.rotaryIntake.setState(RotaryIntake.State.RUNIN);
+            controlState.setIndexState(Indexer.State.READY);
+        }
+        else if (controlState.getIndexState() == Indexer.State.PREP && color == ArtifactSensor.Artifact.NONE) {
             robot.indexer.prepIntake();
             robot.motorIndexer.prepIntake();
         } else if (controlState.getIndexState() == Indexer.State.PREP && color != ArtifactSensor.Artifact.NONE) {
@@ -105,7 +133,11 @@ public class CompetitionTeleOp extends OpMode {
             robot.indexer.next();
             robot.motorIndexer.next();
             robot.artifactSensor.setHolding(robot.motorIndexer.getIndex().ordinal(), color);
-        } else if (controlState.getIndexState() == Indexer.State.TO) {
+        } else if (controlState.getIndexState() == Indexer.State.PREP) {
+            robot.indexer.intake();
+            robot.motorIndexer.intake();
+            controlState.setIndexState(Indexer.State.READY);
+        }else if (controlState.getIndexState() == Indexer.State.TO) {
             robot.indexer.goTo(robot.indexer.getIndex());
             robot.motorIndexer.goTo(robot.motorIndexer.getIndex());
         }
@@ -159,7 +191,7 @@ public class CompetitionTeleOp extends OpMode {
         }
 
         if (controlState.isRunLaunchWheel()) {
-            robot.launchWheelSimple.spinUp(28000);
+            robot.launchWheelSimple.spinUp(LaunchSpeed.launchTPS);
         } else {
             robot.launchWheelSimple.spinDown();
         }
@@ -222,6 +254,9 @@ public class CompetitionTeleOp extends OpMode {
         telemetry.addData("power", robot.motorIndexer.getOutputPower());
         telemetry.addData("velocity", robot.motorIndexer.getVelocity());
         telemetry.addData("ksflag", robot.motorIndexer.getKSFlag() * 50);
+        telemetry.addData("ramp", controlState.getRampState());
+        telemetry.addData("sort", controlState.getSort());
+
         /// legend has it you can tell which subsystem was the most annoying to implement by looking at how many telemetry lines it has
 
         ///  I forgot to add these lines
