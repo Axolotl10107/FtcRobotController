@@ -169,13 +169,13 @@ public class RobotRoundhouse25 {
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorFront"),
                 hardwareMap.get(DcMotorEx.class, "launchWheelMotorBack")
         );
-//        DcMotorEx launchWheelMotor = new DualDcMotorEx(
-//                launchWheelFirstMotor,
-//                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFrontEx")
-//
-//                // TODO: reverse launch wheel front ex...chloe did this in DuelMotorEx...it works
-//                //problem...the intake thingy that moves with the outtake wheel doesnt work now
-//        );
+        DcMotorEx launchWheelMotor = new DualDcMotorEx(
+                launchWheelFirstMotor,
+                hardwareMap.get(DcMotorEx.class, "launchWheelMotorFrontEx")
+
+                // TODO: reverse launch wheel front ex...chloe did this in DuelMotorEx...it works
+                //problem...the intake thingy that moves with the outtake wheel doesnt work now
+        );
         launchWheelMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launchWheelParams.motor = launchWheelMotor;
 
